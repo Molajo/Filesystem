@@ -1,0 +1,17 @@
+{
+    "name":"Molajo/Filesystem",
+    "description":"Common interface for filesystem libraries",
+    "keywords":["molajo", "filesystem"],
+    "license":"MIT",
+    "authors":[
+        {
+            "name":"AmyStephen",
+            "homepage":"http://github.com/molajo"
+        }
+    ],
+    "autoload":{
+        "Interface":{
+            "Molajo\\Filesystem\\":""
+        }
+    }
+}

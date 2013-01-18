@@ -193,6 +193,5 @@ specifications were followed, as closely as possible.
 
 More Information
 ----------------
-- [Usage](doc/usage.md)
-- [Extend](doc/extend.md)
-- [Specifications](doc/specifications.md)
+
+See the doc folder
