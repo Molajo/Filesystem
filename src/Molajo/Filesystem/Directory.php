@@ -1,6 +1,6 @@
 <?php
 /**
- * Directory Instance for Fileservices
+ * Path Instance for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -10,20 +10,17 @@ namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\Entry as EntryInterface;
+use Molajo\Filesystem\Path as PathInterface;
 
 /**
- * Filesystem Directory Instance
+ * Path Instance for Filesystem
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
  */
-Interface Directory extends EntryInterface
+Interface Directory extends DirectoryInterface
 {
     /**
      * Returns a list of files (path and filename) located at path directory

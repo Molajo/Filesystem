@@ -1,6 +1,6 @@
 <?php
 /**
- * Entry Interface
+ * Path Interface
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -17,29 +17,24 @@ defined ('MOLAJO') or die;
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
  */
-interface Entry
+interface Path extends Adapter
 {
     /**
-     * Sets as the name of the file or directory specified in the path
-     *
-     * @param   string  $path
+     * Determine if the file or directory specified in path exists
      *
      * @return  null
      * @since   1.0
      */
-    function setName ($path);
+    function exists ();
 
     /**
-     * Retrieves the name of the file or directory specified in the path
+     * Indicates whether the given path is absolute or not
      *
      * @return  null
      * @since   1.0
      */
-    function getName ();
+    function isAbsolute ();
 
     /**
      * Retrieves the absolute path, which is the relative path from the root directory,
@@ -66,15 +61,7 @@ interface Entry
      * @return  null
      * @since   1.0
      */
-    function toUrl ();
-
-    /**
-     * Determine if the file or directory specified in path exists
-     *
-     * @return  null
-     * @since   1.0
-     */
-    function exists ();
+    function convertToUrl ();
 
     /**
      * Returns the value 'directory, 'file' or 'link' for the type determined
@@ -164,7 +151,6 @@ interface Entry
      * @since   1.0
      */
     function getPermissions ();
-
 
     /**
      * Set the values in the associative array $this->permissions

@@ -1,6 +1,6 @@
 <?php
 /**
- * Github Adapter for Filesystem
+ * Remote Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -13,7 +13,7 @@ defined ('MOLAJO') or die;
 use Molajo\Filesystem\Adapter\Adapter as Adapter;
 
 /**
- * Github Adapter for Filesystem
+ * Remote Adapter for Filesystem
  *
  * @package   Molajo
  * @license   MIT
@@ -23,7 +23,7 @@ use Molajo\Filesystem\Adapter\Adapter as Adapter;
  * Full interface specification:
  *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-class Github extends Adapter
+class Remote extends Adapter
 {
     /**
      * Constructor
@@ -38,10 +38,4 @@ class Github extends Adapter
 
         return;
     }
-
-    public function connect ()
-    {
-
-    }
-
 }

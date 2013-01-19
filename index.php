@@ -15,9 +15,6 @@ define('MOLAJO', 'This is a Molajo Distribution');
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
  */
 
 define('BASE_FOLDER', __DIR__);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Directory Instance for Fileservices
+ * Directory Instance for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -13,17 +13,14 @@ defined ('MOLAJO') or die;
 use Molajo\Filesystem\Directory as DirectoryInterface;
 
 /**
- * Directory Instance for Fileservices
+ * Directory Instance for Filesystem
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
  */
-Class Directory extends Entry implements DirectoryInterface
+Class Directory extends Path implements DirectoryInterface
 {
     /**
      * Adapter Instance
@@ -34,14 +31,6 @@ Class Directory extends Entry implements DirectoryInterface
     protected $adapter;
 
     /**
-     * File System Instance
-     *
-     * @var    object  Filesystem
-     * @since  1.0
-     */
-    protected $filesystem;
-
-    /**
      * Construct
      *
      * @param   Adapter     $adapter
@@ -50,7 +39,7 @@ Class Directory extends Entry implements DirectoryInterface
      *
      * @since   1.0
      */
-    public function __construct (Adapter $adapter, Filesystem $filesystem, $options = array())
+    public function __construct (Adapter $adapter, $options = array())
     {
         $this->adapter    = $adapter;
         $this->filesystem = $filesystem;

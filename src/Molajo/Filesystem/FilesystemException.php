@@ -19,7 +19,7 @@ defined ('MOLAJO') or die;
  * @since     1.0
  *
  * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
+ *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
 Class FilesystemException extends \Exception
 {

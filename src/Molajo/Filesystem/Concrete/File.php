@@ -1,6 +1,6 @@
 <?php
 /**
- * File Instance for Fileservices
+ * File Instance for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -15,7 +15,7 @@ use Molajo\Filesystem\File as FileInterface;
 use Molajo\Filesystem\Adapter;
 
 /**
- * Describes a file instance for Fileservices
+ * Describes a file instance for Filesystem
  *
  * @package   Molajo
  * @license   MIT
@@ -23,25 +23,17 @@ use Molajo\Filesystem\Adapter;
  * @since     1.0
  *
  * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
+ *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-Class File extends Entry implements FileInterface
+Class File extends Path implements FileInterface
 {
     /**
-     * Adapter Instance
+     * File Name
      *
      * @var    Adapter
      * @since  1.0
      */
-    protected $adapter;
-
-    /**
-     * File System Instance
-     *
-     * @var    Filesystem
-     * @since  1.0
-     */
-    protected $filesystem;
+    protected $name;
 
     /**
      * Construct
@@ -52,11 +44,11 @@ Class File extends Entry implements FileInterface
      *
      * @since   1.0
      */
-    public function __construct (Adapter $adapter, Filesystem $filesystem, $options = array())
+    public function __construct (Filesystem $filesystem, Adapter $adapter, $path, $options = array())
     {
-        $this->adapter    = $adapter;
-        $this->filesystem = $filesystem;
-        $this->options    = $options;
+        if (isset($this->options['name'])) {
+            $this->name = $this->options['name'];
+        }
 
         return;
     }
@@ -82,7 +74,7 @@ Class File extends Entry implements FileInterface
      */
     public function getName ()
     {
-
+        return $this->filename;
     }
 
     /**
@@ -147,7 +139,8 @@ Class File extends Entry implements FileInterface
      */
     public function read ($path)
     {
-
+        //remote read
+        return file_get_contents($path);
     }
 
     /**
@@ -167,10 +160,11 @@ Class File extends Entry implements FileInterface
     }
 
     /**
-     * Copies the file identified in $path to the new_parent_directory,
+     * Copies the file identified in $path to the target_adapter in the new_parent_directory,
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
      * @param   string  $path
+     * @param   Adapter $target_adapter
      * @param   string  $new_parent_directory
      * @param   bool    $replace
      * @param   bool    $create_directories
@@ -178,8 +172,17 @@ Class File extends Entry implements FileInterface
      * @return  null
      * @since   1.0
      */
-    public function copy ($path, $new_parent_directory, $replace = false, $create_directories = true)
+    public function copy ($path, Adapter $target_adapter, $new_parent_directory,
+        $replace = false, $create_directories = true)
     {
+       //Example
+
+        // Local Copy
+
+        // Copy Remote to Local
+
+        //
+        copy('http://someserver.com/somefile.zip','./somefile.zip');
 
     }
 

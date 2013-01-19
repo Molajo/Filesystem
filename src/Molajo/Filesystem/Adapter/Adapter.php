@@ -1,6 +1,6 @@
 <?php
 /**
- * Adapter implements Adapter Interface
+ * Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -19,9 +19,6 @@ use Molajo\Filesystem\Adapter as AdapterInterface;
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
  */
 abstract class Adapter implements AdapterInterface
 {
@@ -32,6 +29,22 @@ abstract class Adapter implements AdapterInterface
      * @since  1.0
      */
     protected $options;
+
+    /**
+     * Root Directory for Filesystem
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $root;
+
+    /**
+     * Persistence
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    protected $persistence;
 
     /**
      * Username
@@ -64,14 +77,6 @@ abstract class Adapter implements AdapterInterface
      * @since  1.0
      */
     protected $port;
-
-    /**
-     * FTP Directory
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $root;
 
     /**
      * Timeout in minutes
@@ -152,6 +157,34 @@ abstract class Adapter implements AdapterInterface
     }
 
     /**
+     * Set the Options
+     *
+     * @param   array  $options
+     *
+     * @return  array
+     * @since   1.0
+     */
+    public function setOptions ($options = array())
+    {
+        if (is_array($options)) {
+            return $this->options = $options;
+        }
+
+        return $this->options = array();
+    }
+
+    /**
+     * Get the Options
+     *
+     * @return  array  $options
+     * @since   1.0
+     */
+    public function getOptions ()
+    {
+        return $this->options;
+    }
+
+    /**
      * Get Root of Filesystem
      *
      * @return  null
@@ -173,6 +206,30 @@ abstract class Adapter implements AdapterInterface
     public function setRoot ($root)
     {
         return $this->root = $root;
+    }
+
+    /**
+     * Set persistence indicator for Filesystem
+     *
+     * @param   bool  $persistence
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setPersistence ($persistence)
+    {
+        return $this->persistence = $persistence;
+    }
+
+    /**
+     * Get persistence indicator for Filesystem
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getPersistence ()
+    {
+        return $this->persistence;
     }
 
     /**
@@ -380,7 +437,7 @@ abstract class Adapter implements AdapterInterface
     }
 
     /**
-     * Set the Connection ID
+     * Set the Connection
      *
      * @param   object|resource  $connection
      *

@@ -17,11 +17,8 @@ defined ('MOLAJO') or die;
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
  */
-Interface File
+Interface File extends Path
 {
     /**
      * Set the name of the file specified in the path
@@ -34,7 +31,7 @@ Interface File
     function setName ($path);
 
     /**
-     * Retrieves the name of the file specified in the path
+     * Get the name of the file specified in the path
      *
      * @return  null
      * @since   1.0

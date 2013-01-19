@@ -17,12 +17,25 @@ defined ('MOLAJO') or die;
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
  */
 interface Adapter
 {
+    /**
+     * Constant Persistence: Temporary Filesystem Storage
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    const TEMPORARY = 0;
+
+    /**
+     * Constant Persistence: Permanent Filesystem Storage
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    const PERSISTENT = 1;
+
     /**
      * Get Root for Filesystem
      *
@@ -175,7 +188,7 @@ interface Adapter
     function login ();
 
     /**
-     * Set the Connection ID
+     * Set the Connection
      *
      * @param   object|resource  $connection
      *

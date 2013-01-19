@@ -8,51 +8,55 @@
  */
 
 defined ('MOLAJO') or die;
-echo file_get_contents("http://www.example.com");
 
-
-$options = array(
-    'root'           => BASE_FOLDER,
+$ftp_adapter_options = array(
+    'adapter_name'   => 'FTP Server',
     'username'       => 'integrationFTP',
     'password'       => 'mATs7799',
     'host'           => 'secureftp.nebraska.edu',
     'port'           => 21,
     'root'           => '/integrationFTP',
     'timeout'        => 15,
-    'is_passive'     => true,
-    'name'           => 'Filesystem name'
+    'is_passive'     => true
 );
 
-$path = BASE_FOLDER . '/Molajo/' . 'Media';
+$adapter = 'Local';
 
-include BASE_FOLDER . '/Molajo/Filesystem/Adapter.php';
-include BASE_FOLDER . '/Molajo/Filesystem/Adapter/Adapter.php';
-include BASE_FOLDER . '/Molajo/Filesystem/Adapter/Ftp.php';
+include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter.php';                          // Interface
+include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter/Adapter.php';                  // Abstract Class
+include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter/' . $adapter . '.php';         // Filesystem Adapter
 
-$class = 'Molajo\\Filesystem\\Adapter\\Ftp';
-$adapter = new $class($options);
+include BASE_FOLDER . '/src/Molajo/Filesystem/Concrete/Path.php';         // Path
+include BASE_FOLDER . '/src/Molajo/Filesystem/Concrete/Directory.php';    // Directory
+include BASE_FOLDER . '/src/Molajo/Filesystem/Concrete/File.php';         // File
 
-echo '<pre>';
-var_dump ($adapter);
-die;
-$filesystem = new File($adapter, $options);
+$local_adapter_options = array(
+    'adapter_name'   => 'Local Filesystem',
+    'username'       => '',
+    'password'       => '',
+    'host'           => '',
+    'port'           => '',
+    'root'           => BASE_FOLDER,
+    'timeout'        => 15,
+    'is_passive'     => true
+);
 
-die;
-if (! $filesystem->has ('foo')) {
-    $filesystem->write ('foo', 'Some content');
-}
-
-echo $filesystem->read ('foo');
-
-
-$adapter    = new Molajo\Filesystem\Adapter\Local('/Molajo/Media');
-$filesystem = new Molajo\Filesystem\Directory($adapter);
-
-echo '<pre>';
-var_dump ($filesystem);
-echo '</pre>';
+$class = 'Molajo\\Filesystem\\Adapter\\' . $adapter;
+$adapterServices = new $class($local_adapter_options);
 
 die;
+$file_options = array('xyz' => BASE_FOLDER);
+$path = BASE_FOLDER . '/src/Molajo/' . 'Media';
+
+$fileServices = new File($adapter, $path, $file_options);
+
+
+
+
+
+
+
+
 if ($filesystem->has ('foo')) {
     $filesystem->write ('foo', 'Some content');
 }

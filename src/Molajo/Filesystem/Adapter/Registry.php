@@ -13,7 +13,7 @@ defined ('MOLAJO') or die;
 use Molajo\Filesystem\Adapter\Adapter as Adapter;
 
 /**
- * Describes Registry Adapter for Filesystem Instance
+ * Registry Adapter for Filesystem
  *
  * @package   Molajo
  * @license   MIT
@@ -21,7 +21,7 @@ use Molajo\Filesystem\Adapter\Adapter as Adapter;
  * @since     1.0
  *
  * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
+ *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
 class Registry extends Adapter
 {

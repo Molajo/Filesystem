@@ -1,6 +1,6 @@
 <?php
 /**
- * Entry of Filesystem
+ * Path for Adapter of Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -8,46 +8,45 @@
  */
 namespace Molajo\Filesystem\Concrete;
 
-use Molajo\Filesystem\Entry as EntryInterface;
+use Molajo\Filesystem\FilesystemException;
+use Molajo\Filesystem\Adapter\Adapter;
+use Molajo\Filesystem\Path as PathInterface;
 
 defined ('MOLAJO') or die;
 
 /**
- * Filesystem Entry
+ * Path for Filesystem
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.com/Molajo/Filesystem/doc/speifications.md
  */
-abstract class Entry implements EntryInterface
+class Path extends Adapter implements PathInterface
 {
     /**
-     * Filesystem
+     * Adapter Instance
      *
-     * @var    object Filesystem
-     * @since  1.0
-     */
-    protected $filesystem;
-
-    /**
-     * Adapter
-     *
-     * @var    object Filesystem
+     * @var    Adapter
      * @since  1.0
      */
     protected $adapter;
 
     /**
-     * Path (current path)
+     * Path
      *
      * @var    string
      * @since  1.0
      */
     protected $path;
+
+    /**
+     * Options
+     *
+     * @var    $options
+     * @since  1.0
+     */
+    protected $options = array();
 
     /**
      * Absolute path for current path
@@ -95,78 +94,131 @@ abstract class Entry implements EntryInterface
      * @var    string
      * @since  1.0
      */
-    protected $permissions;
+    protected $permissions = array();
 
     /**
-     * Constant Temporary Filesystem Storage
+     * persistence of 0 (Temporary) or 1 (Permanent)
      *
      * @var    string
      * @since  1.0
      */
-    const TEMPORARY = 0;
-
-    /**
-     * Constant Permanent Filesystem Storage
-     *
-     * @var    string
-     * @since  1.0
-     */
-    const PERSISTENT = 1;
+    protected $persistence = array();
 
     /**
      * Construct
      *
-     * @return  void
+     * @param  Adapter  $adapter
+     * @param  string   $path
+     * @param  array    $options
+     *
      * @since   1.0
      */
-    public function __construct ($path = '', $options = array())
+    public function __construct (Adapter $adapter, $path, $options = array())
     {
-        $this->options = $options;
+        $this->adapter = $adapter;
         $this->path    = $path;
-
         $this->normalise ();
+        $this->options = $options;
         $this->isAbsolute ();
+        $this->convertToUrl ();
 
-        echo realpath ($path);
-        die;
+        if (isset($this->options['persistence'])) {
+            $this->persistence = $this->options['persistence'];
+        }
 
         return;
     }
 
+    /**
+     * Set the Adapter
+     *
+     * @param   Adapter  $adapter
+     *
+     * @return  Adapter
+     * @since   1.0
+     */
+    public function setAdapter (Adapter $adapter)
+    {
+        return $this->adapter = $adapter;
+    }
+
+    /**
+     * Get the Adapter
+     *
+     * @return  Adapter
+     * @since   1.0
+     */
+    public function getAdapter ()
+    {
+        return $this->adapter;
+    }
+
+    /**
+     * Set the Options
+     *
+     * @param   array  $options
+     *
+     * @return  array
+     * @since   1.0
+     */
+    public function setOptions ($options = array())
+    {
+        if (is_array ($options)) {
+            return $this->options = $options;
+        }
+
+        return $this->options = array();
+    }
+
+    /**
+     * Get the Options
+     *
+     * @return  array  $options
+     * @since   1.0
+     */
+    public function getOptions ()
+    {
+        return $this->options;
+    }
 
     /**
      * Normalizes the given path
      *
-     * @return void
-     * @since  1.0
+     * @return  void
+     * @since   1.0
      */
     public function normalise ()
     {
-        $path = $this->path;
-        $path = str_replace ('\\', '/', $path);
+        $this->path = str_replace ('\\', '/', $this->path);
 
-        $prefix = $this->getAbsolutePrefix ($path);
+        $prefix = $this->getAbsolutePath ();
 
-        $path = substr ($path, strlen ($prefix));
+        $this->path = substr ($this->path, strlen ($prefix));
 
-        $parts = array_filter (explode ('/', $path), 'strlen');
+        $parts = array_filter (explode ('/', $this->path), 'strlen');
 
         $tokens = array();
 
         foreach ($parts as $part) {
             switch ($part) {
+
                 case '.':
                     continue;
+
                 case '..':
                     if (0 !== count ($tokens)) {
                         array_pop ($tokens);
                         continue;
+
                     } elseif (! empty($prefix)) {
                         continue;
                     }
+                    break;
+
                 default:
                     $tokens[] = $part;
             }
+
         }
 
         $this->path = $prefix . implode ('/', $tokens);
@@ -175,36 +227,33 @@ abstract class Entry implements EntryInterface
     }
 
     /**
-     * Indicates whether the given path is absolute or not
+     * Checks to see if the path exists
      *
-     * @param string $path A normalized path
-     *
-     * @return boolean
+     * @return  boolean
      */
-    public function isAbsolute ()
+    public function exists ()
     {
-        return $this->getAbsolutePrefix ();
+        if ($this->absolute_path == $this->path) {
+            return true;
+        }
 
+        return false;
     }
 
     /**
-     * Returns the absolute prefix of the given path
+     * Indicates whether the given path is absolute or not
      *
-     * @param string $path A normalized path
-     *
-     * @return string
+     * @return  boolean
      */
-    public function getAbsolutePrefix ()
+    public function isAbsolute ()
     {
-        preg_match ('|^(?P<prefix>([a-zA-Z]:)?/)|', $this->path, $matches);
+        $this->normalise ();
 
-        if (empty($matches['prefix'])) {
-            return '';
+        if ($this->absolute_path == $this->path) {
+            return true;
         }
 
-        $this->absolute_path = strtolower ($matches['prefix']);
-
-        return $this->absolute_path;
+        return false;
     }
 
     /**
@@ -216,7 +265,9 @@ abstract class Entry implements EntryInterface
      */
     public function getAbsolutePath ()
     {
+        $this->absolute_path = realpath ($this->path);
 
+        return $this->absolute_path;
     }
 
     /**
@@ -228,7 +279,14 @@ abstract class Entry implements EntryInterface
      */
     public function getRelativePath ()
     {
+        if ($this->isAbsolute () === true) {
+        } else {
 
+        }
+//??????
+        $this->relative_path = $this->path;
+
+        return $this->relative_path;
     }
 
     /**
@@ -238,24 +296,9 @@ abstract class Entry implements EntryInterface
      * @return  null
      * @since   1.0
      */
-    public function toUrl ()
+    public function convertToUrl ()
     {
-
-    }
-
-    /**
-     * Determine if the file or directory specified in path exists
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function exists ()
-    {
-        if (file_exists ($this->path)) {
-            return true;
-        }
-
-        return false;
+//??????
     }
 
     /**
@@ -263,6 +306,7 @@ abstract class Entry implements EntryInterface
      *
      * @return  null
      * @since   1.0
+     * @throws  \Molajo\Filesystem\FilesystemException
      */
     public function getType ()
     {
@@ -327,21 +371,6 @@ abstract class Entry implements EntryInterface
         return false;
     }
 
-
-    /**
-     * The name of the entry, excluding the path leading to it.
-     *   Either a filename or a directory name
-     *
-     * @param   string
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getName ()
-    {
-
-    }
-
     /**
      * Returns the owner of the file or directory defined in the path
      *
@@ -356,8 +385,16 @@ abstract class Entry implements EntryInterface
     /**
      * Changes the owner to the value specified for the file or directory defined in the path
      *
+     * @param   string $owner
+     *
      * @return  null
      * @since   1.0
+     */
+
+    /**
+     * @param string $owner
+     *
+     * @return null|void
      */
     public function setOwner ($owner)
     {
@@ -377,6 +414,8 @@ abstract class Entry implements EntryInterface
 
     /**
      * Changes the group to the value specified for the file or directory defined in the path
+     *
+     * @param   string  $group
      *
      * @return  null
      * @since   1.0
@@ -404,17 +443,13 @@ abstract class Entry implements EntryInterface
      * Using an associative array with three entries: 'read', 'update', 'execute' with a value for
      *  each entry as either 'true' or 'false' for the group specified: 'owner', 'group',  or 'world'
      *
-     * @param   string  $path
-     * @param   array   $permission
-     * @param   string  $group
-     *
      * @return  null
      * @since   1.0
      */
     public function setPermissions ()
     {
-        $this->permissions = array();
-        $this->group       = $this->path;
+        //$this->permissions = array();
+        //$this->group       = $this->path;
     }
 
 
@@ -422,7 +457,6 @@ abstract class Entry implements EntryInterface
      * Tests if the group specified: 'owner', 'group', or 'world' has read access
      *  Returns true or false
      *
-     * @param           string
      * @param   null    $group
      *
      * @return  null
@@ -437,7 +471,6 @@ abstract class Entry implements EntryInterface
      * Tests if the group specified: 'owner', 'group', or 'world' has write access
      *  Returns true or false
      *
-     * @param           string
      * @param   null    $group
      *
      * @return  null
@@ -452,7 +485,6 @@ abstract class Entry implements EntryInterface
      * Tests if the group specified: 'owner', 'group', or 'world' has execute access
      *  Returns true or false
      *
-     * @param           string
      * @param   null    $group
      *
      * @return  null
@@ -466,7 +498,6 @@ abstract class Entry implements EntryInterface
     /**
      * Set read access to true or false for the group specified: 'owner', 'group', or 'world'
      *
-     * @param           string
      * @param   null    $group
      *
      * @return  null
@@ -480,7 +511,6 @@ abstract class Entry implements EntryInterface
     /**
      * Set write access to true or false for the group specified: 'owner', 'group', or 'world'
      *
-     * @param           string
      * @param   null    $group
      *
      * @return  null
@@ -494,7 +524,6 @@ abstract class Entry implements EntryInterface
     /**
      * Set execute access to true or false for the group specified: 'owner', 'group', or 'world'
      *
-     * @param           string
      * @param   null    $group
      *
      * @return  null
@@ -508,8 +537,6 @@ abstract class Entry implements EntryInterface
     /**
      * Retrieves Create Date for directory or file identified in the path
      *
-     * @param   string
-     *
      * @return  null
      * @since   1.0
      */
@@ -520,8 +547,6 @@ abstract class Entry implements EntryInterface
 
     /**
      * Retrieves Last Access Date for directory or file identified in the path
-     *
-     * @param   string
      *
      * @return  null
      * @since   1.0
@@ -534,8 +559,6 @@ abstract class Entry implements EntryInterface
     /**
      * Retrieves Last Update Date for directory or file identified in the path
      *
-     * @param   string
-     *
      * @return  null
      * @since   1.0
      */
@@ -546,8 +569,6 @@ abstract class Entry implements EntryInterface
 
     /**
      * Sets the Last Access Date for directory or file identified in the path
-     *
-     * @param   string
      *
      * @return  null
      * @since   1.0
@@ -560,7 +581,6 @@ abstract class Entry implements EntryInterface
     /**
      * Sets the Last Update Date for directory or file identified in the path
      *
-     * @param           string
      * @param   string  $value
      *
      * @return  null
