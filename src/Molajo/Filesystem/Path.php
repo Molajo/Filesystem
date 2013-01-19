@@ -112,7 +112,6 @@ interface Path extends Adapter
      * Changes the owner to the value specified in group for the file or
      * directory defined in the path
      *
-     * @param           string
      * @param   string  $group
      *
      * @return  null
@@ -123,8 +122,6 @@ interface Path extends Adapter
     /**
      * Returns the group for the file or directory defined in the path
      *
-     * @param   string
-     *
      * @return  null
      * @since   1.0
      */
@@ -134,7 +131,6 @@ interface Path extends Adapter
      * Changes the group to the value specified for the file or
      * directory defined in the path
      *
-     * @param           string
      * @param   string  $group
      *
      * @return  null
@@ -188,7 +184,6 @@ interface Path extends Adapter
      * Tests if the group specified: 'owner', 'group', or 'world'
      *  has execute access. Returns true or false
      *
-     * @param           string
      * @param   null    $group
      *
      * @return  null
@@ -200,7 +195,6 @@ interface Path extends Adapter
      * Set read access to true or false for the group specified:
      *  'owner', 'group', or 'world'
      *
-     * @param           string
      * @param   null    $group
      *
      * @return  null
@@ -212,7 +206,6 @@ interface Path extends Adapter
      * Set write access to true or false for the group specified:
      *  'owner', 'group', or 'world'
      *
-     * @param           string
      * @param   null    $group
      *
      * @return  null
@@ -224,7 +217,6 @@ interface Path extends Adapter
      * Set execute access to true or false for the group specified:
      *  'owner', 'group', or 'world'
      *
-     * @param           string
      * @param   null    $group
      *
      * @return  null
@@ -275,7 +267,6 @@ interface Path extends Adapter
     /**
      * Sets the Last Update Date for directory or file identified in the path
      *
-     * @param           string
      * @param   string  $value
      *
      * @return  null

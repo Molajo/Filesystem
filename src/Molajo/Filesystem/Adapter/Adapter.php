@@ -205,7 +205,7 @@ abstract class Adapter implements AdapterInterface
      */
     public function setRoot ($root)
     {
-        return $this->root = $root;
+        return $this->root = rtrim($root, '/\\') . '/';
     }
 
     /**

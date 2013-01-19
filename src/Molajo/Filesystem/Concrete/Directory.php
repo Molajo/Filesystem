@@ -11,6 +11,8 @@ namespace Molajo\Filesystem\Concrete;
 defined ('MOLAJO') or die;
 
 use Molajo\Filesystem\Directory as DirectoryInterface;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 /**
  * Directory Instance for Filesystem
@@ -89,6 +91,103 @@ Class Directory extends Path implements DirectoryInterface
      */
     public function create ($path, $name, $permission)
     {
+
+    }
+    /**
+     * Recursively remove a directory
+     *
+     * Uses the process component if proc_open is enabled on the PHP
+     * installation.
+     *
+     * @param string $directory
+     * @return bool
+     */
+    public function delete($path)
+    {
+        if (is_dir($path)) {
+        } else {
+            return true;
+        }
+
+        if (!function_exists('proc_open')) {
+            return $this->removeDirectoryPhp($directory);
+        }
+
+        if (defined('PHP_WINDOWS_VERSION_BUILD')) {
+            $cmd = sprintf('rmdir /S /Q %s', escapeshellarg(realpath($directory)));
+        } else {
+            $cmd = sprintf('rm -rf %s', escapeshellarg($directory));
+        }
+
+        $result = $this->getProcess()->execute($cmd) === 0;
+
+        // clear stat cache because external processes aren't tracked by the php stat cache
+        clearstatcache();
+
+        return $result && !is_dir($directory);
+    }
+
+    function copyFiles()
+
+    {
+
+        if (!isset($_SERVER['DEPLOYMENT_TARGET'])) {
+
+            echo "Cannot find pyhsical path to application root.\n";
+
+            echo "There should be an 'DEPLOYMENT_TARGET' env variable.\n";
+
+            exit(1);
+
+        }
+
+
+
+        echo "Copying code to webroot\n";
+
+        copyDirectory($_SERVER['DEPLOYMENT_SOURCE'], $_SERVER['DEPLOYMENT_TARGET']);
+
+    }
+
+
+
+    function copyDirectory($source, $target)
+
+    {
+
+        $it = new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS);
+
+        $ri = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::SELF_FIRST);
+
+
+
+        if ( !file_exists($target)) {
+
+            mkdir($target, 0777, true);
+
+        }
+
+
+
+        foreach ($ri as $file) {
+
+            $targetPath = $target . DIRECTORY_SEPARATOR . $ri->getSubPathName();
+
+            if ($file->isDir()) {
+
+                if ( ! file_exists($targetPath)) {
+
+                    mkdir($targetPath);
+
+                }
+
+            } else if (!file_exists($targetPath) || filemtime($targetPath) < filemtime($file->getPathname())) {
+
+                copy($file->getPathname(), $targetPath);
+
+            }
+
+        }
 
     }
 }

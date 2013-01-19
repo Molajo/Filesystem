@@ -46,7 +46,7 @@ $cloud = $services->addFilesystem('cloud');
 
 // Backup a folder from the local system to the cloud
 $results = $services->copy('path/to/local/folder', 'path/to/cloud/destination', 'local', 'cloud');
- ```
+```php
 
 stuff
 
@@ -80,6 +80,7 @@ to load Filesystem classes.
 
 ### Enable within your PHP application
 
+```php
 <?php
 
 use Molajo\Filesystem\Service as FilesystemServices;
@@ -92,7 +93,7 @@ $local = $services->addFilesystem('local');
 ```
 
 ### Basic File Services
-
+```php
 <?php
 
 // Read a File
@@ -111,7 +112,7 @@ $data = $local->read('path\to\your\file');
 
 
 ### Basic Directory Services
-
+```php
 <?php
 
 // List of Files in Directory
@@ -134,7 +135,7 @@ $results = $services->write('path\to\your\file');
 More file services...
 
 ### Exception Handling
-
+```php
 <?php
 
 // Read a File

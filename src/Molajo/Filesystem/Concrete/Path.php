@@ -115,8 +115,8 @@ class Path extends Adapter implements PathInterface
      */
     public function __construct (Adapter $adapter, $path, $options = array())
     {
-        $this->adapter = $adapter;
-        $this->path    = $path;
+        $this->setAdapter($adapter);
+        $this->path = $this->normalise($path);
         $this->normalise ();
         $this->options = $options;
         $this->isAbsolute ();
@@ -154,6 +154,30 @@ class Path extends Adapter implements PathInterface
     }
 
     /**
+     * Set the Path
+     *
+     * @param   string  $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function setPath ($path)
+    {
+        return $this->path = $this->normalise($path);
+    }
+
+    /**
+     * Get the Path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getPath ()
+    {
+        return $this->path;
+    }
+
+    /**
      * Set the Options
      *
      * @param   array  $options
@@ -182,51 +206,6 @@ class Path extends Adapter implements PathInterface
     }
 
     /**
-     * Normalizes the given path
-     *
-     * @return  void
-     * @since   1.0
-     */
-    public function normalise ()
-    {
-        $this->path = str_replace ('\\', '/', $this->path);
-
-        $prefix = $this->getAbsolutePath ();
-
-        $this->path = substr ($this->path, strlen ($prefix));
-
-        $parts = array_filter (explode ('/', $this->path), 'strlen');
-
-        $tokens = array();
-
-        foreach ($parts as $part) {
-            switch ($part) {
-
-                case '.':
-                    continue;
-
-                case '..':
-                    if (0 !== count ($tokens)) {
-                        array_pop ($tokens);
-                        continue;
-
-                    } elseif (! empty($prefix)) {
-                        continue;
-                    }
-                    break;
-
-                default:
-                    $tokens[] = $part;
-            }
-
-        }
-
-        $this->path = $prefix . implode ('/', $tokens);
-
-        return;
-    }
-
-    /**
      * Checks to see if the path exists
      *
      * @return  boolean
@@ -247,7 +226,7 @@ class Path extends Adapter implements PathInterface
      */
     public function isAbsolute ()
     {
-        $this->normalise ();
+        $this->path = $this->normalise($this->path);
 
         if ($this->absolute_path == $this->path) {
             return true;
@@ -589,5 +568,52 @@ class Path extends Adapter implements PathInterface
     public function setUpdateDate ($value)
     {
 
+    }
+
+    /**
+     * Normalizes the given path
+     *
+     * @param   $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function normalise ($path)
+    {
+        $path = str_replace ('\\', '/', $path);
+
+        $prefix = $this->getAbsolutePath ();
+
+        $path = substr ($path, strlen ($prefix));
+
+        $parts = array_filter (explode ('/', $path), 'strlen');
+
+        $tokens = array();
+
+        foreach ($parts as $part) {
+            switch ($part) {
+
+                case '.':
+                    continue;
+
+                case '..':
+                    if (0 !== count ($tokens)) {
+                        array_pop ($tokens);
+                        continue;
+
+                    } elseif (! empty($prefix)) {
+                        continue;
+                    }
+                    break;
+
+                default:
+                    $tokens[] = $part;
+            }
+
+        }
+
+        $path = $prefix . implode ('/', $tokens);
+
+        return $path;
     }
 }

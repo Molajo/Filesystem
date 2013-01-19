@@ -104,15 +104,17 @@ Interface File extends Path
      * Copies the file identified in $path to the new_parent_directory,
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * @param   string  $path
-     * @param   string  $new_parent_directory
-     * @param   bool    $replace
-     * @param   bool    $create_directories
+     * @param   string     $path
+     * @param   File       $target
+     * @param   string     $target_directory
+     * @param   bool       $replace
+     * @param   bool       $create_directories
      *
-     * @return  null
+     * @return  mixed
      * @since   1.0
      */
-    public function copy ($path, $new_parent_directory, $replace = false, $create_directories = true);
+    public function copy ($path, File $target, $target_directory,
+        $replace = false, $create_directories = true);
 
     /**
      * Moves the file identified in path to the location identified in the new_parent_directory
