@@ -5,32 +5,36 @@ Filesystem is available on Packagist ([Molajo/Filesystem](http://packagist.org/p
 and as such installable via [Composer](http://getcomposer.org/).
 
 Filesystem's built-in adapters provide sufficient directory and file services for most projects. Out of the box,
-local filesystem, FTP Server, Github, Registry, and Streaming are supported. Creating new Adapters is a simple
-process for most PHP programmers.
+local filesystem, FTP Server, Github, Registry, and Streaming are supported. Developers can create Adapters
+for other Filesystems, as well.
 
-## Usage
+## Basic Usage
 
-Basic example here
+Read a text file at \x\y\zebra.txt on the local server.
 
+**Step 1** Connect to the local fileserver adapter:
 ```
 <?php
 
-use Molajo\Filesystem\Service as FilesystemServices;
-
-// Enable access to filesystem services
-$services = new FilesystemServices();
-
-// Enable access to the local filesystem
-$local = $services->addFilesystem('local');
-
-// Read a file
-$results = $local->read('path/to/your.file');
+use Molajo\Filesystem\Adapter\Local as LocalAdapter;
+$connection = new LocalAdapter();
  ```
 
+**Step 2** Next, connect to the files on the local filesystem, passing in the adapter connection.
 
-Example of copying data between filesystems
+<?php
 
-```
+use Molajo\Filesystem\Access\File as Files;
+$files = new Files($connection);
+ ```
+
+**Step 3** Using the $files connection, request the contents of the file to be returned.
+
+<?php
+
+$data = $files->read('\x\y\zebra.txt');
+
+ ```
 <?php
 
 use Molajo\Filesystem\Service as FilesystemServices;

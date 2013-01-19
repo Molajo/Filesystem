@@ -19,8 +19,6 @@ use Molajo\Filesystem\Adapter\Adapter as Adapter;
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * https://github.com/composer/composer/blob/master/src/Composer/Util/RemoteFilesystem.php
  */
 class Remote extends Adapter
 {

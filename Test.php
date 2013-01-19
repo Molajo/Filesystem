@@ -26,9 +26,9 @@ include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter.php';                     
 include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter/Adapter.php';                  // Abstract Class
 include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter/' . $adapter . '.php';         // Filesystem Adapter
 
-include BASE_FOLDER . '/src/Molajo/Filesystem/Concrete/Path.php';         // Path
-include BASE_FOLDER . '/src/Molajo/Filesystem/Concrete/Directory.php';    // Directory
-include BASE_FOLDER . '/src/Molajo/Filesystem/Concrete/File.php';         // File
+include BASE_FOLDER . '/src/Molajo/Filesystem/Access/Path.php';         // Path
+include BASE_FOLDER . '/src/Molajo/Filesystem/Access/Directory.php';    // Directory
+include BASE_FOLDER . '/src/Molajo/Filesystem/Access/File.php';         // File
 
 $local_adapter_options = array(
     'adapter_name'   => 'Local Filesystem',

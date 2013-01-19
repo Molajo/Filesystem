@@ -33,8 +33,8 @@ $x->add ('Molajo\\Filesystem\\Adapter\\Local', BASE_FOLDER . 'src/Molajo/Filesys
 //$x->add ('Molajo\\Filesystem\\Stream', BASE_FOLDER . 'src/Molajo/Filesystem/Stream.php');
 // cURL and Http
 
-$x->add ('Molajo\\Filesystem\\Concrete\\Path', BASE_FOLDER . 'src/Molajo/Filesystem/Concrete/Path.php');
-$x->add ('Molajo\\Filesystem\\Concrete\\Directory', BASE_FOLDER . 'src/Molajo/Filesystem/Concrete/Directory.php');
-$x->add ('Molajo\\Filesystem\\Concrete\\File', BASE_FOLDER . 'src/Molajo/Filesystem/Concrete/File.php');
+$x->add ('Molajo\\Filesystem\\Access\\Path', BASE_FOLDER . 'src/Molajo/Filesystem/Access/Path.php');
+$x->add ('Molajo\\Filesystem\\Access\\Directory', BASE_FOLDER . 'src/Molajo/Filesystem/Access/Directory.php');
+$x->add ('Molajo\\Filesystem\\Access\\File', BASE_FOLDER . 'src/Molajo/Filesystem/Access/File.php');
 
 include BASE_FOLDER . '/Test.php';

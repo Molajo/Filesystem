@@ -1,6 +1,6 @@
 {
     "name": "Molajo/Filesystem",
-    "description": "Common handling of all file and directory requests, regardless of host filesystems",
+    "description": "Common handling of all file and directory requests for defined filesystem adapters",
     "keywords": ["Filesystem", "Adapters", "Interface", "PSR-0"],
     "homepage": "http://github.com/AmyStephen/Filesystem",
     "type": "library",

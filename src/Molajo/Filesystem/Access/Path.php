@@ -6,7 +6,7 @@
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Concrete;
+namespace Molajo\Filesystem\Access;
 
 use Molajo\Filesystem\FilesystemException;
 use Molajo\Filesystem\Adapter\Adapter;
@@ -17,12 +17,13 @@ defined ('MOLAJO') or die;
 /**
  * Path for Filesystem
  *
+ *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Path extends Adapter implements PathInterface
+class Path implements PathInterface
 {
     /**
      * Adapter Instance
@@ -51,6 +52,8 @@ class Path extends Adapter implements PathInterface
     /**
      * Absolute path for current path
      *
+     * An absolute path is a relative path from the root directory, prepended with a '/'.
+     *
      * @var    string
      * @since  1.0
      */
@@ -58,6 +61,8 @@ class Path extends Adapter implements PathInterface
 
     /**
      * Relative path for current path
+     *
+     * A relative path describes how to get from a particular directory to a file or directory.
      *
      * @var    string
      * @since  1.0
@@ -115,11 +120,10 @@ class Path extends Adapter implements PathInterface
      */
     public function __construct (Adapter $adapter, $path, $options = array())
     {
-        $this->setAdapter($adapter);
-        $this->path = $this->normalise($path);
-        $this->normalise ();
-        $this->options = $options;
-        $this->isAbsolute ();
+        $this->setAdapter ($adapter);
+        $this->setPath ($path);
+        $this->setOptions ($options);
+
         $this->convertToUrl ();
 
         if (isset($this->options['persistence'])) {
@@ -163,7 +167,8 @@ class Path extends Adapter implements PathInterface
      */
     public function setPath ($path)
     {
-        return $this->path = $this->normalise($path);
+        $this->path = $this->normalise ($path);
+        return $this->getAbsolutePath ();
     }
 
     /**
@@ -212,78 +217,43 @@ class Path extends Adapter implements PathInterface
      */
     public function exists ()
     {
-        if ($this->absolute_path == $this->path) {
-            return true;
-        }
-
-        return false;
+        return file_exists($this->path);
     }
 
     /**
      * Indicates whether the given path is absolute or not
      *
+     * Relative path - describes how to get from a particular directory to a file or directory
+     * Absolute Path - relative path from the root directory, prepended with a '/'.
+     *
      * @return  boolean
+     * @since   1.0
      */
     public function isAbsolute ()
     {
-        $this->path = $this->normalise($this->path);
-
-        if ($this->absolute_path == $this->path) {
+        if (substr ($this->path, 0, 1) == '/') {
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * Retrieves the absolute path, which is the relative path from the root directory,
-     *  prepended with a '/'.
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getAbsolutePath ()
-    {
-        $this->absolute_path = realpath ($this->path);
-
-        return $this->absolute_path;
-    }
-
-    /**
-     * Retrieves the relative path, which is the path between a specific directory to
-     *  a specific file or directory
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getRelativePath ()
-    {
-        if ($this->isAbsolute () === true) {
-        } else {
-
-        }
-//??????
-        $this->relative_path = $this->path;
-
-        return $this->relative_path;
     }
 
     /**
      * Returns a URL that can be used to identify this entry.
      *  filesystem:http://example.domain/persistent-or-temporary/path/to/file.html.
      *
-     * @return  null
+     * @return  bool
      * @since   1.0
      */
     public function convertToUrl ()
     {
-//??????
+        return false;
     }
 
     /**
      * Returns the value 'directory, 'file' or 'link' for the type determined from the path
      *
-     * @return  null
+     * @return  string
      * @since   1.0
      * @throws  \Molajo\Filesystem\FilesystemException
      */
@@ -308,7 +278,7 @@ class Path extends Adapter implements PathInterface
     /**
      * Returns true or false indicator as to whether or not the path is a directory
      *
-     * @return  null
+     * @return  bool
      * @since   1.0
      */
     public function isDirectory ()
@@ -323,7 +293,7 @@ class Path extends Adapter implements PathInterface
     /**
      * Returns true or false indicator as to whether or not the path is a file
      *
-     * @return  null
+     * @return  bool
      * @since   1.0
      */
     public function isFile ()
@@ -338,7 +308,7 @@ class Path extends Adapter implements PathInterface
     /**
      * Returns true or false indicator as to whether or not the path is a link
      *
-     * @return  null
+     * @return  bool
      * @since   1.0
      */
     public function isLink ()
@@ -353,7 +323,7 @@ class Path extends Adapter implements PathInterface
     /**
      * Returns the owner of the file or directory defined in the path
      *
-     * @return  null
+     * @return  bool
      * @since   1.0
      */
     public function getOwner ()
@@ -366,24 +336,20 @@ class Path extends Adapter implements PathInterface
      *
      * @param   string $owner
      *
-     * @return  null
+     * @return  string
      * @since   1.0
-     */
-
-    /**
-     * @param string $owner
-     *
-     * @return null|void
      */
     public function setOwner ($owner)
     {
         $this->owner = $owner;
+
+        return $this->owner;
     }
 
     /**
      * Returns the group for the file or directory defined in the path
      *
-     * @return  null
+     * @return  string
      * @since   1.0
      */
     public function getGroup ()
@@ -402,6 +368,8 @@ class Path extends Adapter implements PathInterface
     public function setGroup ($group)
     {
         $this->group = $group;
+
+        return $this->group;
     }
 
     /**
@@ -514,63 +482,6 @@ class Path extends Adapter implements PathInterface
     }
 
     /**
-     * Retrieves Create Date for directory or file identified in the path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getCreateDate ()
-    {
-
-    }
-
-    /**
-     * Retrieves Last Access Date for directory or file identified in the path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getAccessDate ()
-    {
-
-    }
-
-    /**
-     * Retrieves Last Update Date for directory or file identified in the path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getUpdateDate ()
-    {
-
-    }
-
-    /**
-     * Sets the Last Access Date for directory or file identified in the path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setAccessDate ()
-    {
-
-    }
-
-    /**
-     * Sets the Last Update Date for directory or file identified in the path
-     *
-     * @param   string  $value
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setUpdateDate ($value)
-    {
-
-    }
-
-    /**
      * Normalizes the given path
      *
      * @param   $path
@@ -580,40 +491,57 @@ class Path extends Adapter implements PathInterface
      */
     public function normalise ($path)
     {
+        $absolute_path = false;
+        if (substr ($path, 0, 1) == '/') {
+            $absolute_path = true;
+            $path     = substr ($path, 1, strlen ($path));
+        }
+
+        /** Unescape slashes */
         $path = str_replace ('\\', '/', $path);
 
-        $prefix = $this->getAbsolutePath ();
+        /**  Filter: empty value @link http://tinyurl.com/arrayFilterStrlen */
+        $nodes = array_filter (explode ('/', $path), 'strlen');
 
-        $path = substr ($path, strlen ($prefix));
+        $normalised = array();
 
-        $parts = array_filter (explode ('/', $path), 'strlen');
+        foreach ($nodes as $node) {
 
-        $tokens = array();
+            /** '.' means current - ignore it      */
+            if ($node == '.') {
 
-        foreach ($parts as $part) {
-            switch ($part) {
+            /** '..' is parent - remove the parent */
+            } elseif ($node == '..') {
 
-                case '.':
-                    continue;
+                if (count($normalised) > 0) {
+                    array_pop ($normalised);
+                }
 
-                case '..':
-                    if (0 !== count ($tokens)) {
-                        array_pop ($tokens);
-                        continue;
-
-                    } elseif (! empty($prefix)) {
-                        continue;
-                    }
-                    break;
-
-                default:
-                    $tokens[] = $part;
+            } else {
+                $normalised[] = $node;
             }
 
         }
 
-        $path = $prefix . implode ('/', $tokens);
+        $path = implode ('/', $normalised);
+        if ($absolute_path === true) {
+            $path = '/' . $path;
+        }
 
         return $path;
+    }
+
+    /**
+     * Retrieves the absolute path, which is the relative path from the root directory,
+     *  prepended with a '/'.
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getAbsolutePath ()
+    {
+        $this->absolute_path = realpath ($this->path);
+
+        return $this->absolute_path;
     }
 }

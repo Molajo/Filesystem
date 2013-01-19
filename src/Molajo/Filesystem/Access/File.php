@@ -6,7 +6,7 @@
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Concrete;
+namespace Molajo\Filesystem\Access;
 
 defined ('MOLAJO') or die;
 
@@ -21,11 +21,8 @@ use Molajo\Filesystem\Adapter;
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-Class File extends Path implements FileInterface
+Class File extends Directory implements FileInterface
 {
     /**
      * File Name
@@ -85,7 +82,7 @@ Class File extends Path implements FileInterface
      */
     public function getExtension ()
     {
-
+        return pathinfo($path, PATHINFO_EXTENSION);
     }
 
     /**
@@ -139,13 +136,26 @@ Class File extends Path implements FileInterface
      */
     public function read ($path)
     {
-        $this->path = $this->normalise($path);
+        $this->path = $this->normalise ($path);
 
-        if (file_exists($this->path)) {
-            return file_get_contents($this->path);
+        if (file_exists ($this->path)) {
+            return file_get_contents ($this->path);
         }
 
         return false;
+    }
+
+    /**
+     * Append to a file.
+     *
+     * @param string $path
+     * @param string $data
+     *
+     * @return int
+     */
+    public function append ($path, $data)
+    {
+        return file_put_contents ($path, $data, LOCK_EX | FILE_APPEND);
     }
 
     /**
@@ -162,26 +172,26 @@ Class File extends Path implements FileInterface
      */
     public function write ($path, $data, $replace = false, $create_directories = true)
     {
-        $this->path = $this->normalise($path);
+        $this->path = $this->normalise ($path);
 
         if ($replace === false) {
-            if (file_exists($this->path)) {
+            if (file_exists ($this->path)) {
                 return false;
             }
         }
 
         if ($create_directories === false) {
-            if (file_exists($this->path)) {
+            if (file_exists ($this->path)) {
             } else {
                 return false;
             }
         }
 
-        if (file_exists($this->path)) {
-            return file_get_contents($this->path);
+        if (file_exists ($this->path)) {
+            return file_get_contents ($this->path);
         }
 
-        \file_put_contents($this->path, $data);
+        \file_put_contents ($this->path, $data);
 
         return false;
     }
@@ -245,32 +255,32 @@ Class File extends Path implements FileInterface
      */
     public function rename ($path, $new_name)
     {
-        if (true === @rename($source, $target)) {
+        if (true === @rename ($source, $target)) {
             return;
         }
 
-        if (!function_exists('proc_open')) {
-            return $this->copyThenRemove($source, $target);
+        if (! function_exists ('proc_open')) {
+            return $this->copyThenRemove ($source, $target);
         }
 
-        if (defined('PHP_WINDOWS_VERSION_BUILD')) {
+        if (defined ('PHP_WINDOWS_VERSION_BUILD')) {
             // Try to copy & delete - this is a workaround for random "Access denied" errors.
-            $command = sprintf('xcopy %s %s /E /I /Q', escapeshellarg($source), escapeshellarg($target));
-            if (0 === $this->processExecutor->execute($command)) {
-                $this->remove($source);
+            $command = sprintf ('xcopy %s %s /E /I /Q', escapeshellarg ($source), escapeshellarg ($target));
+            if (0 === $this->processExecutor->execute ($command)) {
+                $this->remove ($source);
 
                 return;
             }
         } else {
             // We do not use PHP's "rename" function here since it does not support
             // the case where $source, and $target are located on different partitions.
-            $command = sprintf('mv %s %s', escapeshellarg($source), escapeshellarg($target));
-            if (0 === $this->processExecutor->execute($command)) {
+            $command = sprintf ('mv %s %s', escapeshellarg ($source), escapeshellarg ($target));
+            if (0 === $this->processExecutor->execute ($command)) {
                 return;
             }
         }
 
-        throw new \RuntimeException(sprintf('Could not rename "%s" to "%s".', $source, $target));
+        throw new \RuntimeException(sprintf ('Could not rename "%s" to "%s".', $source, $target));
     }
 
 
@@ -279,29 +289,30 @@ Class File extends Path implements FileInterface
      * given, it's size will be computed recursively.
      *
      * @param string $path Path to the file or directory
+     *
      * @return int
      */
-    public function size($path)
+    public function size ($path)
     {
-        if (!file_exists($path)) {
+        if (! file_exists ($path)) {
             throw new \RuntimeException("$path does not exist.");
         }
-        if (is_dir($path)) {
-            return $this->directorySize($path);
+        if (is_dir ($path)) {
+            return $this->directorySize ($path);
         }
 
-        return filesize($path);
+        return filesize ($path);
     }
 
-    protected function directorySize($directory)
+    protected function directorySize ($directory)
     {
         $it = new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS);
         $ri = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
 
         $size = 0;
         foreach ($ri as $file) {
-            if ($file->isFile()) {
-                $size += $file->getSize();
+            if ($file->isFile ()) {
+                $size += $file->getSize ();
             }
         }
 
@@ -319,30 +330,118 @@ Class File extends Path implements FileInterface
      */
     public function delete ($path, $delete_empty_directory = true)
     {
-        $this->path = $this->normalise($path);
+        $this->path = $this->normalise ($path);
 
-        if (file_exists($this->path)) {
-            return unlink($this->path);
+        if (file_exists ($this->path)) {
+            return unlink ($this->path);
         }
 
         return false;
     }
 
-    public function sha1($file)
+
+    /**
+     * Get the file size of a given file.
+     *
+     * @param string $path
+     * @return int
+     */
+    public function size($path)
     {
-        $file = preg_replace('{[^'.$this->whitelist.']}i', '-', $file);
-        if ($this->enabled && file_exists($this->root . $file)) {
-            return sha1_file($this->root . $file);
+        return filesize($path);
+    }
+
+
+    /**
+     * Retrieves Create Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getCreateDate ()
+    {
+
+    }
+
+    /**
+     * Retrieves Last Access Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getAccessDate ()
+    {
+
+    }
+
+    /**
+     * Retrieves Last Update Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getUpdateDate ()
+    {
+        return filemtime($path);
+    }
+
+    /**
+     * Sets the Last Access Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setAccessDate ()
+    {
+
+    }
+
+    /**
+     * Sets the Last Update Date for directory or file identified in the path
+     *
+     * @param   string  $value
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setUpdateDate ($value)
+    {
+
+    }
+
+
+    /**
+     * Find path names matching a given pattern.
+     *
+     * @param string $pattern
+     * @param int $flags
+     * @return array
+     */
+    public function glob($pattern, $flags = 0)
+    {
+        return glob($pattern, $flags);
+    }
+
+
+
+
+
+
+    public function sha1 ($file)
+    {
+        $file = preg_replace ('{[^' . $this->whitelist . ']}i', '-', $file);
+        if ($this->enabled && file_exists ($this->root . $file)) {
+            return sha1_file ($this->root . $file);
         }
 
         return false;
     }
 
-    public function sha256($file)
+    public function sha256 ($file)
     {
-        $file = preg_replace('{[^'.$this->whitelist.']}i', '-', $file);
-        if ($this->enabled && file_exists($this->root . $file)) {
-            return hash_file('sha256', $this->root . $file);
+        $file = preg_replace ('{[^' . $this->whitelist . ']}i', '-', $file);
+        if ($this->enabled && file_exists ($this->root . $file)) {
+            return hash_file ('sha256', $this->root . $file);
         }
 
         return false;

@@ -6,7 +6,7 @@
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Concrete;
+namespace Molajo\Filesystem\Access;
 
 defined ('MOLAJO') or die;
 
@@ -22,7 +22,7 @@ use RecursiveIteratorIterator;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-Class Directory extends Path implements DirectoryInterface
+Abstract Class Directory extends Path implements DirectoryInterface
 {
     /**
      * Adapter Instance
