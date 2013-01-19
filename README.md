@@ -12,7 +12,7 @@ process for most PHP programmers.
 
 Basic example here
 
-```php
+```
 <?php
 
 use Molajo\Filesystem\Service as FilesystemServices;
