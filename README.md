@@ -30,7 +30,7 @@ $results = $local->read('path/to/your.file');
 
 Example of copying data between filesystems
 
-```php
+```
 <?php
 
 use Molajo\Filesystem\Service as FilesystemServices;
@@ -46,7 +46,7 @@ $cloud = $services->addFilesystem('cloud');
 
 // Backup a folder from the local system to the cloud
 $results = $services->copy('path/to/local/folder', 'path/to/cloud/destination', 'local', 'cloud');
-```php
+```
 
 stuff
 
@@ -80,7 +80,7 @@ to load Filesystem classes.
 
 ### Enable within your PHP application
 
-```php
+```
 <?php
 
 use Molajo\Filesystem\Service as FilesystemServices;
@@ -93,7 +93,7 @@ $local = $services->addFilesystem('local');
 ```
 
 ### Basic File Services
-```php
+```
 <?php
 
 // Read a File
@@ -108,11 +108,11 @@ $results = $local->write('path\to\your\file');
 // Copy a file
 $data = $local->read('path\to\your\file');
 
-```php
+```
 
 
 ### Basic Directory Services
-```php
+```
 <?php
 
 // List of Files in Directory
@@ -130,12 +130,12 @@ $data = $services->write('path\to\your\file');
 // Delete a file
 $results = $services->write('path\to\your\file');
 
-```php
+```
 
 More file services...
 
 ### Exception Handling
-```php
+```
 <?php
 
 // Read a File
@@ -147,7 +147,7 @@ $data = $services->write('path\to\your\file');
 // Delete a file
 $results = $services->write('path\to\your\file');
 
-```php
+```
 
 Short conclusion.
 
