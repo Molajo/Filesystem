@@ -10,32 +10,33 @@ for other Filesystems, as well.
 
 ## Basic Usage
 
-Read a text file at \x\y\zebra.txt on the local server.
+This example shows how to read a text file at /x/y/zebra.txt on the local server.
 
-**Step 1** Connect to the local fileserver adapter:
-```
-<?php
+First, connect to the local fileserver adapter.
+```php
 
 use Molajo\Filesystem\Adapter\Local as LocalAdapter;
 $connection = new LocalAdapter();
- ```
+```
 
-**Step 2** Next, connect to the files on the local filesystem, passing in the adapter connection.
+**Step 2** Next, create a connection for interacting with files on the local filesystem.
+Note: we are passing in the adapter connection to the constructor.
 
-<?php
-
+```php
 use Molajo\Filesystem\Access\File as Files;
 $files = new Files($connection);
  ```
 
-**Step 3** Using the $files connection, request the contents of the file to be returned.
+**Step 3** Now, get the data.
 
-<?php
+```php
 
-$data = $files->read('\x\y\zebra.txt');
+$data = $files->read('/x/y/zebra.txt');
 
  ```
-<?php
+ ## MOAR
+
+```php
 
 use Molajo\Filesystem\Service as FilesystemServices;
 
@@ -50,6 +51,7 @@ $cloud = $services->addFilesystem('cloud');
 
 // Backup a folder from the local system to the cloud
 $results = $services->copy('path/to/local/folder', 'path/to/cloud/destination', 'local', 'cloud');
+
 ```
 
 stuff
