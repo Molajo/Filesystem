@@ -17,7 +17,7 @@ $ftp_adapter_options = array(
     'port'           => 21,
     'root'           => '/integrationFTP',
     'timeout'        => 15,
-    'is_passive'     => true
+    'passive_mode'   => true
 );
 
 $adapter = 'Local';
@@ -38,7 +38,7 @@ $local_adapter_options = array(
     'port'           => '',
     'root'           => BASE_FOLDER,
     'timeout'        => 15,
-    'is_passive'     => true
+    'passive_mode'     => true
 );
 
 $class = 'Molajo\\Filesystem\\Adapter\\' . $adapter;

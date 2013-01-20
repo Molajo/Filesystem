@@ -76,7 +76,7 @@ abstract class Adapter implements AdapterInterface
      * @var    string
      * @since  1.0
      */
-    protected $port;
+    protected $port = 21;
 
     /**
      * Timeout in minutes
@@ -92,7 +92,7 @@ abstract class Adapter implements AdapterInterface
      * @var    bool
      * @since  1.0
      */
-    protected $is_passive = false;
+    protected $passive_mode = false;
 
     /**
      * Connection
@@ -111,46 +111,54 @@ abstract class Adapter implements AdapterInterface
      */
     public function __construct ($options = array())
     {
-        if (isset($this->options['username'])) {
-            $this->username = $this->options['username'];
+        $this->setOptions ($options);
+
+        if (isset($this->options['root'])) {
+            $this->setRoot ($this->options['root']);
         } else {
-            $this->username = '';
+            $this->setRoot ('/');
+        }
+
+        if (isset($this->options['persistence'])) {
+            $this->setPersistence ($this->options['persistence']);
+        } else {
+            $this->setPersistence (0);
+        }
+
+        if (isset($this->options['username'])) {
+            $this->setUsername ($this->options['username']);
+        } else {
+            $this->setUsername ('anonymous');
         }
 
         if (isset($this->options['password'])) {
-            $this->password = $this->options['password'];
+            $this->setPassword ($this->options['password']);
         } else {
-            $this->password = '';
+            $this->setPassword ('');
         }
 
         if (isset($this->options['host'])) {
-            $this->host = $this->options['host'];
+            $this->setHost ($this->options['host']);
         } else {
-            $this->host = '127.0.0.1';
+            $this->setHost ('127.0.0.1');
         }
 
         if (isset($this->options['port'])) {
-            $this->port = $this->options['port'];
+            $this->setPort ($this->options['port']);
         } else {
-            $this->port = 0;
-        }
-
-        if (isset($this->options['root'])) {
-            $this->root = $this->options['root'];
-        } else {
-            $this->root = '/';
+            $this->setPort (21);
         }
 
         if (isset($this->options['timeout'])) {
-            $this->timeout = $this->options['timeout'];
+            $this->setTimeout ($this->options['timeout']);
         } else {
-            $this->timeout = 15;
+            $this->setTimeout (15);
         }
 
-        if (isset($this->options['is_passive'])) {
-            $this->is_passive = $this->options['is_passive'];
+        if (isset($this->options['passive_mode'])) {
+            $this->setPassive_mode ($this->options['passive_mode']);
         } else {
-            $this->is_passive = false;
+            $this->setPassive_mode (false);
         }
 
         return;
@@ -166,7 +174,7 @@ abstract class Adapter implements AdapterInterface
      */
     public function setOptions ($options = array())
     {
-        if (is_array($options)) {
+        if (is_array ($options)) {
             return $this->options = $options;
         }
 
@@ -205,7 +213,7 @@ abstract class Adapter implements AdapterInterface
      */
     public function setRoot ($root)
     {
-        return $this->root = rtrim($root, '/\\') . '/';
+        return $this->root = rtrim ($root, '/\\') . '/';
     }
 
     /**
@@ -355,21 +363,21 @@ abstract class Adapter implements AdapterInterface
     /**
      * Set the Passive Indicator
      *
-     * @param   int  $is_passive
+     * @param   int  $passive_mode
      *
      * @return  int
      * @since   1.0
      */
-    public function setIs_passive ($is_passive = 1)
+    public function setPassive_mode ($passive_mode = 1)
     {
-        $this->is_passive = $is_passive;
+        $this->passive_mode = $passive_mode;
 
-        if ((int)$this->is_passive == 0) {
+        if ((int)$this->passive_mode == 0) {
         } else {
-            $this->is_passive = 1;
+            $this->passive_mode = 1;
         }
 
-        return $this->is_passive;
+        return $this->passive_mode;
     }
 
     /**
@@ -378,14 +386,14 @@ abstract class Adapter implements AdapterInterface
      * @return  int
      * @since   1.0
      */
-    public function getIs_passive ()
+    public function getPassive_mode ()
     {
-        if ((int)$this->is_passive == 0) {
+        if ((int)$this->passive_mode == 0) {
         } else {
-            $this->is_passive = 1;
+            $this->passive_mode = 1;
         }
 
-        return (int)$this->is_passive;
+        return (int)$this->passive_mode;
     }
 
     /**
@@ -396,22 +404,6 @@ abstract class Adapter implements AdapterInterface
      */
     public function connect ()
     {
-    }
-
-    /**
-     * Return the connected FTP connection
-     *
-     * @return  object  resource
-     * @since   1.0
-     */
-    public function getConnection ()
-    {
-        if ($this->isConnected ()) {
-        } else {
-            $this->connect ();
-        }
-
-        return $this->connection;
     }
 
     /**
@@ -447,6 +439,22 @@ abstract class Adapter implements AdapterInterface
     public function setConnection ($connection)
     {
         return $this->connection = $connection;
+    }
+
+    /**
+     * Return the connected FTP connection
+     *
+     * @return  object  resource
+     * @since   1.0
+     */
+    public function getConnection ()
+    {
+        if ($this->isConnected ()) {
+        } else {
+            $this->connect ();
+        }
+
+        return $this->connection;
     }
 
     /**

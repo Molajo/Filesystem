@@ -19,9 +19,6 @@ use Molajo\Filesystem\Adapter\Adapter as Adapter;
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
 class Ftp extends Adapter
 {
@@ -70,7 +67,7 @@ class Ftp extends Adapter
         }
 
         try {
-            \ftp_pasv ($this->connection, $this->getIs_passive ());
+            \ftp_pasv ($this->connection, $this->getPassive_mode ());
 
         } catch (\Exception $e) {
 

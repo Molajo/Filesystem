@@ -37,8 +37,8 @@ interface Path extends Adapter
     function isAbsolute ();
 
     /**
-     * Retrieves the absolute path, which is the relative path from the root directory,
-     *  prepended with a '/'.
+     * Retrieves the absolute path, which is the relative path from the root
+     *  directory, prepended with a '/'.
      *
      * @return  null
      * @since   1.0

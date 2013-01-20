@@ -6,6 +6,8 @@ Using Filesystem
 Filesystem is available on Packagist ([Molajo/Filesystem](http://packagist.org/packages/molajo/filesystem))
 and as such installable via [Composer](http://getcomposer.org/).
 
+## What does it do?
+
 *Filesystem* is a standard package in a Molajo distribution. But, it can be used in any PHP application
 so that you can read, create, update, delete, and list files and directories the same way, regardless of
  the specific filesystem using Adapters.

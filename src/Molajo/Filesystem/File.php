@@ -41,16 +41,6 @@ Interface File extends Path
     /**
      * Retrieves the extension type for the file identified in the path
      *
-     * @param   string $path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setExtension ($path);
-
-    /**
-     * Retrieves the extension type for the file identified in the path
-     *
      * @return  null
      * @since   1.0
      */

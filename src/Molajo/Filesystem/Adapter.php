@@ -23,8 +23,10 @@ interface Adapter
     /**
      * Constant Persistence: Temporary Filesystem Storage
      *
-     * @var    bool
-     * @since  1.0
+     * @var     bool
+     *
+     * @return  null
+     * @since   1.0
      */
     const TEMPORARY = 0;
 
@@ -37,6 +39,24 @@ interface Adapter
     const PERSISTENT = 1;
 
     /**
+     * Get Options for Filesystem
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function getOptions ();
+
+    /**
+     * Set Options for Filesystem
+     *
+     * @param   array  $options
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function setOptions ($options = array());
+
+    /**
      * Get Root for Filesystem
      *
      * @return  null
@@ -47,19 +67,37 @@ interface Adapter
     /**
      * Set Root for Filesystem
      *
-     * @param $root
+     * @param   string
      *
-     * @return  mixed
+     * @return  null
      * @since   1.0
      */
     function setRoot ($root);
+
+    /**
+     * Set Persistence Setting
+     *
+     * @param   bool  $persistence
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function setPersistence ($persistence);
+
+    /**
+     * Get Persistence Setting
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function getPersistence ();
 
     /**
      * Set the username
      *
      * @param   string  $username
      *
-     * @return  mixed
+     * @return  null
      * @since   1.0
      */
     function setUsername ($username);
@@ -67,7 +105,7 @@ interface Adapter
     /**
      * Get the username
      *
-     * @return  mixed
+     * @return  null
      * @since   1.0
      */
     function getUsername ();
@@ -77,7 +115,7 @@ interface Adapter
      *
      * @param   string  $password
      *
-     * @return  mixed
+     * @return  null
      * @since   1.0
      */
     function setPassword ($password);
@@ -85,7 +123,7 @@ interface Adapter
     /**
      * Get the password
      *
-     * @return  mixed
+     * @return  null
      * @since   1.0
      */
     function getPassword ();
@@ -95,7 +133,7 @@ interface Adapter
      *
      * @param   string  $host
      *
-     * @return  mixed
+     * @return  null
      * @since   1.0
      */
     function setHost ($host);
@@ -103,7 +141,7 @@ interface Adapter
     /**
      * Get the Host
      *
-     * @return  mixed
+     * @return  null
      * @since   1.0
      */
     function getHost ();
@@ -113,7 +151,7 @@ interface Adapter
      *
      * @param   int  $port
      *
-     * @return  int
+     * @return  null
      * @since   1.0
      */
     function setPort ($port = 21);
@@ -121,7 +159,7 @@ interface Adapter
     /**
      * Get the Port
      *
-     * @return  mixed
+     * @return  null
      * @since   1.0
      */
     function getPort ();
@@ -131,7 +169,7 @@ interface Adapter
      *
      * @param   int  $timeout
      *
-     * @return  int
+     * @return  null
      * @since   1.0
      */
     function setTimeout ($timeout = 15);
@@ -139,7 +177,7 @@ interface Adapter
     /**
      * Get the Timeout
      *
-     * @return  int
+     * @return  null
      * @since   1.0
      */
     function getTimeout ();
@@ -147,20 +185,20 @@ interface Adapter
     /**
      * Set the Passive Indicator
      *
-     * @param   int  $is_passive
+     * @param   int  $passive_mode
      *
-     * @return  int
+     * @return  null
      * @since   1.0
      */
-    function setIs_passive ($is_passive = 1);
+    function setPassive_mode ($passive_mode = 1);
 
     /**
      * Get the Passive indicator
      *
-     * @return  int
+     * @return  null
      * @since   1.0
      */
-    function getIs_passive ();
+    function getPassive_mode ();
 
     /**
      * Connect to Filesystem
@@ -173,7 +211,7 @@ interface Adapter
     /**
      * Checks to see if the connection is set, returning true, or not, returning false
      *
-     * @return  bool
+     * @return  null
      * @since   1.0
      */
     function isConnected ();
@@ -181,7 +219,7 @@ interface Adapter
     /**
      * Method to login to a server once connected
      *
-     * @return  bool
+     * @return  null
      * @since   1.0
      * @throws  \RuntimeException
      */
@@ -192,7 +230,7 @@ interface Adapter
      *
      * @param   object|resource  $connection
      *
-     * @return  int
+     * @return  null
      * @since   1.0
      */
     function setConnection ($connection);
@@ -208,7 +246,7 @@ interface Adapter
     /**
      * Destruct Method
      *
-     * @return  void
+     * @return  null
      * @since   1.0
      */
     function __destruct ();

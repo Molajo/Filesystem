@@ -10,7 +10,7 @@ namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\Path as PathInterface;
+use Molajo\Filesystem\Directory as DirectoryInterface;
 
 /**
  * Path Instance for Filesystem
@@ -20,7 +20,7 @@ use Molajo\Filesystem\Path as PathInterface;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-Interface Directory extends DirectoryInterface
+Interface Directory
 {
     /**
      * Returns a list of files (path and filename) located at path directory
