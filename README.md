@@ -18,72 +18,11 @@ This flexibility makes it easier for developers to simplify backups processes, i
 by user in an application, or switch out filesystems, when needed, for performance gains or reduce cost, all
 without impact to application code.
 
-In addition, the Molajo project is committed to working with the PHP
-
-## Basic Usage
-
-This simple example shows how to **read** a text file at *'/x/y/zebra.txt'* on the **local filesystem**.
-
-**Step 1** connect to the local fileserver adapter.
-```php
-
-use Molajo\Filesystem\Adapter\Local as LocalAdapter;
-$adapter = new LocalAdapter();
-```
-
-**Step 2** Connect to the files and directories on the local filesystem, injecting the adapter into the constructor.
-
-```php
-use Molajo\Filesystem\Access\File as Files;
-$files = new Files($adapter);
- ```
-**Step 3** Now, make the request for the local filesystem to read the file.
-
-```php
-$data = $files->read('/x/y/zebra.txt');
-
- ```
-
-
-And that's all there is to it. All the verification that it's a file, that the path exists, that the user has
-read permission, and so on, are taken care of for you.
-
-```php
-
-
-## Basic Usage
-
-This simple example shows how to **read** a text file at *'/x/y/zebra.txt'* on the **local filesystem**.
-
-**Step 1** connect to the local fileserver adapter.
-
-// Enable access to the local filesystem
-$local = $file->addFilesystem('local');
-
-// Enable access to the cloud
-$cloud = $file->addFilesystem('cloud');
-
-// Backup a folder from the local system to the cloud
-$results = $file->copy('path/to/local/folder', 'path/to/cloud/destination', 'local', 'cloud');
-
-```
-
-stuff
-
-> Tip: goes here
-
-Getting Started
----------------
-
-dkkdd kdkdkkd kdkdkdk
-
 ## System Requirements
 
 * PSR-0 capable autoloader
 * PHP 5.3, or above
 * [optional] PHPUnit 3.5+ to execute the test suite (phpunit --version)
-
-Link to system
 
 ## Installation
 
@@ -98,38 +37,59 @@ Link to ([manual install steps](https://github.com/Molajo/Filesystem)).
 PSR-0 compatible autoloader (e.g. the [Symfony2 ClassLoader component](https://github.com/symfony/ClassLoader))
 to load **Filesystem** classes.
 
-### Enable within your PHP application
+## Basic Usage
 
+This simple example shows how to **read** a text file at *'/x/y/zebra.txt'* on the **local filesystem**.
+
+**Step 1** connect to the local fileserver adapter.
+
+```php
+use Molajo\Filesystem\Adapter\Local as LocalAdapter;
+$adapter = new LocalAdapter();
 ```
-<?php
+**Step 2** Connect to the files and directories on the local filesystem, injecting the adapter into the constructor.
 
-use Molajo\Filesystem\Service as FilesystemServices;
+```php
+use Molajo\Filesystem\Access\File as Files;
+$files = new Files($adapter);
+ ```
 
-// Enable access to filesystem services
-$file = new FilesystemServices();
+**Step 3** Now, make the request for the local filesystem to read the file.
 
-// Enable access to the local filesystem
-$local = $file->addFilesystem('local');
-```
+```php
+$data = $files->read('/x/y/zebra.txt');
+ ```
+
+And that's all there is to it. All the verification that it's a file, that the path exists, that the user has
+read permission, and so on, are taken care of for you.
 
 ### Basic File Services
-```
-<?php
 
-// Read a File
+```php
 $data = $local->read('path\to\your\file');
 
-// Create a new file or save an existing file
-$data = $local->write('path\to\your\file');
+$local->write('path\to\your\file');
 
-// Delete a file
-$results = $local->write('path\to\your\file');
-
-// Copy a file
-$data = $local->read('path\to\your\file');
+$local->delete('path\to\your\file');
 
 ```
 
+### Backups
+
+This shows how to backup a file on one filesystem to another filesystem.
+
+```php
+
+use Molajo\Filesystem\Adapter\Local as LocalAdapter;
+$adapter = new LocalAdapter();
+
+use Molajo\Filesystem\Access\File as Files;
+$files = new Files($adapter);
+
+
+// Backup a folder from the local system to the cloud
+$results = $file->copy('path/to/local/folder', 'path/to/cloud/destination', 'local', 'cloud');
+```
 
 ### Basic Directory Services
 ```
@@ -169,9 +129,6 @@ $results = $file->write('path\to\your\file');
 
 ```
 
-Short conclusion.
-
-
 About
 =====
 
@@ -184,11 +141,6 @@ Molajo Project has adopted the following:
  * phpUnit Testing
  * phpDoc
 
-Requirements
-------------
-
-- PHP 5.3+
-- [optional] PHPUnit 3.5+ to execute the test suite (phpunit --version)
 
 Submitting bugs and feature requests
 ------------------------------------
