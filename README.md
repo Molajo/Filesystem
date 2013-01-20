@@ -1,133 +1,156 @@
 **NOT COMPLETE**
 
-Using Filesystem
-=============
+=======
+Filesystem
+=======
 
-**Filesystem** is automatically included in Molajo applications but available for use by any PHP application
-on Packagist ([Molajo/Filesystem](http://packagist.org/packages/molajo/filesystem)), installable via
-[Composer](http://getcomposer.org/). **Filesystem**
-
-## What does it do?
-
-**Filesystem** is an object-oriented PHP package to handle file and directory services for different types
-of filesystems through use of Adapters which make it possible for the application to process files
-using the same application code, regardless of whether the file resides on a local filesystem, an FTP Server
-or a cloud-based platform.
-
-This flexibility makes it easier for developers to simplify backups processes, introduce storage partitioning
-by user in an application, or switch out filesystems, when needed, for performance gains or reduce cost, all
-without impact to application code.
+General-purpose file and directory services component for PHP applications using adapters to interact with diverse
+filesystems in the same way, whether the filesystem is local, an FTP server, or a remote, cloud-based platform.
 
 ## System Requirements
 
-* PSR-0 capable autoloader
 * PHP 5.3, or above
+* PSR-0 compliant autoloader
 * [optional] PHPUnit 3.5+ to execute the test suite (phpunit --version)
 
 ## Installation
 
-**Filesystem** is available on Packagist ([Molajo/Filesystem](http://packagist.org/packages/molajo/filesystem))
-and as such installable via [Composer](http://getcomposer.org/).
+**Filesystem** is available on Packagist ([Molajo/Filesystem](http://packagist.org/packages/molajo/filesystem)) and
+installable via [Composer](http://getcomposer.org/).
 
 If you do not use Composer, you can download the code from ([Github](https://github.com/Molajo/Filesystem)).
 Link to ([manual install steps](https://github.com/Molajo/Filesystem)).
 
-### Autoloader
-
-PSR-0 compatible autoloader (e.g. the [Symfony2 ClassLoader component](https://github.com/symfony/ClassLoader))
-to load **Filesystem** classes.
-
 ## Basic Usage
 
-This simple example shows how to **read** a text file at *'/x/y/zebra.txt'* on the **local filesystem**.
-
-**Step 1** connect to the local fileserver adapter.
+**Step 1** Establish Filesystem Driver connection
 
 ```php
-use Molajo\Filesystem\Adapter\Local as LocalAdapter;
-$adapter = new LocalAdapter();
+$connect = new \Molajo\Filesystem\Driver();
 ```
-**Step 2** Connect to the files and directories on the local filesystem, injecting the adapter into the constructor.
+**Step 2** Set properties
 
 ```php
-use Molajo\Filesystem\Access\File as Files;
-$files = new Files($adapter);
- ```
-
-**Step 3** Now, make the request for the local filesystem to read the file.
-
-```php
-$data = $files->read('/x/y/zebra.txt');
- ```
-
-And that's all there is to it. All the verification that it's a file, that the path exists, that the user has
-read permission, and so on, are taken care of for you.
-
-### Basic File Services
+$connect->setSourceAdapter('local');
+$connect->setSourcePath('/x/y/example.txt');
+```
+**Step 3** Invoke method.
 
 ```php
-$data = $local->read('path\to\your\file');
+$data = $connect->read();
+```
+**Alternatively**
 
-$local->write('path\to\your\file');
+Dependencies can be injected via the constructor:
 
-$local->delete('path\to\your\file');
+```php
+$options = array (
+    'source_adapter' = 'local',
+    'source_path' = '/x/y/zebra.txt');
 
+$connect = new \Molajo\Filesystem\Driver($options);
+$data = $connect->read();
+```
+## Basic File and Directory Operations
+
+### Read
+
+To read a specific file from a filesystem:
+
+```php
+$options = array (
+    'source_adapter' = 'local',
+    'source_path' = '/x/y/example.txt');
+
+$connect = new \Molajo\Filesystem\Driver($options);
+$data = $connect->read();
 ```
 
-### Backups
+### List
+
+To list the names of files and/or directories from a filesystem for a given path:
+
+```php
+$options = array (
+    'source_adapter' = 'local',
+    'source_path' = '/x/y/example.txt');
+
+$connect = new \Molajo\Filesystem\Driver($options);
+$data = $connect->read();
+```
+
+### Write
+
+To write a file to a filesystem:
+
+```php
+$options = array (
+    'source_adapter' = 'local',
+    'source_path' = '/x/y/example.txt');
+
+$connect = new \Molajo\Filesystem\Driver($options);
+$data = $connect->read();
+```
+```
+
+### Copy
+
+To write a file or folder to a specific destination on the filesystem:
+
+```php
+$options = array (
+    'source_adapter' = 'local',
+    'source_path' = '/x/y/example.txt');
+
+$connect = new \Molajo\Filesystem\Driver($options);
+$data = $connect->read();
+```
+
+### Move
+
+To move a file or folder to a specific destination on the filesystem:
+
+```php
+$options = array (
+    'source_adapter' = 'local',
+    'source_path' = '/x/y/example.txt');
+
+$connect = new \Molajo\Filesystem\Driver($options);
+$data = $connect->read();
+```
+
+### Delete
+
+To move a file or folder to a specific destination on the filesystem:
+
+```php
+$options = array (
+    'source_adapter' = 'local',
+    'source_path' = '/x/y/example.txt');
+
+$connect = new \Molajo\Filesystem\Driver($options);
+$data = $connect->read();
+```
+
+## Special Purpose File Operations
+
+### Backup
 
 This shows how to backup a file on one filesystem to another filesystem.
 
 ```php
+$options = array (
+    'source_adapter' = 'local',
+    'source_path' = '/x/y/example',
+    'target_adapter' = 'ftp',
+    'target_path' = '/x/y/backup',
+    'archive' = 'zip'
+    );
 
-use Molajo\Filesystem\Adapter\Local as LocalAdapter;
-$adapter = new LocalAdapter();
-
-use Molajo\Filesystem\Access\File as Files;
-$files = new Files($adapter);
-
-
-// Backup a folder from the local system to the cloud
-$results = $file->copy('path/to/local/folder', 'path/to/cloud/destination', 'local', 'cloud');
+$connect = new \Molajo\Filesystem\Driver($options);
+$data = $connect->backup();
 ```
 
-### Basic Directory Services
-```
-<?php
-
-// List of Files in Directory
-$data = $file->read('path\to\your\file');
-
-// Recursively list all files and subfolders within a Directory
-$data = $file->read('path\to\your\file');
-
-// Copy a folder
-$data = $file->write('path\to\your\file');
-
-// Move a folder
-$data = $file->write('path\to\your\file');
-
-// Delete a file
-$results = $file->write('path\to\your\file');
-
-```
-
-More file services...
-
-### Exception Handling
-```
-<?php
-
-// Read a File
-$data = $file->read('path\to\your\file');
-
-// Create a new file or save an existing file
-$data = $file->write('path\to\your\file');
-
-// Delete a file
-$results = $file->write('path\to\your\file');
-
-```
 
 About
 =====

@@ -1,47 +1,43 @@
 <?php
 /**
- * File Instance for Filesystem
+ * Filesystem Driver
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Access;
+namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\File as FileInterface;
-
-use Molajo\Filesystem\Adapter;
+use Molajo\Filesystem\Access\File as File;
 
 /**
- * Describes a file instance for Filesystem
+ * Filesystem Driver
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-Class File extends Directory implements FileInterface
+Class Driver implements Adapter
 {
     /**
-     * File Name
+     * Input options
      *
-     * @var    Adapter
+     * @var    array
      * @since  1.0
      */
-    protected $filename;
+    protected $options;
 
     /**
      * Construct
      *
-     * @param   Adapter     $adapter
-     * @param   Path        $path
-     * @param   array       $options
+     * @param   array  $options
      *
      * @since   1.0
      */
-    public function __construct (Adapter $adapter, $path, $options = array())
+    public function __construct ($options)
     {
         if (isset($this->options['name'])) {
             $this->filename = $this->options['name'];
@@ -51,79 +47,30 @@ Class File extends Directory implements FileInterface
     }
 
     /**
-     * Sets the name of the file specified in the path
+     * Returns the contents of the file located at path directory
      *
      * @param   string  $path
      *
-     * @return  null
+     * @return  mixed;
      * @since   1.0
+     * @throws  \Exception\FileNotFound when file does not exist
+     * @throws  \RuntimeException when unable to read file
      */
-    public function setFilename ()
+    public function read ($path)
     {
+        $this->path = $this->adapter->normalise ($path);
 
-    }
+        $this->adapter->exists ($key);
 
-    /**
-     * Retrieves the name of the file specified in the path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getName ()
-    {
-        return $this->filename;
-    }
+        $this->adapter->isFile ($key);
 
-    /**
-     * Retrieves the extension type for the file identified in the path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getExtension ()
-    {
-        return pathinfo ($this->path, PATHINFO_EXTENSION);
-    }
-
-    /**
-     * Sets the extension type for the file identified in the path
-     *
-     * @param   string $path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setExtension ($path)
-    {
-
-    }
-
-    /**
-     * Retrieves metadata for the file specified in path and returns an associative array
-     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
-     *  absolute_path, relative_path, filename, and file_extension.
-     *
-     * @param   string  $path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setMetadata ($path)
-    {
-
-    }
-
-    /**
-     * Retrieves metadata for the file specified in path and returns an associative array
-     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
-     *  absolute_path, relative_path, filename, and file_extension.
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getMetadata ()
-    {
-
+        if (file_exists ($this->path)) {
+            return file_get_contents ($this->path);
+        }
+        if (false === $content) {
+            throw new \RuntimeException(sprintf ('Could not read the "%s" key content.', $key));
+        }
+        return false;
     }
 
     /**
@@ -134,13 +81,51 @@ Class File extends Directory implements FileInterface
      * @return  mixed;
      * @since   1.0
      */
-    public function read ($path)
+    public function getList ($path)
     {
         $this->path = $this->normalise ($path);
 
         if (file_exists ($this->path)) {
             return file_get_contents ($this->path);
         }
+
+        return false;
+    }
+
+    /**
+     * Creates directory identified in path using the data value
+     *
+     * @param   string  $path
+     * @param   string  $file
+     * @param           $data
+     * @param   bool    $replace
+     * @param   bool    $create_directories
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function createDirectory ($path, $new_name, $replace = false,  $create_directories = true)
+    {
+        $this->path = $this->normalise ($path);
+
+        if ($replace === false) {
+            if (file_exists ($this->path)) {
+                return false;
+            }
+        }
+
+        if ($create_directories === false) {
+            if (file_exists ($this->path)) {
+            } else {
+                return false;
+            }
+        }
+
+        if (filer_exists ($this->path)) {
+            return file_get_contents ($this->path);
+        }
+
+        \file_put_contents ($this->path, $data);
 
         return false;
     }
@@ -179,6 +164,15 @@ Class File extends Directory implements FileInterface
         }
 
         \file_put_contents ($this->path, $data);
+
+
+        $numBytes = $this->adapter->write ($key, $content);
+
+        if (false === $numBytes) {
+            throw new \RuntimeException(sprintf ('Could not write the "%s" key content.', $key));
+        }
+
+        return $numBytes;
 
         return false;
     }
@@ -251,72 +245,31 @@ Class File extends Directory implements FileInterface
         return false;
     }
 
-
     /**
-     * Get the file size of a given file.
-     *
-     * @param string $path
-     *
-     * @return int
-     */
-    public function size ($path)
-    {
-        return filesize ($path);
-    }
-
-    /**
-     * Retrieves Create Date for directory or file identified in the path
+     * Retrieves metadata for the file specified in path and returns an associative array
+     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
+     *  absolute_path, relative_path, filename, and file_extension.
      *
      * @return  null
      * @since   1.0
      */
-    public function getCreateDate ()
+    public function getMetadata ()
     {
 
     }
 
+
     /**
-     * Retrieves Last Access Date for directory or file identified in the path
+     * Retrieves metadata for the file specified in path and returns an associative array
+     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
+     *  absolute_path, relative_path, filename, and file_extension.
+     *
+     * @param   string  $path
      *
      * @return  null
      * @since   1.0
      */
-    public function getAccessDate ()
-    {
-
-    }
-
-    /**
-     * Retrieves Last Update Date for directory or file identified in the path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getUpdateDate ()
-    {
-        return filemtime ($this->path);
-    }
-
-    /**
-     * Sets the Last Access Date for directory or file identified in the path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setAccessDate ()
-    {
-
-    }
-
-    /**
-     * Sets the Last Update Date for directory or file identified in the path
-     *
-     * @param   string  $value
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setUpdateDate ($value)
+    public function setMetadata ()
     {
 
     }

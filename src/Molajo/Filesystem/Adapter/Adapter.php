@@ -10,7 +10,7 @@ namespace Molajo\Filesystem\Adapter;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\Adapter as AdapterInterface;
+use Molajo\Filesystem\Api\Adapter as AdapterInterface;
 
 /**
  * Describes Adapter Instance
@@ -477,11 +477,7 @@ abstract class Adapter implements AdapterInterface
      */
     public function __destruct ()
     {
-        if (is_resource ($this->connection)) {
-            $this->close ();
-        }
 
-        return;
     }
 
     /**
@@ -492,10 +488,6 @@ abstract class Adapter implements AdapterInterface
      */
     public function close ()
     {
-        if ($this->isConnected ()) {
-            $this->connection = null;
-        }
 
-        return;
     }
 }

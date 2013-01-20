@@ -10,8 +10,6 @@ namespace Molajo\Filesystem\Adapter;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\Adapter\Adapter as Adapter;
-
 /**
  * FTP Adapter for Filesystem
  *

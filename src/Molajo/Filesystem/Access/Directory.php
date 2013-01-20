@@ -185,4 +185,33 @@ Abstract Class Directory extends Path implements DirectoryInterface
         }
 
     }
+
+    /**
+     * Returns size of a file or directory specified by path. If a directory is
+     * given, it's size will be computed recursively.
+     *
+     * @param string $path Path to the file or directory
+     *
+     * @return int
+     */
+    public function size ($path)
+    {
+        if (is_dir ($path)) {
+            return $this->directorySize ($path);
+        }
+    }
+    protected function directorySize ($directory)
+    {
+        $it = new RecursiveDirectoryIterator($directory, RecursiveDirectoryIterator::SKIP_DOTS);
+        $ri = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+
+        $size = 0;
+        foreach ($ri as $file) {
+            if ($file->isFile ()) {
+                $size += $file->getSize ();
+            }
+        }
+
+        return $size;
+    }
 }
