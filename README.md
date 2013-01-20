@@ -4,8 +4,8 @@
 Filesystem
 =======
 
-General-purpose file and directory services component for PHP applications using adapters to interact with diverse
-filesystems in the same way, whether the filesystem is local, an FTP server, or a remote, cloud-based platform.
+General-purpose file and directory services package for PHP applications that uses adapters to interact in the same
+way with different filesystems, include local filesystems, FTP servers, and remote, cloud-based platforms.
 
 ## System Requirements
 
@@ -26,30 +26,31 @@ Link to ([manual install steps](https://github.com/Molajo/Filesystem)).
 **Step 1** Establish Filesystem Driver connection
 
 ```php
-$connect = new \Molajo\Filesystem\Driver();
+    $connect = new \Molajo\Filesystem\Driver();
 ```
 **Step 2** Set properties
 
 ```php
-$connect->setSourceAdapter('local');
-$connect->setSourcePath('/x/y/example.txt');
+    $connect->setSourceAdapter('local');
+    $connect->setSourcePath('/x/y/example.txt');
 ```
 **Step 3** Invoke method.
 
 ```php
-$data = $connect->read();
+    $data = $connect->read();
 ```
 **Alternatively**
 
 Dependencies can be injected via the constructor:
 
 ```php
-$options = array (
-    'source_adapter' = 'local',
-    'source_path' = '/x/y/zebra.txt');
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example.txt'
+    );
 
-$connect = new \Molajo\Filesystem\Driver($options);
-$data = $connect->read();
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->read ();
 ```
 ## Basic File and Directory Operations
 
@@ -58,12 +59,13 @@ $data = $connect->read();
 To read a specific file from a filesystem:
 
 ```php
-$options = array (
-    'source_adapter' = 'local',
-    'source_path' = '/x/y/example.txt');
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example.txt'
+    );
 
-$connect = new \Molajo\Filesystem\Driver($options);
-$data = $connect->read();
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->read ();
 ```
 
 ### List
@@ -71,12 +73,13 @@ $data = $connect->read();
 To list the names of files and/or directories from a filesystem for a given path:
 
 ```php
-$options = array (
-    'source_adapter' = 'local',
-    'source_path' = '/x/y/example.txt');
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example.txt'
+    );
 
-$connect = new \Molajo\Filesystem\Driver($options);
-$data = $connect->read();
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->read ();
 ```
 
 ### Write
@@ -84,13 +87,13 @@ $data = $connect->read();
 To write a file to a filesystem:
 
 ```php
-$options = array (
-    'source_adapter' = 'local',
-    'source_path' = '/x/y/example.txt');
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example.txt'
+    );
 
-$connect = new \Molajo\Filesystem\Driver($options);
-$data = $connect->read();
-```
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->read ();
 ```
 
 ### Copy
@@ -98,12 +101,13 @@ $data = $connect->read();
 To write a file or folder to a specific destination on the filesystem:
 
 ```php
-$options = array (
-    'source_adapter' = 'local',
-    'source_path' = '/x/y/example.txt');
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example.txt'
+    );
 
-$connect = new \Molajo\Filesystem\Driver($options);
-$data = $connect->read();
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->read ();
 ```
 
 ### Move
@@ -111,12 +115,13 @@ $data = $connect->read();
 To move a file or folder to a specific destination on the filesystem:
 
 ```php
-$options = array (
-    'source_adapter' = 'local',
-    'source_path' = '/x/y/example.txt');
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example.txt'
+    );
 
-$connect = new \Molajo\Filesystem\Driver($options);
-$data = $connect->read();
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->read ();
 ```
 
 ### Delete
@@ -124,12 +129,13 @@ $data = $connect->read();
 To move a file or folder to a specific destination on the filesystem:
 
 ```php
-$options = array (
-    'source_adapter' = 'local',
-    'source_path' = '/x/y/example.txt');
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example.txt'
+    );
 
-$connect = new \Molajo\Filesystem\Driver($options);
-$data = $connect->read();
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->read ();
 ```
 
 ## Special Purpose File Operations
@@ -139,16 +145,16 @@ $data = $connect->read();
 This shows how to backup a file on one filesystem to another filesystem.
 
 ```php
-$options = array (
-    'source_adapter' = 'local',
-    'source_path' = '/x/y/example',
-    'target_adapter' = 'ftp',
-    'target_path' = '/x/y/backup',
-    'archive' = 'zip'
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example',
+        'target_adapter' => 'ftp',
+        'target_path'    => '/x/y/backup',
+        'archive'        => 'zip'
     );
 
-$connect = new \Molajo\Filesystem\Driver($options);
-$data = $connect->backup();
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->backup ();
 ```
 
 

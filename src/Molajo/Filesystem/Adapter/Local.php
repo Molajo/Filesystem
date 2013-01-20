@@ -31,6 +31,7 @@ class Local extends Adapter
     {
         parent::__construct ($options);
 
+
         return;
     }
 
@@ -41,7 +42,9 @@ class Local extends Adapter
      * @since   1.0
      * @throws  \Exception
      */
-    public function connect () {}
+    public function connect ()
+    {
+    }
 
     /**
      * Method to login to a server once connected
@@ -50,7 +53,9 @@ class Local extends Adapter
      * @since   1.0
      * @throws  \RuntimeException
      */
-    public function login () {}
+    public function login ()
+    {
+    }
 
     /**
      * Destruct Method
@@ -58,7 +63,9 @@ class Local extends Adapter
      * @return  void
      * @since   1.0
      */
-    public function __destruct () {}
+    public function __destruct ()
+    {
+    }
 
     /**
      * Close the Local Connection
@@ -67,5 +74,7 @@ class Local extends Adapter
      * @since   1.0
      * @throws  \Exception
      */
-    public function close () {}
+    public function close ()
+    {
+    }
 }

@@ -10,7 +10,10 @@ namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\Access\File as File;
+use Molajo\Filesystem\Api\Adapter as Adapter;
+
+use \RuntimeException;
+use Molajo\Filesystem\FileNotFoundException;
 
 /**
  * Filesystem Driver
@@ -39,11 +42,118 @@ Class Driver implements Adapter
      */
     public function __construct ($options)
     {
-        if (isset($this->options['name'])) {
-            $this->filename = $this->options['name'];
+        $this->options = $options;
+
+        if (isset($this->options['path'])) {
+            $this->path = $this->options['path'];
+        }
+
+        if (isset($this->options['root'])) {
+            $this->setRoot ($this->options['root']);
+        } else {
+            $this->setRoot ('/');
+        }
+
+        if (isset($this->options['persistence'])) {
+            $this->setPersistence ($this->options['persistence']);
+        } else {
+            $this->setPersistence (0);
         }
 
         return;
+    }
+
+    /**
+     * Get Root of Filesystem
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getRoot ()
+    {
+        return $this->root;
+    }
+
+    /**
+     * Set Root of Filesystem
+     *
+     * @param   string  $root
+     *
+     * @return  mixed
+     * @since   1.0
+     */
+    public function setRoot ($root)
+    {
+        return $this->root = rtrim ($root, '/\\') . '/';
+    }
+
+    /**
+     * Set persistence indicator for Filesystem
+     *
+     * @param   bool  $persistence
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setPersistence ($persistence)
+    {
+        return $this->persistence = $persistence;
+    }
+
+    /**
+     * Get persistence indicator for Filesystem
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getPersistence ()
+    {
+        return $this->persistence;
+    }
+
+
+    /**
+     * Connect
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function connect ()
+    {
+
+    }
+
+    /**
+     * Close the FTP Connection
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function close ()
+    {
+
+    }
+
+    /**
+     * Get the Connection
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function getConnection ()
+    {
+
+    }
+
+    /**
+     * Set the Connection
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function setConnection ()
+    {
+
     }
 
     /**
@@ -53,23 +163,25 @@ Class Driver implements Adapter
      *
      * @return  mixed;
      * @since   1.0
-     * @throws  \Exception\FileNotFound when file does not exist
-     * @throws  \RuntimeException when unable to read file
+     * @throws  FileNotFound when file does not exist
+     * @throws  RuntimeException when unable to read file
      */
     public function read ($path)
     {
         $this->path = $this->adapter->normalise ($path);
 
-        $this->adapter->exists ($key);
+        $this->adapter->exists ($path);
 
-        $this->adapter->isFile ($key);
+        $this->adapter->isFile ($path);
 
         if (file_exists ($this->path)) {
-            return file_get_contents ($this->path);
+            $data = file_get_contents ($this->path);
         }
-        if (false === $content) {
-            throw new \RuntimeException(sprintf ('Could not read the "%s" key content.', $key));
+
+        if (false === $data) {
+            throw new \RuntimeException('Could not read: ', $path);
         }
+
         return false;
     }
 
@@ -166,10 +278,10 @@ Class Driver implements Adapter
         \file_put_contents ($this->path, $data);
 
 
-        $numBytes = $this->adapter->write ($key, $content);
+        $numBytes = $this->adapter->write ($path, $data);
 
         if (false === $numBytes) {
-            throw new \RuntimeException(sprintf ('Could not write the "%s" key content.', $key));
+            throw new \RuntimeException(sprintf ('Could not write the "%s" key content.', $path));
         }
 
         return $numBytes;
@@ -273,4 +385,61 @@ Class Driver implements Adapter
     {
 
     }
+
+    //
+    //  Helper methods
+    //
+
+    /**
+     * Normalizes the given path
+     *
+     * @param   $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function normalise ($path)
+    {
+        $absolute_path = false;
+        if (substr ($path, 0, 1) == '/') {
+            $absolute_path = true;
+            $path          = substr ($path, 1, strlen ($path));
+        }
+
+        /** Unescape slashes */
+        $path = str_replace ('\\', '/', $path);
+
+        /**  Filter: empty value
+         * @link http://tinyurl.com/arrayFilterStrlen
+         */
+        $nodes = array_filter (explode ('/', $path), 'strlen');
+
+        $normalised = array();
+
+        foreach ($nodes as $node) {
+
+            /** '.' means current - ignore it      */
+            if ($node == '.') {
+
+                /** '..' is parent - remove the parent */
+            } elseif ($node == '..') {
+
+                if (count ($normalised) > 0) {
+                    array_pop ($normalised);
+                }
+
+            } else {
+                $normalised[] = $node;
+            }
+
+        }
+
+        $path = implode ('/', $normalised);
+        if ($absolute_path === true) {
+            $path = '/' . $path;
+        }
+
+        return $path;
+    }
+
 }

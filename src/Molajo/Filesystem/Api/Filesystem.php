@@ -20,7 +20,6 @@ defined ('MOLAJO') or die;
  */
 Interface Filesystem
 {
-
     /**
      * Returns the contents of the file located at path directory
      *
@@ -31,12 +30,10 @@ Interface Filesystem
      */
     public function read ($path);
 
-
     /**
      * Renames the file identified in path to new_name within the existing parent directory
      *
      * @param   string  $path
-     * @param   string  $new_name
      *
      * @return  null
      * @since   1.0
@@ -69,8 +66,13 @@ Interface Filesystem
      * @return  mixed
      * @since   1.0
      */
-    public function copy ($path, File $target, $target_directory,
-        $replace = false, $create_directories = true);
+    public function copy (
+        $path,
+        File $target,
+        $target_directory,
+        $replace = false,
+        $create_directories = true
+    );
 
     /**
      * Moves the file identified in path to the location identified in the new_parent_directory

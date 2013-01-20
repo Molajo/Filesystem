@@ -471,57 +471,6 @@ Abstract class Path implements PathInterface
 
     }
 
-    /**
-     * Normalizes the given path
-     *
-     * @param   $path
-     *
-     * @return  string
-     * @since   1.0
-     */
-    public function normalise ($path)
-    {
-        $absolute_path = false;
-        if (substr ($path, 0, 1) == '/') {
-            $absolute_path = true;
-            $path          = substr ($path, 1, strlen ($path));
-        }
-
-        /** Unescape slashes */
-        $path = str_replace ('\\', '/', $path);
-
-        /**  Filter: empty value
-         * @link http://tinyurl.com/arrayFilterStrlen
-         */
-        $nodes = array_filter (explode ('/', $path), 'strlen');
-
-        $normalised = array();
-
-        foreach ($nodes as $node) {
-
-            /** '.' means current - ignore it      */
-            if ($node == '.') {
-
-                /** '..' is parent - remove the parent */
-            } elseif ($node == '..') {
-
-                if (count ($normalised) > 0) {
-                    array_pop ($normalised);
-                }
-
-            } else {
-                $normalised[] = $node;
-            }
-
-        }
-
-        $path = implode ('/', $normalised);
-        if ($absolute_path === true) {
-            $path = '/' . $path;
-        }
-
-        return $path;
-    }
 
     /**
      * Retrieves the absolute path, which is the relative path from the root directory,
