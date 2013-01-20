@@ -36,18 +36,14 @@ Abstract Class Directory extends Path implements DirectoryInterface
      * Construct
      *
      * @param   Adapter     $adapter
-     * @param   Filesystem  $filesystem
+     * @param   Path        $path
      * @param   array       $options
      *
      * @since   1.0
      */
-    public function __construct (Adapter $adapter, $options = array())
+    public function __construct (Adapter $adapter, $path, $options = array())
     {
-        $this->adapter    = $adapter;
-        $this->filesystem = $filesystem;
-        $this->options    = $options;
 
-        return;
     }
 
     /**
@@ -93,6 +89,7 @@ Abstract Class Directory extends Path implements DirectoryInterface
     {
 
     }
+
     /**
      * Recursively remove a directory
      *
@@ -100,38 +97,39 @@ Abstract Class Directory extends Path implements DirectoryInterface
      * installation.
      *
      * @param string $directory
+     *
      * @return bool
      */
-    public function delete($path)
+    public function delete ($path)
     {
-        if (is_dir($path)) {
+        if (is_dir ($path)) {
         } else {
             return true;
         }
 
-        if (!function_exists('proc_open')) {
-            return $this->removeDirectoryPhp($directory);
+        if (! function_exists ('proc_open')) {
+            return $this->removeDirectoryPhp ($directory);
         }
 
-        if (defined('PHP_WINDOWS_VERSION_BUILD')) {
-            $cmd = sprintf('rmdir /S /Q %s', escapeshellarg(realpath($directory)));
+        if (defined ('PHP_WINDOWS_VERSION_BUILD')) {
+            $cmd = sprintf ('rmdir /S /Q %s', escapeshellarg (realpath ($directory)));
         } else {
-            $cmd = sprintf('rm -rf %s', escapeshellarg($directory));
+            $cmd = sprintf ('rm -rf %s', escapeshellarg ($directory));
         }
 
-        $result = $this->getProcess()->execute($cmd) === 0;
+        $result = $this->getProcess ()->execute ($cmd) === 0;
 
         // clear stat cache because external processes aren't tracked by the php stat cache
-        clearstatcache();
+        clearstatcache ();
 
-        return $result && !is_dir($directory);
+        return $result && ! is_dir ($directory);
     }
 
-    function copyFiles()
+    function copyFiles ()
 
     {
 
-        if (!isset($_SERVER['DEPLOYMENT_TARGET'])) {
+        if (! isset($_SERVER['DEPLOYMENT_TARGET'])) {
 
             echo "Cannot find pyhsical path to application root.\n";
 
@@ -142,17 +140,14 @@ Abstract Class Directory extends Path implements DirectoryInterface
         }
 
 
-
         echo "Copying code to webroot\n";
 
-        copyDirectory($_SERVER['DEPLOYMENT_SOURCE'], $_SERVER['DEPLOYMENT_TARGET']);
+        copyDirectory ($_SERVER['DEPLOYMENT_SOURCE'], $_SERVER['DEPLOYMENT_TARGET']);
 
     }
 
 
-
-    function copyDirectory($source, $target)
-
+    function copyDirectory ($source, $target)
     {
 
         $it = new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS);
@@ -160,31 +155,31 @@ Abstract Class Directory extends Path implements DirectoryInterface
         $ri = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::SELF_FIRST);
 
 
+        if (! file_exists ($target)) {
 
-        if ( !file_exists($target)) {
-
-            mkdir($target, 0777, true);
+            mkdir ($target, 0777, true);
 
         }
 
 
-
         foreach ($ri as $file) {
 
-            $targetPath = $target . DIRECTORY_SEPARATOR . $ri->getSubPathName();
+            $targetPath = $target . DIRECTORY_SEPARATOR . $ri->getSubPathName ();
 
-            if ($file->isDir()) {
+            if ($file->isDir ()) {
 
-                if ( ! file_exists($targetPath)) {
+                if (! file_exists ($targetPath)) {
 
-                    mkdir($targetPath);
+                    mkdir ($targetPath);
 
                 }
 
-            } else if (!file_exists($targetPath) || filemtime($targetPath) < filemtime($file->getPathname())) {
+            } else {
+                if (! file_exists ($targetPath) || filemtime ($targetPath) < filemtime ($file->getPathname ())) {
 
-                copy($file->getPathname(), $targetPath);
+                    copy ($file->getPathname (), $targetPath);
 
+                }
             }
 
         }

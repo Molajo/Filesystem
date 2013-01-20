@@ -23,7 +23,7 @@ defined ('MOLAJO') or die;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Path implements PathInterface
+Abstract class Path implements PathInterface
 {
     /**
      * Adapter Instance
@@ -102,14 +102,6 @@ class Path implements PathInterface
     protected $permissions = array();
 
     /**
-     * persistence of 0 (Temporary) or 1 (Permanent)
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $persistence = array();
-
-    /**
      * Construct
      *
      * @param  Adapter  $adapter
@@ -120,15 +112,12 @@ class Path implements PathInterface
      */
     public function __construct (Adapter $adapter, $path, $options = array())
     {
+
         $this->setAdapter ($adapter);
         $this->setPath ($path);
         $this->setOptions ($options);
 
         $this->convertToUrl ();
-
-        if (isset($this->options['persistence'])) {
-            $this->persistence = $this->options['persistence'];
-        }
 
         return;
     }
@@ -168,6 +157,7 @@ class Path implements PathInterface
     public function setPath ($path)
     {
         $this->path = $this->normalise ($path);
+
         return $this->getAbsolutePath ();
     }
 
@@ -217,7 +207,7 @@ class Path implements PathInterface
      */
     public function exists ()
     {
-        return file_exists($this->path);
+        return file_exists ($this->path);
     }
 
     /**
@@ -494,13 +484,15 @@ class Path implements PathInterface
         $absolute_path = false;
         if (substr ($path, 0, 1) == '/') {
             $absolute_path = true;
-            $path     = substr ($path, 1, strlen ($path));
+            $path          = substr ($path, 1, strlen ($path));
         }
 
         /** Unescape slashes */
         $path = str_replace ('\\', '/', $path);
 
-        /**  Filter: empty value @link http://tinyurl.com/arrayFilterStrlen */
+        /**  Filter: empty value
+         * @link http://tinyurl.com/arrayFilterStrlen
+         */
         $nodes = array_filter (explode ('/', $path), 'strlen');
 
         $normalised = array();
@@ -510,10 +502,10 @@ class Path implements PathInterface
             /** '.' means current - ignore it      */
             if ($node == '.') {
 
-            /** '..' is parent - remove the parent */
+                /** '..' is parent - remove the parent */
             } elseif ($node == '..') {
 
-                if (count($normalised) > 0) {
+                if (count ($normalised) > 0) {
                     array_pop ($normalised);
                 }
 

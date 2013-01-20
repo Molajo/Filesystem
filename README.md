@@ -3,65 +3,68 @@
 Using Filesystem
 =============
 
-Filesystem is available on Packagist ([Molajo/Filesystem](http://packagist.org/packages/molajo/filesystem))
-and as such installable via [Composer](http://getcomposer.org/).
+**Filesystem** is automatically included in Molajo applications but available for use by any PHP application
+on Packagist ([Molajo/Filesystem](http://packagist.org/packages/molajo/filesystem)), installable via
+[Composer](http://getcomposer.org/). **Filesystem**
 
 ## What does it do?
 
-*Filesystem* is a standard package in a Molajo distribution. But, it can be used in any PHP application
-so that you can read, create, update, delete, and list files and directories the same way, regardless of
- the specific filesystem using Adapters.
+**Filesystem** is an object-oriented PHP package to handle file and directory services for different types
+of filesystems through use of Adapters which make it possible for the application to process files
+using the same application code, regardless of whether the file resides on a local filesystem, an FTP Server
+or a cloud-based platform.
 
-Adapters are in the package for the local filesystem, FTP Server, Github, a memory-based Registry,
-and Streaming. Building new adapters is a fairly straight forward process for a PHP developer.
+This flexibility makes it easier for developers to simplify backups processes, introduce storage partitioning
+by user in an application, or switch out filesystems, when needed, for performance gains or reduce cost, all
+without impact to application code.
 
-This capability introduces opportunities not previously available with separate, disconnected file
-services on a site. For example, it is easy to copy the data from the local server to Amazon Services and
-it is possible to create an adapter that partitions storage per user.
+In addition, the Molajo project is committed to working with the PHP
 
 ## Basic Usage
 
-This example shows how to read a text file at /x/y/zebra.txt on the local server.
+This simple example shows how to **read** a text file at *'/x/y/zebra.txt'* on the **local filesystem**.
 
 **Step 1** connect to the local fileserver adapter.
 ```php
 
 use Molajo\Filesystem\Adapter\Local as LocalAdapter;
-$connection = new LocalAdapter();
+$adapter = new LocalAdapter();
 ```
 
-**Step 2** Next, create a connection for interacting with files on the local filesystem.
-Note: we are passing in the adapter connection to the constructor.
+**Step 2** Connect to the files and directories on the local filesystem, injecting the adapter into the constructor.
 
 ```php
 use Molajo\Filesystem\Access\File as Files;
-$files = new Files($connection);
+$files = new Files($adapter);
  ```
-
-**Step 3** Now, get the data.
+**Step 3** Now, make the request for the local filesystem to read the file.
 
 ```php
-
 $data = $files->read('/x/y/zebra.txt');
 
  ```
- ## MOAR
+
+
+And that's all there is to it. All the verification that it's a file, that the path exists, that the user has
+read permission, and so on, are taken care of for you.
 
 ```php
 
-use Molajo\Filesystem\Service as FilesystemServices;
 
-// Enable access to filesystem services
-$services = new FilesystemServices();
+## Basic Usage
+
+This simple example shows how to **read** a text file at *'/x/y/zebra.txt'* on the **local filesystem**.
+
+**Step 1** connect to the local fileserver adapter.
 
 // Enable access to the local filesystem
-$local = $services->addFilesystem('local');
+$local = $file->addFilesystem('local');
 
 // Enable access to the cloud
-$cloud = $services->addFilesystem('cloud');
+$cloud = $file->addFilesystem('cloud');
 
 // Backup a folder from the local system to the cloud
-$results = $services->copy('path/to/local/folder', 'path/to/cloud/destination', 'local', 'cloud');
+$results = $file->copy('path/to/local/folder', 'path/to/cloud/destination', 'local', 'cloud');
 
 ```
 
@@ -84,7 +87,7 @@ Link to system
 
 ## Installation
 
-Filesystem is available on Packagist ([Molajo/Filesystem](http://packagist.org/packages/molajo/filesystem))
+**Filesystem** is available on Packagist ([Molajo/Filesystem](http://packagist.org/packages/molajo/filesystem))
 and as such installable via [Composer](http://getcomposer.org/).
 
 If you do not use Composer, you can download the code from ([Github](https://github.com/Molajo/Filesystem)).
@@ -93,7 +96,7 @@ Link to ([manual install steps](https://github.com/Molajo/Filesystem)).
 ### Autoloader
 
 PSR-0 compatible autoloader (e.g. the [Symfony2 ClassLoader component](https://github.com/symfony/ClassLoader))
-to load Filesystem classes.
+to load **Filesystem** classes.
 
 ### Enable within your PHP application
 
@@ -103,10 +106,10 @@ to load Filesystem classes.
 use Molajo\Filesystem\Service as FilesystemServices;
 
 // Enable access to filesystem services
-$services = new FilesystemServices();
+$file = new FilesystemServices();
 
 // Enable access to the local filesystem
-$local = $services->addFilesystem('local');
+$local = $file->addFilesystem('local');
 ```
 
 ### Basic File Services
@@ -133,19 +136,19 @@ $data = $local->read('path\to\your\file');
 <?php
 
 // List of Files in Directory
-$data = $services->read('path\to\your\file');
+$data = $file->read('path\to\your\file');
 
 // Recursively list all files and subfolders within a Directory
-$data = $services->read('path\to\your\file');
+$data = $file->read('path\to\your\file');
 
 // Copy a folder
-$data = $services->write('path\to\your\file');
+$data = $file->write('path\to\your\file');
 
 // Move a folder
-$data = $services->write('path\to\your\file');
+$data = $file->write('path\to\your\file');
 
 // Delete a file
-$results = $services->write('path\to\your\file');
+$results = $file->write('path\to\your\file');
 
 ```
 
@@ -156,13 +159,13 @@ More file services...
 <?php
 
 // Read a File
-$data = $services->read('path\to\your\file');
+$data = $file->read('path\to\your\file');
 
 // Create a new file or save an existing file
-$data = $services->write('path\to\your\file');
+$data = $file->write('path\to\your\file');
 
 // Delete a file
-$results = $services->write('path\to\your\file');
+$results = $file->write('path\to\your\file');
 
 ```
 
@@ -201,7 +204,7 @@ See also the list of [contributors](https://github.com/Molajo/Fileservices/contr
 License
 -------
 
-Molajo Filesystem is licensed under the MIT License - see the `LICENSE` file for details
+**Molajo Filesystem** is licensed under the MIT License - see the `LICENSE` file for details
 
 Acknowledgements
 ----------------

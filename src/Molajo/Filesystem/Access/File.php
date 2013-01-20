@@ -36,12 +36,12 @@ Class File extends Directory implements FileInterface
      * Construct
      *
      * @param   Adapter     $adapter
-     * @param   Filesystem  $filesystem
+     * @param   Path        $path
      * @param   array       $options
      *
      * @since   1.0
      */
-    public function __construct (Filesystem $filesystem, Adapter $adapter, $path, $options = array())
+    public function __construct (Adapter $adapter, $path, $options = array())
     {
         if (isset($this->options['name'])) {
             $this->name = $this->options['name'];
@@ -82,7 +82,7 @@ Class File extends Directory implements FileInterface
      */
     public function getExtension ()
     {
-        return pathinfo($path, PATHINFO_EXTENSION);
+        return pathinfo ($path, PATHINFO_EXTENSION);
     }
 
     /**
@@ -344,11 +344,12 @@ Class File extends Directory implements FileInterface
      * Get the file size of a given file.
      *
      * @param string $path
+     *
      * @return int
      */
-    public function size($path)
+    public function size ($path)
     {
-        return filesize($path);
+        return filesize ($path);
     }
 
 
@@ -382,7 +383,7 @@ Class File extends Directory implements FileInterface
      */
     public function getUpdateDate ()
     {
-        return filemtime($path);
+        return filemtime ($path);
     }
 
     /**
@@ -414,17 +415,14 @@ Class File extends Directory implements FileInterface
      * Find path names matching a given pattern.
      *
      * @param string $pattern
-     * @param int $flags
+     * @param int    $flags
+     *
      * @return array
      */
-    public function glob($pattern, $flags = 0)
+    public function glob ($pattern, $flags = 0)
     {
-        return glob($pattern, $flags);
+        return glob ($pattern, $flags);
     }
-
-
-
-
 
 
     public function sha1 ($file)
