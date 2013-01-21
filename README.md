@@ -4,8 +4,7 @@
 Filesystem
 =======
 
-General-purpose file and directory services package for PHP applications that uses adapters to interact in the same
-way with different filesystems, include local filesystems, FTP servers, and remote, cloud-based platforms.
+General-purpose file and directory services package for PHP applications using the same API with different filesystems.
 
 ## System Requirements
 
@@ -15,11 +14,45 @@ way with different filesystems, include local filesystems, FTP servers, and remo
 
 ## Installation
 
-**Filesystem** is available on Packagist ([Molajo/Filesystem](http://packagist.org/packages/molajo/filesystem)) and
-installable via [Composer](http://getcomposer.org/).
+### Install using Composer from Packagist
 
-If you do not use Composer, you can download the code from ([Github](https://github.com/Molajo/Filesystem)).
-Link to ([manual install steps](https://github.com/Molajo/Filesystem)).
+**Step 1** Install composer in your project:
+
+```php
+    curl -s https://getcomposer.org/installer | php
+```
+
+**Step 2** Create a **composer.json** file in your project root:
+
+```php
+{
+    "require": {
+        "slim/slim": "2.*"
+    }
+}
+```
+
+**Step 3** Install via composer:
+
+```php
+    php composer.phar install
+```
+
+**Step 4** Add this line to your application’s **index.php** file:
+
+```php
+    <?php
+    require 'vendor/autoload.php';
+```
+### Or, Install Manually
+
+Download and extract **Filesystem**.
+
+Copy the Molajo folder (first subfolder of src) into your Vendor directory.
+
+Require it in your application’s index.php file.
+
+Register Molajo\Filesystem\ subfolder in your autoload process.
 
 ## Basic Usage
 
@@ -34,7 +67,7 @@ Link to ([manual install steps](https://github.com/Molajo/Filesystem)).
     $connect->setSourceAdapter('local');
     $connect->setSourcePath('/x/y/example.txt');
 ```
-**Step 3** Invoke method.
+**Step 3** Invoke method
 
 ```php
     $data = $connect->read();
@@ -137,6 +170,30 @@ To move a file or folder to a specific destination on the filesystem:
     $connect = new \Molajo\Filesystem\Driver($options);
     $data    = $connect->read ();
 ```
+## Lists
+
+### DirectoryIterator
+http://us2.php.net/manual/en/class.filesystemiterator.php
+
+### Merged Filesystems
+
+Many times, a developer must work with groups of files that are located in different folders and potentially
+in a different filesystem. **Merged filesystems** allow you to define a set of directories as though it were
+the same location in order to use the output together.
+
+```php
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example.txt'
+    );
+
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->read ();
+```
+### RecursiveTreeIterator
+
+http://us2.php.net/manual/en/class.recursivetreeiterator.php
+http://us2.php.net/manual/en/class.recursivetreeiterator.php
 
 ## Special Purpose File Operations
 
@@ -157,16 +214,49 @@ This shows how to backup a file on one filesystem to another filesystem.
     $data    = $connect->backup ();
 ```
 
+### Download
+
+This shows how to backup a file on one filesystem to another filesystem.
+
+```php
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example',
+        'target_adapter' => 'ftp',
+        'target_path'    => '/x/y/backup',
+        'archive'        => 'zip'
+    );
+
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->backup ();
+```
+
+### FTP Server
+
+This shows how to backup a file on one filesystem to another filesystem.
+
+```php
+    $options = array(
+        'source_adapter' => 'local',
+        'source_path'    => '/x/y/example',
+        'target_adapter' => 'ftp',
+        'target_path'    => '/x/y/backup',
+        'archive'        => 'zip'
+    );
+
+    $connect = new \Molajo\Filesystem\Driver($options);
+    $data    = $connect->backup ();
+```
 
 About
 =====
 
 Molajo Project has adopted the following:
 
- * ([Semantic Versioning](http://semver.org/))
- * ([PSR-0 Autoloader Interoperability](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md))
- * ([PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md))
- and ([PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md))
+ * [Semantic Versioning](http://semver.org/)
+ * [PSR-0 Autoloader Interoperability](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)
+ * [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md)
+ and [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
  * phpUnit Testing
  * phpDoc
 
@@ -190,11 +280,11 @@ License
 Acknowledgements
 ----------------
 
-[W3C File API: Directories and System] W3C Working Draft 17 April 2012 → http://www.w3.org/TR/file-system-api/
+**W3C File API: Directories and System** [W3C Working Draft 17 April 2012 → ](http://www.w3.org/TR/file-system-api/)
 specifications were followed, as closely as possible.
 
 More Information
 ----------------
-- [Usage](doc/usage.md)
-- [Extend](doc/extend.md)
-- [Specifications](doc/specifications.md)
+- [Usage](/doc/usage.md)
+- [Extend](/doc/extend.md)
+- [Specifications](/doc/specifications.md)

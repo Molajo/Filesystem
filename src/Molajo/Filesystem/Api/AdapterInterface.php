@@ -1,6 +1,6 @@
 <?php
 /**
- * Adapter Interface for Filesystem
+ * Basic Adapter Interface for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -11,46 +11,33 @@ namespace Molajo\Filesystem\Api;
 defined ('MOLAJO') or die;
 
 /**
- * Describes an adapter instance for the filesystem
+ * Basic adapter connect instance for the filesystem
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-interface Adapter
+interface AdapterInterface
 {
     /**
-     * Connect
+     * Returns the value 'directory, 'file' or 'link' for the type determined
+     *  from the path
      *
      * @return  null
      * @since   1.0
      */
-    function connect ();
+    function getType ();
 
     /**
-     * Close the FTP Connection
+     * Determine if the file or directory specified in path exists
+     *
+     * @param   string  $path
      *
      * @return  null
      * @since   1.0
      */
-    function close ();
-
-    /**
-     * Get the Connection
-     *
-     * @return  null
-     * @since   1.0
-     */
-    function getConnection ();
-
-    /**
-     * Set the Connection
-     *
-     * @return  null
-     * @since   1.0
-     */
-    function setConnection ();
+    function exists ($path);
 
     /**
      * Returns the contents of the file identified in path
@@ -60,7 +47,7 @@ interface Adapter
      * @return  null;
      * @since   1.0
      */
-    public function read ($path);
+    function read ($path);
 
     /**
      * Returns a list of file and folder names located at path directory
@@ -70,7 +57,7 @@ interface Adapter
      * @return  null
      * @since   1.0
      */
-    public function getList ($path);
+    function getList ($path);
 
     /**
      * Creates directory identified in path using the data value
@@ -83,7 +70,7 @@ interface Adapter
      * @return  null
      * @since   1.0
      */
-    public function createDirectory ($path, $new_name, $replace = false, $create_directories = true);
+    function createDirectory ($path, $new_name, $replace = false, $create_directories = true);
 
     /**
      * Creates or replaces the file identified in path using the data value
@@ -97,7 +84,7 @@ interface Adapter
      * @return  null
      * @since   1.0
      */
-    public function write ($path, $file, $data, $replace = false, $create_directories = true);
+    function write ($path, $file, $data, $replace = false, $create_directories = true);
 
     /**
      * Copies the file identified in $path to the target_adapter in the new_parent_directory,
@@ -114,7 +101,7 @@ interface Adapter
      * @return  null
      * @since   1.0
      */
-    public function copy ($path, File $target, $target_directory, $replace = false, $create_directories = true);
+    function copy ($path, File $target, $target_directory, $replace = false, $create_directories = true);
 
     /**
      * Moves the file identified in path to the location identified in the new_parent_directory
@@ -129,7 +116,7 @@ interface Adapter
      * @return  mixed
      * @since   1.0
      */
-    public function move ($path, File $target, $target_directory, $replace = false, $create_directories = true);
+    function move ($path, File $target, $target_directory, $replace = false, $create_directories = true);
 
     /**
      * Deletes the file identified in path. Empty directories are removed, if so indicated.
@@ -140,7 +127,7 @@ interface Adapter
      * @return  null
      * @since   1.0
      */
-    public function delete ($path, $delete_empty_directory = true);
+    function delete ($path, $delete_empty_directory = true);
 
     /**
      * Retrieves metadata for the file specified in path and returns an associative array
@@ -150,18 +137,6 @@ interface Adapter
      * @return  null
      * @since   1.0
      */
-    public function getMetadata ($path, $options);
+    function getMetadata ($path, $options);
 
-    /**
-     * Retrieves metadata for the file specified in path and returns an associative array
-     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
-     *  absolute_path, relative_path, filename, and file_extension.
-     *
-     * @param   string  $path
-     * @param   string  $options
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setMetadata ($path, $options);
 }

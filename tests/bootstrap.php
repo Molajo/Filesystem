@@ -1,6 +1,6 @@
 <?php
 /**
- * Filesystem Interface
+ * Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.

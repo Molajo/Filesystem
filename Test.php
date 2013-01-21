@@ -8,7 +8,7 @@
  */
 
 defined ('MOLAJO') or die;
-
+/**
 $ftp_adapter_options = array(
     'adapter_name'   => 'FTP Server',
     'username'       => 'integrationFTP',
@@ -21,14 +21,11 @@ $ftp_adapter_options = array(
 );
 
 $adapter = 'Local';
-
-include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter.php';                          // Interface
-include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter/Adapter.php';                  // Abstract Class
-include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter/' . $adapter . '.php';         // Filesystem Adapter
-
-include BASE_FOLDER . '/src/Molajo/Filesystem/Access/Path.php';         // Path
-include BASE_FOLDER . '/src/Molajo/Filesystem/Access/Directory.php';    // Directory
-include BASE_FOLDER . '/src/Molajo/Filesystem/Access/File.php';         // File
+*/
+include BASE_FOLDER . '/src/Molajo/Filesystem/Driver.php';
+include BASE_FOLDER . '/src/Molajo/Filesystem/Api/Adapter.php';                          // Interface
+include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter/Adapter.php';
+include BASE_FOLDER . '/src/Molajo/Filesystem/Adapter/Local.php';
 
 $local_adapter_options = array(
     'adapter_name'   => 'Local Filesystem',
@@ -41,10 +38,10 @@ $local_adapter_options = array(
     'passive_mode'     => true
 );
 
-$class = 'Molajo\\Filesystem\\Adapter\\' . $adapter;
+$class = 'Molajo\\Filesystem\\Adapter\\Local';
 $adapterServices = new $class($local_adapter_options);
 
-die;
+
 $file_options = array('xyz' => BASE_FOLDER);
 $path = BASE_FOLDER . '/src/Molajo/' . 'Media';
 
