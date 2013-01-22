@@ -12,9 +12,6 @@ defined ('MOLAJO') or die;
 
 use Molajo\Filesystem\FilesystemAdapter;
 
-use Exception;
-use Molajo\Filesystem\Exception\FileException;
-
 /**
  * Local Adapter for Filesystem
  *
@@ -28,43 +25,112 @@ class Local extends FilesystemAdapter
     /**
      * Constructor
      *
-     * @param  string  $path
-     * @param  array   $options
+     * @param   array  $options
      *
-     * @since  1.0
+     * @since   1.0
      */
     public function __construct ($path, $options = array())
     {
         parent::__construct ($path, $options);
 
+
         return;
     }
-
     /**
-     * Does the path exist (either as a file or a folder)?
+     * Set Root of Filesystem
      *
-     * @param string $path
+     * @param   string  $root
      *
-     * @return bool|null
+     * @return  mixed
+     * @since   1.0
      */
-    public function exists ($path)
+    public function setRoot ($root)
     {
-        return parent::exists ($path);
+        return $this->root = rtrim ($root, '/\\') . '/';
     }
 
     /**
-     * Returns the value 'directory', 'file' or 'link' for the type determined
-     *  from the path
+     * Set persistence indicator for Filesystem
      *
-     * @param   string  $path
+     * @param   bool  $persistence
      *
      * @return  null
      * @since   1.0
      */
-    function getType ($path)
+    public function setPersistence ($persistence)
     {
-        return parent::exists ($path);
+        return $this->persistence = $persistence;
     }
+
+    /**
+     * Method to connect to a Local server
+     *
+     * @return  object|resource
+     * @since   1.0
+     * @throws  \Exception
+     */
+    public function connect ()
+    {
+    }
+
+    /**
+     * Method to login to a server once connected
+     *
+     * @return  bool
+     * @since   1.0
+     * @throws  \RuntimeException
+     */
+    public function login ()
+    {
+    }
+
+    /**
+     * Destruct Method
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function __destruct ()
+    {
+    }
+
+    /**
+     * Close the Local Connection
+     *
+     * @return  void
+     * @since   1.0
+     * @throws  \Exception
+     */
+    public function close ()
+    {
+    }
+
+
+    /**
+     * Checks to see if the path exists
+     *
+     * @return  boolean
+     */
+    public function exists ($path)
+    {
+        return file_exists ($path);
+    }
+
+    /**
+     * Set the Path
+     *
+     * @param   string  $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function setPath ($path)
+    {
+        $this->path = $this->normalise ($path);
+
+        return $this->getAbsolutePath ($path);
+    }
+
 
     /**
      * Returns the contents of the file located at path directory
@@ -74,15 +140,25 @@ class Local extends FilesystemAdapter
      * @return  mixed
      * @since   1.0
      * @throws  FileException when file does not exist
-     * @throws  /RuntimeException when unable to read file
+     * @throws  RuntimeException when unable to read file
      */
-    public function read ($path = '')
+    public function read ($path)
     {
-        if ($path == '') {
-            $path = $this->path;
+        $path = $this->adapter->normalise ($path);
+
+        $this->adapter->exists ($path);
+
+        $this->adapter->isFile ($path);
+
+        if (file_exists ($path)) {
+            $data = file_get_contents ($path);
         }
 
-        return parent::read ($path);
+        if (false === $data) {
+            throw new \RuntimeException('Could not read: ', $path);
+        }
+
+        return false;
     }
 
     /**
@@ -338,6 +414,18 @@ class Local extends FilesystemAdapter
         }
 
         return $path;
+    }
+
+    /**
+     * Returns the value 'directory, 'file' or 'link' for the type determined
+     *  from the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function getType ($path)
+    {
+        // TODO: Implement getType() method.
     }
 
     /**

@@ -6,7 +6,7 @@
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Api;
+namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
@@ -18,16 +18,18 @@ defined ('MOLAJO') or die;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-interface AdapterInterface
+interface FileInterface
 {
     /**
-     * Returns the value 'directory, 'file' or 'link' for the type determined
+     * Returns the value 'directory', 'file' or 'link' for the type determined
      *  from the path
+     *
+     * @param   string  $path
      *
      * @return  null
      * @since   1.0
      */
-    function getType ();
+    function getType ($path);
 
     /**
      * Determine if the file or directory specified in path exists
@@ -47,7 +49,7 @@ interface AdapterInterface
      * @return  null;
      * @since   1.0
      */
-    function read ($path);
+    function read ($path = '');
 
     /**
      * Returns a list of file and folder names located at path directory
@@ -90,18 +92,18 @@ interface AdapterInterface
      * Copies the file identified in $path to the target_adapter in the new_parent_directory,
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * Note: File $target is an instance of the Filesystem exclusive to the target portion of the copy
+     * Note: $target_filesystem is an instance of the Filesystem exclusive to the target portion of the copy
      *
-     * @param   string  $path
-     * @param   File    $target
-     * @param   string  $target_directory
-     * @param   bool    $replace
-     * @param   bool    $create_directories
+     * @param      $path
+     * @param      $target_filesystem
+     * @param      $target_directory
+     * @param bool $replace
+     * @param bool $create_directories
      *
      * @return  null
      * @since   1.0
      */
-    function copy ($path, File $target, $target_directory, $replace = false, $create_directories = true);
+    function copy ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true);
 
     /**
      * Moves the file identified in path to the location identified in the new_parent_directory
@@ -116,7 +118,7 @@ interface AdapterInterface
      * @return  mixed
      * @since   1.0
      */
-    function move ($path, File $target, $target_directory, $replace = false, $create_directories = true);
+    function move ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true);
 
     /**
      * Deletes the file identified in path. Empty directories are removed, if so indicated.
@@ -139,4 +141,13 @@ interface AdapterInterface
      */
     function getMetadata ($path, $options);
 
+    /**
+     * Normalizes the given path
+     *
+     * @param   $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    function normalise ($path);
 }

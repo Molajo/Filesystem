@@ -10,7 +10,7 @@ namespace Molajo\Filesystem\Adapter;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\Adapter\Adapter as Adapter;
+use Molajo\Filesystem\Adapter;
 
 /**
  * Stream Adapter for Filesystem
@@ -23,7 +23,7 @@ use Molajo\Filesystem\Adapter\Adapter as Adapter;
  * Full interface specification:
  *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-class Stream extends Adapter
+class Stream extends FilesystemAdapter
 {
     /**
      * Constructor

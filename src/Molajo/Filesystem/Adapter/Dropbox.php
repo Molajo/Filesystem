@@ -10,7 +10,7 @@ namespace Molajo\Filesystem\Adapter;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\Adapter\Adapter as Adapter;
+use Molajo\Filesystem\Adapter;
 
 /**
  * Dropbox Adapter for Filesystem
@@ -22,7 +22,7 @@ use Molajo\Filesystem\Adapter\Adapter as Adapter;
  *
  * http://code.google.com/p/dropbox-php/wiki/Dropbox_API
  */
-class Dropbox extends Adapter
+class Dropbox extends FilesystemAdapter
 {
     /**
      * Constructor

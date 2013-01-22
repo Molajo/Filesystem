@@ -18,7 +18,7 @@ defined ('MOLAJO') or die;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Ftp extends Adapter
+class Ftp extends FilesystemAdapter
 {
     /**
      * Options

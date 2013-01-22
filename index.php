@@ -1,6 +1,6 @@
 <?php
 /**
- * Index.php
+ * Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -8,21 +8,23 @@
  */
 define('MOLAJO', 'This is a Molajo Distribution');
 
-/**
- * Filesystem
- *
- * @package   Molajo
- * @license   MIT
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @since     1.0
- */
-
+if (substr($_SERVER['DOCUMENT_ROOT'], -1) == '/') {
+    define('ROOT_FOLDER', $_SERVER['DOCUMENT_ROOT']);
+} else {
+    define('ROOT_FOLDER', $_SERVER['DOCUMENT_ROOT'] . '/');
+}
 define('BASE_FOLDER', __DIR__);
 
-/** Autoload, Namespaces and Overrides */
-if (file_exists (BASE_FOLDER . '/Autoload.php')) {
-} else {
-    echo 'Autoload cannot be found.';
-}
-require_once BASE_FOLDER . '/Autoload.php';
+/** Load Classloader */
+include BASE_FOLDER . '/' . 'ClassLoader.php';
+
+$loader = new ClassLoader();
+$loader->add('Molajo\Filesystem', BASE_FOLDER.'/src');
+$loader->register();
+
+
+
+
+
+require_once __DIR__ . '/tests/bootstrap.php';
 

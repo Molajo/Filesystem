@@ -6,7 +6,7 @@
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Api;
+namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
@@ -18,7 +18,7 @@ defined ('MOLAJO') or die;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-interface AuthorisationInterface
+interface FileAuthorisationInterface
 {
     /**
      * Connect

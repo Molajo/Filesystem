@@ -10,7 +10,7 @@ namespace Molajo\Filesystem\Adapter;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\Adapter\Adapter as Adapter;
+use Molajo\Filesystem\Adapter;
 
 /**
  * Js Adapter for Filesystem
@@ -20,7 +20,7 @@ use Molajo\Filesystem\Adapter\Adapter as Adapter;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Js extends Adapter
+class Js extends FilesystemAdapter
 {
     /**
      * Constructor

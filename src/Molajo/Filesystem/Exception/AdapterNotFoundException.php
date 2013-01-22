@@ -1,6 +1,6 @@
 <?php
 /**
- * FileNotFound Exception
+ * AdapterNotFoundException Exception
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -10,15 +10,17 @@ namespace Molajo\Filesystem\Exception;
 
 defined ('MOLAJO') or die;
 
+use RuntimeException;
+
 /**
- * FileNotFound Exception
+ * AdapterNotFoundException Exception
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class FileNotFound extends \RuntimeException implements Exception
+class AdapterNotFoundException extends RuntimeException implements FileSystemExceptionInterface
 {
     private $key;
 

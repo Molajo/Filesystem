@@ -1,6 +1,6 @@
 <?php
 /**
- * Filesystem Driver
+ * Base Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -10,36 +10,31 @@ namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\Api\AdapterInterface;
+use Molajo\Filesystem\FileInterface;
 
-use \RuntimeException;
-use Molajo\Filesystem\FileNotFoundException;
+use Exception;
+use RuntimeException;
+use Molajo\Filesystem\Exception\InvalidPathException as InvalidPathException;
+use Molajo\Filesystem\Exception\FileException as FileException;
+use Molajo\Filesystem\Exception\AdapterNotFoundException as AdapterNotFoundException;
 
 /**
- * Filesystem Driver
+ * Base Adapter for Filesystem
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-Class Driver implements AdapterInterface
+abstract class FilesystemAdapter implements FileInterface
 {
-    /**
-     * Adapter Instance
-     *
-     * @var    Adapter
-     * @since  1.0
-     */
-    protected $adapter;
-
     /**
      * Options
      *
-     * @var    $options
+     * @var    array
      * @since  1.0
      */
-    protected $options = array();
+    protected $options;
 
     /**
      * Path
@@ -50,9 +45,15 @@ Class Driver implements AdapterInterface
     protected $path;
 
     /**
-     * Absolute path for current path
+     * Type: Directory,
      *
-     * An absolute path is a relative path from the root directory, prepended with a '/'.
+     * @var    string
+     * @since  1.0
+     */
+    protected $type;
+
+    /**
+     * Absolute Path for Filesystem
      *
      * @var    string
      * @since  1.0
@@ -60,27 +61,148 @@ Class Driver implements AdapterInterface
     protected $absolute_path;
 
     /**
-     * Construct
+     * Root Directory for Filesystem
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $root;
+
+    /**
+     * Persistence
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    protected $persistence;
+
+    /**
+     * Constructor
      *
      * @param   array  $options
      *
      * @since   1.0
      */
-    public function __construct ($options)
+    public function __construct ($path, $options = array())
     {
         $this->options = $options;
+
+        if (isset($this->options['root'])) {
+            $this->setRoot ($this->options['root']);
+        } else {
+            $this->setRoot ('/');
+        }
+
+        if (isset($this->options['persistence'])) {
+            $this->setPersistence ($this->options['persistence']);
+        } else {
+            $this->setPersistence (0);
+        }
+
+        $this->setPath ($path);
 
         return;
     }
 
     /**
-     * Checks to see if the path exists
+     * Set the Path
      *
-     * @return  boolean
+     * @param   string  $path
+     *
+     * @return  string
+     * @since   1.0
      */
-    public function exists ()
+    public function setPath ($path)
     {
-        return file_exists ($this->path);
+        $path = $this->normalise ($path);
+
+        return $this->getAbsolutePath ($path);
+    }
+
+    /**
+     * Retrieves the absolute path, which is the relative path from the root directory,
+     *  prepended with a '/'.
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getAbsolutePath ($path)
+    {
+        $this->absolute_path = realpath ($path);
+
+        return $this->absolute_path;
+    }
+
+    /**
+     * Set Root of Filesystem
+     *
+     * @param   string  $root
+     *
+     * @return  mixed
+     * @since   1.0
+     */
+    public function setRoot ($root)
+    {
+        $this->root = rtrim ($root, '/\\') . '/';
+
+        return $this->root;
+    }
+
+    /**
+     * Set persistence indicator for Filesystem
+     *
+     * @param   bool  $persistence
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setPersistence ($persistence)
+    {
+        $this->persistence = $persistence;
+
+        return $this->persistence;
+    }
+
+    /**
+     * Returns the value 'directory, 'file' or 'link' for the type determined
+     *  from the path
+     *
+     * @param   string  $path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getType ($path)
+    {
+        if ($this->isDirectory ($this->path)) {
+            return 'directory';
+        }
+
+        if ($this->isFile ($this->path)) {
+            return 'file';
+        }
+
+        if ($this->isLink ($this->path)) {
+            return 'link';
+        }
+
+        throw new FileException ('Not a directory, file or a link.');
+    }
+
+    /**
+     * Does the path exist (either as a file or a folder)?
+     *
+     * @param string $path
+     *
+     * @return bool|null
+     */
+    public function exists ($path)
+    {
+        if (file_exists ($path)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -88,28 +210,40 @@ Class Driver implements AdapterInterface
      *
      * @param   string  $path
      *
-     * @return  mixed;
+     * @return  mixed
      * @since   1.0
-     * @throws  FileNotFound when file does not exist
+     * @throws  FileException when file does not exist
      * @throws  RuntimeException when unable to read file
      */
-    public function read ($path)
+    public function read ($path = '')
     {
-        $this->path = $this->adapter->normalise ($path);
+        $path = $this->normalise ($path);
 
-        $this->adapter->exists ($path);
-
-        $this->adapter->isFile ($path);
-
-        if (file_exists ($this->path)) {
-            $data = file_get_contents ($this->path);
+        if ($this->exists ($path) === false) {
+            throw new FileException ('Could not find file at path: ', $path);
         }
 
-        if (false === $data) {
-            throw new \RuntimeException('Could not read: ', $path);
+        if ($this->isFile ($path)) {
+        } else {
+            throw new FileException ('Is not a file path: ', $path);
         }
 
-        return false;
+        $data = false;
+
+        try {
+            $data = file_get_contents ($path);
+
+        } catch (\Exception $e) {
+
+            throw new \Exception
+            ('Filesystem Read: Error reading path ' . $path);
+        }
+
+        if ($data === false) {
+            throw new FileException ('Could not read: ', $path);
+        }
+
+        return $data;
     }
 
     /**
@@ -122,10 +256,10 @@ Class Driver implements AdapterInterface
      */
     public function getList ($path)
     {
-        $this->path = $this->normalise ($path);
+        $path = $this->normalise ($path);
 
-        if (file_exists ($this->path)) {
-            return file_get_contents ($this->path);
+        if (file_exists ($path)) {
+            return file_get_contents ($path);
         }
 
         return false;
@@ -142,28 +276,28 @@ Class Driver implements AdapterInterface
      * @return  null
      * @since   1.0
      */
-    public function createDirectory ($path, $new_name, $replace = false,  $create_directories = true)
+    public function createDirectory ($path, $new_name, $replace = false, $create_directories = true)
     {
-        $this->path = $this->normalise ($path);
+        $path = $this->normalise ($path);
 
         if ($replace === false) {
-            if (file_exists ($this->path)) {
+            if (file_exists ($path)) {
                 return false;
             }
         }
 
         if ($create_directories === false) {
-            if (file_exists ($this->path)) {
+            if (file_exists ($path)) {
             } else {
                 return false;
             }
         }
 
-        if (file_exists ($this->path)) {
-            return file_get_contents ($this->path);
+        if (file_exists ($path)) {
+            return file_get_contents ($path);
         }
 
-        \mk_dir ($this->path);
+        \mk_dir ($path);
 
         // Desired folder structure
         $structure = './depth1/depth2/depth3/';
@@ -171,7 +305,7 @@ Class Driver implements AdapterInterface
 // To create the nested structure, the $recursive parameter
 // to mkdir() must be specified.
 
-        if (!mkdir($structure, 0, true)) {
+        if (! mkdir ($structure, 0, true)) {
             die('Failed to create folders...');
         }
 
@@ -188,64 +322,69 @@ Class Driver implements AdapterInterface
      * @param   bool    $replace
      * @param   bool    $create_directories
      *
-     * @return  null
+     * @return  void
      * @since   1.0
      */
     function write ($path, $file, $data, $replace = false, $create_directories = true)
     {
-        $this->path = $this->normalise ($path);
+        $path = $this->normalise ($path);
 
         if ($replace === false) {
-            if (file_exists ($this->path)) {
+            if (file_exists ($path)) {
                 return false;
             }
         }
 
         if ($create_directories === false) {
-            if (file_exists ($this->path)) {
+            if (file_exists ($path)) {
             } else {
                 return false;
             }
         }
 
-        if (file_exists ($this->path)) {
-            return file_get_contents ($this->path);
+        if (file_exists ($path)) {
+            return file_get_contents ($path);
         }
 
-        \file_put_contents ($this->path, $data);
+        $numBytes = \file_put_contents ($path, $data);
 
-
-        $numBytes = $this->adapter->write ($path, $file, $data, $replace = false, $create_directories = true);
-
-        if (false === $numBytes) {
-            throw new \RuntimeException(sprintf ('Could not write the "%s" key content.', $path));
+        if (false === $numBytes || (int) $numBytes == 0) {
+            throw new FileSystemException(sprintf ('Could not write the "%s" key content.', $path));
         }
 
-        return $numBytes;
-
-        return false;
+        return;
     }
 
     /**
      * Copies the file identified in $path to the target_adapter in the new_parent_directory,
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * Note: File $target is an instance of the Filesystem exclusive to the target portion of the copy
+     * Note: $target_filesystem is an instance of the Filesystem exclusive to the target portion of the copy
      *
-     * @param   string  $path
-     * @param   File    $target
-     * @param   string  $target_directory
-     * @param   bool    $replace
-     * @param   bool    $create_directories
+     * @param   string    $path
+     * @param   object    $target_filesystem
+     * @param   string    $target_directory
+     * @param   bool      $replace
+     * @param   bool      $create_directories
      *
      * @return  null
      * @since   1.0
      */
-    public function copy ($path, File $target, $target_directory, $replace = false, $create_directories = true)
+    public function copy ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true)
     {
+        $options            = array();
+        $options['adapter_name'] =  $target_filesystem;
+        $class = 'Molajo\\Filesystem\\File';
+        $target = new $class($target_directory, $options);
+
         $data = $this->read ($path);
 
-        $target->write ($target_directory, $data, $replace, $create_directories);
+        $results = $target->write ($target_directory, basename($path), $data, $replace, $create_directories);
+
+        if ($results === false) {
+            throw new \FileSystemException('Could not write the "%s" key content.',
+                $target_directory . '\' . $file_name');
+        }
 
         return;
     }
@@ -263,7 +402,7 @@ Class Driver implements AdapterInterface
      * @return  null
      * @since   1.0
      */
-    public function move ($path, File $target, $target_directory, $replace = false, $create_directories = true)
+    public function move ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true)
     {
         $data = $this->read ($path);
 
@@ -285,10 +424,10 @@ Class Driver implements AdapterInterface
      */
     public function delete ($path, $delete_empty_directory = true)
     {
-        $this->path = $this->normalise ($path);
+        $path = $this->normalise ($path);
 
-        if (file_exists ($this->path)) {
-            return unlink ($this->path);
+        if (file_exists ($path)) {
+            return unlink ($path);
         }
 
         return false;
@@ -310,23 +449,6 @@ Class Driver implements AdapterInterface
 
     }
 
-
-    /**
-     * Retrieves metadata for the file specified in path and returns an associative array
-     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
-     *  absolute_path, relative_path, filename, and file_extension.
-     *
-     * @param   string  $path
-     * @param   string  $options
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setMetadata ($path, $options)
-    {
-
-    }
-
     //
     //  Helper methods
     //
@@ -339,8 +461,12 @@ Class Driver implements AdapterInterface
      * @return  string
      * @since   1.0
      */
-    public function normalise ($path)
+    public function normalise ($path = '')
     {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
         $absolute_path = false;
         if (substr ($path, 0, 1) == '/') {
             $absolute_path = true;
@@ -351,6 +477,7 @@ Class Driver implements AdapterInterface
         $path = str_replace ('\\', '/', $path);
 
         /**  Filter: empty value
+         *
          * @link http://tinyurl.com/arrayFilterStrlen
          */
         $nodes = array_filter (explode ('/', $path), 'strlen');
@@ -383,6 +510,118 @@ Class Driver implements AdapterInterface
         return $path;
     }
 
+    /**
+     * Method to connect to a Local server
+     *
+     * @return  object|resource
+     * @since   1.0
+     * @throws  \Exception
+     */
+    public function connect ()
+    {
+    }
+
+    /**
+     * Method to login to a server once connected
+     *
+     * @return  bool
+     * @since   1.0
+     * @throws  \RuntimeException
+     */
+    public function login ()
+    {
+    }
+
+    /**
+     * Destruct Method
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function __destruct ()
+    {
+    }
+
+    /**
+     * Close the Local Connection
+     *
+     * @return  void
+     * @since   1.0
+     * @throws  \Exception
+     */
+    public function close ()
+    {
+    }
+
+    /**
+     * Get the file size of a given file.
+     *
+     * @param string $path
+     *
+     * @return int
+     */
+    public function size ($path)
+    {
+        return filesize ($path);
+    }
+
+    /**
+     * Retrieves Create Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getCreateDate ()
+    {
+
+    }
+
+    /**
+     * Retrieves Last Access Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getAccessDate ()
+    {
+
+    }
+
+    /**
+     * Retrieves Last Update Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getUpdateDate ()
+    {
+        return filemtime ($this->path);
+    }
+
+    /**
+     * Sets the Last Access Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setAccessDate ()
+    {
+
+    }
+
+    /**
+     * Sets the Last Update Date for directory or file identified in the path
+     *
+     * @param   string  $value
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setUpdateDate ($value)
+    {
+
+    }
+
 
     /**
      * Indicates whether the given path is absolute or not
@@ -393,9 +632,9 @@ Class Driver implements AdapterInterface
      * @return  boolean
      * @since   1.0
      */
-    public function isAbsolute ()
+    public function isAbsolute ($path)
     {
-        if (substr ($this->path, 0, 1) == '/') {
+        if (substr ($path, 0, 1) == '/') {
             return true;
         }
 
@@ -414,30 +653,6 @@ Class Driver implements AdapterInterface
         return false;
     }
 
-    /**
-     * Returns the value 'directory, 'file' or 'link' for the type determined from the path
-     *
-     * @return  string
-     * @since   1.0
-     * @throws  \Molajo\Filesystem\FilesystemException
-     */
-    public function getType ()
-    {
-        if ($this->isDirectory ($this->path)) {
-            return 'directory';
-        }
-
-        if ($this->isFile ($this->path)) {
-            return 'file';
-        }
-
-        if ($this->isLink ($this->path)) {
-            return 'link';
-        }
-
-        throw new FilesystemException
-            ('Not a directory, file or a link.');
-    }
 
     /**
      * Returns true or false indicator as to whether or not the path is a directory
@@ -445,9 +660,9 @@ Class Driver implements AdapterInterface
      * @return  bool
      * @since   1.0
      */
-    public function isDirectory ()
+    public function isDirectory ($path)
     {
-        if (is_file ($this->path)) {
+        if (is_file ($path)) {
             return true;
         }
 
@@ -460,9 +675,9 @@ Class Driver implements AdapterInterface
      * @return  bool
      * @since   1.0
      */
-    public function isFile ()
+    public function isFile ($path)
     {
-        if (is_file ($this->path)) {
+        if (is_file ($path)) {
             return true;
         }
 
@@ -475,9 +690,9 @@ Class Driver implements AdapterInterface
      * @return  bool
      * @since   1.0
      */
-    public function isLink ()
+    public function isLink ($path)
     {
-        if (is_link ($this->path)) {
+        if (is_link ($path)) {
             return true;
         }
 
@@ -560,7 +775,7 @@ Class Driver implements AdapterInterface
     public function setPermissions ()
     {
         //$this->permissions = array();
-        //$this->group       = $this->path;
+        //$this->group       = $path;
     }
 
 
@@ -645,19 +860,20 @@ Class Driver implements AdapterInterface
 
     }
 
-
     /**
-     * Retrieves the absolute path, which is the relative path from the root directory,
-     *  prepended with a '/'.
+     * Retrieves metadata for the file specified in path and returns an associative array
+     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
+     *  absolute_path, relative_path, filename, and file_extension.
      *
-     * @return  string
+     * @param   string  $path
+     * @param   string  $options
+     *
+     * @return  null
      * @since   1.0
      */
-    public function getAbsolutePath ()
+    public function setMetadata ($path, $options)
     {
-        $this->absolute_path = realpath ($this->path);
 
-        return $this->absolute_path;
     }
 
 }

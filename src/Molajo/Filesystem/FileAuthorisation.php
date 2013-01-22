@@ -1,128 +1,66 @@
 <?php
 /**
- * Path for Adapter of Filesystem
+ * FileAuthorisation Driver
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Access;
-
-use Molajo\Filesystem\FilesystemException;
-use Molajo\Filesystem\Adapter\Adapter;
-use Molajo\Filesystem\Path as PathInterface;
+namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
+use \RuntimeException;
+use Molajo\Filesystem\Exception\FileException;
+
 /**
- * Path for Filesystem
- *
+ * FileAuthorisation Driver
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-Abstract class Path implements PathInterface
+Class FileAuthorisation implements FileAuthorisationInterface
 {
+    /**
+     * Options
+     *
+     * @var    $options
+     * @since  1.0
+     */
+    protected $options = array();
+
+    /**
+     * Path
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $path;
+
+    /**
+     * Absolute path for current path
+     *
+     * An absolute path is a relative path from the root directory, prepended with a '/'.
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $absolute_path;
 
     /**
      * Construct
      *
-     * @param  Adapter  $adapter
-     * @param  string   $path
-     * @param  array    $options
-     *
-     * @since   1.0
-     */
-    public function __construct (Adapter $adapter, $path, $options = array())
-    {
-
-        $this->setAdapter ($adapter);
-        $this->setPath ($path);
-        $this->setOptions ($options);
-
-        $this->convertToUrl ();
-
-        return;
-    }
-
-    /**
-     * Set the Adapter
-     *
-     * @param   Adapter  $adapter
-     *
-     * @return  Adapter
-     * @since   1.0
-     */
-    public function setAdapter (Adapter $adapter)
-    {
-        return $this->adapter = $adapter;
-    }
-
-    /**
-     * Get the Adapter
-     *
-     * @return  Adapter
-     * @since   1.0
-     */
-    public function getAdapter ()
-    {
-        return $this->adapter;
-    }
-
-    /**
-     * Set the Path
-     *
-     * @param   string  $path
-     *
-     * @return  string
-     * @since   1.0
-     */
-    public function setPath ($path)
-    {
-        $this->path = $this->normalise ($path);
-
-        return $this->getAbsolutePath ();
-    }
-
-    /**
-     * Get the Path
-     *
-     * @return  string
-     * @since   1.0
-     */
-    public function getPath ()
-    {
-        return $this->path;
-    }
-
-    /**
-     * Set the Options
-     *
      * @param   array  $options
      *
-     * @return  array
      * @since   1.0
      */
-    public function setOptions ($options = array())
+    public function __construct ($options)
     {
-        if (is_array ($options)) {
-            return $this->options = $options;
-        }
+        $this->options = $options;
 
-        return $this->options = array();
-    }
-
-    /**
-     * Get the Options
-     *
-     * @return  array  $options
-     * @since   1.0
-     */
-    public function getOptions ()
-    {
-        return $this->options;
+        return;
     }
 
     /**
@@ -130,10 +68,63 @@ Abstract class Path implements PathInterface
      *
      * @return  boolean
      */
-    public function exists ()
+    public function exists ($path)
     {
-        return file_exists ($this->path);
+        return file_exists ($path);
     }
+
+    /**
+     * Normalizes the given path
+     *
+     * @param   $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function normalise ($path)
+    {
+        $absolute_path = false;
+        if (substr ($path, 0, 1) == '/') {
+            $absolute_path = true;
+            $path          = substr ($path, 1, strlen ($path));
+        }
+
+        /** Unescape slashes */
+        $path = str_replace ('\\', '/', $path);
+
+        /**  Filter: empty value
+         * @link http://tinyurl.com/arrayFilterStrlen
+         */
+        $nodes = array_filter (explode ('/', $path), 'strlen');
+
+        $normalised = array();
+
+        foreach ($nodes as $node) {
+
+            /** '.' means current - ignore it      */
+            if ($node == '.') {
+
+                /** '..' is parent - remove the parent */
+            } elseif ($node == '..') {
+
+                if (count ($normalised) > 0) {
+                    array_pop ($normalised);
+                }
+
+            } else {
+                $normalised[] = $node;
+            }
+
+        }
+
+        $path = implode ('/', $normalised);
+        if ($absolute_path === true) {
+            $path = '/' . $path;
+        }
+
+        return $path;
+    }
+
 
     /**
      * Indicates whether the given path is absolute or not
@@ -146,7 +137,7 @@ Abstract class Path implements PathInterface
      */
     public function isAbsolute ()
     {
-        if (substr ($this->path, 0, 1) == '/') {
+        if (substr ($path, 0, 1) == '/') {
             return true;
         }
 
@@ -165,30 +156,6 @@ Abstract class Path implements PathInterface
         return false;
     }
 
-    /**
-     * Returns the value 'directory, 'file' or 'link' for the type determined from the path
-     *
-     * @return  string
-     * @since   1.0
-     * @throws  \Molajo\Filesystem\FilesystemException
-     */
-    public function getType ()
-    {
-        if ($this->isDirectory ($this->path)) {
-            return 'directory';
-        }
-
-        if ($this->isFile ($this->path)) {
-            return 'file';
-        }
-
-        if ($this->isLink ($this->path)) {
-            return 'link';
-        }
-
-        throw new FilesystemException
-        ('Not a directory, file or a link.');
-    }
 
     /**
      * Returns true or false indicator as to whether or not the path is a directory
@@ -198,7 +165,7 @@ Abstract class Path implements PathInterface
      */
     public function isDirectory ()
     {
-        if (is_file ($this->path)) {
+        if (is_file ($path)) {
             return true;
         }
 
@@ -213,7 +180,7 @@ Abstract class Path implements PathInterface
      */
     public function isFile ()
     {
-        if (is_file ($this->path)) {
+        if (is_file ($path)) {
             return true;
         }
 
@@ -228,7 +195,7 @@ Abstract class Path implements PathInterface
      */
     public function isLink ()
     {
-        if (is_link ($this->path)) {
+        if (is_link ($path)) {
             return true;
         }
 
@@ -311,7 +278,7 @@ Abstract class Path implements PathInterface
     public function setPermissions ()
     {
         //$this->permissions = array();
-        //$this->group       = $this->path;
+        //$this->group       = $path;
     }
 
 
@@ -406,8 +373,44 @@ Abstract class Path implements PathInterface
      */
     public function getAbsolutePath ()
     {
-        $this->absolute_path = realpath ($this->path);
+        $this->absolute_path = realpath ($path);
 
         return $this->absolute_path;
     }
+
+
+    /**
+     * Retrieves metadata for the file specified in path and returns an associative array
+     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
+     *  absolute_path, relative_path, filename, and file_extension.
+     *
+     * @param   string  $path
+     * @param   string  $options
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getMetadata ($path, $options)
+    {
+
+    }
+
+
+    /**
+     * Retrieves metadata for the file specified in path and returns an associative array
+     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
+     *  absolute_path, relative_path, filename, and file_extension.
+     *
+     * @param   string  $path
+     * @param   string  $options
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setMetadata ($path, $options)
+    {
+
+    }
+
+
 }

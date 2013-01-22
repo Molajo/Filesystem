@@ -27,7 +27,7 @@ General-purpose file and directory services package for PHP applications using t
 ```php
 {
     "require": {
-        "slim/slim": "2.*"
+        "Molajo/Filesystem": "1.*"
     }
 }
 ```
@@ -44,28 +44,33 @@ General-purpose file and directory services package for PHP applications using t
     <?php
     require 'vendor/autoload.php';
 ```
+
+This instructs PHP to use Composer’s autoloader for **Filesystem** project dependencies.
+
+<?php
+require 'vendor/autoload.php';
+
 ### Or, Install Manually
 
 Download and extract **Filesystem**.
 
 Copy the Molajo folder (first subfolder of src) into your Vendor directory.
 
-Require it in your application’s index.php file.
-
 Register Molajo\Filesystem\ subfolder in your autoload process.
 
 ## Basic Usage
 
-**Step 1** Establish Filesystem Driver connection
+**Step 1** Establish Filesystem File connection
+
+    Defaults to *Local* Adapter.
 
 ```php
-    $connect = new \Molajo\Filesystem\Driver();
+    $connect = new \Molajo\Filesystem\File('from/the/base/of/the/website/test1.txt');
 ```
 **Step 2** Set properties
 
 ```php
-    $connect->setSourceAdapter('local');
-    $connect->setSourcePath('/x/y/example.txt');
+
 ```
 **Step 3** Invoke method
 
@@ -82,7 +87,7 @@ Dependencies can be injected via the constructor:
         'source_path'    => '/x/y/example.txt'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->read ();
 ```
 ## Basic File and Directory Operations
@@ -97,7 +102,7 @@ To read a specific file from a filesystem:
         'source_path'    => '/x/y/example.txt'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->read ();
 ```
 
@@ -111,7 +116,7 @@ To list the names of files and/or directories from a filesystem for a given path
         'source_path'    => '/x/y/example.txt'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->read ();
 ```
 
@@ -125,7 +130,7 @@ To write a file to a filesystem:
         'source_path'    => '/x/y/example.txt'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->read ();
 ```
 
@@ -139,7 +144,7 @@ To write a file or folder to a specific destination on the filesystem:
         'source_path'    => '/x/y/example.txt'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->read ();
 ```
 
@@ -153,7 +158,7 @@ To move a file or folder to a specific destination on the filesystem:
         'source_path'    => '/x/y/example.txt'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->read ();
 ```
 
@@ -167,7 +172,7 @@ To move a file or folder to a specific destination on the filesystem:
         'source_path'    => '/x/y/example.txt'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->read ();
 ```
 ## Lists
@@ -187,7 +192,7 @@ the same location in order to use the output together.
         'source_path'    => '/x/y/example.txt'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->read ();
 ```
 ### RecursiveTreeIterator
@@ -210,7 +215,7 @@ This shows how to backup a file on one filesystem to another filesystem.
         'archive'        => 'zip'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->backup ();
 ```
 
@@ -227,7 +232,7 @@ This shows how to backup a file on one filesystem to another filesystem.
         'archive'        => 'zip'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->backup ();
 ```
 
@@ -244,7 +249,7 @@ This shows how to backup a file on one filesystem to another filesystem.
         'archive'        => 'zip'
     );
 
-    $connect = new \Molajo\Filesystem\Driver($options);
+    $connect = new \Molajo\Filesystem\File($options);
     $data    = $connect->backup ();
 ```
 
@@ -285,6 +290,6 @@ specifications were followed, as closely as possible.
 
 More Information
 ----------------
-- [Usage](/doc/usage.md)
-- [Extend](/doc/extend.md)
-- [Specifications](/doc/specifications.md)
+- [Usage](/Filesystem/doc/usage.md)
+- [Extend](/Filesystem/doc/extend.md)
+- [Specifications](/Filesystem/doc/specifications.md)

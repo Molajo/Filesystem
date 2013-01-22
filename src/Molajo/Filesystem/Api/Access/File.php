@@ -187,7 +187,7 @@ Class File extends Directory implements FileInterface
      * Copies the file identified in $path to the target_adapter in the new_parent_directory,
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * Note: File $target is an instance of the Filesystem exclusive to the target portion of the copy
+     * Note: $target_filesystem is an instance of the Filesystem exclusive to the target portion of the copy
      *
      * @param   string  $path
      * @param   File    $target
@@ -198,7 +198,7 @@ Class File extends Directory implements FileInterface
      * @return  null
      * @since   1.0
      */
-    public function copy ($path, File $target, $target_directory, $replace = false, $create_directories = true)
+    public function copy ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true)
     {
         $data = $this->read ($path);
 
@@ -220,7 +220,7 @@ Class File extends Directory implements FileInterface
      * @return  null
      * @since   1.0
      */
-    public function move ($path, File $target, $target_directory, $replace = false, $create_directories = true)
+    public function move ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true)
     {
         $data = $this->read ($path);
 

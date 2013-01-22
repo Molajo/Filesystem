@@ -7,5 +7,5 @@
  * @license   MIT
  */
 
-$loader = require_once __DIR__ . "/../vendor/autoload.php";
-$loader->add('Molajo\\Filesystem\\', __DIR__);
+//require_once __DIR__ . '/Testcases/TestFile.php';
+require_once __DIR__ . '/Testcases/TestLocalFilesystem.php';

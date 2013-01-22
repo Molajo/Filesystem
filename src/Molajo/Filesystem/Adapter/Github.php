@@ -11,7 +11,7 @@ namespace Molajo\Filesystem\Adapter;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\Adapter\Adapter as Adapter;
+use Molajo\Filesystem\Adapter;
 
 /**
  * Github Adapter for Filesystem
@@ -24,7 +24,7 @@ use Molajo\Filesystem\Adapter\Adapter as Adapter;
  * Full interface specification:
  *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-class Github extends Adapter
+class Github extends FilesystemAdapter
 {
     /**
      * Constructor
