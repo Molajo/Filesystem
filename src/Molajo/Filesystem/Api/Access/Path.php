@@ -8,7 +8,7 @@
  */
 namespace Molajo\Filesystem\Access;
 
-use Molajo\Filesystem\FilesystemException;
+use Molajo\Filesystem\FileException;
 use Molajo\Filesystem\Adapter;
 use Molajo\Filesystem\Path as PathInterface;
 
@@ -170,7 +170,7 @@ Abstract class Path implements PathInterface
      *
      * @return  string
      * @since   1.0
-     * @throws  \Molajo\Filesystem\FilesystemException
+     * @throws  \Molajo\Filesystem\FileException
      */
     public function getType ()
     {
@@ -186,7 +186,7 @@ Abstract class Path implements PathInterface
             return 'link';
         }
 
-        throw new FilesystemException
+        throw new FileException
         ('Not a directory, file or a link.');
     }
 

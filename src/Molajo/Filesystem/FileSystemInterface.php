@@ -1,6 +1,6 @@
 <?php
 /**
- * Authorisation Interface for Filesystem Adapters
+ * System Interface for Filesystem Adapter
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -11,14 +11,14 @@ namespace Molajo\Filesystem;
 defined ('MOLAJO') or die;
 
 /**
- * Authorisation Interface for Filesystem Adapters
+ * System Interface for Filesystem Adapter
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-interface FileAuthorisationInterface
+interface FilesystemInterface
 {
     /**
      * Connect
@@ -55,7 +55,7 @@ interface FileAuthorisationInterface
     /**
      * Returns the owner of the file or directory defined in the path
      *
-     * @param   null  $path
+     * @param   string  $path
      *
      * @return  bool
      * @since   1.0
@@ -65,7 +65,7 @@ interface FileAuthorisationInterface
     /**
      * Returns the group for the file or directory defined in the path
      *
-     * @param   null  $path
+     * @param   string  $path
      *
      * @return  string
      * @since   1.0
@@ -73,80 +73,64 @@ interface FileAuthorisationInterface
     function getGroup ($path);
 
     /**
-     * Returns associative array: 'read', 'update', 'execute' as true or false
-     *  for 'owner', 'group', or 'world'
-     *
-     * @param   null  $path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    function getPermissions ($path);
-
-    /**
      * Retrieves Create Date for directory or file identified in the path
      *
-     * @param   string
+     * @param   string  $path
      *
      * @return  null
      * @since   1.0
      */
-    function getCreateDate ();
+    function getCreateDate ($path);
 
     /**
      * Retrieves Last Access Date for directory or file identified in the path
      *
-     * @param   string
+     * @param   string  $path
      *
      * @return  null
      * @since   1.0
      */
-    function getAccessDate ();
+    function getAccessDate ($path);
 
     /**
      * Retrieves Last Update Date for directory or file identified in the path
      *
-     * @param   string
+     * @param   string   $path
      *
      * @return  null
      * @since   1.0
      */
-    function getUpdateDate ();
+    function getUpdateDate ($path);
 
     /**
-     * Tests if the group specified: 'owner', 'group', or 'world' has read access
-     *  Returns true or false
+     * Tests for read access, returning true or false
      *
-     * @param   null    $path
-     * @param   null    $group
+     * @param   string  $path
      *
      * @return  null
      * @since   1.0
      */
-    function isReadable ($path, $group = null);
+    function isReadable ($path);
 
     /**
-     * Tests if the group specified: 'owner', 'group', or 'world' has write access
-     *  Returns true or false
+     * Tests for write access, returning true or false
      *
-     * @param   null    $path
-     * @param   null    $group
+     * @param   string  $path
      *
      * @return  null
      * @since   1.0
      */
-    function isWriteable ($path, $group = null);
+    function isWriteable ($path);
 
     /**
-     * Tests if the group specified: 'owner', 'group', or 'world' has execute access
+     * Tests for execute access, returning true or false
      *
-     * @param   null    $path
-     * @param   null    $group
+     * @param   string  $path
      *
      * @return  null
      * @since   1.0
      */
-    function isExecutable ($path, $group = null);
+    function isExecutable ($path);
 
     /**
      * Changes the owner to the value specified for the file or directory defined in the path
@@ -171,23 +155,11 @@ interface FileAuthorisationInterface
     function setGroup ($path, $group);
 
     /**
-     * Using an associative array with three entries: 'read', 'update', 'execute' with a value for
-     *  each entry as either 'true' or 'false' for the group specified: 'owner', 'group',  or 'world'
-     *
-     * @param   string  $path
-     * @param   array   $permissions
-     *
-     * @return  null
-     * @since   1.0
-     */
-    function setPermissions ($path, $permissions = array());
-
-    /**
      * Set read access to true or false for the group specified: 'owner', 'group', or 'world'
      *
      * @param   string  $path
      * @param   null    $group
-     * @param   string  $permissions
+     * @param   bool    $permission
      *
      * @return  null
      * @since   1.0
@@ -197,7 +169,9 @@ interface FileAuthorisationInterface
     /**
      * Set write access to true or false for the group specified: 'owner', 'group', or 'world'
      *
+     * @param   string  $path
      * @param   null    $group
+     * @param   bool    $permission
      *
      * @return  null
      * @since   1.0
@@ -207,7 +181,9 @@ interface FileAuthorisationInterface
     /**
      * Set execute access to true or false for the group specified: 'owner', 'group', or 'world'
      *
+     * @param   string  $path
      * @param   null    $group
+     * @param   bool    $permission
      *
      * @return  null
      * @since   1.0
@@ -217,20 +193,22 @@ interface FileAuthorisationInterface
     /**
      * Sets the Last Access Date for directory or file identified in the path
      *
-     * @param   string
-     *
-     * @return  null
-     * @since   1.0
-     */
-    function setAccessDate ();
-
-    /**
-     * Sets the Last Update Date for directory or file identified in the path
-     *
+     * @param   string  $path
      * @param   string  $value
      *
      * @return  null
      * @since   1.0
      */
-    function setUpdateDate ($value);
+    function setAccessDate ($path, $value);
+
+    /**
+     * Sets the Last Update Date for directory or file identified in the path
+     *
+     * @param   string  $path
+     * @param   string  $value
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function setUpdateDate ($path, $value);
 }

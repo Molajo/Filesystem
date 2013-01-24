@@ -21,7 +21,7 @@ use Molajo\Filesystem\Exception\FileException as FileException;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-Class File
+Class Fileupload
 {
     /**
      * Options
@@ -152,8 +152,6 @@ Class File
      */
     public function __call ($name, $arguments)
     {
-        echo '<pre>';
-        var_dump(array($name, $arguments));
         return call_user_func_array(array($this->adapter, $name), $arguments);
    }
 

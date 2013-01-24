@@ -12,9 +12,6 @@ defined ('MOLAJO') or die;
 
 use Molajo\Filesystem\FilesystemAdapter;
 
-use Exception;
-use Molajo\Filesystem\Exception\FileException;
-
 /**
  * Local Adapter for Filesystem
  *
@@ -63,8 +60,48 @@ class Local extends FilesystemAdapter
      */
     function getType ($path)
     {
-        return parent::exists ($path);
+        return parent::getType ($path);
     }
+
+    /**
+     * Returns true or false indicator as to whether or not the path is a directory
+     *
+     * @param   string  $path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isDirectory ($path)
+    {
+        return parent::isDirectory ($path);
+    }
+
+    /**
+     * Returns true or false indicator as to whether or not the path is a file
+     *
+     * @param   string  $path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isFile ($path)
+    {
+        return parent::isFile ($path);
+    }
+
+    /**
+     * Returns true or false indicator as to whether or not the path is a link
+     *
+     * @param   string  $path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isLink ($path)
+    {
+        return parent::isLink ($path);
+    }
+
 
     /**
      * Returns the contents of the file located at path directory
@@ -73,8 +110,6 @@ class Local extends FilesystemAdapter
      *
      * @return  mixed
      * @since   1.0
-     * @throws  FileException when file does not exist
-     * @throws  /RuntimeException when unable to read file
      */
     public function read ($path = '')
     {
@@ -86,165 +121,23 @@ class Local extends FilesystemAdapter
     }
 
     /**
-     * Returns the contents of the file located at path directory
-     *
-     * @param   string  $path
-     *
-     * @return  mixed;
-     * @since   1.0
-     */
-    public function getList ($path)
-    {
-        $path = $this->normalise ($path);
-
-        if (file_exists ($path)) {
-            return file_get_contents ($path);
-        }
-
-        return false;
-    }
-
-    /**
-     * Creates directory identified in path using the data value
-     *
-     * @param   string  $path
-     * @param   string  $new_name
-     * @param   bool    $replace
-     * @param   bool    $create_directories
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function createDirectory ($path, $new_name, $replace = false, $create_directories = true)
-    {
-        $path = $this->normalise ($path);
-
-        if ($replace === false) {
-            if (file_exists ($path)) {
-                return false;
-            }
-        }
-
-        if ($create_directories === false) {
-            if (file_exists ($path)) {
-            } else {
-                return false;
-            }
-        }
-
-        if (file_exists ($path)) {
-            return file_get_contents ($path);
-        }
-
-        \mk_dir ($path);
-
-        // Desired folder structure
-        $structure = './depth1/depth2/depth3/';
-
-// To create the nested structure, the $recursive parameter
-// to mkdir() must be specified.
-
-        if (! mkdir ($structure, 0, true)) {
-            die('Failed to create folders...');
-        }
-
-
-        return false;
-    }
-
-    /**
      * Creates or replaces the file identified in path using the data value
      *
      * @param   string  $path
      * @param   string  $file
-     * @param           $data
+     * @param   string  $data
      * @param   bool    $replace
-     * @param   bool    $create_directories
      *
      * @return  null
      * @since   1.0
      */
-    function write ($path, $file, $data, $replace = false, $create_directories = true)
+    function write ($path, $file, $data, $replace)
     {
-        $path = $this->normalise ($path);
-
-        if ($replace === false) {
-            if (file_exists ($path)) {
-                return false;
-            }
+        if ($path == '') {
+            $path = $this->path;
         }
 
-        if ($create_directories === false) {
-            if (file_exists ($path)) {
-            } else {
-                return false;
-            }
-        }
-
-        if (file_exists ($path)) {
-            return file_get_contents ($path);
-        }
-
-        \file_put_contents ($path, $data);
-
-
-        $numBytes = $this->adapter->write ($path, $file, $data, $replace = false, $create_directories = true);
-
-        if (false === $numBytes) {
-            throw new \RuntimeException(sprintf ('Could not write the "%s" key content.', $path));
-        }
-
-        return $numBytes;
-
-        return false;
-    }
-
-    /**
-     * Copies the file identified in $path to the target_adapter in the new_parent_directory,
-     *  replacing existing contents, if indicated, and creating directories needed, if indicated
-     *
-     * Note: $target_filesystem is an instance of the Filesystem exclusive to the target portion of the copy
-     *
-     * @param   string  $path
-     * @param   File    $target
-     * @param   string  $target_directory
-     * @param   bool    $replace
-     * @param   bool    $create_directories
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function copy ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true)
-    {
-        $data = $this->read ($path);
-
-        $target->write ($target_directory, $data, $replace, $create_directories);
-
-        return;
-    }
-
-    /**
-     * Moves the file identified in path to the location identified in the new_parent_directory
-     *  replacing existing contents, if indicated, and creating directories needed, if indicated
-     *
-     * @param   string  $path
-     * @param   File    $target
-     * @param   string  $target_directory
-     * @param   bool    $replace
-     * @param   bool    $create_directories
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function move ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true)
-    {
-        $data = $this->read ($path);
-
-        $target->write ($target_directory, $data, $replace, $create_directories);
-
-        $this->delete ($path);
-
-        return;
+        return parent::write ($path, $file, $data, $replace);
     }
 
     /**
@@ -258,13 +151,109 @@ class Local extends FilesystemAdapter
      */
     public function delete ($path, $delete_empty_directory = true)
     {
-        $path = $this->normalise ($path);
-
-        if (file_exists ($path)) {
-            return unlink ($path);
+        if ($path == '') {
+            $path = $this->path;
         }
 
-        return false;
+        return parent::delete ($path, $delete_empty_directory);
+    }
+
+    /**
+     * Copies the file identified in $path to the target_adapter in the new_parent_directory,
+     *  replacing existing contents, if indicated, and creating directories needed, if indicated
+     *
+     * Note: $target_filesystem is an instance of the Filesystem exclusive to the target portion of the copy
+     *
+     * @param   string  $path
+     * @param   string  $target_filesystem
+     * @param   string  $target_directory
+     * @param   bool    $replace
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function copy ($path, $target_filesystem, $target_directory, $replace = false)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::copy ($path, $target_filesystem, $target_directory, $replace);
+    }
+
+    /**
+     * Moves the file identified in path to the location identified in the new_parent_directory
+     *  replacing existing contents, if indicated, and creating directories needed, if indicated
+     *
+     * @param   string  $path
+     * @param   string  $target_filesystem
+     * @param   string  $target_directory
+     * @param   bool    $replace
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function move ($path, $target_filesystem, $target_directory, $replace = false)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::move ($path, $target_filesystem, $target_directory, $replace);
+    }
+
+    /**
+     * Returns a list of files located at path directory
+     *
+     * @param   string  $path
+     *
+     * @return  mixed
+     * @since   1.0
+     */
+    public function getList ($path)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::getList ($path);
+    }
+
+    /**
+     * Creates directory identified in path using the data value
+     *
+     * @param   string  $path
+     * @param   string  $new_name
+     * @param   bool    $replace
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function createDirectory ($path, $new_name, $replace = false)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::createDirectory ($path, $new_name, $replace);
+    }
+
+    /**
+     * Delete directory identified in path using the data value
+     *
+     * @param   string  $path
+     * @param   bool    $create_subdirectories
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function deleteDirectory ($path, $delete_subdirectories = true)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::deleteDirectory ($path, $delete_subdirectories);
     }
 
     /**
@@ -280,12 +269,12 @@ class Local extends FilesystemAdapter
      */
     public function getMetadata ($path, $options)
     {
+        if ($path == '') {
+            $path = $this->path;
+        }
 
+        return parent::getMetadata ($path, $options);
     }
-
-    //
-    //  Helper methods
-    //
 
     /**
      * Normalizes the given path
@@ -295,61 +284,144 @@ class Local extends FilesystemAdapter
      * @return  string
      * @since   1.0
      */
-    public function normalise ($path)
+    public function normalise ($path = '')
     {
-        $absolute_path = false;
-        if (substr ($path, 0, 1) == '/') {
-            $absolute_path = true;
-            $path          = substr ($path, 1, strlen ($path));
+        if ($path == '') {
+            $path = $this->path;
         }
 
-        /** Unescape slashes */
-        $path = str_replace ('\\', '/', $path);
-
-        /**  Filter: empty value
-         *
-         * @link http://tinyurl.com/arrayFilterStrlen
-         */
-        $nodes = array_filter (explode ('/', $path), 'strlen');
-
-        $normalised = array();
-
-        foreach ($nodes as $node) {
-
-            /** '.' means current - ignore it      */
-            if ($node == '.') {
-
-                /** '..' is parent - remove the parent */
-            } elseif ($node == '..') {
-
-                if (count ($normalised) > 0) {
-                    array_pop ($normalised);
-                }
-
-            } else {
-                $normalised[] = $node;
-            }
-
-        }
-
-        $path = implode ('/', $normalised);
-        if ($absolute_path === true) {
-            $path = '/' . $path;
-        }
-
-        return $path;
+        return parent::normalise ($path);
     }
 
     /**
      * Get the file size of a given file.
      *
-     * @param string $path
+     * @param   string $path
      *
-     * @return int
+     * @return  int
+     * @since   1.0
      */
-    public function size ($path)
+    public function size ($path = '')
     {
-        return filesize ($path);
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::size ($path);
+    }
+
+    /**
+     * FilesystemInterface
+     */
+
+    /**
+     * Method to connect to a Local server
+     *
+     * @return  object|resource
+     * @since   1.0
+     */
+    public function connect ()
+    {
+        return;
+    }
+
+    /**
+     * Get the Connection
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function getConnection ()
+    {
+        return;
+    }
+
+    /**
+     * Set the Connection
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function setConnection ()
+    {
+        return;
+    }
+
+    /**
+     * Close the Local Connection
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function close ()
+    {
+        return;
+    }
+
+    /**
+     * Returns the owner of the file or directory defined in the path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getOwner ($path)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::getOwner ($path);
+    }
+
+    /**
+     * Change the owner to the value specified for the file or directory defined in the path
+     *
+     * @param   string $path
+     * @param   string $owner
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function setOwner ($path, $owner)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::setOwner ($path, $owner);
+    }
+
+    /**
+     * Returns the group of the file or directory defined in the path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getGroup ($path)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::getGroup ($path);
+    }
+
+    /**
+     * Change the group to the value specified for the file or directory defined in the path
+     *
+     * @param   string $path
+     * @param   string $group
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function setGroup ($path, $group)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::setGroup ($path, $group);
     }
 
     /**
@@ -358,9 +430,13 @@ class Local extends FilesystemAdapter
      * @return  null
      * @since   1.0
      */
-    public function getCreateDate ()
+    public function getCreateDate ($path)
     {
+        if ($path == '') {
+            $path = $this->path;
+        }
 
+        return parent::getCreateDate ($path);
     }
 
     /**
@@ -369,43 +445,167 @@ class Local extends FilesystemAdapter
      * @return  null
      * @since   1.0
      */
-    public function getAccessDate ()
+    public function getAccessDate ($path)
     {
+        if ($path == '') {
+            $path = $this->path;
+        }
 
+        return parent::getAccessDate ($path);
     }
 
     /**
      * Retrieves Last Update Date for directory or file identified in the path
      *
+     * @param   null    $path
+     *
      * @return  null
      * @since   1.0
      */
-    public function getUpdateDate ()
+    public function getUpdateDate ($path)
     {
-        return filemtime ($this->path);
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::getUpdateDate ($path);
+    }
+
+    /**
+     * Tests for read access, returning true or false
+     *
+     * @param   null    $path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function isReadable ($path)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::isReadable ($path);
+    }
+
+    /**
+     * Tests for write access, returning true or false
+     *
+     * @param   null    $path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function isWriteable ($path)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::isWriteable ($path);
+    }
+
+    /**
+     * Tests for execute access, returning true or false
+     *
+     * @param   null    $path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function isExecutable ($path)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::isExecutable ($path);
+    }
+
+    /**
+     * Set read access to true or false for the group specified: 'owner', 'group', or 'world'
+     *
+     * @param   null    $group
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setReadable ($path, $group = null, $permission = true)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::setReadable ($path, $group, $permission);
+    }
+
+    /**
+     * Set write access to true or false for the group specified: 'owner', 'group', or 'world'
+     *
+     * @param   null    $group
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setWriteable ($path, $group = null, $permission = true)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::setWriteable ($path, $group, $permission);
+    }
+
+    /**
+     * Set execute access to true or false for the group specified: 'owner', 'group', or 'world'
+     *
+     * @param   null    $group
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setExecutable ($path, $group = null, $permission = true)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::setExecutable ($path, $group, $permission);
     }
 
     /**
      * Sets the Last Access Date for directory or file identified in the path
      *
-     * @return  null
-     * @since   1.0
-     */
-    public function setAccessDate ()
-    {
-
-    }
-
-    /**
-     * Sets the Last Update Date for directory or file identified in the path
-     *
+     * @param   string  $path
      * @param   string  $value
      *
      * @return  null
      * @since   1.0
      */
-    public function setUpdateDate ($value)
+    public function setAccessDate ($path, $value)
     {
+        if ($path == '') {
+            $path = $this->path;
+        }
 
+        return parent::setAccessDate ($path, $value);
+    }
+
+    /**
+     * Sets the Last Update Date for directory or file identified in the path
+     *
+     * @param   string  $path
+     * @param   string  $value
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setUpdateDate ($path, $value)
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        return parent::setUpdateDate ($path, $value);
     }
 }

@@ -10,8 +10,6 @@ namespace Molajo\Filesystem\Exception;
 
 defined ('MOLAJO') or die;
 
-use RuntimeException;
-
 /**
  * AdapterNotFoundException Exception
  *
@@ -20,23 +18,17 @@ use RuntimeException;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class AdapterNotFoundException extends RuntimeException implements FileSystemExceptionInterface
+class AdapterNotFoundException extends FileExtension implements FileExceptionInterface
 {
-    private $key;
-
-    public function __construct($key, $code = 0, \Exception $previous = null)
+    /**
+     * Constructor.
+     *
+     * @param  string  $path
+     *
+     * @since  1.0
+     */
+    public function __construct($path)
     {
-        $this->key = $key;
-
-        parent::__construct(
-            sprintf('File "%s" Not found.', $key),
-            $code,
-            $previous
-        );
-    }
-
-    public function getKey()
-    {
-        return $this->path;
+        parent::__construct('The file %s could not be accessed', $path);
     }
 }

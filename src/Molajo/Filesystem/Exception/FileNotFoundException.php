@@ -1,6 +1,6 @@
 <?php
 /**
- * InvalidPathException Exception
+ * FileNotFoundException Exception
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -9,15 +9,16 @@
 namespace Molajo\Filesystem\Exception;
 
 defined ('MOLAJO') or die;
+
 /**
- * InvalidPathException Exception
+ * FileNotFoundException Exception
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class InvalidPathException extends FileExtension implements FileExceptionInterface
+class FileNotFoundException extends FileExtension implements FileExceptionInterface
 {
     /**
      * Constructor.
@@ -28,6 +29,6 @@ class InvalidPathException extends FileExtension implements FileExceptionInterfa
      */
     public function __construct($path)
     {
-        parent::__construct('The file %s could not be accessed', $path);
+        parent::__construct('Filesystem: file could not be found', $path);
     }
 }

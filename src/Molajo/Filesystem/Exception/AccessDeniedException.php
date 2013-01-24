@@ -1,6 +1,6 @@
 <?php
 /**
- * InvalidPathException Exception
+ * AccessDeniedException Exception
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -9,15 +9,16 @@
 namespace Molajo\Filesystem\Exception;
 
 defined ('MOLAJO') or die;
+
 /**
- * InvalidPathException Exception
+ * AccessDeniedException Exception
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class InvalidPathException extends FileExtension implements FileExceptionInterface
+class AccessDeniedException extends FileException
 {
     /**
      * Constructor.

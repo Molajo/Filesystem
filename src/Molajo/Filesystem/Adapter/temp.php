@@ -33,7 +33,6 @@ class Local extends FilesystemAdapter
     {
         parent::__construct ($path, $options);
 
-
         return;
     }
     /**
@@ -186,24 +185,16 @@ class Local extends FilesystemAdapter
      * @param   string  $path
      * @param   string  $new_name
      * @param   bool    $replace
-     * @param   bool    $create_directories
      *
      * @return  null
      * @since   1.0
      */
-    public function createDirectory ($path, $new_name, $replace = false, $create_directories = true)
+    public function createDirectory ($path, $new_name, $replace = false)
     {
         $path = $this->normalise ($path);
 
         if ($replace === false) {
             if (file_exists ($path)) {
-                return false;
-            }
-        }
-
-        if ($create_directories === false) {
-            if (file_exists ($path)) {
-            } else {
                 return false;
             }
         }
@@ -235,24 +226,16 @@ class Local extends FilesystemAdapter
      * @param   string  $file
      * @param           $data
      * @param   bool    $replace
-     * @param   bool    $create_directories
      *
      * @return  null
      * @since   1.0
      */
-    function write ($path, $file, $data, $replace = false, $create_directories = true)
+    function write ($path, $file, $data, $replace = false)
     {
         $path = $this->normalise ($path);
 
         if ($replace === false) {
             if (file_exists ($path)) {
-                return false;
-            }
-        }
-
-        if ($create_directories === false) {
-            if (file_exists ($path)) {
-            } else {
                 return false;
             }
         }
@@ -264,7 +247,7 @@ class Local extends FilesystemAdapter
         \file_put_contents ($path, $data);
 
 
-        $numBytes = $this->adapter->write ($path, $file, $data, $replace = false, $create_directories = true);
+        $numBytes = $this->adapter->write ($path, $file, $data, $replace = false);
 
         if (false === $numBytes) {
             throw new \RuntimeException(sprintf ('Could not write the "%s" key content.', $path));
@@ -285,16 +268,15 @@ class Local extends FilesystemAdapter
      * @param   File    $target
      * @param   string  $target_directory
      * @param   bool    $replace
-     * @param   bool    $create_directories
      *
      * @return  null
      * @since   1.0
      */
-    public function copy ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true)
+    public function copy ($path, $target_filesystem, $target_directory, $replace = false)
     {
         $data = $this->read ($path);
 
-        $target->write ($target_directory, $data, $replace, $create_directories);
+        $target->write ($target_directory, $data, $replace);
 
         return;
     }
@@ -307,16 +289,15 @@ class Local extends FilesystemAdapter
      * @param   File    $target
      * @param   string  $target_directory
      * @param   bool    $replace
-     * @param   bool    $create_directories
      *
      * @return  null
      * @since   1.0
      */
-    public function move ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true)
+    public function move ($path, $target_filesystem, $target_directory, $replace = false)
     {
         $data = $this->read ($path);
 
-        $target->write ($target_directory, $data, $replace, $create_directories);
+        $target->write ($target_directory, $data, $replace);
 
         $this->delete ($path);
 

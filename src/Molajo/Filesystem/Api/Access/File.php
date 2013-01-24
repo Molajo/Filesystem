@@ -98,20 +98,6 @@ Class File extends Directory implements FileInterface
 
     }
 
-    /**
-     * Retrieves metadata for the file specified in path and returns an associative array
-     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
-     *  absolute_path, relative_path, filename, and file_extension.
-     *
-     * @param   string  $path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setMetadata ($path)
-    {
-
-    }
 
     /**
      * Retrieves metadata for the file specified in path and returns an associative array
@@ -152,24 +138,16 @@ Class File extends Directory implements FileInterface
      * @param   string  $file
      * @param           $data
      * @param   bool    $replace
-     * @param   bool    $create_directories
      *
      * @return  null
      * @since   1.0
      */
-    public function write ($path, $data, $replace = false, $create_directories = true)
+    public function write ($path, $data, $replace = false)
     {
         $this->path = $this->normalise ($path);
 
         if ($replace === false) {
             if (file_exists ($this->path)) {
-                return false;
-            }
-        }
-
-        if ($create_directories === false) {
-            if (file_exists ($this->path)) {
-            } else {
                 return false;
             }
         }
@@ -193,16 +171,15 @@ Class File extends Directory implements FileInterface
      * @param   File    $target
      * @param   string  $target_directory
      * @param   bool    $replace
-     * @param   bool    $create_directories
      *
      * @return  null
      * @since   1.0
      */
-    public function copy ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true)
+    public function copy ($path, $target_filesystem, $target_directory, $replace = false)
     {
         $data = $this->read ($path);
 
-        $target->write ($target_directory, $data, $replace, $create_directories);
+        $target->write ($target_directory, $data, $replace);
 
         return;
     }
@@ -215,16 +192,15 @@ Class File extends Directory implements FileInterface
      * @param   File    $target
      * @param   string  $target_directory
      * @param   bool    $replace
-     * @param   bool    $create_directories
      *
      * @return  null
      * @since   1.0
      */
-    public function move ($path, $target_filesystem, $target_directory, $replace = false, $create_directories = true)
+    public function move ($path, $target_filesystem, $target_directory, $replace = false)
     {
         $data = $this->read ($path);
 
-        $target->write ($target_directory, $data, $replace, $create_directories);
+        $target->write ($target_directory, $data, $replace);
 
         $this->delete ($path);
 
