@@ -7,5 +7,5 @@
  * @license   MIT
  */
 
-//require_once __DIR__ . '/Testcases/TestFile.php';
+require_once __DIR__ . '/Testcases/TestFile.php';
 require_once __DIR__ . '/Testcases/TestLocalFilesystem.php';

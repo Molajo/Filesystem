@@ -18,7 +18,7 @@ defined ('MOLAJO') or die;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class FileNotFoundException extends FileExtension implements FileExceptionInterface
+class FileNotFoundException extends FileException implements FileExceptionInterface
 {
     /**
      * Constructor.
@@ -27,8 +27,8 @@ class FileNotFoundException extends FileExtension implements FileExceptionInterf
      *
      * @since  1.0
      */
-    public function __construct($path)
+    public function __construct ($path)
     {
-        parent::__construct('Filesystem: file could not be found', $path);
+        parent::__construct ('Filesystem: file could not be found', $path);
     }
 }

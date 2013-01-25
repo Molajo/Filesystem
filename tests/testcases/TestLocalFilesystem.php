@@ -16,7 +16,7 @@ echo 'BEGIN LOCAL FILESYSTEM TESTING', '<br />';
 echo 'Test 1 - Read ...';
 $path =  ROOT_FOLDER . 'Filesystem/tests/test1.txt';
 $options = array();
-$class = 'Molajo\\Filesystem\\File';
+$class = 'Molajo\\Filesystem\\Adapter';
 
 $connection = new $class($path, $options);
 $data    = $connection->read ($path);
@@ -37,7 +37,7 @@ $file               = 'new.txt';
 $data               = 'goes in here and more here.';
 $replace            = false;
 $options            = array();
-$class              = 'Molajo\\Filesystem\\File';
+$class              = 'Molajo\\Filesystem\\Adapter';
 
 $connection = new $class($path, $options);
 $data       = $connection->write ($path, $file, $data, $replace);
@@ -57,7 +57,7 @@ $file               = 'test1.txt';
 $data               = 'goes in here';
 $replace            = true;
 $options            = array();
-$class              = 'Molajo\\Filesystem\\File';
+$class              = 'Molajo\\Filesystem\\Adapter';
 
 $connection = new $class($path, $options);
 $data       = $connection->write ($path, $file, $data, $replace);
@@ -75,7 +75,7 @@ echo 'Test 3 - Delete file ';
 $path               = ROOT_FOLDER . 'Filesystem/tests/test1.txt';
 $delete_empty_directory            = true;
 $options            = array();
-$class              = 'Molajo\\Filesystem\\File';
+$class              = 'Molajo\\Filesystem\\Adapter';
 
 $connection = new $class($path, $options);
 $data       = $connection->delete

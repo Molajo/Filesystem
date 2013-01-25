@@ -27,8 +27,8 @@ class AccessDeniedException extends FileException
      *
      * @since  1.0
      */
-    public function __construct($path)
+    public function __construct ($path)
     {
-        parent::__construct('The file %s could not be accessed', $path);
+        parent::__construct ('The file %s could not be accessed', $path);
     }
 }

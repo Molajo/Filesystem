@@ -23,7 +23,7 @@ use Molajo\Filesystem\Adapter;
  * Full interface specification:
  *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-class Ldap extends FilesystemAdapter
+class Ldap implements File, Path, System
 {
     /**
      * Constructor

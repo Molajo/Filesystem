@@ -22,7 +22,7 @@ use Molajo\Filesystem\Adapter;
  *
  * http://code.google.com/p/dropbox-php/wiki/Dropbox_API
  */
-class Dropbox extends FilesystemAdapter
+class Dropbox implements File, Path, System
 {
     /**
      * Constructor

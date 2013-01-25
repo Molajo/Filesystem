@@ -5,7 +5,7 @@
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
- * https://github.com/ryanharkins/mysql-php-backup/blob/master/backup.php
+ *            https://github.com/ryanharkins/mysql-php-backup/blob/master/backup.php
  */
 namespace Molajo\Filesystem\Adapter;
 
@@ -24,7 +24,7 @@ use Molajo\Filesystem\Adapter;
  * Full interface specification:
  *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-class Github extends FilesystemAdapter
+class Github implements File, Path, System
 {
     /**
      * Constructor

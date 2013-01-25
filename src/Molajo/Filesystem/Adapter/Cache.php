@@ -20,7 +20,7 @@ use Molajo\Filesystem\Adapter;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Cache extends FilesystemAdapter
+class Cache implements File, Path, System
 {
     /**
      * Constructor

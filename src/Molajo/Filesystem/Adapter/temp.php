@@ -10,7 +10,9 @@ namespace Molajo\Filesystem\Adapter;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\FilesystemAdapter;
+use Molajo\Filesystem\SystemInterface;
+use Molajo\Filesystem\PathInterface;
+use Molajo\Filesystem\FileInterface;
 
 /**
  * Local Adapter for Filesystem
@@ -20,7 +22,7 @@ use Molajo\Filesystem\FilesystemAdapter;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Local extends FilesystemAdapter
+class Local implements FileInterface, PathInterface, SystemInterface
 {
     /**
      * Constructor
@@ -35,6 +37,7 @@ class Local extends FilesystemAdapter
 
         return;
     }
+
     /**
      * Set Root of Filesystem
      *
@@ -108,7 +111,7 @@ class Local extends FilesystemAdapter
     /**
      * Checks to see if the path exists
      *
-     * @return  boolean
+     * @return  bool
      */
     public function exists ($path)
     {
@@ -449,7 +452,7 @@ class Local extends FilesystemAdapter
      * @return  null
      * @since   1.0
      */
-    public function getUpdateDate ()
+    public function getModifiedDate ()
     {
         return filemtime ($this->path);
     }
@@ -473,7 +476,7 @@ class Local extends FilesystemAdapter
      * @return  null
      * @since   1.0
      */
-    public function setUpdateDate ($value)
+    public function setModifiedDate ($value)
     {
 
     }

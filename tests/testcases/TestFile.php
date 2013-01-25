@@ -16,7 +16,7 @@ echo 'BEGIN Testing File Class' , '<br />';
 echo 'SKIPPING Test 1 - Does not exists (should fail) ...';
 $path =  ROOT_FOLDER . 'Filesystem/tests/XXXXXXXtest1.txt';
 $options = array();
-$class = 'Molajo\\Filesystem\\File';
+$class = 'Molajo\\Filesystem\\Adapter';
 //$connection = new $class($path, $options);
 //$data    = $connection->read ();
 
@@ -32,8 +32,11 @@ echo '<br />';
 echo 'Test 2 - read a file begins ...';
 $path =  ROOT_FOLDER . 'Filesystem/tests/test1.txt';
 $options = array();
-$class = 'Molajo\\Filesystem\\File';
+$class = 'Molajo\\Filesystem\\Adapter';
 $connection = new $class($path, $options);
+echo '<pre>';
+var_dump($connection);
+die;
 $data    = $connection->read ();
 
 if (trim($data) == 'text1') {

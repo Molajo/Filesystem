@@ -10,7 +10,9 @@ namespace Molajo\Filesystem\Adapter;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\FilesystemAdapter;
+use Molajo\Filesystem\SystemInterface;
+use Molajo\Filesystem\PathInterface;
+use Molajo\Filesystem\FileInterface;
 
 /**
  * Local Adapter for Filesystem
@@ -20,7 +22,7 @@ use Molajo\Filesystem\FilesystemAdapter;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Local extends FilesystemAdapter
+class Local implements FileInterface, PathInterface, SystemInterface
 {
     /**
      * Constructor
@@ -36,72 +38,6 @@ class Local extends FilesystemAdapter
 
         return;
     }
-
-    /**
-     * Does the path exist (either as a file or a folder)?
-     *
-     * @param string $path
-     *
-     * @return bool|null
-     */
-    public function exists ($path)
-    {
-        return parent::exists ($path);
-    }
-
-    /**
-     * Returns the value 'directory', 'file' or 'link' for the type determined
-     *  from the path
-     *
-     * @param   string  $path
-     *
-     * @return  null
-     * @since   1.0
-     */
-    function getType ($path)
-    {
-        return parent::getType ($path);
-    }
-
-    /**
-     * Returns true or false indicator as to whether or not the path is a directory
-     *
-     * @param   string  $path
-     *
-     * @return  bool
-     * @since   1.0
-     */
-    public function isDirectory ($path)
-    {
-        return parent::isDirectory ($path);
-    }
-
-    /**
-     * Returns true or false indicator as to whether or not the path is a file
-     *
-     * @param   string  $path
-     *
-     * @return  bool
-     * @since   1.0
-     */
-    public function isFile ($path)
-    {
-        return parent::isFile ($path);
-    }
-
-    /**
-     * Returns true or false indicator as to whether or not the path is a link
-     *
-     * @param   string  $path
-     *
-     * @return  bool
-     * @since   1.0
-     */
-    public function isLink ($path)
-    {
-        return parent::isLink ($path);
-    }
-
 
     /**
      * Returns the contents of the file located at path directory
@@ -277,6 +213,167 @@ class Local extends FilesystemAdapter
     }
 
     /**
+     * Sets the value of the path defining the current directory and file
+     *
+     * @param $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function setPath ($path)
+    {
+        return parent::setPath ($path);
+    }
+
+
+    /**
+     * Returns the value of the path defining the current directory and file
+     *
+     * @param   $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getPath ($path)
+    {
+        return parent::getPath ($path);
+    }
+
+    /**
+     * Retrieves the absolute path, which is the relative path from the root directory,
+     *  prepended with a '/'.
+     *
+     * @param   string  $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getAbsolutePath ($path)
+    {
+        return parent::getAbsolutePath ($path);
+    }
+
+    /**
+     * Indicates whether the given path is absolute or not
+     *
+     * Relative path - describes how to get from a particular directory to a file or directory
+     * Absolute Path - relative path from the root directory, prepended with a '/'.
+     *
+     * @param   string  $path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isAbsolute ($path)
+    {
+        return parent::isAbsolute ($path);
+    }
+
+    /**
+     * Returns the value 'directory', 'file' or 'link' for the type determined
+     *  from the path
+     *
+     * @param   string  $path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    function getType ($path)
+    {
+        return parent::getType ($path);
+    }
+
+    /**
+     * Returns true or false indicator as to whether or not the path is a directory
+     *
+     * @param   string  $path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isDirectory ($path)
+    {
+        return parent::isDirectory ($path);
+    }
+
+    /**
+     * Returns true or false indicator as to whether or not the path is a file
+     *
+     * @param   string  $path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isFile ($path)
+    {
+        return parent::isFile ($path);
+    }
+
+    /**
+     * Returns true or false indicator as to whether or not the path is a link
+     *
+     * @param   string  $path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isLink ($path)
+    {
+        return parent::isLink ($path);
+    }
+
+    /**
+     * Does the path exist (either as a file or a folder)?
+     *
+     * @param string $path
+     *
+     * @return bool|null
+     */
+    public function exists ($path)
+    {
+        return parent::exists ($path);
+    }
+
+    /**
+     * Get File or Directory Name
+     *
+     * @param   string  $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getName ($path)
+    {
+        return parent::getName ($path);
+    }
+
+    /**
+     * Get Parent for current path
+     *
+     * @param   string  $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getParent ($path)
+    {
+        return parent::getParent ($path);
+    }
+
+    /**
+     * Get File Extension
+     *
+     * @param   string  $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getExtension ($path)
+    {
+        return parent::getExtension ($path);
+    }
+
+    /**
      * Normalizes the given path
      *
      * @param   $path
@@ -311,7 +408,7 @@ class Local extends FilesystemAdapter
     }
 
     /**
-     * FilesystemInterface
+     * SystemInterface
      */
 
     /**
@@ -359,6 +456,32 @@ class Local extends FilesystemAdapter
     }
 
     /**
+     * Set Root of Filesystem
+     *
+     * @param   string  $root
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function setRoot ($root)
+    {
+
+    }
+
+    /**
+     * Set persistence indicator for Filesystem
+     *
+     * @param   bool  $persistence
+     *
+     * @return  bpp;
+     * @since   1.0
+     */
+    public function setPersistence ($persistence)
+    {
+
+    }
+
+    /**
      * Returns the owner of the file or directory defined in the path
      *
      * @return  bool
@@ -374,24 +497,6 @@ class Local extends FilesystemAdapter
     }
 
     /**
-     * Change the owner to the value specified for the file or directory defined in the path
-     *
-     * @param   string $path
-     * @param   string $owner
-     *
-     * @return  string
-     * @since   1.0
-     */
-    public function setOwner ($path, $owner)
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        return parent::setOwner ($path, $owner);
-    }
-
-    /**
      * Returns the group of the file or directory defined in the path
      *
      * @return  bool
@@ -404,24 +509,6 @@ class Local extends FilesystemAdapter
         }
 
         return parent::getGroup ($path);
-    }
-
-    /**
-     * Change the group to the value specified for the file or directory defined in the path
-     *
-     * @param   string $path
-     * @param   string $group
-     *
-     * @return  string
-     * @since   1.0
-     */
-    public function setGroup ($path, $group)
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        return parent::setGroup ($path, $group);
     }
 
     /**
@@ -462,13 +549,13 @@ class Local extends FilesystemAdapter
      * @return  null
      * @since   1.0
      */
-    public function getUpdateDate ($path)
+    public function getModifiedDate ($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::getUpdateDate ($path);
+        return parent::getModifiedDate ($path);
     }
 
     /**
@@ -523,58 +610,24 @@ class Local extends FilesystemAdapter
     }
 
     /**
-     * Set read access to true or false for the group specified: 'owner', 'group', or 'world'
+     * Set file permissions
      *
      * @param   null    $group
      *
      * @return  null
      * @since   1.0
      */
-    public function setReadable ($path, $group = null, $permission = true)
+    public function chmod ($path, $mode)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::setReadable ($path, $group, $permission);
+        return parent::chmod ($path, $mode);
     }
 
     /**
-     * Set write access to true or false for the group specified: 'owner', 'group', or 'world'
-     *
-     * @param   null    $group
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setWriteable ($path, $group = null, $permission = true)
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        return parent::setWriteable ($path, $group, $permission);
-    }
-
-    /**
-     * Set execute access to true or false for the group specified: 'owner', 'group', or 'world'
-     *
-     * @param   null    $group
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setExecutable ($path, $group = null, $permission = true)
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        return parent::setExecutable ($path, $group, $permission);
-    }
-
-    /**
-     * Sets the Last Access Date for directory or file identified in the path
+     * Sets the Last Modified Date for directory or file identified in the path
      *
      * @param   string  $path
      * @param   string  $value
@@ -582,30 +635,12 @@ class Local extends FilesystemAdapter
      * @return  null
      * @since   1.0
      */
-    public function setAccessDate ($path, $value)
+    public function touch ($path, $time, $atime = null)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::setAccessDate ($path, $value);
-    }
-
-    /**
-     * Sets the Last Update Date for directory or file identified in the path
-     *
-     * @param   string  $path
-     * @param   string  $value
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setUpdateDate ($path, $value)
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        return parent::setUpdateDate ($path, $value);
+        return parent::touch ($path, $time, $atime);
     }
 }
