@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="tests/bootstrap.php" colors="true">
+<phpunit bootstrap="Bootstrap.php" colors="true">
     <testsuites>
-        <testsuite name="Molajo Filesystem Test Suite">
-            <directory>tests/Filesystem/</directory>
+        <testsuite name="Molajo Filesystem Tests">
+            <directory>./src/Molajo/Filesystem/*/Tests/</directory>
         </testsuite>
     </testsuites>
 
+    <php>
+        <ini name="intl.default_locale" value="en"/>
+        <ini name="intl.error_level" value="0"/>
+        <ini name="memory_limit" value="-1"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="Symfony Test Suite">
+            <directory>./src/Symfony/Bridge/*/Tests/</directory>
+            <directory>./src/Symfony/Component/*/Tests/</directory>
+            <directory>./src/Symfony/Bundle/*/Tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+            <group>benchmark</group>
+        </exclude>
+    </groups>
+
     <filter>
         <whitelist>
-            <directory suffix=".php">src/Filesystem/</directory>
+            <directory suffix=".php">.src/Molajo/Filesystem/</directory>
         </whitelist>
+        <exclude>
+            <directory>./src/Molajo/Filesystem/*/Tests</directory>
+        </exclude>
     </filter>
 </phpunit>

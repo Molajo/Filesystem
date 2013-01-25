@@ -1,6 +1,6 @@
 <?php
 /**
- * System Adapter for Filesystem
+ * Path Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -9,8 +9,6 @@
 namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
-
-use Molajo\Filesystem\AdapterInterface;
 
 use Exception;
 
@@ -22,14 +20,14 @@ use Molajo\Filesystem\Exception\FileNotFoundException as FileNotFoundException;
 use Molajo\Filesystem\Exception\InvalidPathException as InvalidPathException;
 
 /**
- * System Adapter for Filesystem
+ * Path Adapter for Filesystem
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-abstract class Path extends System implements PathInterface
+class Path extends System implements PathInterface
 {
     /**
      * Constructor

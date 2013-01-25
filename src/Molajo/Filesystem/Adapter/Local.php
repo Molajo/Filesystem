@@ -6,13 +6,9 @@
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Adapter;
-
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\SystemInterface;
-use Molajo\Filesystem\PathInterface;
-use Molajo\Filesystem\FileInterface;
+use Molajo\Filesystem\File;
 
 /**
  * Local Adapter for Filesystem
@@ -22,7 +18,7 @@ use Molajo\Filesystem\FileInterface;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Local implements FileInterface, PathInterface, SystemInterface
+class Local extends File
 {
     /**
      * Constructor
@@ -453,6 +449,19 @@ class Local implements FileInterface, PathInterface, SystemInterface
     public function close ()
     {
         return;
+    }
+
+    /**
+     * Set Root of Filesystem
+     *
+     * @param   string  $root
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function root ($root)
+    {
+
     }
 
     /**

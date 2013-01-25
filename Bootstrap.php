@@ -22,4 +22,4 @@ $loader = new ClassLoader();
 $loader->add('Molajo\Filesystem', BASE_FOLDER.'/src');
 $loader->register();
 
-require_once __DIR__ . '/tests/bootstrap.php';
+require_once __DIR__ . '/tests/Tests.php';

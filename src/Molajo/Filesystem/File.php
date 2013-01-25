@@ -10,7 +10,10 @@ namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\AdapterInterface;
+
+use Molajo\Filesystem\FileInterface;
+use Molajo\Filesystem\PathInterface;
+use Molajo\Filesystem\SystemInterface;
 
 use \Exception;
 use \RuntimeException;

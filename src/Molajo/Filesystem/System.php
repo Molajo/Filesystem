@@ -10,6 +10,9 @@ namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
+
+use Molajo\Filesystem\SystemInterface;
+
 use \Exception;
 use Molajo\Filesystem\Exception\FileException as FileException;
 
@@ -21,7 +24,7 @@ use Molajo\Filesystem\Exception\FileException as FileException;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-abstract class System implements SystemInterface
+class System implements SystemInterface
 {
     /**
      * Options
