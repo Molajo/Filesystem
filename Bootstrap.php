@@ -20,6 +20,5 @@ include BASE_FOLDER . '/' . 'ClassLoader.php';
 
 $loader = new ClassLoader();
 $loader->add('Molajo\Filesystem', BASE_FOLDER.'/src');
+$loader->add('Test\Filesystem', BASE_FOLDER.'/src');
 $loader->register();
-
-require_once __DIR__ . '/tests/Tests.php';

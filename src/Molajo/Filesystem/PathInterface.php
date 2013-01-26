@@ -39,7 +39,7 @@ interface PathInterface
     public function getPath ();
 
     /**
-     * Retrieves the absolute path, which is the relative path from the root directory,
+     * Retrieves the absolute path, which is the relative path from the root directory
      *
      * @param   string  $path
      *
@@ -71,16 +71,6 @@ interface PathInterface
      * @since   1.0
      */
     public function getType ($path);
-
-    /**
-     * Set Root of Filesystem
-     *
-     * @param   string  $path
-     *
-     * @return  string
-     * @since   1.0
-     */
-    public function setRoot ($root);
 
     /**
      * Set persistence indicator for Filesystem

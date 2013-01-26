@@ -6,7 +6,7 @@
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 
 use Molajo\Filesystem\File;
 
@@ -28,9 +28,9 @@ class Local extends File
      *
      * @since  1.0
      */
-    public function __construct ($path, $options = array())
+    public function __construct($path, $options = array())
     {
-        parent::__construct ($path, $options);
+        parent::__construct($path, $options);
 
         return;
     }
@@ -43,13 +43,13 @@ class Local extends File
      * @return  mixed
      * @since   1.0
      */
-    public function read ($path = '')
+    public function read($path = '')
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::read ($path);
+        return parent::read($path);
     }
 
     /**
@@ -63,13 +63,13 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    function write ($path, $file, $data, $replace)
+    function write($path, $file, $data, $replace)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::write ($path, $file, $data, $replace);
+        return parent::write($path, $file, $data, $replace);
     }
 
     /**
@@ -81,13 +81,13 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function delete ($path, $delete_empty_directory = true)
+    public function delete($path, $delete_empty_directory = true)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::delete ($path, $delete_empty_directory);
+        return parent::delete($path, $delete_empty_directory);
     }
 
     /**
@@ -104,13 +104,13 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function copy ($path, $target_filesystem, $target_directory, $replace = false)
+    public function copy($path, $target_filesystem, $target_directory, $replace = false)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::copy ($path, $target_filesystem, $target_directory, $replace);
+        return parent::copy($path, $target_filesystem, $target_directory, $replace);
     }
 
     /**
@@ -125,13 +125,13 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function move ($path, $target_filesystem, $target_directory, $replace = false)
+    public function move($path, $target_filesystem, $target_directory, $replace = false)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::move ($path, $target_filesystem, $target_directory, $replace);
+        return parent::move($path, $target_filesystem, $target_directory, $replace);
     }
 
     /**
@@ -142,13 +142,13 @@ class Local extends File
      * @return  mixed
      * @since   1.0
      */
-    public function getList ($path)
+    public function getList($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::getList ($path);
+        return parent::getList($path);
     }
 
     /**
@@ -161,31 +161,31 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function createDirectory ($path, $new_name, $replace = false)
+    public function createDirectory($path, $new_name, $replace = false)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::createDirectory ($path, $new_name, $replace);
+        return parent::createDirectory($path, $new_name, $replace);
     }
 
     /**
      * Delete directory identified in path using the data value
      *
      * @param   string  $path
-     * @param   bool    $create_subdirectories
+     * @param   bool    $delete_subdirectories
      *
      * @return  null
      * @since   1.0
      */
-    public function deleteDirectory ($path, $delete_subdirectories = true)
+    public function deleteDirectory($path, $delete_subdirectories = true)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::deleteDirectory ($path, $delete_subdirectories);
+        return parent::deleteDirectory($path, $delete_subdirectories);
     }
 
     /**
@@ -199,14 +199,28 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function getMetadata ($path, $options)
+    public function getMetadata($path, $options)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::getMetadata ($path, $options);
+        return parent::getMetadata($path, $options);
     }
+
+    /**
+     * Normalizes the given path
+     *
+     * @param   $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function normalise($path = '')
+    {
+        return parent::normalise($path);
+    }
+
 
     /**
      * Sets the value of the path defining the current directory and file
@@ -216,23 +230,20 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function setPath ($path)
+    public function setPath($path)
     {
-        return parent::setPath ($path);
+        return parent::setPath($path);
     }
-
 
     /**
      * Returns the value of the path defining the current directory and file
      *
-     * @param   $path
-     *
      * @return  string
      * @since   1.0
      */
-    public function getPath ($path)
+    public function getPath()
     {
-        return parent::getPath ($path);
+        return parent::getPath();
     }
 
     /**
@@ -244,9 +255,9 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function getAbsolutePath ($path)
+    public function getAbsolutePath($path)
     {
-        return parent::getAbsolutePath ($path);
+        return parent::getAbsolutePath($path);
     }
 
     /**
@@ -260,9 +271,9 @@ class Local extends File
      * @return  bool
      * @since   1.0
      */
-    public function isAbsolute ($path)
+    public function isAbsolute($path)
     {
-        return parent::isAbsolute ($path);
+        return parent::isAbsolute($path);
     }
 
     /**
@@ -274,9 +285,9 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    function getType ($path)
+    function getType($path)
     {
-        return parent::getType ($path);
+        return parent::getType($path);
     }
 
     /**
@@ -287,9 +298,9 @@ class Local extends File
      * @return  bool
      * @since   1.0
      */
-    public function isDirectory ($path)
+    public function isDirectory($path)
     {
-        return parent::isDirectory ($path);
+        return parent::isDirectory($path);
     }
 
     /**
@@ -300,9 +311,9 @@ class Local extends File
      * @return  bool
      * @since   1.0
      */
-    public function isFile ($path)
+    public function isFile($path)
     {
-        return parent::isFile ($path);
+        return parent::isFile($path);
     }
 
     /**
@@ -313,9 +324,9 @@ class Local extends File
      * @return  bool
      * @since   1.0
      */
-    public function isLink ($path)
+    public function isLink($path)
     {
-        return parent::isLink ($path);
+        return parent::isLink($path);
     }
 
     /**
@@ -325,9 +336,9 @@ class Local extends File
      *
      * @return bool|null
      */
-    public function exists ($path)
+    public function exists($path)
     {
-        return parent::exists ($path);
+        return parent::exists($path);
     }
 
     /**
@@ -338,9 +349,9 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function getName ($path)
+    public function getName($path)
     {
-        return parent::getName ($path);
+        return parent::getName($path);
     }
 
     /**
@@ -351,9 +362,9 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function getParent ($path)
+    public function getParent($path)
     {
-        return parent::getParent ($path);
+        return parent::getParent($path);
     }
 
     /**
@@ -364,26 +375,9 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function getExtension ($path)
+    public function getExtension($path)
     {
-        return parent::getExtension ($path);
-    }
-
-    /**
-     * Normalizes the given path
-     *
-     * @param   $path
-     *
-     * @return  string
-     * @since   1.0
-     */
-    public function normalise ($path = '')
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        return parent::normalise ($path);
+        return parent::getExtension($path);
     }
 
     /**
@@ -394,13 +388,13 @@ class Local extends File
      * @return  int
      * @since   1.0
      */
-    public function size ($path = '')
+    public function size($path = '')
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::size ($path);
+        return parent::size($path);
     }
 
     /**
@@ -413,7 +407,7 @@ class Local extends File
      * @return  object|resource
      * @since   1.0
      */
-    public function connect ()
+    public function connect()
     {
         return;
     }
@@ -424,7 +418,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    function getConnection ()
+    function getConnection()
     {
         return;
     }
@@ -435,7 +429,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    function setConnection ()
+    function setConnection()
     {
         return;
     }
@@ -446,7 +440,7 @@ class Local extends File
      * @return  void
      * @since   1.0
      */
-    public function close ()
+    public function close()
     {
         return;
     }
@@ -459,7 +453,7 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function root ($root)
+    public function root($root)
     {
 
     }
@@ -472,7 +466,7 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function setRoot ($root)
+    public function setRoot($root)
     {
 
     }
@@ -482,10 +476,10 @@ class Local extends File
      *
      * @param   bool  $persistence
      *
-     * @return  bpp;
+     * @return  string
      * @since   1.0
      */
-    public function setPersistence ($persistence)
+    public function setPersistence($persistence)
     {
 
     }
@@ -493,61 +487,69 @@ class Local extends File
     /**
      * Returns the owner of the file or directory defined in the path
      *
+     * @param  string $path
+     *
      * @return  bool
      * @since   1.0
      */
-    public function getOwner ($path)
+    public function getOwner($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::getOwner ($path);
+        return parent::getOwner($path);
     }
 
     /**
      * Returns the group of the file or directory defined in the path
      *
+     * @param  string $path
+     *
      * @return  bool
      * @since   1.0
      */
-    public function getGroup ($path)
+    public function getGroup($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::getGroup ($path);
+        return parent::getGroup($path);
     }
 
     /**
      * Retrieves Create Date for directory or file identified in the path
      *
+     * @param  string $path
+     *
      * @return  null
      * @since   1.0
      */
-    public function getCreateDate ($path)
+    public function getCreateDate($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::getCreateDate ($path);
+        return parent::getCreateDate($path);
     }
 
     /**
      * Retrieves Last Access Date for directory or file identified in the path
      *
+     * @param  string  $path
+     *
      * @return  null
      * @since   1.0
      */
-    public function getAccessDate ($path)
+    public function getAccessDate($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::getAccessDate ($path);
+        return parent::getAccessDate($path);
     }
 
     /**
@@ -558,13 +560,13 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function getModifiedDate ($path)
+    public function getModifiedDate($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::getModifiedDate ($path);
+        return parent::getModifiedDate($path);
     }
 
     /**
@@ -575,13 +577,13 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function isReadable ($path)
+    public function isReadable($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::isReadable ($path);
+        return parent::isReadable($path);
     }
 
     /**
@@ -592,13 +594,13 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function isWriteable ($path)
+    public function isWriteable($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::isWriteable ($path);
+        return parent::isWriteable($path);
     }
 
     /**
@@ -609,47 +611,49 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function isExecutable ($path)
+    public function isExecutable($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::isExecutable ($path);
+        return parent::isExecutable($path);
     }
 
     /**
      * Set file permissions
      *
-     * @param   null    $group
+     * @param  string  $path
+     * @param  int     $mode
      *
-     * @return  null
+     * @return  int|null
      * @since   1.0
      */
-    public function chmod ($path, $mode)
+    public function chmod($path, $mode)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::chmod ($path, $mode);
+        return parent::chmod($path, $mode);
     }
 
     /**
      * Sets the Last Modified Date for directory or file identified in the path
      *
-     * @param   string  $path
-     * @param   string  $value
+     * @param  string  $path
+     * @param  int     $time
+     * @param  null    $atime
      *
-     * @return  null
+     * @return  int|null
      * @since   1.0
      */
-    public function touch ($path, $time, $atime = null)
+    public function touch($path, $time, $atime = null)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::touch ($path, $time, $atime);
+        return parent::touch($path, $time, $atime);
     }
 }

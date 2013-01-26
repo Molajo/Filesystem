@@ -55,12 +55,20 @@ interface SystemInterface
     /**
      * Set Root of Filesystem
      *
-     * @param   string  $root
+     * @param   string  $path
      *
      * @return  string
      * @since   1.0
      */
-    public function root ($root);
+    public function setRoot ($root);
+
+    /**
+     * Get Root of Filesystem
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getRoot ();
 
     /**
      * Set persistence indicator for Filesystem

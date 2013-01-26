@@ -8,7 +8,7 @@
  */
 namespace Molajo\Filesystem;
 
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 
 use Exception;
 
@@ -32,17 +32,16 @@ class Path extends System implements PathInterface
     /**
      * Constructor
      *
-     * @path   string  $path
-     *
+     * @param   string  $path
      * @param  array   $options
      *
      * @since  1.0
      */
-    public function __construct ($path, $options = array())
+    public function __construct($path, $options = array())
     {
-        parent::__construct ($path, $options);
+        parent::__construct($path, $options);
 
-        $this->setPath ($path);
+        $this->setPath($path);
 
         return;
     }
@@ -55,9 +54,9 @@ class Path extends System implements PathInterface
      * @return  string
      * @since   1.0
      */
-    public function setPath ($path)
+    public function setPath($path)
     {
-        $path = $this->normalise ($path);
+        $path = $this->normalise($path);
 
         return $this->path = $path;
     }
@@ -68,7 +67,7 @@ class Path extends System implements PathInterface
      * @return  string
      * @since   1.0
      */
-    public function getPath ()
+    public function getPath()
     {
         return $this->path;
     }
@@ -81,21 +80,22 @@ class Path extends System implements PathInterface
      *
      * @return  string
      * @since   1.0
+     * @throws  FileNotFoundException
      */
-    public function getAbsolutePath ($path)
+    public function getAbsolutePath($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        $path = $this->normalise ($path);
+        $path = $this->normalise($path);
 
-        if ($this->exists ($path) === false) {
+        if ($this->exists($path) === false) {
             throw new FileNotFoundException
             ('Filesystem: getAbsolutePath method does not exist: ' . $path);
         }
 
-        $this->absolute_path = realpath ($path);
+        $this->absolute_path = realpath($path);
 
         return $this->absolute_path;
     }
@@ -111,43 +111,13 @@ class Path extends System implements PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isAbsolute ($path)
+    public function isAbsolute($path)
     {
-        if (substr ($this->path, 0, 1) == '/') {
+        if (substr($this->path, 0, 1) == '/') {
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * Set Root of Filesystem
-     *
-     * @param   string  $root
-     *
-     * @return  string
-     * @since   1.0
-     */
-    public function setRoot ($root)
-    {
-        $this->root = rtrim ($root, '/\\') . '/';
-
-        return $this->root;
-    }
-
-    /**
-     * Set persistence indicator for Filesystem
-     *
-     * @param   bool  $persistence
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setPersistence ($persistence)
-    {
-        $this->persistence = $persistence;
-
-        return $this->persistence;
     }
 
     /**
@@ -159,34 +129,51 @@ class Path extends System implements PathInterface
      * @return  null
      * @since   1.0
      * @throws  FileException
+     * @throws  FileNotFoundException
      */
-    public function getType ($path)
+    public function getType($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        $path = $this->normalise ($path);
+        $path = $this->normalise($path);
 
-        if ($this->exists ($path) === false) {
+        if ($this->exists($path) === false) {
             throw new FileNotFoundException
             ('Filesystem: getName method does not exist: ' . $path);
         }
 
-        if ($this->isDirectory ($path)) {
+        if ($this->isDirectory($path)) {
             return 'directory';
         }
 
-        if ($this->isFile ($path)) {
+        if ($this->isFile($path)) {
             return 'file';
         }
 
-        if ($this->isLink ($path)) {
+        if ($this->isLink($path)) {
             return 'link';
         }
 
         throw new FileException ('Not a directory, file or a link.');
     }
+
+    /**
+     * Set persistence indicator for Filesystem
+     *
+     * @param   bool  $persistence
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function setPersistence($persistence)
+    {
+        $this->persistence = $persistence;
+
+        return $this->persistence;
+    }
+
 
     /**
      * Returns true or false indicator as to whether or not the path is a directory
@@ -196,15 +183,15 @@ class Path extends System implements PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isDirectory ($path)
+    public function isDirectory($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        $path = $this->normalise ($path);
+        $path = $this->normalise($path);
 
-        if (is_file ($path)) {
+        if (is_file($path)) {
             return true;
         }
 
@@ -219,15 +206,15 @@ class Path extends System implements PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isFile ($path)
+    public function isFile($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        $path = $this->normalise ($path);
+        $path = $this->normalise($path);
 
-        if (is_file ($path)) {
+        if (is_file($path)) {
             return true;
         }
 
@@ -242,15 +229,15 @@ class Path extends System implements PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isLink ($path)
+    public function isLink($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        $path = $this->normalise ($path);
+        $path = $this->normalise($path);
 
-        if (is_link ($path)) {
+        if (is_link($path)) {
             return true;
         }
 
@@ -264,15 +251,15 @@ class Path extends System implements PathInterface
      *
      * @return bool|null
      */
-    public function exists ($path)
+    public function exists($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        $path = $this->normalise ($path);
+        $path = $this->normalise($path);
 
-        if (file_exists ($path)) {
+        if (file_exists($path)) {
             return true;
         }
 
@@ -286,56 +273,22 @@ class Path extends System implements PathInterface
      *
      * @return  bool|null
      * @since   1.0
+     * @throws  FileNotFoundException
      */
-    public function getName ($path)
+    public function getName($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        $path = $this->normalise ($path);
+        $path = $this->normalise($path);
 
-        if ($this->exists ($path) === false) {
+        if ($this->exists($path) === false) {
             throw new FileNotFoundException
             ('Filesystem: getName method Path does not exist: ' . $path);
         }
 
-        return basename ($path);
-    }
-
-    /**
-     * Get File Extension
-     *
-     * @param   string $path
-     *
-     * @return  bool|null
-     * @since   1.0
-     */
-    public function getExtension ($path)
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->normalise ($path);
-
-        if ($this->exists ($path) === false) {
-            throw new FileNotFoundException
-            ('Filesystem: getExtension method Path does not exist: ' . $path);
-        }
-
-        $path = $this->normalise ($path);
-
-        if ($this->exists ($path) === false) {
-            throw new FileNotFoundException ('Filesystem: could not find file at path: ', $path);
-        }
-
-        if ($this->isFile ($path)) {
-        } else {
-            throw new FileNotFoundException ('Filesystem: not a valid file path: ', $path);
-        }
-
-        return pathinfo (basename ($path), PATHINFO_EXTENSION);
+        return basename($path);
     }
 
     /**
@@ -345,38 +298,58 @@ class Path extends System implements PathInterface
      *
      * @return  bool|null
      * @since   1.0
+     * @throws  FileNotFoundException
      */
-    public function getParent ($path)
+    public function getParent($path)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        $path = $this->normalise ($path);
+        $path = $this->normalise($path);
 
-        if ($this->exists ($path) === false) {
+        if ($this->exists($path) === false) {
             throw new FileNotFoundException
             ('Filesystem: getParent method Path does not exist: ' . $path);
         }
 
-        return dirname ($path);
+        return dirname($path);
     }
 
     /**
-     * Get Mime Type
+     * Get File Extension
      *
      * @param   string $path
      *
      * @return  bool|null
      * @since   1.0
+     * @throws  FileNotFoundException
      */
-    public function getMimeType ($path)
+    public function getExtension($path)
     {
-        if (file_exists ($path)) {
-            return true;
+        if ($path == '') {
+            $path = $this->path;
         }
 
+        $path = $this->normalise($path);
 
+        if ($this->exists($path) === false) {
+            throw new FileNotFoundException
+            ('Filesystem: getExtension method Path does not exist: ' . $path);
+        }
+
+        $path = $this->normalise($path);
+
+        if ($this->exists($path) === false) {
+            throw new FileNotFoundException ('Filesystem: could not find file at path: ', $path);
+        }
+
+        if ($this->isFile($path)) {
+        } else {
+            throw new FileNotFoundException ('Filesystem: not a valid file path: ', $path);
+        }
+
+        return pathinfo(basename($path), PATHINFO_EXTENSION);
     }
 
     /**
@@ -387,12 +360,74 @@ class Path extends System implements PathInterface
      * @return  int
      * @since   1.0
      */
-    public function size ($path = '')
+    public function size($path = '')
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return filesize ($path);
+        return filesize($path);
+    }
+
+    /**
+     * Normalizes the given path
+     *
+     * @param   $path
+     *
+     * @return  string
+     * @since   1.0
+     * @throws  OutOfBoundsException
+     */
+    public function normalise($path = '')
+    {
+        if ($path == '') {
+            $path = $this->path;
+        }
+
+        $absolute_path = false;
+        if (substr($path, 0, 1) == '/') {
+            $absolute_path = true;
+            $path          = substr($path, 1, strlen($path));
+        }
+
+        /** Unescape slashes */
+        $path = str_replace('\\', '/', $path);
+
+        /**  Filter: empty value
+         *
+         * @link http://tinyurl.com/arrayFilterStrlen
+         */
+        $nodes = array_filter(explode('/', $path), 'strlen');
+
+        $normalised = array();
+
+        foreach ($nodes as $node) {
+
+            /** '.' means current - ignore it      */
+            if ($node == '.') {
+
+                /** '..' is parent - remove the parent */
+            } elseif ($node == '..') {
+
+                if (count($normalised) > 0) {
+                    array_pop($normalised);
+                }
+
+            } else {
+                $normalised[] = $node;
+            }
+
+        }
+
+        $path = implode('/', $normalised);
+        if ($absolute_path === true) {
+            $path = '/' . $path;
+        }
+
+        if (0 !== strpos($path, $this->directory)) {
+            throw new \OutOfBoundsException(sprintf('The path "%s" is out of the filesystem.', $path));
+        }
+
+        return $path;
     }
 }

@@ -41,7 +41,7 @@ interface FileInterface
      * @return  null
      * @since   1.0
      */
-    public function write ($path, $file, $data, $replace);
+    public function write ($path = '', $file, $data, $replace);
 
     /**
      * Deletes the file identified in path. Empty directories are removed, if so indicated.
@@ -52,7 +52,7 @@ interface FileInterface
      * @return  null
      * @since   1.0
      */
-    public function delete ($path, $delete_empty_directory = true);
+    public function delete ($path = '', $delete_empty_directory = true);
 
     /**
      * Copies the file identified in $path to the target_adapter in the new_parent_directory,
@@ -68,7 +68,7 @@ interface FileInterface
      * @return  null
      * @since   1.0
      */
-    public function copy ($path, $target_filesystem, $target_directory, $replace = false);
+    public function copy ($path = '', $target_filesystem, $target_directory, $replace = false);
 
     /**
      * Moves the file identified in path to the location identified in the new_parent_directory
@@ -82,7 +82,7 @@ interface FileInterface
      * @return  mixed
      * @since   1.0
      */
-    public function move ($path, $target_filesystem, $target_directory, $replace = false);
+    public function move ($path = '', $target_filesystem, $target_directory, $replace = false);
 
     /**
      * Returns a list of file and folder names located at path directory
@@ -92,7 +92,7 @@ interface FileInterface
      * @return  null
      * @since   1.0
      */
-    public function getList ($path);
+    public function getList ($path = '');
 
     /**
      * Creates directory identified in path using the data value
@@ -104,7 +104,7 @@ interface FileInterface
      * @return  null
      * @since   1.0
      */
-    public function createDirectory ($path, $new_name, $replace = false);
+    public function createDirectory ($path = '', $new_name, $replace = false);
 
     /**
      * Delete directory identified in path using the data value
@@ -115,7 +115,7 @@ interface FileInterface
      * @return  null
      * @since   1.0
      */
-    public function deleteDirectory ($path, $delete_subdirectories = true);
+    public function deleteDirectory ($path = '', $delete_subdirectories = true);
 
     /**
      * Retrieves metadata for the file specified in path and returns an associative array
@@ -128,5 +128,5 @@ interface FileInterface
      * @return  null
      * @since   1.0
      */
-    public function getMetadata ($path, $options);
+    public function getMetadata ($path = '', $options);
 }

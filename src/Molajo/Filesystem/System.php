@@ -169,6 +169,17 @@ class System implements SystemInterface
     }
 
     /**
+     * get Root of Filesystem
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getRoot()
+    {
+        return $this->root;
+    }
+
+    /**
      * Set persistence indicator for Filesystem
      *
      * @param   bool  $persistence

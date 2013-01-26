@@ -41,14 +41,10 @@ General-purpose file and directory services package for PHP applications using t
 **Step 4** Add this line to your application’s **index.php** file:
 
 ```php
-    <?php
     require 'vendor/autoload.php';
 ```
 
 This instructs PHP to use Composer’s autoloader for **Filesystem** project dependencies.
-
-<?php
-require 'vendor/autoload.php';
 
 ### Or, Install Manually
 
@@ -60,50 +56,31 @@ Register Molajo\Filesystem\ subfolder in your autoload process.
 
 ## Basic Usage
 
-**Step 1** Establish Filesystem File connection
+### Filesystems
 
-    Defaults to *Local* Adapter.
+The value of **Filesystem** is that the application code which requests files and
+directories be created, read, updated, deleted, copied, and so on, does not have
+to change when the system that manages the files and directories changes.
 
-```php
-    $connect = new \Molajo\Filesystem\File('from/the/base/of/the/website/test1.txt');
-```
-**Step 2** Set properties
-
-```php
-
-```
-**Step 3** Invoke method
-
-```php
-    $data = $connect->read();
-```
-**Alternatively**
-
-Dependencies can be injected via the constructor:
-
-```php
-    $options = array(
-        'source_adapter' => 'local',
-        'source_path'    => '/x/y/example.txt'
-    );
-
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->read ();
-```
-## Basic File and Directory Operations
+The following commands can be used for a local filesystem, FTP server, Cache storage,
+ and so on. This is accomplished by defining Adapters which interact with **Filesystems**
+ to perform tasks.
 
 ### Read
 
 To read a specific file from a filesystem:
 
 ```php
-    $options = array(
-        'source_adapter' => 'local',
-        'source_path'    => '/x/y/example.txt'
-    );
 
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->read ();
+    $path = 'location\of\file.txt';
+    $options = array(
+        'adapter_name' => 'local'
+    );
+    $connect = new \Molajo\Filesystem\Adapter($path, $options);
+
+    $adapter = $connect->getAdapter();
+    $data    = $adapter->read ();
+
 ```
 
 ### List
@@ -111,13 +88,14 @@ To read a specific file from a filesystem:
 To list the names of files and/or directories from a filesystem for a given path:
 
 ```php
+    $path = 'location\of\file.txt';
     $options = array(
-        'source_adapter' => 'local',
-        'source_path'    => '/x/y/example.txt'
+        'adapter_name' => 'local'
     );
+    $connect = new \Molajo\Filesystem\Adapter($path, $options);
 
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->read ();
+    $adapter = $connect->getAdapter();
+    $data    = $adapter->getList ();
 ```
 
 ### Write

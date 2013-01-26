@@ -78,7 +78,7 @@ Class Adapter implements AdapterInterface
 
         $this->options = $options;
 
-        $this->setAdapter ($this->adapter_name, $this->adapter_name);
+        $this->setAdapter ($this->adapter_name, $this->path);
 
         return $this;
     }
