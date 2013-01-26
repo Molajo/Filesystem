@@ -32,7 +32,7 @@ class Path extends System implements PathInterface
     /**
      * Constructor
      *
-     * @param   string  $path
+     * @param  string  $path
      * @param  array   $options
      *
      * @since  1.0
@@ -82,7 +82,7 @@ class Path extends System implements PathInterface
      * @since   1.0
      * @throws  FileNotFoundException
      */
-    public function getAbsolutePath($path)
+    public function getAbsolutePath($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -111,7 +111,7 @@ class Path extends System implements PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isAbsolute($path)
+    public function isAbsolute($path = '')
     {
         if (substr($this->path, 0, 1) == '/') {
             return true;
@@ -131,7 +131,7 @@ class Path extends System implements PathInterface
      * @throws  FileException
      * @throws  FileNotFoundException
      */
-    public function getType($path)
+    public function getType($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -183,7 +183,7 @@ class Path extends System implements PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isDirectory($path)
+    public function isDirectory($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -206,7 +206,7 @@ class Path extends System implements PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isFile($path)
+    public function isFile($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -229,7 +229,7 @@ class Path extends System implements PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isLink($path)
+    public function isLink($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -251,7 +251,7 @@ class Path extends System implements PathInterface
      *
      * @return bool|null
      */
-    public function exists($path)
+    public function exists($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -275,7 +275,7 @@ class Path extends System implements PathInterface
      * @since   1.0
      * @throws  FileNotFoundException
      */
-    public function getName($path)
+    public function getName($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -300,7 +300,7 @@ class Path extends System implements PathInterface
      * @since   1.0
      * @throws  FileNotFoundException
      */
-    public function getParent($path)
+    public function getParent($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -325,7 +325,7 @@ class Path extends System implements PathInterface
      * @since   1.0
      * @throws  FileNotFoundException
      */
-    public function getExtension($path)
+    public function getExtension($path = '')
     {
         if ($path == '') {
             $path = $this->path;

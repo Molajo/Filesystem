@@ -46,7 +46,7 @@ interface PathInterface
      * @return  string
      * @since   1.0
      */
-    public function getAbsolutePath ($path);
+    public function getAbsolutePath ($path = '');
 
     /**
      * Indicates whether the given path is absolute or not
@@ -59,7 +59,7 @@ interface PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isAbsolute ($path);
+    public function isAbsolute ($path = '');
 
     /**
      * Returns the value 'directory', 'file' or 'link' for the type determined
@@ -70,7 +70,7 @@ interface PathInterface
      * @return  string
      * @since   1.0
      */
-    public function getType ($path);
+    public function getType ($path = '');
 
     /**
      * Set persistence indicator for Filesystem
@@ -90,7 +90,7 @@ interface PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isDirectory ($path);
+    public function isDirectory ($path = '');
 
     /**
      * Returns true or false indicator as to whether or not the path is a file
@@ -100,7 +100,7 @@ interface PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isFile ($path);
+    public function isFile ($path = '');
 
     /**
      * Returns true or false indicator as to whether or not the path is a link
@@ -110,7 +110,7 @@ interface PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isLink ($path);
+    public function isLink ($path = '');
 
     /**
      * Determine if the file or directory specified in path exists
@@ -120,7 +120,7 @@ interface PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function exists ($path);
+    public function exists ($path = '');
 
     /**
      * Get File or Directory Name
@@ -130,7 +130,7 @@ interface PathInterface
      * @return  string
      * @since   1.0
      */
-    public function getName ($path);
+    public function getName ($path = '');
 
     /**
      * Get Parent for current path
@@ -140,7 +140,7 @@ interface PathInterface
      * @return  string
      * @since   1.0
      */
-    public function getParent ($path);
+    public function getParent ($path = '');
 
     /**
      * Get File Extension
@@ -150,7 +150,7 @@ interface PathInterface
      * @return  string
      * @since   1.0
      */
-    public function getExtension ($path);
+    public function getExtension ($path = '');
 
     /**
      * Get the file size of a given file.

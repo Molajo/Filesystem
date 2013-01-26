@@ -10,7 +10,6 @@ namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
-
 use Molajo\Filesystem\FileInterface;
 use Molajo\Filesystem\PathInterface;
 use Molajo\Filesystem\SystemInterface;
@@ -34,7 +33,6 @@ use Molajo\Filesystem\Exception\InvalidPathException as InvalidPathException;
  */
 class File extends Path implements FileInterface
 {
-
     /**
      * Constructor
      *
@@ -44,7 +42,7 @@ class File extends Path implements FileInterface
      */
     public function __construct ($path, $options = array())
     {
-        parents::__construct ($path, $options);
+        parent::__construct ($path, $options);
 
         return;
     }
@@ -219,14 +217,10 @@ class File extends Path implements FileInterface
         if ($path == '') {
             $path = $this->path;
         }
-        $options                 = array();
-        $options['adapter_name'] = $target_filesystem;
-        $class                   = 'Molajo\\Filesystem\\Adapter';
-        $target                  = new $class($target_directory, $options);
 
         $data = $this->read ($path);
 
-        $results = $target->write ($target_directory, basename ($path), $data, $replace);
+        $results = $target_filesystem->write ($target_directory, basename ($path), $data, $replace);
 
         if ($results === false) {
             throw new FileException('Could not write the "%s" key content.',
@@ -256,7 +250,7 @@ class File extends Path implements FileInterface
 
         $data = $this->read ($path);
 
-        $target->write ($target_directory, $data, $replace);
+        $target_filesystem->write ($target_directory, $data, $replace);
 
         $this->delete ($path);
 
@@ -296,8 +290,6 @@ class File extends Path implements FileInterface
         }
 
         return $files;
-
-        return false;
     }
 
     /**
@@ -328,7 +320,7 @@ class File extends Path implements FileInterface
             return file_get_contents ($path);
         }
 
-        \mk_dir ($path, 0755, true);
+        \mk_dir ($path, $this->directory_permissions, true);
 
         // Desired folder structure
         $structure = './depth1/depth2/depth3/';

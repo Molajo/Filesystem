@@ -23,14 +23,13 @@ class Local extends File
     /**
      * Constructor
      *
-     * @param  string  $path
-     * @param  array   $options
+     * @param   array  $options
      *
-     * @since  1.0
+     * @since   1.0
      */
-    public function __construct($path, $options = array())
+    public function __construct ($path, $options = array())
     {
-        parent::__construct($path, $options);
+        parent::__construct ($path, $options);
 
         return;
     }
@@ -63,7 +62,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    function write($path, $file, $data, $replace)
+    function write($path = '', $file, $data, $replace)
     {
         if ($path == '') {
             $path = $this->path;
@@ -81,7 +80,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function delete($path, $delete_empty_directory = true)
+    public function delete($path = '', $delete_empty_directory = true)
     {
         if ($path == '') {
             $path = $this->path;
@@ -104,7 +103,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function copy($path, $target_filesystem, $target_directory, $replace = false)
+    public function copy($path = '', $target_filesystem, $target_directory, $replace = false)
     {
         if ($path == '') {
             $path = $this->path;
@@ -125,7 +124,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function move($path, $target_filesystem, $target_directory, $replace = false)
+    public function move($path = '', $target_filesystem, $target_directory, $replace = false)
     {
         if ($path == '') {
             $path = $this->path;
@@ -142,7 +141,7 @@ class Local extends File
      * @return  mixed
      * @since   1.0
      */
-    public function getList($path)
+    public function getList($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -161,7 +160,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function createDirectory($path, $new_name, $replace = false)
+    public function createDirectory($path = '', $new_name, $replace = false)
     {
         if ($path == '') {
             $path = $this->path;
@@ -179,7 +178,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function deleteDirectory($path, $delete_subdirectories = true)
+    public function deleteDirectory($path = '', $delete_subdirectories = true)
     {
         if ($path == '') {
             $path = $this->path;
@@ -199,7 +198,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function getMetadata($path, $options)
+    public function getMetadata($path = '', $options)
     {
         if ($path == '') {
             $path = $this->path;
@@ -255,7 +254,7 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function getAbsolutePath($path)
+    public function getAbsolutePath($path = '')
     {
         return parent::getAbsolutePath($path);
     }
@@ -271,7 +270,7 @@ class Local extends File
      * @return  bool
      * @since   1.0
      */
-    public function isAbsolute($path)
+    public function isAbsolute($path = '')
     {
         return parent::isAbsolute($path);
     }
@@ -285,7 +284,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    function getType($path)
+    function getType($path = '')
     {
         return parent::getType($path);
     }
@@ -298,7 +297,7 @@ class Local extends File
      * @return  bool
      * @since   1.0
      */
-    public function isDirectory($path)
+    public function isDirectory($path = '')
     {
         return parent::isDirectory($path);
     }
@@ -311,7 +310,7 @@ class Local extends File
      * @return  bool
      * @since   1.0
      */
-    public function isFile($path)
+    public function isFile($path = '')
     {
         return parent::isFile($path);
     }
@@ -324,7 +323,7 @@ class Local extends File
      * @return  bool
      * @since   1.0
      */
-    public function isLink($path)
+    public function isLink($path = '')
     {
         return parent::isLink($path);
     }
@@ -336,7 +335,7 @@ class Local extends File
      *
      * @return bool|null
      */
-    public function exists($path)
+    public function exists($path = '')
     {
         return parent::exists($path);
     }
@@ -349,7 +348,7 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function getName($path)
+    public function getName($path = '')
     {
         return parent::getName($path);
     }
@@ -362,7 +361,7 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function getParent($path)
+    public function getParent($path = '')
     {
         return parent::getParent($path);
     }
@@ -375,7 +374,7 @@ class Local extends File
      * @return  string
      * @since   1.0
      */
-    public function getExtension($path)
+    public function getExtension($path = '')
     {
         return parent::getExtension($path);
     }
@@ -446,14 +445,12 @@ class Local extends File
     }
 
     /**
-     * Set Root of Filesystem
-     *
-     * @param   string  $root
+     * Get Root of Filesystem
      *
      * @return  string
      * @since   1.0
      */
-    public function root($root)
+    public function getRoot()
     {
 
     }
@@ -492,7 +489,7 @@ class Local extends File
      * @return  bool
      * @since   1.0
      */
-    public function getOwner($path)
+    public function getOwner($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -509,7 +506,7 @@ class Local extends File
      * @return  bool
      * @since   1.0
      */
-    public function getGroup($path)
+    public function getGroup($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -526,7 +523,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function getCreateDate($path)
+    public function getCreateDate($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -543,7 +540,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function getAccessDate($path)
+    public function getAccessDate($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -560,7 +557,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function getModifiedDate($path)
+    public function getModifiedDate($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -577,7 +574,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function isReadable($path)
+    public function isReadable($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -594,7 +591,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function isWriteable($path)
+    public function isWriteable($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -611,7 +608,7 @@ class Local extends File
      * @return  null
      * @since   1.0
      */
-    public function isExecutable($path)
+    public function isExecutable($path = '')
     {
         if ($path == '') {
             $path = $this->path;
@@ -629,7 +626,7 @@ class Local extends File
      * @return  int|null
      * @since   1.0
      */
-    public function chmod($path, $mode)
+    public function chmod($path = '', $mode)
     {
         if ($path == '') {
             $path = $this->path;
@@ -648,7 +645,7 @@ class Local extends File
      * @return  int|null
      * @since   1.0
      */
-    public function touch($path, $time, $atime = null)
+    public function touch($path = '', $time, $atime = null)
     {
         if ($path == '') {
             $path = $this->path;

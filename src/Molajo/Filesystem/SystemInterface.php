@@ -88,7 +88,7 @@ interface SystemInterface
      * @return  bool
      * @since   1.0
      */
-    public function getOwner ($path);
+    public function getOwner ($path = '');
 
     /**
      * Returns the group for the file or directory defined in the path
@@ -98,7 +98,7 @@ interface SystemInterface
      * @return  string
      * @since   1.0
      */
-    public function getGroup ($path);
+    public function getGroup ($path = '');
 
     /**
      * Retrieves Create Date for directory or file identified in the path
@@ -108,7 +108,7 @@ interface SystemInterface
      * @return  null
      * @since   1.0
      */
-    public function getCreateDate ($path);
+    public function getCreateDate ($path = '');
 
     /**
      * Retrieves Last Access Date for directory or file identified in the path
@@ -118,7 +118,7 @@ interface SystemInterface
      * @return  null
      * @since   1.0
      */
-    public function getAccessDate ($path);
+    public function getAccessDate ($path = '');
 
     /**
      * Retrieves Last Update Date for directory or file identified in the path
@@ -128,7 +128,7 @@ interface SystemInterface
      * @return  null
      * @since   1.0
      */
-    public function getModifiedDate ($path);
+    public function getModifiedDate ($path = '');
 
     /**
      * Tests for read access, returning true or false
@@ -138,7 +138,7 @@ interface SystemInterface
      * @return  null
      * @since   1.0
      */
-    public function isReadable ($path);
+    public function isReadable ($path = '');
 
     /**
      * Tests for write access, returning true or false
@@ -148,7 +148,7 @@ interface SystemInterface
      * @return  null
      * @since   1.0
      */
-    public function isWriteable ($path);
+    public function isWriteable ($path = '');
 
     /**
      * Tests for execute access, returning true or false
@@ -158,7 +158,7 @@ interface SystemInterface
      * @return  null
      * @since   1.0
      */
-    public function isExecutable ($path);
+    public function isExecutable ($path = '');
 
     /**
      * Change file mode
@@ -169,7 +169,7 @@ interface SystemInterface
      * @return  null
      * @since   1.0
      */
-    public function chmod ($path, $mode);
+    public function chmod ($path = '', $mode);
 
     /**
      * Update the touch time and/or the access time for the directory or file identified in the path
@@ -181,7 +181,7 @@ interface SystemInterface
      * @return  null
      * @since   1.0
      */
-    public function touch ($path, $time, $atime = null);
+    public function touch ($path = '', $time, $atime = null);
 
     /**
      * Normalizes the given path
