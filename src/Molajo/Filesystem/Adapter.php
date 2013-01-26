@@ -107,7 +107,7 @@ Class Adapter implements AdapterInterface
 
         $this->path = $path;
 
-        $class = 'Molajo\\Filesystem\\Adapter\\' . $this->adapter_name;
+        $class = 'Molajo\\Filesystem\\Adapters\\' . $this->adapter_name;
 
         if (class_exists ($class)) {
         } else {

@@ -1,19 +1,19 @@
 <?php
 /**
- * Media Adapter for Filesystem
+ * Registry Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Adapter;
+namespace Molajo\Filesystem\Adapters;
 
 defined ('MOLAJO') or die;
 
 use Molajo\Filesystem\Adapter;
 
 /**
- * Media Adapter for Filesystem
+ * Registry Adapter for Filesystem
  *
  * @package   Molajo
  * @license   MIT
@@ -23,7 +23,7 @@ use Molajo\Filesystem\Adapter;
  * Full interface specification:
  *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-class Media implements File, Path, System
+class Registry implements File, Path, System
 {
     /**
      * Constructor

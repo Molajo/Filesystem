@@ -19,8 +19,12 @@ define('BASE_FOLDER', __DIR__);
 include BASE_FOLDER . '/' . 'ClassLoader.php';
 
 $loader = new ClassLoader();
-$loader->add('Molajo\Filesystem', BASE_FOLDER.'/src');
+$loader->add('Molajo\Filesystem', BASE_FOLDER.'/src/Molajo');
 $loader->add('Molajo\Filesystem\Adapters', BASE_FOLDER.'/src/Molajo/Filesystem');
-$loader->add('Tests', BASE_FOLDER.'/Tests');
+$loader->add('Tests\Filesystem', BASE_FOLDER.'/Tests/Filesystem');
 $loader->register();
 
+/** Load Classloader */
+include BASE_FOLDER . '/Tests/Filesystem/AdapterTest.php';
+$adapterTest = new Tests\Filesystem\AdapterTest();
+$test = $adapterTest->testSetAdapter();

@@ -1,29 +1,26 @@
 <?php
 /**
- * Stream Adapter for Filesystem
+ * Remote Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Adapter;
+namespace Molajo\Filesystem\Adapters;
 
 defined ('MOLAJO') or die;
 
 use Molajo\Filesystem\Adapter;
 
 /**
- * Stream Adapter for Filesystem
+ * Remote Adapter for Filesystem
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-class Stream implements File, Path, System
+class Remote implements File, Path, System
 {
     /**
      * Constructor

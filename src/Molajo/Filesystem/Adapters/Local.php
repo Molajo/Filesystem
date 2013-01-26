@@ -1,4 +1,5 @@
 <?php
+namespace Molajo\Filesystem\Adapters;
 /**
  * Local Adapter for Filesystem
  *

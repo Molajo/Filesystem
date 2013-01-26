@@ -1,28 +1,30 @@
 <?php
 /**
- * Dropbox Adapter for Filesystem
+ * Github Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
+ *            https://github.com/ryanharkins/mysql-php-backup/blob/master/backup.php
  */
-namespace Molajo\Filesystem\Adapter;
+namespace Molajo\Filesystem\Adapters;
 
 defined ('MOLAJO') or die;
 
 use Molajo\Filesystem\Adapter;
 
 /**
- * Dropbox Adapter for Filesystem
+ * Github Adapter for Filesystem
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  *
- * http://code.google.com/p/dropbox-php/wiki/Dropbox_API
+ * Full interface specification:
+ *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-class Dropbox implements File, Path, System
+class Github implements File, Path, System
 {
     /**
      * Constructor
@@ -37,4 +39,10 @@ class Dropbox implements File, Path, System
 
         return;
     }
+
+    public function connect ()
+    {
+
+    }
+
 }

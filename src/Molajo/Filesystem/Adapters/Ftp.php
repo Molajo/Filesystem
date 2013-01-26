@@ -6,7 +6,7 @@
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Adapter;
+namespace Molajo\Filesystem\Adapters;
 
 defined ('MOLAJO') or die;
 
