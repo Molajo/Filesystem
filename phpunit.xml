@@ -4,7 +4,7 @@
 
     <testsuites>
         <testsuite name="Unit">
-            <directory>Tests/Molajo/Filesystem</directory>
+            <directory>Tests/Molajo/Filesystem/</directory>
         </testsuite>
     </testsuites>
 

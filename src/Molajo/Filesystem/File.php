@@ -31,7 +31,7 @@ use Molajo\Filesystem\Exception\InvalidPathException as InvalidPathException;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class File extends Path implements FileInterface
+abstract class File extends Path implements FileInterface
 {
     /**
      * Constructor
