@@ -52,7 +52,7 @@ Class Adapter implements AdapterInterface
      * @var    string
      * @since  1.0
      */
-    protected $adapter;
+    public $adapter;
 
     /**
      * Construct
@@ -78,7 +78,7 @@ Class Adapter implements AdapterInterface
 
         $this->options = $options;
 
-        $this->setAdapter ($this->adapter_name, $this->path);
+        $this->setAdapter ($this->adapter_name, $this->path, $this->options);
 
         return $this;
     }
@@ -93,19 +93,22 @@ Class Adapter implements AdapterInterface
      * @since   1.0
      * @throws  FileException
      */
-    public function setAdapter ($adapter_name = '', $path = '')
+    public function setAdapter ($adapter_name = '', $path = '', $options = array())
     {
         if ($adapter_name == '') {
             $adapter_name = $this->adapter_name;
         }
-
         $this->adapter_name = $adapter_name;
 
         if ($path == '') {
             $path = $this->path;
         }
-
         $this->path = $path;
+
+        if ($options == array()) {
+            $options = $this->options;
+        }
+        $this->options = $options;
 
         $class = 'Molajo\\Filesystem\\Adapters\\' . $this->adapter_name;
 
@@ -114,7 +117,7 @@ Class Adapter implements AdapterInterface
             throw new FileException('Filesystem Adapter Class ' . $class . ' does not exist.');
         }
 
-        $this->adapter = new $class($path, $this->options);
+        $this->adapter = new $class($this->path, $this->options);
 
         return $this->adapter;
     }

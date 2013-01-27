@@ -2,6 +2,7 @@
 namespace Tests\Filesystem;
 
 use \PHPUnit_Framework_TestCase;
+
 use Molajo\Filesystem\Adapter;
 
 /**
@@ -10,17 +11,110 @@ use Molajo\Filesystem\Adapter;
 class AdapterTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Adapter
+     * @var Object - Adaptor Factory
      */
     protected $object;
 
     /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
+     * @var Adapter
+     */
+    protected $adapter;
+
+    /**
+     * @var Path
+     */
+    protected $path;
+
+    /**
+     * @var Class
+     */
+    protected $options = array();
+
+    /**
+     * Initialises Adapter
      */
     protected function setUp()
     {
+        $this->options = array(
+            'adapter_name' => 'Local',
+            'root' => ROOT_FOLDER,
+            'persistence' => true,
+            'adapter_name' => 'Local'
+        );
+        $this->path =  BASE_FOLDER . '/Tests/test1.txt';
 
+        $this->object = new Adapter($this->path, $this->options);
+
+        $this->assertObjectHasAttribute('path', $this->object);
+        $this->assertObjectHasAttribute('adapter_name', $this->object);
+        $this->assertObjectHasAttribute('adapter', $this->object);
+
+        unset($this->object);
+
+        return;
+    }
+
+
+    /**
+     * @covers Molajo\Filesystem\Adapter::setAdapter
+     */
+    public function testSetAdapter()
+    {
+        $this->options = array('adapter_name' => 'Local');
+        $this->path =  BASE_FOLDER . '/Tests/test1.txt';
+
+        $this->object = new Adapter($this->path, $this->options = array());
+
+        $this->adapter = $this->object->setAdapter();
+
+        $this->assertObjectHasAttribute('options', $this->adapter);
+        $this->assertObjectHasAttribute('root', $this->adapter);
+        $this->assertObjectHasAttribute('persistence', $this->adapter);
+        $this->assertObjectHasAttribute('absolute_path', $this->adapter);
+
+        unset($this->object);
+        unset($this->adapter);
+
+        return;
+
+    }
+
+    /**
+     * @covers Molajo\Filesystem\Adapter::getAdapter
+     */
+    public function testGetAdapter()
+    {
+        $this->options = array('adapter_name' => 'Local');
+        $this->path =  BASE_FOLDER . '/Tests/test1.txt';
+
+        $this->object = new Adapter($this->path, $this->options = array());
+
+        $this->adapter = $this->object->getAdapter();
+
+        $this->assertObjectHasAttribute('options', $this->adapter);
+        $this->assertObjectHasAttribute('root', $this->adapter);
+        $this->assertObjectHasAttribute('persistence', $this->adapter);
+        $this->assertObjectHasAttribute('absolute_path', $this->adapter);
+
+        unset($this->object);
+        unset($this->adapter);
+
+        return;
+    }
+
+    public function testRead()
+    {
+        $this->options = array('adapter_name' => 'Local');
+        $this->path =  BASE_FOLDER . '/Tests/test1.txt';
+        $this->object = new Adapter($this->path, $this->options = array());
+        $this->adapter = $this->object->getAdapter();
+        $data    = $this->adapter->read ($this->path, $this->options);
+        $this->assertEquals('yabba, dabba, doo', trim($data));
+
+        unset($this->object);
+        unset($this->adapter);
+
+        return;
     }
 
     /**
@@ -29,37 +123,7 @@ class AdapterTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    }
-
-    /**
-     * @covers Molajo\Filesystem\Adapter::setAdapter
-     * @todo   Implement testSetAdapter().
-     */
-    public function testSetAdapter()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
-     * @covers Molajo\Filesystem\Adapter::getAdapter
-     * @todo   Implement testGetAdapter().
-     */
-    public function testGetAdapter()
-    {
 
     }
 
-    public function testRead()
-    {
-        $options = array('adapter_name' => 'Local');
-        $path =  BASE_FOLDER . '/Tests/test1.txt';
-
-        $adapter = new Adapter($path, $options = array());
-        $this->object = $adapter->getAdapter();
-        $data    = $this->object->read ();
-        $this->assertEquals('yabba, dabba, doo', trim($data));
-    }
 }

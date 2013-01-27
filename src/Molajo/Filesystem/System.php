@@ -121,7 +121,7 @@ class System implements SystemInterface
         if (isset($this->options['root'])) {
             $this->setRoot ($this->options['root']);
         } else {
-            $this->setRoot ('/');
+            $this->setRoot (ROOT_FOLDER);
         }
 
         if (isset($this->options['persistence'])) {
@@ -596,11 +596,6 @@ class System implements SystemInterface
         $path = implode ('/', $normalised);
         if ($absolute_path === true) {
             $path = '/' . $path;
-        }
-
-        if (0 !== strpos ($path, $this->directory)) {
-            throw new \OutOfBoundsException
-            (sprintf ('The path "%s" is out of the filesystem.', $path));
         }
 
         return $path;

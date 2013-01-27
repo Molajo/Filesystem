@@ -424,10 +424,6 @@ class Path extends System implements PathInterface
             $path = '/' . $path;
         }
 
-        if (0 !== strpos($path, $this->directory)) {
-            throw new \OutOfBoundsException(sprintf('The path "%s" is out of the filesystem.', $path));
-        }
-
         return $path;
     }
 }
