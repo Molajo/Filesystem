@@ -10,12 +10,9 @@ namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
-use Molajo\Filesystem\FileInterface;
-use Molajo\Filesystem\PathInterface;
-use Molajo\Filesystem\SystemInterface;
-
 use \Exception;
 use \RuntimeException;
+
 use Molajo\Filesystem\Exception\AccessDeniedException as AccessDeniedException;
 use Molajo\Filesystem\Exception\AdapterNotFoundException as AdapterNotFoundException;
 use Molajo\Filesystem\Exception\FileException as FileException;
@@ -44,7 +41,26 @@ abstract class File extends Path implements FileInterface
     {
         parent::__construct ($path, $options);
 
-        return;
+        return $this;
+
+
+
+        $this->metadata = array();
+
+        $this->metadata['directory'] = $this->directory;
+        $this->metadata['file_name'] = $this->directory;
+        $this->metadata['extension'] = $this->directory;
+
+        $this->metadata['owner'] = $this->getOwner();
+        $this->metadata['group'] = $this->getGroup();
+
+        $this->metadata['is_directory'] = $this->isDirectory();
+        $this->metadata['is_file'] = $this->isFile();
+        $this->metadata['is_link'] = $this->isLink();
+
+        $this->metadata['mime_type'] = $this->getMimeType();
+        $this->metadata['exists'] = $this->exists();
+
     }
 
     /**
@@ -430,6 +446,7 @@ abstract class File extends Path implements FileInterface
      */
     public function getMetadata ($path = '', $options)
     {
+        return $metadata;
 
     }
 }

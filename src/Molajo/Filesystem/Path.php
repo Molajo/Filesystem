@@ -43,7 +43,27 @@ class Path extends System implements PathInterface
 
         $this->setPath($path);
 
-        return;
+        $this->metadata['path'] = $this->path;
+
+        $this->metadata['type'] = $this->type;
+        $this->metadata['absolute_path'] = $this->getAbsolutePath();
+
+        $this->metadata['owner'] = $this->getOwner();
+        $this->metadata['group'] = $this->getGroup();
+
+        $this->metadata['is_directory'] = $this->isDirectory();
+        $this->metadata['is_file'] = $this->isFile();
+        $this->metadata['is_link'] = $this->isLink();
+
+        $this->metadata['exists'] = $this->exists();
+
+        $this->metadata['name'] = $this->getName();
+        $this->metadata['parent'] = $this->getParent();
+        $this->metadata['extension'] = $this->getExtension();
+
+        $this->metadata['size'] = $this->getSize();
+
+        return $this;
     }
 
     /**
@@ -158,22 +178,6 @@ class Path extends System implements PathInterface
 
         throw new FileException ('Not a directory, file or a link.');
     }
-
-    /**
-     * Set persistence indicator for Filesystem
-     *
-     * @param   bool  $persistence
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setPersistence($persistence)
-    {
-        $this->persistence = $persistence;
-
-        return $this->persistence;
-    }
-
 
     /**
      * Returns true or false indicator as to whether or not the path is a directory

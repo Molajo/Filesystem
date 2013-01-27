@@ -21,12 +21,12 @@ class AdapterTest extends PHPUnit_Framework_TestCase
     protected $adapter;
 
     /**
-     * @var Path
+     * @var $Path
      */
     protected $path;
 
     /**
-     * @var Class
+     * @var $Class
      */
     protected $options = array();
 
@@ -37,11 +37,10 @@ class AdapterTest extends PHPUnit_Framework_TestCase
     {
         $this->options = array(
             'adapter_name' => 'Local',
-            'root' => ROOT_FOLDER,
-            'persistence' => true,
-            'adapter_name' => 'Local'
+            'root'         => ROOT_FOLDER,
+            'persistence'  => true
         );
-        $this->path =  BASE_FOLDER . '/Tests/test1.txt';
+        $this->path    = BASE_FOLDER . '/Tests/test1.txt';
 
         $this->object = new Adapter($this->path, $this->options);
 
@@ -60,8 +59,12 @@ class AdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testSetAdapter()
     {
-        $this->options = array('adapter_name' => 'Local');
-        $this->path =  BASE_FOLDER . '/Tests/test1.txt';
+        $this->options = array(
+            'adapter_name' => 'Local',
+            'root'         => ROOT_FOLDER,
+            'persistence'  => true
+        );
+        $this->path    = BASE_FOLDER . '/Tests/test1.txt';
 
         $this->object = new Adapter($this->path, $this->options = array());
 
@@ -84,11 +87,13 @@ class AdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAdapter()
     {
-        $this->options = array('adapter_name' => 'Local');
-        $this->path =  BASE_FOLDER . '/Tests/test1.txt';
-
-        $this->object = new Adapter($this->path, $this->options = array());
-
+        $this->options = array(
+            'adapter_name' => 'Local',
+            'root'         => ROOT_FOLDER,
+            'persistence'  => true
+        );
+        $this->path    = BASE_FOLDER . '/Tests/test1.txt';
+        $this->object  = new Adapter($this->path, $this->options = array());
         $this->adapter = $this->object->getAdapter();
 
         $this->assertObjectHasAttribute('options', $this->adapter);
@@ -104,11 +109,16 @@ class AdapterTest extends PHPUnit_Framework_TestCase
 
     public function testRead()
     {
-        $this->options = array('adapter_name' => 'Local');
-        $this->path =  BASE_FOLDER . '/Tests/test1.txt';
-        $this->object = new Adapter($this->path, $this->options = array());
+        $this->options = array(
+            'adapter_name' => 'Local',
+            'root'         => ROOT_FOLDER,
+            'persistence'  => true
+        );
+        $this->path    = BASE_FOLDER . '/Tests/test1.txt';
+        $this->object  = new Adapter($this->path, $this->options = array());
         $this->adapter = $this->object->getAdapter();
-        $data    = $this->adapter->read ($this->path, $this->options);
+
+        $data = $this->adapter->read();
         $this->assertEquals('yabba, dabba, doo', trim($data));
 
         unset($this->object);

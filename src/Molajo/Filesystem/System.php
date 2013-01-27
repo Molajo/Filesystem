@@ -10,9 +10,6 @@ namespace Molajo\Filesystem;
 
 defined ('MOLAJO') or die;
 
-
-use Molajo\Filesystem\SystemInterface;
-
 use \Exception;
 use Molajo\Filesystem\Exception\FileException as FileException;
 
@@ -127,7 +124,7 @@ class System implements SystemInterface
         if (isset($this->options['persistence'])) {
             $this->setPersistence ($this->options['persistence']);
         } else {
-            $this->setPersistence (0);
+            $this->setPersistence (true);
         }
 
         if (isset($this->options['directory_permissions'])) {
@@ -147,6 +144,28 @@ class System implements SystemInterface
         } else {
             $this->read_only  = '0444';
         }
+
+//test: chmod     touch
+
+        $this->metadata = array();
+
+        $this->metadata['root'] = $this->root;
+        $this->metadata['persistence'] = $this->persistence;
+
+        $this->metadata['owner'] = $this->getOwner();
+        $this->metadata['group'] = $this->getGroup();
+
+        $this->metadata['getCreateDate'] = $this->getCreateDate();
+        $this->metadata['getAccessDate'] = $this->getAccessDate();
+        $this->metadata['getModifiedDate'] = $this->getModifiedDate();
+
+        $this->metadata['isReadable'] = $this->isReadable();
+        $this->metadata['isWriteable'] = $this->isWriteable();
+        $this->metadata['isExecutable'] = $this->isExecutable();
+
+        $this->metadata['directory_permissions'] = $this->file_permissions;
+        $this->metadata['file_permissions'] = $this->read_only;
+        $this->metadata['read_only'] = $this->read_only;
 
         return;
     }
