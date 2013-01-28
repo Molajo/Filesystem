@@ -41,8 +41,6 @@ class Path extends System implements PathInterface
     {
         parent::__construct($path, $options);
 
-        $this->setPath($path);
-
         $this->metadata['path'] = $this->path;
 
         $this->metadata['type'] = $this->type;
@@ -429,5 +427,18 @@ class Path extends System implements PathInterface
         }
 
         return $path;
+    }
+
+    /**
+     * Returns true or false indicator as to whether or not the path is a link
+     *
+     * @param   string  $path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getSize()
+    {
+        return;
     }
 }

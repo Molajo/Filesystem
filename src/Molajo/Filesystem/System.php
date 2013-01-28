@@ -149,6 +149,8 @@ class System implements SystemInterface
 
         $this->metadata = array();
 
+        $this->setPath($path);
+
         $this->metadata['root'] = $this->root;
         $this->metadata['persistence'] = $this->persistence;
 
@@ -304,20 +306,26 @@ class System implements SystemInterface
      */
     public function getCreateDate ($path = '')
     {
+        return;
+
         if ($path == '') {
             $path = $this->path;
         }
 
         $path = $this->normalise ($path);
 
-        if (file_exists ($path = '')) {
+        if (file_exists ($path)) {
         } else {
+
             throw new FileException
             ('Filesystem: getCreateDate method. File does not exist' . $path);
         }
 
+        $file = \getRealPath($path);
+
         try {
-            echo \date ("F d Y H:i:s.", filectime ($path = ''));
+            echo date("F d Y H:i:s.", filectime($file));
+            die;
 
         } catch (Exception $e) {
             throw new FileException
@@ -325,7 +333,7 @@ class System implements SystemInterface
             ('Filesystem: getCreateDate method failed for ' . $path);
         }
 
-        return;
+        return $create_date;
     }
 
     /**
@@ -339,13 +347,15 @@ class System implements SystemInterface
      */
     public function getAccessDate ($path = '')
     {
+        return;
+
         if ($path == '') {
             $path = $this->path;
         }
 
         $path = $this->normalise ($path);
 
-        if (file_exists ($path = '')) {
+        if (file_exists ($path)) {
         } else {
             throw new FileException
 
@@ -375,13 +385,15 @@ class System implements SystemInterface
      */
     public function getModifiedDate ($path = '')
     {
+        return;
+
         if ($path == '') {
             $path = $this->path;
         }
 
         $path = $this->normalise ($path);
 
-        if (file_exists ($path = '')) {
+        if (file_exists ($path)) {
         } else {
             throw new FileException
 

@@ -43,8 +43,6 @@ abstract class File extends Path implements FileInterface
 
         return $this;
 
-
-
         $this->metadata = array();
 
         $this->metadata['directory'] = $this->directory;
