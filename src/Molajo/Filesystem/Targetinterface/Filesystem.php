@@ -74,14 +74,9 @@ class Filesystem extends Path implements FileInterface
     }
 
     /**
-     * Retrieves metadata for the file specified in path and returns an associative array
-     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
-     *  absolute_path, relative_path, filename, and file_extension.
+     * Retrieves and sets metadata for the file specified in path
      *
-     * @param   string  $path
-     * @param   string  $options
-     *
-     * @return  null
+     * @return  object  Filesystem
      * @since   1.0
      */
     public function getMetadata()
@@ -123,13 +118,11 @@ class Filesystem extends Path implements FileInterface
     /**
      * Returns the contents of the file identified by path
      *
-     * @param   string  $path
-     *
-     * @return  mixed
+     * @return  mixed|string|array
      * @since   1.0
      * @throws  AdapterNotFoundException when file does not exist
      */
-    public function read($path = '')
+    public function read()
     {
         if ($path == '') {
             $path = $this->path;
@@ -165,81 +158,78 @@ class Filesystem extends Path implements FileInterface
     }
 
     /**
-     * Creates or replaces the file identified in path using the data value
+     * Creates or replaces the file or directory identified in path using the data value
      *
-     * @param   string  $path
-     * @param   string  $file
-     * @param   string  $data
+     * @param   string  $name
      * @param   bool    $replace
+     * @param   string  $data
      *
-     * @return  null
+     * @return  object  Filesystem
      * @since   1.0
      * @throws  FileException
      */
-    function write($path = '', $file, $data, $replace)
+    function write($name, $replace, $data = '')
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->filesystem_type->normalise($path);
 
         if (trim($data) == '' || strlen($data) == 0) {
             throw new FileException
-            ('Filesystem: attempting to write no data to file: ' . $path . '/' . $file);
+            ('Filesystem: attempting to write no data to file: ' . $this->path . '/' . $name);
         }
 
-        if (file_exists($path . '/' . $file)) {
+        //isdirectory or isfile or die
+        //\mk_dir($path, $this->directory_permissions, true);
+
+        if (file_exists($this->path . '/' . $name)) {
 
             if ($replace === false) {
                 throw new FileException
-                ('Filesystem: attempting to write to existing file: ' . $path . '/' . $file);
+                ('Filesystem: attempting to write to existing file: ' . $this->path . '/' . $name);
             }
 
-            if ($this->isWriteable($path . '/' . $file) === false) {
+            if ($this->isWriteable($this->path . '/' . $name) === false) {
                 throw new FileException
-                ('Filesystem: file is not writable: ' . $path . '/' . $file);
+                ('Filesystem: file is not writable: ' . $this->path . '/' . $name);
             }
 
-            $handle = fopen($path . '/' . $file, 'r+');
+            $handle = fopen($this->path . '/' . $name, 'r+');
 
             if (flock($handle, LOCK_EX)) {
             } else {
                 throw new FileException
-                ('Filesystem: Lock not obtainable for file write for: ' . $path . '/' . $file);
+                ('Filesystem: Lock not obtainable for file write for: ' . $this->path . '/' . $name);
             }
 
             fclose($handle);
         }
 
         try {
-            \file_put_contents($path . '/' . $file, $data, LOCK_EX);
+            \file_put_contents($this->path . '/' . $name, $data, LOCK_EX);
 
         } catch (Exception $e) {
             throw new FileException
-            ('Directories do not exist for requested file: .' . $path . '/' . $file);
+            ('Directories do not exist for requested file: .' . $this->path . '/' . $name);
         }
 
         return true;
     }
 
     /**
-     * Deletes the file identified in path. Empty directories are removed if so indicated
+     * Deletes the file or folder identified in path. Empty directories are removed, if so indicated
      *
      * @param   string  $path
-     * @param   bool    $delete_empty_directory
+     * @param   bool    $delete_empty
      *
      * @return  null
      * @since   1.0
      */
-    public function delete($path = '', $delete_empty_directory = true)
+    public function delete($path = '', $delete_empty = true)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
         $path = $this->filesystem_type->normalise($path);
-
+        //rmdir($this->computePath($key));
         if (file_exists($path)) {
 
             if ($this->isWriteable($path) === false) {
@@ -274,10 +264,10 @@ class Filesystem extends Path implements FileInterface
      * Copies the file identified in $path to the target_adapter in the new_parent_directory,
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * Note: $target_filesystem is an instance of the Filesystem exclusive to the target portion of the copy
+     * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target portion of the copy
      *
      * @param   string  $path
-     * @param   string  $target_filesystem
+     * @param   string  $target_filesystem_type
      * @param   string  $target_directory
      * @param   bool    $replace
      *
@@ -285,7 +275,7 @@ class Filesystem extends Path implements FileInterface
      * @since   1.0
      * @throws  FileException
      */
-    public function copy($path = '', $target_filesystem, $target_directory, $replace = false)
+    public function copy($path = '', $target_filesystem_type, $target_directory, $replace = false)
     {
         if ($path == '') {
             $path = $this->path;
@@ -293,7 +283,7 @@ class Filesystem extends Path implements FileInterface
 
         $data = $this->read($path);
 
-        $results = $target_filesystem->write($target_directory, basename($path), $data, $replace);
+        $results = $target_filesystem_type->write($target_directory, basename($path), $data, $replace);
 
         if ($results === false) {
             throw new FileException('Could not write the "%s" key content.',
@@ -315,7 +305,7 @@ class Filesystem extends Path implements FileInterface
      * @return  null
      * @since   1.0
      */
-    public function move($path = '', $target_filesystem, $target_directory, $replace = false)
+    public function move($path = '', $target_filesystem_type, $target_directory, $replace = false)
     {
         if ($path == '') {
             $path = $this->path;
@@ -323,7 +313,7 @@ class Filesystem extends Path implements FileInterface
 
         $data = $this->read($path);
 
-        $target_filesystem->write($target_directory, $data, $replace);
+        $target_filesystem_type->write($target_directory, $data, $replace);
 
         $this->delete($path);
 
@@ -331,20 +321,15 @@ class Filesystem extends Path implements FileInterface
     }
 
     /**
-     * Returns the contents of the file located at path directory
+     * Returns the contents of the directory located at path directory
      *
-     * @param   string  $path
+     * @param   bool  $recursive
      *
      * @return  mixed;
      * @since   1.0
      */
-    public function getList($path = '')
+    public function getList($recursive = false)
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->filesystem_type->normalise($path);
 
         if (file_exists($path)) {
             return file_get_contents($path);
@@ -366,97 +351,100 @@ class Filesystem extends Path implements FileInterface
     }
 
     /**
-     * Creates directory identified in path using the data value
+     * Change the file mode for 'owner', 'group', and 'world', and read, write, execute access
      *
-     * @param   string  $path
-     * @param   string  $new_name
-     * @param   bool    $replace
+     * Mode: R/W for owner, nothing for everyone else '0600'
+     *  R/W for owner, read for everyone else '0644'
+     *  Everything for owner, R/E for others - '0755'
+     *  Everything for owner, read and execute for group - '0750'
      *
-     * @return  null
+     * Notes: The current user is the user under which PHP runs. It is probably not the same
+     *  user you use for normal shell or FTP access. The mode can be changed only by user
+     *  who owns the file on most systems.
+     *
+     * @param   int     $mode
+     *
+     * @return  int|null
+     * @throws  FileException
      * @since   1.0
      */
-    public function createDirectory($path = '', $new_name, $replace = false)
+    public function chmod($mode)
     {
-        if ($path == '') {
-            $path = $this->path;
+        if (file_exists($this->path)) {
+        } else {
+
+            throw new FileException
+            ('Filesystem: chmod method. File does not exist' . $this->path);
         }
 
-        $path = $this->filesystem_type->normalise($path);
+        if (in_array($mode, array('0600', '0644', '0755', '0750'))) {
+        } else {
 
-        if ($replace === false) {
-            if (file_exists($path)) {
-                return false;
-            }
+            throw new FileException
+            ('Filesystem: chmod method. Mode not provided: ' . $mode);
         }
 
-        if (file_exists($path)) {
-            return file_get_contents($path);
+        try {
+            chmod($this->path, $mode);
+
+        } catch (Exception $e) {
+
+            throw new FileException
+            ('Filesystem: chmod method failed for path ' . $this->path . ' mode: ' . $mode);
         }
 
-        \mk_dir($path, $this->directory_permissions, true);
-
-        // Desired folder structure
-        $structure = './depth1/depth2/depth3/';
-
-// To create the nested structure, the $recursive parameter
-// to mkdir() must be specified.
-
-        if (! mkdir($structure, 0, true)) {
-            die('Failed to create folders...');
-        }
-
-
-        return false;
+        return $mode;
     }
 
     /**
-     * Delete directory identified in path using the data value
+     * Update the touch time and/or the access time for the directory or file identified in the path
      *
-     * @param   string  $path
-     * @param   bool    $create_subdirectories
+     * @param   int     $time
+     * @param   int     $atime
+     *
+     * @return  int|null
+     * @throws  FileException
+     * @since   1.0
+     */
+    public function touch($time, $atime = null)
+    {
+        if (file_exists($this->path)) {
+        } else {
+
+            throw new FileException
+            ('Filesystem: setModifiedDate method. File does not exist' . $this->path);
+        }
+
+        if ($time == '' || $time === null || $time == 0) {
+            $time = time();
+        }
+
+        try {
+
+            if (touch($this->path, $time)) {
+                echo $this->path . ' modification time has been changed to present time';
+
+            } else {
+                echo 'Sorry, could not change modification time of ' . $this->path;
+            }
+
+        } catch (Exception $e) {
+
+            throw new FileException
+            ('Filesystem: is_readable method failed for ' . $this->path);
+        }
+
+        return $time;
+    }
+
+    /**
+     * Close the Local Connection
      *
      * @return  null
      * @since   1.0
      */
-    public function deleteDirectory($path = '', $delete_subdirectories = true)
+    public function close()
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->filesystem_type->normalise($path);
-
-        if (file_exists($path)) {
-            return file_get_contents($path);
-        }
-
-        \mk_dir($path);
-
-        if ($this->isDirectory($key)) {
-            return rmdir($this->computePath($key));
-        }
-
-        // Desired folder structure
-        $structure = './depth1/depth2/depth3/';
-
-// To create the nested structure, the $recursive parameter
-// to mkdir() must be specified.
-
-        if (! mkdir($structure, 0, true)) {
-            die('Failed to create folders...');
-        }
-
-
-        return false;
-    }
-
-    public function chmod($mode)
-    {
-
-    }
-
-    public function touch($time, $atime = null)
-    {
-
+        return;
     }
 }

@@ -221,6 +221,116 @@ abstract class Path extends System implements PathInterface
     }
 
     /**
+     * Returns the owner of the file or directory defined in the path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getOwner()
+    {
+        $this->owner = $this->filesystem_type->getOwner();
+
+        return $this->owner;
+    }
+
+    /**
+     * Returns the group for the file or directory defined in the path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getGroup()
+    {
+        $this->group = $this->filesystem_type->getOwner();
+
+        return $this->group;
+    }
+
+    /**
+     * Retrieves Create Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     * @throws  FileException
+     */
+    public function getCreateDate()
+    {
+        $this->create_date = $this->filesystem_type->getCreateDate();
+
+        return $this->create_date;
+    }
+
+    /**
+     * Retrieves Last Access Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     * @throws  FileException
+     */
+    public function getAccessDate()
+    {
+        $this->access_date = $this->filesystem_type->getAccessDate();
+
+        return $this->access_date;
+    }
+
+    /**
+     * Retrieves Last Update Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     * @throws  FileException
+     */
+    public function getModifiedDate()
+    {
+        $this->modified_date = $this->filesystem_type->getModifiedDate();
+
+        return $this->modified_date;
+    }
+
+    /**
+     * Tests if the group specified: 'owner', 'group', or 'world' has read access
+     *  Returns true or false
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isReadable()
+    {
+        $this->is_readable = $this->filesystem_type->isReadable();
+
+        return $this->is_readable;
+    }
+
+    /**
+     * Tests if the group specified: 'owner', 'group', or 'world' has write access
+     *  Returns true or false
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isWriteable()
+    {
+        $this->is_writeable = $this->filesystem_type->isWriteable();
+
+        return $this->is_writeable;
+    }
+
+    /**
+     * Tests if the group specified: 'owner', 'group', or 'world' has execute access
+     *  Returns true or false
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function isExecutable()
+    {
+        $this->is_executable = $this->filesystem_type->isExecutable();
+
+        return $this->is_executable;
+    }
+
+    /**
      * Returns the mime type for this file.
      *
      * @throws \RuntimeException if finfo failed to load and/or mim_content_type

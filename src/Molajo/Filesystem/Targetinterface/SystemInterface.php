@@ -21,14 +21,6 @@ defined ('MOLAJO') or die;
 interface SystemInterface
 {
     /**
-     * Connect
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function connect ();
-
-    /**
      * Set Root of Filesystem
      *
      * @param   string  $path
@@ -128,32 +120,4 @@ interface SystemInterface
      */
     public function isExecutable ();
 
-    /**
-     * Change file mode
-     *
-     * @param   int     $mode
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function chmod ($mode);
-
-    /**
-     * Update the touch time and/or the access time for the directory or file identified in the path
-     *
-     * @param   int     $time
-     * @param   int     $atime
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function touch ($time, $atime = null);
-
-    /**
-     * Close the Connection
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function close ();
 }

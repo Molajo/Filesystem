@@ -8,7 +8,7 @@
  */
 namespace Molajo\Filesystem\Targetinterface;
 
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 
 /**
  * File Interface for Filesystem Adapter
@@ -21,100 +21,125 @@ defined ('MOLAJO') or die;
 interface FileInterface
 {
     /**
+     * Connect
+     *
+     * @return  object  Filesystem
+     * @since   1.0
+     */
+    public function connect();
+
+    /**
+     * Set the Path
+     *
+     * @param   string  $path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function setPath($path);
+
+    /**
+     * Retrieves and sets metadata for the file specified in path
+     *
+     * @return  object  Filesystem
+     * @since   1.0
+     */
+    public function getMetadata();
+
+    /**
      * Returns the contents of the file identified in path
      *
-     * @param   string  $path
-     *
-     * @return  array
+     * @return  mixed|string|array
      * @since   1.0
      */
-    public function read ($path = '');
+    public function read();
 
     /**
-     * Creates or replaces the file identified in path using the data value
+     * Creates or replaces the file or directory identified in path using the data value
      *
-     * @param   string  $path
      * @param   string  $file
+     * @param   bool    $replace
      * @param   string  $data
-     * @param   bool    $replace
      *
      * @return  null
      * @since   1.0
      */
-    public function write ($path = '', $file, $data, $replace);
+    public function write($file, $replace, $data = '');
 
     /**
-     * Deletes the file identified in path. Empty directories are removed, if so indicated.
+     * Deletes the file or folder identified in path. Deletes subdirectories, if so indicated
      *
-     * @param   string  $path
-     * @param   bool    $delete_empty_directory
+     * @param   bool    $delete_subdirectories  defaults true (for directories)
      *
      * @return  null
      * @since   1.0
      */
-    public function delete ($path = '', $delete_empty_directory = true);
+    public function delete($delete_subdirectories = true);
 
     /**
-     * Copies the file identified in $path to the target_adapter in the new_parent_directory,
-     *  replacing existing contents, if indicated, and creating directories needed, if indicated
+     * Copies the file/folder in $path to the target_directory, replacing content, if indicated
      *
-     * Note: $target_filesystem is an instance of the Filesystem exclusive to the target portion of the copy
+     * Note: $target_filesystem_type used to create new filesystem instance for target
      *
-     * @param   string  $path
-     * @param   string  $target_filesystem
      * @param   string  $target_directory
-     * @param   bool    $replace
+     * @param   bool    $replace                 defaults to true
+     * @param   string  $target_filesystem_type  defaults to current
      *
-     * @return  null
+     * @return  void
      * @since   1.0
      */
-    public function copy ($path = '', $target_filesystem, $target_directory, $replace = false);
+    public function copy($target_directory, $replace = true, $target_filesystem_type = '');
 
     /**
-     * Moves the file identified in path to the location identified in the new_parent_directory
-     *  replacing existing contents, if indicated, and creating directories needed, if indicated
+     * Moves the file/folder in $path to the target_directory, replacing content, if indicated
      *
-     * @param   string  $path
-     * @param   string  $target_filesystem
+     * Note: $target_filesystem_type used to create new filesystem instance for target
+     *
      * @param   string  $target_directory
-     * @param   bool    $replace
+     * @param   bool    $replace                 defaults to true
+     * @param   string  $target_filesystem_type  defaults to current
      *
-     * @return  mixed
+     * @return  void
      * @since   1.0
      */
-    public function move ($path = '', $target_filesystem, $target_directory, $replace = false);
+    public function move($target_directory, $replace = true, $target_filesystem_type = '');
 
     /**
      * Returns a list of file and folder names located at path directory
      *
-     * @param   string  $path
+     * @param   bool  $recursive
      *
-     * @return  null
+     * @return  array
      * @since   1.0
      */
-    public function getList ($path = '');
+    public function getList($recursive = '');
 
     /**
-     * Creates directory identified in path using the data value
+     * Change file mode
      *
-     * @param   string  $path
-     * @param   string  $new_name
-     * @param   bool    $replace
+     * @param   int     $mode
      *
-     * @return  null
+     * @return  void
      * @since   1.0
      */
-    public function createDirectory ($path = '', $new_name, $replace = false);
+    public function chmod($mode);
 
     /**
-     * Delete directory identified in path using the data value
+     * Update the touch time and/or the access time for the directory or file identified in the path
      *
-     * @param   string  $path
-     * @param   bool    $delete_subdirectories
+     * @param   int     $time
+     * @param   int     $atime
      *
-     * @return  null
+     * @return  void
      * @since   1.0
      */
-    public function deleteDirectory ($path = '', $delete_subdirectories = true);
+    public function touch($time, $atime = null);
 
+    /**
+     * Close the Connection
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function close();
 }

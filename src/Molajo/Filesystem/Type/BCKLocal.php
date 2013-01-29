@@ -77,41 +77,41 @@ class Local
      * Deletes the file identified in path. Empty directories are removed if so indicated
      *
      * @param   string  $path
-     * @param   bool    $delete_empty_directory
+     * @param   bool    $delete_empty
      *
      * @return  null
      * @since   1.0
      */
-    public function delete($path = '', $delete_empty_directory = true)
+    public function delete($path = '', $delete_empty = true)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::delete($path, $delete_empty_directory);
+        return parent::delete($path, $delete_empty);
     }
 
     /**
      * Copies the file identified in $path to the target_adapter in the new_parent_directory,
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * Note: $target_filesystem is an instance of the Filesystem exclusive to the target portion of the copy
+     * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target portion of the copy
      *
      * @param   string  $path
-     * @param   string  $target_filesystem
+     * @param   string  $target_filesystem_type
      * @param   string  $target_directory
      * @param   bool    $replace
      *
      * @return  null
      * @since   1.0
      */
-    public function copy($path = '', $target_filesystem, $target_directory, $replace = false)
+    public function copy($path = '', $target_filesystem_type, $target_directory, $replace = false)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::copy($path, $target_filesystem, $target_directory, $replace);
+        return parent::copy($path, $target_filesystem_type, $target_directory, $replace);
     }
 
     /**
@@ -119,20 +119,20 @@ class Local
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
      * @param   string  $path
-     * @param   string  $target_filesystem
+     * @param   string  $target_filesystem_type
      * @param   string  $target_directory
      * @param   bool    $replace
      *
      * @return  null
      * @since   1.0
      */
-    public function move($path = '', $target_filesystem, $target_directory, $replace = false)
+    public function move($path = '', $target_filesystem_type, $target_directory, $replace = false)
     {
         if ($path == '') {
             $path = $this->path;
         }
 
-        return parent::move($path, $target_filesystem, $target_directory, $replace);
+        return parent::move($path, $target_filesystem_type, $target_directory, $replace);
     }
 
     /**
