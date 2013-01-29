@@ -11,44 +11,31 @@ use Molajo\Filesystem\Adapter;
 class AdapterTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Object - Adaptor Factory
+     * @var Adapter Name
      */
-    protected $object;
+    protected $adapter_name;
 
     /**
-     * @var Adapter
-     */
-    protected $adapter;
-
-    /**
-     * @var $Path
+     * @var Path
      */
     protected $path;
 
     /**
-     * @var $Class
+     * @var Options
      */
     protected $options = array();
+
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
 
     /**
      * Initialises Adapter
      */
     protected function setUp()
     {
-        $this->options = array(
-            'adapter_name' => 'Local',
-            'root'         => ROOT_FOLDER,
-            'persistence'  => true
-        );
-        $this->path    = BASE_FOLDER . '/Tests/test1.txt';
 
-        $this->object = new Adapter($this->path, $this->options);
-
-        $this->assertObjectHasAttribute('path', $this->object);
-        $this->assertObjectHasAttribute('adapter_name', $this->object);
-        $this->assertObjectHasAttribute('adapter', $this->object);
-
-        unset($this->object);
 
         return;
     }
@@ -59,72 +46,24 @@ class AdapterTest extends PHPUnit_Framework_TestCase
      */
     public function testSetAdapter()
     {
-        $this->options = array(
-            'adapter_name' => 'Local',
-            'root'         => ROOT_FOLDER,
-            'persistence'  => true
-        );
-        $this->path    = BASE_FOLDER . '/Tests/test1.txt';
+        $this->adapter_name = 'Local';
+        $this->action       = 'Read';
+        $this->path         = BASE_FOLDER . '/Tests/test1.txt';
+        $this->options      = array();
 
-        $this->object = new Adapter($this->path, $this->options = array());
+        $this->filesystem = new Adapter($this->adapter_name, $this->action, $this->path, $this->options = array());
 
-        $this->adapter = $this->object->setAdapter();
-
-        $this->assertObjectHasAttribute('options', $this->adapter);
-        $this->assertObjectHasAttribute('root', $this->adapter);
-        $this->assertObjectHasAttribute('persistence', $this->adapter);
-        $this->assertObjectHasAttribute('absolute_path', $this->adapter);
-
-        unset($this->object);
-        unset($this->adapter);
+        echo '<pre>';
+        var_dump($this->filesystem);
+        echo '</pre>';
+        die;
+        $this->assertObjectHasAttribute('options', $this->filesystem);
+        $this->assertObjectHasAttribute('root', $this->filesystem);
+        $this->assertObjectHasAttribute('persistence', $this->filesystem);
+        $this->assertObjectHasAttribute('absolute_path', $this->filesystem);
 
         return;
 
-    }
-
-    /**
-     * @covers Molajo\Filesystem\Adapter::getAdapter
-     */
-    public function testGetAdapter()
-    {
-        $this->options = array(
-            'adapter_name' => 'Local',
-            'root'         => ROOT_FOLDER,
-            'persistence'  => true
-        );
-        $this->path    = BASE_FOLDER . '/Tests/test1.txt';
-        $this->object  = new Adapter($this->path, $this->options = array());
-        $this->adapter = $this->object->getAdapter();
-
-        $this->assertObjectHasAttribute('options', $this->adapter);
-        $this->assertObjectHasAttribute('root', $this->adapter);
-        $this->assertObjectHasAttribute('persistence', $this->adapter);
-        $this->assertObjectHasAttribute('absolute_path', $this->adapter);
-
-        unset($this->object);
-        unset($this->adapter);
-
-        return;
-    }
-
-    public function testRead()
-    {
-        $this->options = array(
-            'adapter_name' => 'Local',
-            'root'         => ROOT_FOLDER,
-            'persistence'  => true
-        );
-        $this->path    = BASE_FOLDER . '/Tests/test1.txt';
-        $this->object  = new Adapter($this->path, $this->options = array());
-        $this->adapter = $this->object->getAdapter();
-
-        $data = $this->adapter->read();
-        $this->assertEquals('yabba, dabba, doo', trim($data));
-
-        unset($this->object);
-        unset($this->adapter);
-
-        return;
     }
 
     /**

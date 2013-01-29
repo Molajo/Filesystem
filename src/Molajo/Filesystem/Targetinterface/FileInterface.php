@@ -6,7 +6,7 @@
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem;
+namespace Molajo\Filesystem\Targetinterface;
 
 defined ('MOLAJO') or die;
 
@@ -117,16 +117,4 @@ interface FileInterface
      */
     public function deleteDirectory ($path = '', $delete_subdirectories = true);
 
-    /**
-     * Retrieves metadata for the file specified in path and returns an associative array
-     *  minimally populated with: last_accessed_date, last_updated_date, size, mimetype,
-     *  absolute_path, relative_path, filename, and file_extension.
-     *
-     * @param   string  $path
-     * @param   array   $options
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getMetadata ($path = '', $options);
 }

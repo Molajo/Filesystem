@@ -1,26 +1,26 @@
 <?php
 /**
- * Js Adapter for Filesystem
+ * Cache Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Adapters;
+namespace Molajo\Filesystem\Type;
 
 defined ('MOLAJO') or die;
 
 use Molajo\Filesystem\Adapter;
 
 /**
- * Js Adapter for Filesystem
+ * Cache Adapter for Filesystem
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Js implements File, Path, System
+class Cache implements File, Path, System
 {
     /**
      * Constructor

@@ -8,9 +8,10 @@
  */
 namespace Molajo\Filesystem;
 
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 
-use Molajo\Filesystem\Exception\FileException as FileException;
+use Molajo\Filesystem\Targetinterface\Filesystem;
+use Molajo\Filesystem\Exception\FileException;
 
 /**
  * Adapter Class
@@ -20,117 +21,162 @@ use Molajo\Filesystem\Exception\FileException as FileException;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-Class Adapter implements AdapterInterface
+Class Adapter
 {
     /**
-     * Options
-     *
-     * @var    array  $options
-     * @since  1.0
-     */
-    protected $options = array();
-
-    /**
-     * Path
+     * Filesystem Type Name
      *
      * @var    string
      * @since  1.0
      */
-    protected $path;
+    protected $type;
 
     /**
-     * Adapter Name
+     * Filesystem Type Instance
      *
-     * @var    string
-     * @since  1.0
+     * @var     string
+     * @since   1.0
      */
-    protected $adapter_name;
+    protected $filesystem_type;
 
     /**
-     * Adapter Instance
+     * Filesystem Object and Interface
      *
-     * @var    string
-     * @since  1.0
+     * @var     object  Filesystem
+     * @since   1.0
      */
-    public $adapter;
+    public $filesystem;
 
     /**
      * Construct
      *
+     * @param   string  $type
+     * @param   string  $action
      * @param   string  $path
      * @param   array   $options
      *
      * @since   1.0
      * @throws  FileException
      */
-    public function __construct ($path, $options = array())
+    public function __construct($type = 'Local', $action, $path, $options = array())
     {
-        $this->path = $path;
+        /** Get the Filesystem Type */
+        $this->type = $type;
 
-        $this->adapter_name = '';
-        if (isset($this->options['adapter_name'])) {
-            $this->adapter_name = $this->options['adapter_name'];
+        if ($this->type == '') {
+            $this->type = 'Local';
         }
 
-        if ($this->adapter_name == '') {
-            $this->adapter_name = 'Local';
-        }
+        $this->filesystem_type = $this->getType();
 
-        $this->options = $options;
+        $this->filesystem      = $this->getFilesystem();
 
-        $this->setAdapter ($this->adapter_name, $this->path, $this->options);
+        $this->connect();
 
-        return $this;
+        $this->path            = $this->setPath($path);
+
+        $this->getMetadata();
+        echo '<pre>';
+        var_dump($this->filesystem_type);
+        echo '</pre>';
+        die;
+        $this->doAction($action, $options);
+
+        return $this->filesystem_type;
     }
 
     /**
-     * Set Adapter
+     * Get the Filesystem Type (ex., Local, Ftp, Virtual, etc.)
      *
-     * @param   string  $adapter_name
-     * @param   string  $path
-     *
-     * @return  object  $adapter
+     * @return  object  Filesystem Type
      * @since   1.0
      * @throws  FileException
      */
-    public function setAdapter ($adapter_name = '', $path = '', $options = array())
+    protected function getType()
     {
-        if ($adapter_name == '') {
-            $adapter_name = $this->adapter_name;
-        }
-        $this->adapter_name = $adapter_name;
+        $class = 'Molajo\\Filesystem\\Type\\' . $this->type;
 
-        if ($path == '') {
-            $path = $this->path;
-        }
-        $this->path = $path;
-
-        if ($options == array()) {
-            $options = $this->options;
-        }
-        $this->options = $options;
-
-        $class = 'Molajo\\Filesystem\\Adapters\\' . $this->adapter_name;
-
-        if (class_exists ($class)) {
+        if (class_exists($class)) {
         } else {
-            throw new FileException('Filesystem Adapter Class ' . $class . ' does not exist.');
+            throw new FileException('Filesystem Type Class ' . $class . ' does not exist.');
         }
 
-        $this->adapter = new $class($this->path, $this->options);
-
-        return $this->adapter;
+        return new $class();
     }
 
     /**
-     * Get Adapter
+     * Get Filesystem Object
      *
-     * @return  string
+     * @return  object  Filesystem
      * @since   1.0
      * @throws  FileException
      */
-    public function getAdapter ()
+    protected function getFilesystem()
     {
-        return $this->adapter;
+        $class = 'Molajo\\Filesystem\\Targetinterface\\Filesystem';
+
+        if (class_exists($class)) {
+        } else {
+            throw new FileException('Filesystem Adapter Class Filesystem does not exist.');
+        }
+
+        return new Filesystem($this->filesystem_type);
+    }
+
+    /**
+     * Connect to the Filesystem
+     *
+     * @return  object  Filesystem
+     * @since   1.0
+     */
+    protected function connect()
+    {
+        $this->filesystem = $this->filesystem->connect();
+
+        return $this->filesystem;
+    }
+
+    /**
+     * Set the Path
+     *
+     * @return  object  Filesystem
+     * @since   1.0
+     */
+    protected function setPath($path)
+    {
+        $this->path = $this->filesystem->setPath($path);
+
+        return $this->path;
+    }
+
+    /**
+     * Get Filesystem Metadata
+     *
+     * @return  object  Filesystem
+     * @since   1.0
+     */
+    public function getMetadata()
+    {
+        $this->filesystem = $this->filesystem->getMetadata();
+
+        return $this->filesystem;
+    }
+
+    /**
+     * Perform Requested Filesystem Action
+     *
+     * @since   1.0
+     * @throws  FileException
+     */
+    public function doAction($action, $options = array())
+    {
+        if (is_array($options)) {
+        } else {
+            $options = array();
+        }
+
+        $this->filesystem_type = $this->filesystem->$action($options);
+
+        return $this->filesystem_type;
     }
 }

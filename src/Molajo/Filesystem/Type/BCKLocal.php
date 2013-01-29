@@ -1,5 +1,5 @@
 <?php
-namespace Molajo\Filesystem\Adapters;
+namespace Molajo\Filesystem\Type;
 /**
  * Local Adapter for Filesystem
  *
@@ -9,8 +9,6 @@ namespace Molajo\Filesystem\Adapters;
  */
 defined('MOLAJO') or die;
 
-use Molajo\Filesystem\File;
-
 /**
  * Local Adapter for Filesystem
  *
@@ -19,7 +17,7 @@ use Molajo\Filesystem\File;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Local extends File
+class Local
 {
     /**
      * Constructor
@@ -30,7 +28,10 @@ class Local extends File
      */
     public function __construct ($path, $options = array())
     {
-        parent::__construct ($path, $options);
+        $this->options = array(
+            'root'         => ROOT_FOLDER,
+            'persistence'  => true
+        );
 
         return;
     }

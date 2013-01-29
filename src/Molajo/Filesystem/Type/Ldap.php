@@ -1,19 +1,19 @@
 <?php
 /**
- * Stream Adapter for Filesystem
+ * Ldap Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Adapters;
+namespace Molajo\Filesystem\Type;
 
 defined ('MOLAJO') or die;
 
 use Molajo\Filesystem\Adapter;
 
 /**
- * Stream Adapter for Filesystem
+ * Ldap Adapter for Filesystem
  *
  * @package   Molajo
  * @license   MIT
@@ -23,7 +23,7 @@ use Molajo\Filesystem\Adapter;
  * Full interface specification:
  *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
-class Stream implements File, Path, System
+class Ldap implements File, Path, System
 {
     /**
      * Constructor

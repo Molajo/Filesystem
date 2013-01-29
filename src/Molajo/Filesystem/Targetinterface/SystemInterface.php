@@ -1,17 +1,17 @@
 <?php
 /**
- * System Interface for Filesystem Adapter
+ * System Target Interface for Filesystem Adapter
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem;
+namespace Molajo\Filesystem\Targetinterface;
 
 defined ('MOLAJO') or die;
 
 /**
- * System Interface for Filesystem Adapter
+ * System Target Interface for Filesystem Adapter
  *
  * @package   Molajo
  * @license   MIT
@@ -29,30 +29,6 @@ interface SystemInterface
     public function connect ();
 
     /**
-     * Get the Connection
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function getConnection ();
-
-    /**
-     * Set the Connection
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function setConnection ();
-
-    /**
-     * Close the Connection
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function close ();
-
-    /**
      * Set Root of Filesystem
      *
      * @param   string  $path
@@ -61,14 +37,6 @@ interface SystemInterface
      * @since   1.0
      */
     public function setRoot ($root);
-
-    /**
-     * Get Root of Filesystem
-     *
-     * @return  string
-     * @since   1.0
-     */
-    public function getRoot ();
 
     /**
      * Set persistence indicator for Filesystem
@@ -81,116 +49,111 @@ interface SystemInterface
     public function setPersistence ($persistence);
 
     /**
-     * Returns the owner of the file or directory defined in the path
-     *
-     * @param   string  $path
-     *
-     * @return  bool
-     * @since   1.0
-     */
-    public function getOwner ($path = '');
-
-    /**
-     * Returns the group for the file or directory defined in the path
-     *
-     * @param   string  $path
+     * Get Root of Filesystem
      *
      * @return  string
      * @since   1.0
      */
-    public function getGroup ($path = '');
+    public function getRoot ();
+
+    /**
+     * Get Persistence indicator
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getPersistence ();
+
+    /**
+     * Returns the owner of the file or directory defined in the path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getOwner ();
+
+    /**
+     * Returns the group for the file or directory defined in the path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getGroup ();
 
     /**
      * Retrieves Create Date for directory or file identified in the path
      *
-     * @param   string  $path
-     *
      * @return  null
      * @since   1.0
      */
-    public function getCreateDate ($path = '');
+    public function getCreateDate ();
 
     /**
      * Retrieves Last Access Date for directory or file identified in the path
      *
-     * @param   string  $path
-     *
      * @return  null
      * @since   1.0
      */
-    public function getAccessDate ($path = '');
+    public function getAccessDate ();
 
     /**
      * Retrieves Last Update Date for directory or file identified in the path
      *
-     * @param   string   $path
-     *
      * @return  null
      * @since   1.0
      */
-    public function getModifiedDate ($path = '');
+    public function getModifiedDate ();
 
     /**
      * Tests for read access, returning true or false
      *
-     * @param   string  $path
-     *
      * @return  null
      * @since   1.0
      */
-    public function isReadable ($path = '');
+    public function isReadable ();
 
     /**
      * Tests for write access, returning true or false
      *
-     * @param   string  $path
-     *
      * @return  null
      * @since   1.0
      */
-    public function isWriteable ($path = '');
+    public function isWriteable ();
 
     /**
      * Tests for execute access, returning true or false
      *
-     * @param   string  $path
-     *
      * @return  null
      * @since   1.0
      */
-    public function isExecutable ($path = '');
+    public function isExecutable ();
 
     /**
      * Change file mode
      *
-     * @param   string  $path
      * @param   int     $mode
      *
      * @return  null
      * @since   1.0
      */
-    public function chmod ($path = '', $mode);
+    public function chmod ($mode);
 
     /**
      * Update the touch time and/or the access time for the directory or file identified in the path
      *
-     * @param   string  $path
      * @param   int     $time
      * @param   int     $atime
      *
      * @return  null
      * @since   1.0
      */
-    public function touch ($path = '', $time, $atime = null);
+    public function touch ($time, $atime = null);
 
     /**
-     * Normalizes the given path
+     * Close the Connection
      *
-     * @param   $path
-     *
-     * @return  string
+     * @return  null
      * @since   1.0
-     * @throws  \OutOfBoundsException
      */
-    public function normalise ($path = '');
+    public function close ();
 }

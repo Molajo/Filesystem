@@ -6,7 +6,7 @@
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Adapters;
+namespace Molajo\Filesystem\Type;
 
 defined ('MOLAJO') or die;
 
@@ -133,7 +133,7 @@ class Ftp implements File, Path, System
         if (isset($this->options['password'])) {
             $this->setPassword ($this->options['password']);
         } else {
-            $this->setPassword ('');
+            $this->setPassword ();
         }
 
         if (isset($this->options['host'])) {
