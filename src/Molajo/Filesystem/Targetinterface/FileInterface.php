@@ -117,23 +117,23 @@ interface FileInterface
     /**
      * Change file mode
      *
-     * @param   int     $mode
+     * @param   string  $mode
      *
      * @return  void
      * @since   1.0
      */
-    public function chmod($mode);
+    public function chmod($mode = '');
 
     /**
      * Update the touch time and/or the access time for the directory or file identified in the path
      *
-     * @param   int     $time
-     * @param   int     $atime
+     * @param   null    $time
+     * @param   null    $atime
      *
      * @return  void
      * @since   1.0
      */
-    public function touch($time, $atime = null);
+    public function touch($time = null, $atime = null);
 
     /**
      * Close the Connection

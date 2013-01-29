@@ -11,7 +11,7 @@ namespace Molajo\Filesystem;
 defined('MOLAJO') or die;
 
 use Molajo\Filesystem\Targetinterface\Filesystem;
-use Molajo\Filesystem\Targetinterface\FilesystemInterface;
+use Molajo\Filesystem\Targetinterface\FileInterface;
 use Molajo\Filesystem\Exception\FileException;
 
 /**
@@ -22,7 +22,7 @@ use Molajo\Filesystem\Exception\FileException;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-Class Adapter implements FilesystemInterface
+Class Adapter implements FileInterface
 {
     /**
      * Filesystem Type Name
@@ -76,39 +76,125 @@ Class Adapter implements FilesystemInterface
         }
 
         switch ($action) {
+
             case 'read':
                 return $this->read();
+
                 break;
 
             case 'write':
+
+                if (isset($options['file'])) {
+                    $file = $options['file'];
+                } else {
+                    throw new \BadMethodCallException
+                    ('Filesystem Adapter: Must provide filename for write request. Path: ' . $this->path);
+                }
+
+                $replace = true;
+                if (isset($options['replace'])) {
+                    $replace = (int)$options['replace'];
+                }
+                if ($replace === false) {
+                } else {
+                    $replace = true;
+                }
+
+                if (isset($options['data'])) {
+                    $data = $options['data'];
+                } else {
+                    $data = '';
+                }
+
                 return $this->write($file, $replace, $data);
+
                 break;
 
             case 'delete':
-                return $this->delete($delete_subdirectories);
+
+                $delete_subdirectories = true;
+                if (isset($options['delete_subdirectories'])) {
+                    $delete_subdirectories = (int)$options['delete_subdirectories'];
+                }
+                if ($delete_subdirectories === false) {
+                } else {
+                    $delete_subdirectories = true;
+                }
+
+                $this->delete($delete_subdirectories);
+
                 break;
 
             case 'copy':
-                return $this->copy($target_directory, $replace, $target_filesystem_type);
-                break;
-
             case 'move':
-                return $this->move($target_directory, $replace, $target_filesystem_type);
+
+                if (isset($options['target_directory'])) {
+                    $target_directory = $options['target_directory'];
+                } else {
+                    throw new \BadMethodCallException
+                    ('Filesystem Adapter: Must provide target_directory for copy request. Path: ' . $this->path);
+                }
+
+                $replace = true;
+                if (isset($options['replace'])) {
+                    $replace = (int)$options['replace'];
+                }
+                if ($replace === false) {
+                } else {
+                    $replace = true;
+                }
+
+                if (isset($options['target_filesystem_type'])) {
+                    $target_filesystem_type = $options['target_filesystem_type'];
+                } else {
+                    $target_filesystem_type = $this->type;
+                }
+
+                $this->$action($target_directory, $replace, $target_filesystem_type);
+
                 break;
 
             case 'getList':
+
+                $recursive = true;
+                if (isset($options['recursive'])) {
+                    $recursive = (int)$options['recursive'];
+                }
+                if ($recursive === false) {
+                } else {
+                    $recursive = true;
+                }
                 return $this->getList($recursive);
+
                 break;
 
             case 'chmod':
-                return $this->chmod($mode);
+
+                $mode = '';
+                if (isset($options['mode'])) {
+                    $mode = $options['recursive'];
+                }
+
+                $this->chmod($mode);
+
                 break;
 
             case 'touch':
-                return $this->touch($time, $atime);
+
+                $time = null;
+                if (isset($options['time'])) {
+                    $time = (int)$options['time'];
+                }
+
+                $atime = null;
+                if (isset($options['atime'])) {
+                    $atime = (int)$options['atime'];
+                }
+
+                $this->touch($time, $atime);
+
                 break;
         }
-
 
         return $this->filesystem_type;
     }
@@ -131,7 +217,7 @@ Class Adapter implements FilesystemInterface
 
         $this->filesystem_type = $this->getType();
 
-        $this->filesystem      = $this->getFilesystem();
+        $this->filesystem = $this->getFilesystem();
         $this->filesystem = $this->filesystem->connect();
 
         return $this->filesystem;
@@ -304,14 +390,14 @@ Class Adapter implements FilesystemInterface
     /**
      * Change file mode
      *
-     * @param   int     $mode
+     * @param   string  $mode
      *
      * @return  void
      * @since   1.0
      */
-    public function chmod($mode)
+    public function chmod($mode = '')
     {
-        $this->filesystem->getList($mode);
+        $this->filesystem->chmod($mode);
 
         return;
     }
@@ -319,13 +405,13 @@ Class Adapter implements FilesystemInterface
     /**
      * Update the touch time and/or the access time for the directory or file identified in the path
      *
-     * @param   int     $time
-     * @param   int     $atime
+     * @param   null     $time
+     * @param   null     $atime
      *
      * @return  void
      * @since   1.0
      */
-    public function touch($time, $atime = null)
+    public function touch($time = null, $atime = null)
     {
         $this->filesystem->touch($time, $atime);
 
