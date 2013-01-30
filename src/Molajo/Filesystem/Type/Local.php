@@ -237,22 +237,6 @@ class Local
     public $mime_type;
 
     /**
-     * Options
-     *
-     * @var    array
-     * @since  1.0
-     */
-    public $options;
-
-    /**
-     * File contents
-     *
-     * @var    string
-     * @since  1.0
-     */
-    public $file_content;
-
-    /**
      * Constructor
      *
      * @since  1.0
@@ -260,17 +244,18 @@ class Local
     public function __construct()
     {
         $this->filesystem_type = 'Local';
-
         return $this;
     }
 
     /**
      * Method to connect to a Local server
      *
+     * @param   $type
+     *
      * @return  object|resource
      * @since   1.0
      */
-    public function connect()
+    public function connect($type = null)
     {
         $this->root = $this->setRoot();
 
@@ -295,7 +280,7 @@ class Local
             $root = ROOT_FOLDER;
         }
 
-        $this->root = $this->normalise($root);
+        $this->root = $root;
 
         return $this->root;
     }
@@ -345,9 +330,9 @@ class Local
         }
         $this->file_permissions = $file_permissions;
 
-        if ((int)$read_only == 0) {
+        if ((int)$read_only == 1) {
         } else {
-            $read_only = 1;
+            $read_only = 0;
         }
         $this->read_only = $read_only;
 
@@ -362,15 +347,70 @@ class Local
      * @return  string
      * @since   1.0
      */
-    public function setPath($path = '')
+    public function setPath($path)
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
         $this->path = $this->normalise($path);
 
         return $this->path;
+    }
+
+    /**
+     * Normalizes the given path
+     *
+     * @param   $path
+     *
+     * @return  string
+     * @since   1.0
+     * @throws  OutOfBoundsException
+     */
+    public function normalise($path = '')
+    {
+        if ($path == '') {
+            $this->path = $path;
+        }
+
+        $absolute_path = false;
+
+        if (substr($path, 0, 1) == '/') {
+            $absolute_path = true;
+            $path          = substr($path, 1, strlen($path));
+        }
+
+        /** Unescape slashes */
+        $path = str_replace('\\', '/', $path);
+
+        /**  Filter: empty value
+         *
+         * @link http://tinyurl.com/arrayFilterStrlen
+         */
+        $nodes = array_filter(explode('/', $path), 'strlen');
+
+        $normalised = array();
+
+        foreach ($nodes as $node) {
+
+            /** '.' means current - ignore it      */
+            if ($node == '.') {
+
+                /** '..' is parent - remove the parent */
+            } elseif ($node == '..') {
+
+                if (count($normalised) > 0) {
+                    array_pop($normalised);
+                }
+
+            } else {
+                $normalised[] = $node;
+            }
+
+        }
+
+        $path = implode('/', $normalised);
+        if ($absolute_path === true) {
+            $path = '/' . $path;
+        }
+
+        return $path;
     }
 
     /**
@@ -393,6 +433,50 @@ class Local
     public function getRoot()
     {
         return $this->root;
+    }
+
+    /**
+     * Get Persistence
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getPersistence()
+    {
+        return $this->persistence;
+    }
+
+    /**
+     * Get Directory Permissions for Filesystem
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getDirectoryPermissions()
+    {
+        return $this->directory_permissions;
+    }
+
+    /**
+     * Get File Permissions for Filesystem
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getFilePermissions()
+    {
+        return $this->file_permissions;
+    }
+
+    /**
+     * Get Read Only for Filesystem
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getReadOnly()
+    {
+        return $this->read_only;
     }
 
     /**
@@ -442,11 +526,12 @@ class Local
     public function getCreateDate()
     {
         try {
-            $this->create_date = date("F d Y H:i:s.", filectime($this->path));
+
+            $this->create_date = \date("F d Y H:i:s.", filectime($this->path));
 
         } catch (Exception $e) {
-            throw new FileException
 
+            throw new FileException
             ('Filesystem: getCreateDate method failed for ' . $this->path);
         }
 
@@ -463,11 +548,12 @@ class Local
     public function getAccessDate()
     {
         try {
-            $this->access_date = \fileatime("F d Y H:i:s.", filectime($this->path));
+
+            $this->access_date = \date("F d Y H:i:s.", fileatime($this->path));
 
         } catch (Exception $e) {
-            throw new FileException
 
+            throw new FileException
             ('Filesystem: getCreateDate method failed for ' . $this->path);
         }
 
@@ -484,7 +570,8 @@ class Local
     public function getModifiedDate()
     {
         try {
-            $this->modified_date = \filemtime("F d Y H:i:s.", filemtime($this->path));
+
+            $this->modified_date = \date("F d Y H:i:s.", filemtime($this->path));
 
         } catch (Exception $e) {
             throw new FileException
@@ -499,7 +586,7 @@ class Local
      * Tests if the group specified: 'owner', 'group', or 'world' has read access
      *  Returns true or false
      *
-     * @param   string  $path
+     * @param   string  $this->path
      *
      * @return  bool
      * @since   1.0
@@ -515,23 +602,23 @@ class Local
      * Tests if the group specified: 'owner', 'group', or 'world' has write access
      *  Returns true or false
      *
-     * @param   string  $path
+     * @param   string  $this->path
      *
      * @return  bool
      * @since   1.0
      */
     public function isWriteable()
     {
-        $this->is_writeable = is_writable($this->path);
+        $this->is_writable = is_writable($this->path);
 
-        return $this->is_writeable;
+        return $this->is_writable;
     }
 
     /**
      * Tests if the group specified: 'owner', 'group', or 'world' has execute access
      *  Returns true or false
      *
-     * @param   string  $path
+     * @param   string  $this->path
      *
      * @return  null
      * @since   1.0
@@ -544,82 +631,6 @@ class Local
     }
 
     /**
-     * Change the file mode for 'owner', 'group', and 'world', and read, write, execute access
-     *
-     * Mode: R/W for owner, nothing for everyone else '0600'
-     *  R/W for owner, read for everyone else '0644'
-     *  Everything for owner, R/E for others - '0755'
-     *  Everything for owner, read and execute for group - '0750'
-     *
-     * Notes: The current user is the user under which PHP runs. It is probably not the same
-     *  user you use for normal shell or FTP access. The mode can be changed only by user
-     *  who owns the file on most systems.
-     *
-     * @param   string  $path
-     * @param   int     $mode
-     *
-     * @return  int|null
-     * @throws  FileException
-     * @since   1.0
-     */
-    public function chmod($mode)
-    {
-        if (in_array($mode, array('0600', '0644', '0755', '0750'))) {
-        } else {
-
-            throw new FileException
-            ('Filesystem: chmod method. Mode not provided: ' . $mode);
-        }
-
-        try {
-            chmod($this->path, $mode);
-
-        } catch (Exception $e) {
-
-            throw new FileException
-            ('Filesystem: chmod method failed for ' . $mode);
-        }
-
-        return $mode;
-    }
-
-    /**
-     * Update the touch time and/or the access time for the directory or file identified in the path
-     *
-     * @param   string  $path
-     * @param   int     $time
-     * @param   int     $atime
-     *
-     * @return  int|null
-     * @throws  FileException
-     * @since   1.0
-     */
-    public function touch($time, $atime = null)
-    {
-        if ($time == '' || $time === null || $time == 0) {
-            $time = getDateTime($time);
-        }
-
-        try {
-
-            if (touch($this->path, $time)) {
-                echo $path . ' modification time has been changed to present time';
-
-            } else {
-                echo 'Sorry, could not change modification time of ' . $this->path;
-            }
-
-        } catch (Exception $e) {
-
-            throw new FileException
-            ('Filesystem: is_readable method failed for ' . $this->path);
-        }
-
-        return $time;
-    }
-
-
-    /**
      * Get Date Time
      *
      * @param   $time
@@ -629,7 +640,6 @@ class Local
      */
     public function getDateTime($time)
     {
-
         if ($time instanceof DateTime) {
             return $time;
         }
@@ -645,26 +655,18 @@ class Local
      * Retrieves the absolute path, which is the relative path from the root directory,
      *  prepended with a '/'.
      *
-     * @param   string  $path
-     *
      * @return  string
      * @since   1.0
      * @throws  FileNotFoundException
      */
-    public function getAbsolutePath($path = '')
+    public function getAbsolutePath()
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->normalise($path);
-
-        if ($this->exists($path) === false) {
+        if ($this->exists($this->path) === false) {
             throw new FileNotFoundException
-            ('Filesystem: getAbsolutePath method does not exist: ' . $path);
+            ('Filesystem: getAbsolutePath method does not exist: ' . $this->path);
         }
 
-        $this->absolute_path = realpath($path);
+        $this->absolute_path = realpath($this->path);
 
         return $this->absolute_path;
     }
@@ -675,364 +677,218 @@ class Local
      * Relative path - describes how to get from a particular directory to a file or directory
      * Absolute Path - relative path from the root directory, prepended with a '/'.
      *
-     * @param   string  $path
+     * @return  bool
+     * @since   1.0
+     */
+    public function isAbsolute()
+    {
+        if (substr($this->path, 0, 1) == '/') {
+            $this->is_absolute = true;
+        } else {
+            $this->is_absolute = false;
+        }
+
+        return $this->is_absolute;
+    }
+
+    /**
+     * Returns true or false indicator as to whether or not the path is a directory
      *
      * @return  bool
      * @since   1.0
      */
-    public function isAbsolute($path = '')
+    public function isDirectory()
     {
-        if (substr($this->path, 0, 1) == '/') {
-            return true;
+        if (is_dir($this->path)) {
+            $this->is_directory = true;
+        } else {
+            $this->is_directory = false;
         }
 
-        return false;
+        return $this->is_directory;
+    }
+
+    /**
+     * Returns true or false indicator as to whether or not the path is a file
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isFile()
+    {
+        if (is_file($this->path)) {
+            $this->is_file = true;
+        } else {
+            $this->is_file = false;
+        }
+
+        return $this->is_file;
+    }
+
+    /**
+     * Returns true or false indicator as to whether or not the path is a link
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function isLink()
+    {
+        if (is_link($this->path)) {
+            $this->is_link = true;
+        } else {
+            $this->is_link = false;
+        }
+
+        return $this->is_link;
     }
 
     /**
      * Returns the value 'directory, 'file' or 'link' for the type determined
      *  from the path
      *
-     * @param   string  $path
-     *
      * @return  null
      * @since   1.0
      * @throws  FileException
      * @throws  FileNotFoundException
      */
-    public function getType($path = '')
+    public function getType()
     {
-        if ($path == '') {
-            $path = $this->path;
+        if ($this->is_directory === true) {
+            $this->type = 'directory';
+            return $this->type;
         }
 
-        $path = $this->normalise($path);
-
-        if ($this->exists($path) === false) {
-            throw new FileNotFoundException
-            ('Filesystem: getName method does not exist: ' . $path);
+        if ($this->is_file === true) {
+            $this->type = 'file';
+            return $this->type;
         }
 
-        if ($this->isDirectory($path)) {
-            return 'directory';
-        }
-
-        if ($this->isFile($path)) {
-            return 'file';
-        }
-
-        if ($this->isLink($path)) {
-            return 'link';
+        if ($this->is_link === true) {
+            $this->type = 'link';
+            return $this->type;
         }
 
         throw new FileException ('Not a directory, file or a link.');
     }
 
     /**
-     * Returns true or false indicator as to whether or not the path is a directory
-     *
-     * @param   string  $path
-     *
-     * @return  bool
-     * @since   1.0
-     */
-    public function isDirectory($path = '')
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->normalise($path);
-
-        if (is_file($path)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns true or false indicator as to whether or not the path is a file
-     *
-     * @param   string  $path
-     *
-     * @return  bool
-     * @since   1.0
-     */
-    public function isFile($path = '')
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->normalise($path);
-
-        if (is_file($path)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns true or false indicator as to whether or not the path is a link
-     *
-     * @param   string  $path
-     *
-     * @return  bool
-     * @since   1.0
-     */
-    public function isLink($path = '')
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->normalise($path);
-
-        if (is_link($path)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Does the path exist (either as a file or a folder)?
      *
-     * @param string $path
+     * @param string $this->path
      *
      * @return bool|null
      */
-    public function exists($path = '')
+    public function exists()
     {
-        if ($path == '') {
-            $path = $this->path;
+        if (file_exists($this->path)) {
+            $this->exists = true;
+        } else {
+            $this->exists = false;
         }
 
-        $path = $this->normalise($path);
-
-        if (file_exists($path)) {
-            return true;
-        }
-
-        return false;
+        return $this->exists;
     }
 
     /**
      * Get File or Directory Name
      *
-     * @param   string $path
-     *
      * @return  bool|null
      * @since   1.0
      * @throws  FileNotFoundException
      */
-    public function getName($path = '')
+    public function getName()
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
+        $this->name = basename($this->path);
 
-        $path = $this->normalise($path);
-
-        if ($this->exists($path) === false) {
-            throw new FileNotFoundException
-            ('Filesystem: getName method Path does not exist: ' . $path);
-        }
-
-        return basename($path);
+        return $this->name;
     }
 
     /**
      * Get Parent
      *
-     * @param   string $path
-     *
      * @return  bool|null
      * @since   1.0
      * @throws  FileNotFoundException
      */
-    public function getParent($path = '')
+    public function getParent()
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
+        $this->parent = dirname($this->path);
 
-        $path = $this->normalise($path);
-
-        if ($this->exists($path) === false) {
-            throw new FileNotFoundException
-            ('Filesystem: getParent method Path does not exist: ' . $path);
-        }
-
-        return dirname($path);
+        return $this->parent;
     }
 
     /**
      * Get File Extension
      *
-     * @param   string $path
-     *
      * @return  bool|null
      * @since   1.0
      * @throws  FileNotFoundException
      */
-    public function getExtension($path = '')
+    public function getExtension()
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->normalise($path);
-
-        if ($this->exists($path) === false) {
-            throw new FileNotFoundException
-            ('Filesystem: getExtension method Path does not exist: ' . $path);
-        }
-
-        $path = $this->normalise($path);
-
-        if ($this->exists($path) === false) {
-            throw new FileNotFoundException ('Filesystem: could not find file at path: ', $path);
-        }
-
-        if ($this->isFile($path)) {
+        if ($this->is_file === true) {
         } else {
-            throw new FileNotFoundException ('Filesystem: not a valid file path: ', $path);
+            throw new FileNotFoundException
+            ('Filesystem Local: not a valid file. Path: ', $this->path);
         }
 
-        return pathinfo(basename($path), PATHINFO_EXTENSION);
+        $this->extension = pathinfo(basename($this->path), PATHINFO_EXTENSION);
+
+        return $this->extension;
     }
 
     /**
      * Get the file size of a given file.
      *
-     * @param   string  $path
-     *
      * @return  int
-     * @since   1.0
-     */
-    public function size($path = '')
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        return filesize($path);
-    }
-
-    /**
-     * Normalizes the given path
-     *
-     * @param   $path
-     *
-     * @return  string
-     * @since   1.0
-     * @throws  OutOfBoundsException
-     */
-    public function normalise($path = '')
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $absolute_path = false;
-
-        if (substr($path, 0, 1) == '/') {
-            $absolute_path = true;
-            $path          = substr($path, 1, strlen($path));
-        }
-
-        /** Unescape slashes */
-        $path = str_replace('\\', '/', $path);
-
-        /**  Filter: empty value
-         *
-         * @link http://tinyurl.com/arrayFilterStrlen
-         */
-        $nodes = array_filter(explode('/', $path), 'strlen');
-
-        $normalised = array();
-
-        foreach ($nodes as $node) {
-
-            /** '.' means current - ignore it      */
-            if ($node == '.') {
-
-                /** '..' is parent - remove the parent */
-            } elseif ($node == '..') {
-
-                if (count($normalised) > 0) {
-                    array_pop($normalised);
-                }
-
-            } else {
-                $normalised[] = $node;
-            }
-
-        }
-
-        $path = implode('/', $normalised);
-        if ($absolute_path === true) {
-            $path = '/' . $path;
-        }
-
-        return $path;
-    }
-
-    /**
-     * Returns true or false indicator as to whether or not the path is a link
-     *
-     * @param   string  $path
-     *
-     * @return  bool
      * @since   1.0
      */
     public function getSize()
     {
-        return;
+        if ($this->is_file === true) {
+            $this->size = filesize($this->path);
+        } else {
+            $this->size = filesize($this->path);
+        }
+
+        return $this->size;
     }
 
     /**
      * Returns the contents of the file identified by path
      *
-     * @param   string  $path
-     *
      * @return  mixed
      * @since   1.0
-     * @throws  AdapterNotFoundException when file does not exist
+     * @throws  FileNotFoundException when file does not exist
      */
-    public function read($path = '')
+    public function read()
     {
-        if ($path == '') {
-            $path = $this->path;
+        if ($this->exists === false) {
+            throw new FileNotFoundException
+            ('Local Filesystem Read: File does not exist: ', $this->path);
         }
 
-        $path = $this->normalise($path);
-
-        if ($this->exists($path) === false) {
-            throw new FileNotFoundException ('Filesystem: could not find file at path: ', $path);
+        if ($this->is_file === false) {
+            throw new FileNotFoundException
+            ('Local Filesystem Read: Is not a file: ', $this->path);
         }
 
-        if ($this->isFile($path)) {
-        } else {
-            throw new FileNotFoundException ('Filesystem: not a valid file path: ', $path);
+        if ($this->is_readable === false) {
+            throw new FileNotFoundException
+            ('Local Filesystem Read: No permission, not readable: ', $this->path);
         }
-
-        $data = false;
 
         try {
-            $data = file_get_contents($path);
+            $data = file_get_contents($this->path);
 
         } catch (\Exception $e) {
 
             throw new FileNotFoundException
-            ('Filesystem: error reading path ' . $path);
+            ('Local Filesystem Read: Error reading file: ', $this->path);
         }
 
         if ($data === false) {
-            throw new FileNotFoundException ('Filesystem: could not read: ', $path);
+            ('Local Filesystem Read: Empty Filet: ' . $this->path);
         }
 
         return $data;
@@ -1041,7 +897,6 @@ class Local
     /**
      * Creates or replaces the file identified in path using the data value
      *
-     * @param   string  $path
      * @param   string  $file
      * @param   string  $data
      * @param   bool    $replace
@@ -1050,48 +905,48 @@ class Local
      * @since   1.0
      * @throws  FileException
      */
-    function write($path = '', $file, $data, $replace)
+    function write($file, $data, $replace)
     {
-        if ($path == '') {
-            $path = $this->path;
+        if ($this->path == '') {
+            $this->path = $this->path;
         }
 
-        $path = $this->normalise($path);
+        $this->path = $this->normalise($this->path);
 
         if (trim($data) == '' || strlen($data) == 0) {
             throw new FileException
-            ('Filesystem: attempting to write no data to file: ' . $path . '/' . $file);
+            ('Filesystem: attempting to write no data to file: ' . $this->path . '/' . $file);
         }
 
-        if (file_exists($path . '/' . $file)) {
+        if (file_exists($this->path . '/' . $file)) {
 
             if ($replace === false) {
                 throw new FileException
-                ('Filesystem: attempting to write to existing file: ' . $path . '/' . $file);
+                ('Filesystem: attempting to write to existing file: ' . $this->path . '/' . $file);
             }
 
-            if ($this->isWriteable($path . '/' . $file) === false) {
+            if ($this->isWriteable($this->path . '/' . $file) === false) {
                 throw new FileException
-                ('Filesystem: file is not writable: ' . $path . '/' . $file);
+                ('Filesystem: file is not writable: ' . $this->path . '/' . $file);
             }
 
-            $handle = fopen($path . '/' . $file, 'r+');
+            $handle = fopen($this->path . '/' . $file, 'r+');
 
             if (flock($handle, LOCK_EX)) {
             } else {
                 throw new FileException
-                ('Filesystem: Lock not obtainable for file write for: ' . $path . '/' . $file);
+                ('Filesystem: Lock not obtainable for file write for: ' . $this->path . '/' . $file);
             }
 
             fclose($handle);
         }
 
         try {
-            \file_put_contents($path . '/' . $file, $data, LOCK_EX);
+            \file_put_contents($this->path . '/' . $file, $data, LOCK_EX);
 
         } catch (Exception $e) {
             throw new FileException
-            ('Directories do not exist for requested file: .' . $path . '/' . $file);
+            ('Directories do not exist for requested file: .' . $this->path . '/' . $file);
         }
 
         return true;
@@ -1100,45 +955,38 @@ class Local
     /**
      * Deletes the file identified in path. Empty directories are removed if so indicated
      *
-     * @param   string  $path
      * @param   bool    $delete_empty
      *
      * @return  null
      * @since   1.0
      */
-    public function delete($path = '', $delete_empty = true)
+    public function delete($delete_empty = true)
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
+        if (file_exists($this->path)) {
 
-        $path = $this->normalise($path);
-
-        if (file_exists($path)) {
-
-            if ($this->isWriteable($path) === false) {
+            if ($this->isWriteable($this->path) === false) {
                 throw new FileException
-                ('Filesystem: file to be deleted is not writable: ' . $path);
+                ('Filesystem: file to be deleted is not writable: ' . $this->path);
             }
 
-            $handle = fopen($path, 'r+');
+            $handle = fopen($this->path, 'r+');
 
             if (flock($handle, LOCK_EX)) {
             } else {
                 throw new FileException
-                ('Filesystem: Lock not obtainable for delete for: ' . $path);
+                ('Filesystem: Lock not obtainable for delete for: ' . $this->path);
             }
 
             fclose($handle);
         }
 
         try {
-            \unlink($path);
+            \unlink($this->path);
 
         } catch (Exception $e) {
 
             throw new FileException
-            ('Filesystem: Delete failed for: ' . $path);
+            ('Filesystem: Delete failed for: ' . $this->path);
         }
 
         return true;
@@ -1150,7 +998,6 @@ class Local
      *
      * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target portion of the copy
      *
-     * @param   string  $path
      * @param   string  $target_filesystem_type
      * @param   string  $target_directory
      * @param   bool    $replace
@@ -1159,15 +1006,11 @@ class Local
      * @since   1.0
      * @throws  FileException
      */
-    public function copy($path = '', $target_filesystem_type, $target_directory, $replace = false)
+    public function copy($target_filesystem_type, $target_directory, $replace = false)
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
+        $data = $this->read($this->path);
 
-        $data = $this->read($path);
-
-        $results = $target_filesystem_type->write($target_directory, basename($path), $data, $replace);
+        $results = $this->write($target_directory, basename($this->path), $data, $replace);
 
         if ($results === false) {
             throw new FileException('Could not write the "%s" key content.',
@@ -1181,7 +1024,6 @@ class Local
      * Moves the file identified in path to the location identified in the new_parent_directory
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * @param   string  $path
      * @param   File    $target
      * @param   string  $target_directory
      * @param   bool    $replace
@@ -1189,17 +1031,13 @@ class Local
      * @return  null
      * @since   1.0
      */
-    public function move($path = '', $target_filesystem_type, $target_directory, $replace = false)
+    public function move($target_filesystem_type, $target_directory, $replace = false)
     {
-        if ($path == '') {
-            $path = $this->path;
-        }
+        $data = $this->read($this->path);
 
-        $data = $this->read($path);
+        $this->write($target_directory, $data, $replace);
 
-        $target_filesystem_type->write($target_directory, $data, $replace);
-
-        $this->delete($path);
+        $this->delete($this->path);
 
         return;
     }
@@ -1207,24 +1045,18 @@ class Local
     /**
      * Returns the contents of the file located at path directory
      *
-     * @param   string  $path
+     * @param   bool  $recursive
      *
      * @return  mixed;
      * @since   1.0
      */
-    public function getList($path = '')
+    public function getList($recursive)
     {
-        if ($path == '') {
-            $path = $this->path;
+        if (file_exists($this->path)) {
+            return file_get_contents($this->path);
         }
 
-        $path = $this->normalise($path);
-
-        if (file_exists($path)) {
-            return file_get_contents($path);
-        }
-
-        $iterator = $this->pathname->rootAdapter()->getIterator($this->pathname, func_get_args());
+//  $iterator = $this->pathname->rootAdapter()->getIterator($this->pathname, func_get_args());
 
 // cheap array creation
         if (method_exists($iterator, 'toArray')) {
@@ -1237,80 +1069,6 @@ class Local
         }
 
         return $files;
-    }
-
-    /**
-     * Creates directory identified in path using the data value
-     *
-     * @param   string  $path
-     * @param   string  $new_name
-     * @param   bool    $replace
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function createDirectory($path = '', $new_name, $replace = false)
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->normalise($path);
-
-        if ($replace === false) {
-            if (file_exists($path)) {
-                return false;
-            }
-        }
-
-        if (file_exists($path)) {
-            return file_get_contents($path);
-        }
-
-        \mk_dir($path, $this->directory_permissions, true);
-
-        // Desired folder structure
-        $structure = './depth1/depth2/depth3/';
-
-// To create the nested structure, the $recursive parameter
-// to mkdir() must be specified.
-
-        if (! mkdir($structure, 0, true)) {
-            die('Failed to create folders...');
-        }
-
-
-        return false;
-    }
-
-    /**
-     * Delete directory identified in path using the data value
-     *
-     * @param   string  $path
-     * @param   bool    $create_subdirectories
-     *
-     * @return  null
-     * @since   1.0
-     */
-    public function deleteDirectory($path = '', $delete_subdirectories = true)
-    {
-        if ($path == '') {
-            $path = $this->path;
-        }
-
-        $path = $this->normalise($path);
-
-        if (file_exists($path)) {
-            return file_get_contents($path);
-        }
-
-        \mk_dir($path);
-
-        if ($this->isDirectory($path)) {
-            return rmdir($path);
-        }
-
-        return false;
     }
 
     /**
@@ -1356,6 +1114,79 @@ class Local
             'The finfo extension or mime_content_type function are needed to '
                 . 'determine the Mime Type for this file.'
         );
+    }
+
+    /**
+     * Change the file mode for 'owner', 'group', and 'world', and read, write, execute access
+     *
+     * Mode: R/W for owner, nothing for everyone else '0600'
+     *  R/W for owner, read for everyone else '0644'
+     *  Everything for owner, R/E for others - '0755'
+     *  Everything for owner, read and execute for group - '0750'
+     *
+     * Notes: The current user is the user under which PHP runs. It is probably not the same
+     *  user you use for normal shell or FTP access. The mode can be changed only by user
+     *  who owns the file on most systems.
+     *
+     * @param   int     $mode
+     *
+     * @return  int|null
+     * @throws  FileException
+     * @since   1.0
+     */
+    public function chmod($mode)
+    {
+        if (in_array($mode, array('0600', '0644', '0755', '0750'))) {
+        } else {
+
+            throw new FileException
+            ('Filesystem: chmod method. Mode not provided: ' . $mode);
+        }
+
+        try {
+            chmod($this->path, $mode);
+
+        } catch (Exception $e) {
+
+            throw new FileException
+            ('Filesystem: chmod method failed for ' . $mode);
+        }
+
+        return $mode;
+    }
+
+    /**
+     * Update the touch time and/or the access time for the directory or file identified in the path
+     *
+     * @param   int     $time
+     * @param   int     $atime
+     *
+     * @return  int|null
+     * @throws  FileException
+     * @since   1.0
+     */
+    public function touch($time, $atime = null)
+    {
+        if ($time == '' || $time === null || $time == 0) {
+            $time = getDateTime($time);
+        }
+
+        try {
+
+            if (touch($this->path, $time)) {
+                echo $atime . ' modification time has been changed to present time';
+
+            } else {
+                echo 'Sorry, could not change modification time of ' . $this->path;
+            }
+
+        } catch (Exception $e) {
+
+            throw new FileException
+            ('Filesystem: is_readable method failed for ' . $this->path);
+        }
+
+        return $time;
     }
 
     /**

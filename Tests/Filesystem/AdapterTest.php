@@ -51,16 +51,45 @@ class AdapterTest extends PHPUnit_Framework_TestCase
         $this->path         = BASE_FOLDER . '/Tests/test1.txt';
         $this->options      = array();
 
-        $this->filesystem = new Adapter($this->adapter_name, $this->action, $this->path, $this->options = array());
+        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options = array());
 
-        echo '<pre>';
-        var_dump($this->filesystem);
-        echo '</pre>';
-        die;
-        $this->assertObjectHasAttribute('options', $this->filesystem);
-        $this->assertObjectHasAttribute('root', $this->filesystem);
-        $this->assertObjectHasAttribute('persistence', $this->filesystem);
-        $this->assertObjectHasAttribute('absolute_path', $this->filesystem);
+        $this->assertEquals('Local', $connect->filesystem_type_object->filesystem_type);
+        $this->assertEquals('/', $connect->filesystem_type_object->root);
+        $this->assertEquals(1, $connect->filesystem_type_object->persistence);
+        $this->assertEquals('755', $connect->filesystem_type_object->directory_permissions);
+        $this->assertEquals('0644', $connect->filesystem_type_object->file_permissions);
+        $this->assertEquals(1, $connect->filesystem_type_object->read_only);
+        $this->assertEquals(501, $connect->filesystem_type_object->owner);
+        $this->assertEquals(20, $connect->filesystem_type_object->group);
+        $this->assertEquals('January 26 2013 08:37:22.', $connect->filesystem_type_object->create_date);
+        $this->assertEquals('January 28 2013 21:26:45.', $connect->filesystem_type_object->access_date);
+        $this->assertEquals('January 24 2013 21:58:26.', $connect->filesystem_type_object->modified_date);
+        $this->assertEquals(true, $connect->filesystem_type_object->is_readable);
+        $this->assertEquals(true, $connect->filesystem_type_object->is_writable);
+        $this->assertEquals(false, $connect->filesystem_type_object->is_executable);
+        $this->assertEquals(
+            '/Users/amystephen/Sites/Filesystem/Tests/test1.txt',
+            $connect->filesystem_type_object->path
+        );
+        $this->assertEquals(true, $connect->filesystem_type_object->exists);
+        $this->assertEquals(
+            '/Users/amystephen/Sites/Filesystem/Tests/test1.txt',
+            $connect->filesystem_type_object->absolute_path
+        );
+        $this->assertEquals(true, $connect->filesystem_type_object->is_absolute);
+        $this->assertEquals(false, $connect->filesystem_type_object->is_directory);
+        $this->assertEquals(true, $connect->filesystem_type_object->is_file);
+        $this->assertEquals(false, $connect->filesystem_type_object->is_link);
+        $this->assertEquals('file', $connect->filesystem_type_object->type);
+        $this->assertEquals('test1.txt', $connect->filesystem_type_object->name);
+        $this->assertEquals(
+            '/Users/amystephen/Sites/Filesystem/Tests',
+            $connect->filesystem_type_object->parent
+        );
+        $this->assertEquals('txt', $connect->filesystem_type_object->extension);
+        $this->assertEquals(18, $connect->filesystem_type_object->size);
+        $this->assertEquals(null, $connect->filesystem_type_object->mime_type);
+
 
         return;
 

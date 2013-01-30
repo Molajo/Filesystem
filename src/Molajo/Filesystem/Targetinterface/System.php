@@ -30,7 +30,15 @@ class System implements SystemInterface
      * @var    array
      * @since  1.0
      */
-    protected $filesystem_type;
+    public $filesystem_type_object;
+
+    /**
+     * Adaptee Filesystem Name
+     *
+     * @var    array
+     * @since  1.0
+     */
+    public $filesystem_type;
 
     /**
      * Adaptee Filesystem Connection
@@ -38,7 +46,7 @@ class System implements SystemInterface
      * @var    array
      * @since  1.0
      */
-    protected $connection;
+    public $connection;
 
     /**
      * Root Directory for Filesystem Type
@@ -46,7 +54,7 @@ class System implements SystemInterface
      * @var    string
      * @since  1.0
      */
-    protected $root;
+    public $root;
 
     /**
      * Persistence of Filesystem Type
@@ -54,39 +62,7 @@ class System implements SystemInterface
      * @var    bool
      * @since  1.0
      */
-    protected $persistence;
-
-    /**
-     * Path
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $path;
-
-    /**
-     * Type: Directory, File, Link
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $type;
-
-    /**
-     * Absolute Path for Filesystem
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $absolute_path;
-
-    /**
-     * Directory
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $directory;
+    public $persistence;
 
     /**
      * Directory Permissions
@@ -94,7 +70,7 @@ class System implements SystemInterface
      * @var    string
      * @since  1.0
      */
-    protected $directory_permissions;
+    public $directory_permissions;
 
     /**
      * File Permissions
@@ -102,7 +78,7 @@ class System implements SystemInterface
      * @var    string
      * @since  1.0
      */
-    protected $file_permissions;
+    public $file_permissions;
 
     /**
      * Read only
@@ -110,19 +86,183 @@ class System implements SystemInterface
      * @var    string
      * @since  1.0
      */
-    protected $read_only;
+    public $read_only;
+
+    /**
+     * Path
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $path;
+
+    /**
+     * Exists
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    public $exists;
+
+    /**
+     * Absolute Path for Filesystem
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $absolute_path;
+
+    /**
+     * Is Absolute Path
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    public $is_absolute;
+
+    /**
+     * Is Directory
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    public $is_directory;
+
+    /**
+     * Is File
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    public $is_file;
+
+    /**
+     * Is Link
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    public $is_link;
+
+    /**
+     * Type: Directory, File, Link
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $type;
+
+    /**
+     * File name
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $name;
+
+    /**
+     * Parent
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $parent;
+
+    /**
+     * Extension
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $extension;
+
+    /**
+     * Size
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $size;
+
+    /**
+     * Owner
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $owner;
+
+    /**
+     * Group
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $group;
+
+    /**
+     * Create Date
+     *
+     * @var    date
+     * @since  1.0
+     */
+    public $create_date;
+
+    /**
+     * Access Date
+     *
+     * @var    date
+     * @since  1.0
+     */
+    public $access_date;
+
+    /**
+     * Modified Date
+     *
+     * @var    date
+     * @since  1.0
+     */
+    public $modified_date;
+
+    /**
+     * Is Readable
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    public $is_readable;
+
+    /**
+     * Is Writable
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    public $is_writable;
+
+    /**
+     * Is Executable
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    public $is_executable;
+
+    /**
+     * Mimetype
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $mime_type;
 
     /**
      * Constructor
      *
-     * @param   array  $options
-     *
      * @since   1.0
      */
-    public function __construct($filesystem_type)
+    public function __construct()
     {
-        $this->filesystem_type = $filesystem_type;
-
         return $this;
     }
 
@@ -136,7 +276,7 @@ class System implements SystemInterface
      */
     public function setRoot($root)
     {
-        $this->root = $this->filesystem_type->setRoot($root);
+        $this->root = $this->filesystem_type_object->setRoot($root);
 
         return $this->root;
     }
@@ -151,9 +291,54 @@ class System implements SystemInterface
      */
     public function setPersistence($persistence)
     {
-        $this->persistence = $this->filesystem_type->setPersistence($persistence);
+        $this->persistence = $this->filesystem_type_object->setPersistence($persistence);
 
         return $this->persistence;
+    }
+
+    /**
+     * Get Directory Permissions for Filesystem
+     *
+     * @param   $directory_permissions
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function setDirectoryPermissions($directory_permissions)
+    {
+        $this->directory_permissions = $this->filesystem_type_object->setDirectoryPermissions($directory_permissions);
+
+        return $this->directory_permissions;
+    }
+
+    /**
+     * Get File Permissions for Filesystem
+     *
+     * @param   $file_permissions
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function setFilePermissions($file_permissions)
+    {
+        $this->file_permissions = $this->filesystem_type_object->setFilePermissions($file_permissions);
+
+        return $this->file_permissions;
+    }
+
+    /**
+     * Get Read Only for Filesystem
+     *
+     * @param   $read_only
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function setReadOnly($read_only)
+    {
+        $this->read_only = $this->filesystem_type_object->getReadOnly($read_only);
+
+        return $this->read_only;
     }
 
     /**
@@ -164,7 +349,7 @@ class System implements SystemInterface
      */
     public function getFilesystemType()
     {
-        $this->filesystem_type = $this->filesystem_type->getFilesystemType();
+        $this->filesystem_type = $this->filesystem_type_object->getFilesystemType();
 
         return $this->filesystem_type;
     }
@@ -177,7 +362,7 @@ class System implements SystemInterface
      */
     public function getRoot()
     {
-        $this->root = $this->filesystem_type->getRoot();
+        $this->root = $this->filesystem_type_object->getRoot();
 
         return $this->root;
     }
@@ -190,9 +375,47 @@ class System implements SystemInterface
      */
     public function getPersistence()
     {
-        $this->persistence = $this->filesystem_type->getPersistence();
+        $this->persistence = $this->filesystem_type_object->getPersistence();
 
         return $this->persistence;
     }
 
+    /**
+     * Get Directory Permissions for Filesystem
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getDirectoryPermissions()
+    {
+        $this->directory_permissions = $this->filesystem_type_object->getDirectoryPermissions();
+
+        return $this->directory_permissions;
+    }
+
+    /**
+     * Get File Permissions for Filesystem
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getFilePermissions()
+    {
+        $this->file_permissions = $this->filesystem_type_object->getFilePermissions();
+
+        return $this->file_permissions;
+    }
+
+    /**
+     * Get Read Only for Filesystem
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getReadOnly()
+    {
+        $this->read_only = $this->filesystem_type_object->getReadOnly();
+
+        return $this->read_only;
+    }
 }

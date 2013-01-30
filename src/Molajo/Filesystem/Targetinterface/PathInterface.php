@@ -21,16 +21,6 @@ defined('MOLAJO') or die;
 interface PathInterface
 {
     /**
-     * Sets the value of the path defining the current directory and file
-     *
-     * @param $path
-     *
-     * @return  string
-     * @since   1.0
-     */
-    public function setPath($path);
-
-    /**
      * Returns the value of the path defining the current directory and file
      *
      * @return  string
@@ -130,6 +120,69 @@ interface PathInterface
      */
     public function getSize();
 
+    /**
+     * Returns the owner of the file or directory defined in the path
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function getOwner();
+
+    /**
+     * Returns the group for the file or directory defined in the path
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getGroup();
+
+    /**
+     * Retrieves Create Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getCreateDate();
+
+    /**
+     * Retrieves Last Access Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getAccessDate();
+
+    /**
+     * Retrieves Last Update Date for directory or file identified in the path
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function getModifiedDate();
+
+    /**
+     * Tests for read access, returning true or false
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function isReadable();
+
+    /**
+     * Tests for write access, returning true or false
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function isWriteable();
+
+    /**
+     * Tests for execute access, returning true or false
+     *
+     * @return  null
+     * @since   1.0
+     */
+    public function isExecutable();
 
     /**
      * Get the mimetype of a given file.
@@ -138,4 +191,5 @@ interface PathInterface
      * @since   1.0
      */
     public function getMimeType();
+
 }

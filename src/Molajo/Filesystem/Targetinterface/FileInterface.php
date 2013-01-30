@@ -21,17 +21,19 @@ defined('MOLAJO') or die;
 interface FileInterface
 {
     /**
-     * Connect
+     * Connect to the Filesystem
+     *
+     * @param   string  Filesystem $type
      *
      * @return  object  Filesystem
      * @since   1.0
      */
-    public function connect();
+    public function connect($type);
 
     /**
-     * Set the Path
+     * Sets the value of the path defining the current directory and file
      *
-     * @param   string  $path
+     * @param   $path
      *
      * @return  string
      * @since   1.0
@@ -64,7 +66,7 @@ interface FileInterface
      * @return  null
      * @since   1.0
      */
-    public function write($file, $replace, $data = '');
+    public function write($file, $replace = true, $data = '');
 
     /**
      * Deletes the file or folder identified in path. Deletes subdirectories, if so indicated
@@ -112,7 +114,7 @@ interface FileInterface
      * @return  array
      * @since   1.0
      */
-    public function getList($recursive = '');
+    public function getList($recursive = false);
 
     /**
      * Change file mode

@@ -33,38 +33,49 @@ Class Adapter implements FileInterface
     protected $type;
 
     /**
-     * Filesystem Type Instance
-     *
-     * @var     string
-     * @since   1.0
-     */
-    protected $filesystem_type;
-
-    /**
      * Filesystem Object and Interface
      *
      * @var     object  Filesystem
      * @since   1.0
      */
-    public $filesystem;
+    public $filesystem_object;
+
+    /**
+     * Filesystem Type Instance
+     *
+     * @var     string
+     * @since   1.0
+     */
+    public $filesystem_type_object;
+
+    /**
+     * Action Results
+     *
+     * @var     mixed
+     * @since   1.0
+     */
+    public $action_results;
 
     /**
      * Construct
      *
      * @param   string  $type
-     * @param   string  $action
      * @param   string  $path
+     * @param   string  $action
      * @param   array   $options
      *
      * @since   1.0
-     * @throws  FileException
      */
     public function __construct($type = 'Local', $path = '', $action = '', $options = array())
     {
+        if (ini_get('date.timezone') == null) {
+            date_default_timezone_set('America/Chicago');
+        }
+
         $this->connect($type);
 
         if ($path == '') {
-            return $this->filesystem_type;
+            return $this;
         }
 
         $this->path = $this->setPath($path);
@@ -72,13 +83,13 @@ Class Adapter implements FileInterface
         $this->getMetadata();
 
         if ($action == '') {
-            return $this->filesystem_type;
+            return $this;
         }
 
         switch ($action) {
 
             case 'read':
-                return $this->read();
+                $this->action_results = $this->read();
 
                 break;
 
@@ -106,7 +117,7 @@ Class Adapter implements FileInterface
                     $data = '';
                 }
 
-                return $this->write($file, $replace, $data);
+                $this->action_results = $this->write($file, $replace, $data);
 
                 break;
 
@@ -121,7 +132,7 @@ Class Adapter implements FileInterface
                     $delete_subdirectories = true;
                 }
 
-                $this->delete($delete_subdirectories);
+                $this->action_results = $this->delete($delete_subdirectories);
 
                 break;
 
@@ -144,13 +155,13 @@ Class Adapter implements FileInterface
                     $replace = true;
                 }
 
-                if (isset($options['target_filesystem_type'])) {
-                    $target_filesystem_type = $options['target_filesystem_type'];
+                if (isset($options['target_filesystem_type_object'])) {
+                    $target_filesystem_type_object = $options['target_filesystem_type_object'];
                 } else {
-                    $target_filesystem_type = $this->type;
+                    $target_filesystem_type_object = $this->type;
                 }
 
-                $this->$action($target_directory, $replace, $target_filesystem_type);
+                $this->action_results = $this->$action($target_directory, $replace, $target_filesystem_type_object);
 
                 break;
 
@@ -164,7 +175,7 @@ Class Adapter implements FileInterface
                 } else {
                     $recursive = true;
                 }
-                return $this->getList($recursive);
+                $this->action_results = $this->getList($recursive);
 
                 break;
 
@@ -175,7 +186,7 @@ Class Adapter implements FileInterface
                     $mode = $options['recursive'];
                 }
 
-                $this->chmod($mode);
+                $this->action_results = $this->chmod($mode);
 
                 break;
 
@@ -191,17 +202,18 @@ Class Adapter implements FileInterface
                     $atime = (int)$options['atime'];
                 }
 
-                $this->touch($time, $atime);
+                $this->action_results = $this->touch($time, $atime);
 
                 break;
         }
 
-        return $this->filesystem_type;
+        return $this;
     }
-
 
     /**
      * Connect to the Filesystem
+     *
+     * @param   string  Filesystem Type (ex. 'Local')
      *
      * @return  object  Filesystem
      * @since   1.0
@@ -215,12 +227,13 @@ Class Adapter implements FileInterface
             $this->type = 'Local';
         }
 
-        $this->filesystem_type = $this->getType();
+        $this->filesystem_type_object = $this->getType();
 
         $this->filesystem = $this->getFilesystem();
-        $this->filesystem = $this->filesystem->connect();
 
-        return $this->filesystem;
+        $this->filesystem_type_object = $this->filesystem->connect($this->filesystem_type_object);
+
+        return $this->filesystem_type_object;
     }
 
     /**
@@ -239,7 +252,7 @@ Class Adapter implements FileInterface
             throw new FileException('Filesystem Type Class ' . $class . ' does not exist.');
         }
 
-        return new $class();
+        return new $class($this->type);
     }
 
     /**
@@ -258,13 +271,15 @@ Class Adapter implements FileInterface
             throw new FileException('Filesystem Adapter Class Filesystem does not exist.');
         }
 
-        return new Filesystem($this->filesystem_type);
+        return new Filesystem();
     }
 
     /**
      * Set the Path
      *
-     * @return  object  Filesystem
+     * @param   string  $path
+     *
+     * @return  string
      * @since   1.0
      */
     public function setPath($path)
@@ -282,9 +297,9 @@ Class Adapter implements FileInterface
      */
     public function getMetadata()
     {
-        $this->filesystem = $this->filesystem->getMetadata();
+        $this->filesystem_type_object = $this->filesystem->getMetadata();
 
-        return $this->filesystem;
+        return $this->filesystem_type_object;
     }
 
     /**
@@ -320,10 +335,9 @@ Class Adapter implements FileInterface
     /**
      * Deletes the file or folder identified in path. Deletes subdirectories, if so indicated
      *
-     * @param   string  $path
-     * @param   bool    $delete_subdirectories, default true (for directories)
+     * @param   bool    $delete_subdirectories  defaults true (for directories)
      *
-     * @return  void
+     * @return  null
      * @since   1.0
      */
     public function delete($delete_subdirectories = true)
@@ -336,18 +350,18 @@ Class Adapter implements FileInterface
     /**
      * Copies the file/folder in $path to the target_directory, replacing content, if indicated
      *
-     * Note: $target_filesystem_type used to create new filesystem instance for target
+     * Note: $target_filesystem_type_object used to create new filesystem instance for target
      *
      * @param   string  $target_directory
      * @param   bool    $replace               , defaults to true
-     * @param   string  $target_filesystem_type, defaults to current
+     * @param   string  $target_filesystem_type_object, defaults to current
      *
      * @return  void
      * @since   1.0
      */
-    public function copy($target_directory, $replace = true, $target_filesystem_type = '')
+    public function copy($target_directory, $replace = true, $target_filesystem_type_object = '')
     {
-        $this->filesystem->copy($target_directory, $replace, $target_filesystem_type);
+        $this->filesystem->copy($target_directory, $replace, $target_filesystem_type_object);
 
         return;
     }
@@ -355,18 +369,18 @@ Class Adapter implements FileInterface
     /**
      * Moves the file/folder in $path to the target_directory, replacing content, if indicated
      *
-     * Note: $target_filesystem_type used to create new filesystem instance for target
+     * Note: $target_filesystem_type_object used to create new filesystem instance for target
      *
      * @param   string  $target_directory
      * @param   bool    $replace               , defaults to true
-     * @param   string  $target_filesystem_type, defaults to current
+     * @param   string  $target_filesystem_type_object, defaults to current
      *
      * @return  void
      * @since   1.0
      */
-    public function move($target_directory, $replace = true, $target_filesystem_type = '')
+    public function move($target_directory, $replace = true, $target_filesystem_type_object = '')
     {
-        $this->filesystem->move($target_directory, $replace, $target_filesystem_type);
+        $this->filesystem->move($target_directory, $replace, $target_filesystem_type_object);
 
         return;
     }
@@ -380,7 +394,7 @@ Class Adapter implements FileInterface
      * @return  array
      * @since   1.0
      */
-    public function getList($recursive = '')
+    public function getList($recursive = false)
     {
         $content = $this->filesystem->getList($recursive);
 
