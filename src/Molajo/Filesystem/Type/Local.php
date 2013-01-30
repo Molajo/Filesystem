@@ -10,6 +10,14 @@ namespace Molajo\Filesystem\Type;
 
 defined('MOLAJO') or die;
 
+use \DirectoryIterator;
+use \DateTime;
+use \Exception;
+use \RuntimeException;
+
+use Molajo\Filesystem\Exception\FileException;
+use Molajo\Filesystem\Exception\FileNotFoundException;
+
 /**
  * Local Adapter for Filesystem
  *
@@ -827,9 +835,14 @@ class Local
     public function getExtension()
     {
         if ($this->is_file === true) {
+
+        } elseif ($this->is_directory === true) {
+            $this->extension = '';
+            return $this->extension;
+
         } else {
             throw new FileNotFoundException
-            ('Filesystem Local: not a valid file. Path: ', $this->path);
+            ('Filesystem Local: not a valid file. Path: ' . $this->path);
         }
 
         $this->extension = pathinfo(basename($this->path), PATHINFO_EXTENSION);
@@ -840,15 +853,33 @@ class Local
     /**
      * Get the file size of a given file.
      *
+     * $recursive  bool  For directory, recursively calculate file calculations default true
+     *
      * @return  int
      * @since   1.0
      */
-    public function getSize()
+    public function getSize($recursive = true)
     {
+        echo $this->path . '<br />';
+        $this->size = 0;
+
         if ($this->is_file === true) {
             $this->size = filesize($this->path);
+
+        } elseif ($this->is_directory === true) {
+
+            $directory = new DirectoryIterator($this->path);
+
+            if (count($directory) > 0) {
+                foreach ($directory as $item) {
+                    if (is_file($item)) {
+                        $this->size = $this->size + filesize($item);
+                    }
+                }
+            }
+
         } else {
-            $this->size = filesize($this->path);
+            $this->size = 0;
         }
 
         return $this->size;
@@ -865,17 +896,17 @@ class Local
     {
         if ($this->exists === false) {
             throw new FileNotFoundException
-            ('Local Filesystem Read: File does not exist: ', $this->path);
+            ('Local Filesystem Read: File does not exist: ' . $this->path);
         }
 
         if ($this->is_file === false) {
             throw new FileNotFoundException
-            ('Local Filesystem Read: Is not a file: ', $this->path);
+            ('Local Filesystem Read: Is not a file: ' . $this->path);
         }
 
         if ($this->is_readable === false) {
             throw new FileNotFoundException
-            ('Local Filesystem Read: No permission, not readable: ', $this->path);
+            ('Local Filesystem Read: No permission, not readable: ' . $this->path);
         }
 
         try {
@@ -884,38 +915,59 @@ class Local
         } catch (\Exception $e) {
 
             throw new FileNotFoundException
-            ('Local Filesystem Read: Error reading file: ', $this->path);
+            ('Local Filesystem Read: Error reading file: ' . $this->path);
         }
 
         if ($data === false) {
-            ('Local Filesystem Read: Empty Filet: ' . $this->path);
+            ('Local Filesystem Read: Empty File: ' . $this->path);
         }
 
         return $data;
     }
 
     /**
-     * Creates or replaces the file identified in path using the data value
+     * Creates or replaces the file or directory identified in path using the data value
      *
-     * @param   string  $file
-     * @param   string  $data
+     * @param   string  $file       spaces for create directory
      * @param   bool    $replace
+     * @param   string  $data       spaces for create directory
      *
      * @return  null
      * @since   1.0
-     * @throws  FileException
      */
-    function write($file, $data, $replace)
+    public function write($file = '', $replace = true, $data = '')
     {
-        if ($this->path == '') {
-            $this->path = $this->path;
+        if ($this->is_file === true || $this->is_directory === true) {
+
+        } else {
+            throw new FileException
+            ('Local Filesystem Write: must be directory or file: ' . $this->path . '/' . $file);
         }
 
-        $this->path = $this->normalise($this->path);
-
         if (trim($data) == '' || strlen($data) == 0) {
+            if ($this->is_directory === true) {
+            } else {
+                throw new FileException
+                ('Filesystem: attempting to write no data to file: ' . $this->path . '/' . $file);
+            }
+        }
+
+        if (file_exists($this->path)) {
+
+        } elseif ($this->is_writable === true) {
+
+            try {
+                \mkdir($this->path, $this->directory_permissions, true);
+
+            } catch (Exception $e) {
+
+                throw new FileException
+                ('Filesystem Write: error creating directory: ' . $this->path);
+            }
+
+        } else {
             throw new FileException
-            ('Filesystem: attempting to write no data to file: ' . $this->path . '/' . $file);
+            ('Filesystem Write: insufficient permission to create directory: ' . $this->path);
         }
 
         if (file_exists($this->path . '/' . $file)) {
@@ -924,29 +976,25 @@ class Local
                 throw new FileException
                 ('Filesystem: attempting to write to existing file: ' . $this->path . '/' . $file);
             }
+            \unlink($this->path . '/' . $file);
+        }
 
-            if ($this->isWriteable($this->path . '/' . $file) === false) {
-                throw new FileException
-                ('Filesystem: file is not writable: ' . $this->path . '/' . $file);
-            }
-
-            $handle = fopen($this->path . '/' . $file, 'r+');
-
-            if (flock($handle, LOCK_EX)) {
-            } else {
-                throw new FileException
-                ('Filesystem: Lock not obtainable for file write for: ' . $this->path . '/' . $file);
-            }
-
-            fclose($handle);
+        if ($this->isWriteable($this->path . '/' . $file) === false) {
+            throw new FileException
+            ('Filesystem: file is not writable: ' . $this->path . '/' . $file);
         }
 
         try {
-            \file_put_contents($this->path . '/' . $file, $data, LOCK_EX);
+            \file_put_contents($this->path . '/' . $file, $data);
 
         } catch (Exception $e) {
-            throw new FileException
-            ('Directories do not exist for requested file: .' . $this->path . '/' . $file);
+
+            throw new FileNotFoundException
+            ('Filesystem: error writing file ' . $this->path . '/' . $file);
+        }
+
+        if (file_exists($this->path . '/' . $file) === false) {
+            throw new FileNotFoundException ('Filesystem Write: error writing to file: ' . $this->path . '/' . $file);
         }
 
         return true;
@@ -964,15 +1012,16 @@ class Local
     {
         if (file_exists($this->path)) {
 
-            if ($this->isWriteable($this->path) === false) {
+            if ($this->is_writable === false) {
                 throw new FileException
                 ('Filesystem: file to be deleted is not writable: ' . $this->path);
             }
 
-            $handle = fopen($this->path, 'r+');
+            $handle = fopen($this->path, $this->file_permissions);
 
             if (flock($handle, LOCK_EX)) {
             } else {
+
                 throw new FileException
                 ('Filesystem: Lock not obtainable for delete for: ' . $this->path);
             }

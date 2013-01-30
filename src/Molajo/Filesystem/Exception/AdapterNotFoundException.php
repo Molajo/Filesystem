@@ -20,15 +20,5 @@ defined ('MOLAJO') or die;
  */
 class AdapterNotFoundException extends FileExtension implements FileExceptionInterface
 {
-    /**
-     * Constructor.
-     *
-     * @param  string  $path
-     *
-     * @since  1.0
-     */
-    public function __construct ($path)
-    {
-        parent::__construct ('The file %s could not be accessed', $path);
-    }
+    protected $code = 404;
 }

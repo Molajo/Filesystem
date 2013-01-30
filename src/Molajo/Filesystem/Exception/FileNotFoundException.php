@@ -20,15 +20,5 @@ defined ('MOLAJO') or die;
  */
 class FileNotFoundException extends FileException implements FileExceptionInterface
 {
-    /**
-     * Constructor.
-     *
-     * @param  string  $path
-     *
-     * @since  1.0
-     */
-    public function __construct ($path)
-    {
-        parent::__construct ('Filesystem: file could not be found', $path);
-    }
+    protected $code = 404;
 }

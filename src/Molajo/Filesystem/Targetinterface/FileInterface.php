@@ -59,14 +59,14 @@ interface FileInterface
     /**
      * Creates or replaces the file or directory identified in path using the data value
      *
-     * @param   string  $file
+     * @param   string  $file       spaces for create directory
      * @param   bool    $replace
-     * @param   string  $data
+     * @param   string  $data       spaces for create directory
      *
      * @return  null
      * @since   1.0
      */
-    public function write($file, $replace = true, $data = '');
+    public function write($file = '', $replace = true, $data = '');
 
     /**
      * Deletes the file or folder identified in path. Deletes subdirectories, if so indicated

@@ -86,6 +86,7 @@ Class Adapter implements FileInterface
             return $this;
         }
 
+        $action = strtolower($action);
         switch ($action) {
 
             case 'read':
@@ -124,9 +125,11 @@ Class Adapter implements FileInterface
             case 'delete':
 
                 $delete_subdirectories = true;
+
                 if (isset($options['delete_subdirectories'])) {
                     $delete_subdirectories = (int)$options['delete_subdirectories'];
                 }
+
                 if ($delete_subdirectories === false) {
                 } else {
                     $delete_subdirectories = true;
@@ -141,15 +144,18 @@ Class Adapter implements FileInterface
 
                 if (isset($options['target_directory'])) {
                     $target_directory = $options['target_directory'];
+
                 } else {
                     throw new \BadMethodCallException
                     ('Filesystem Adapter: Must provide target_directory for copy request. Path: ' . $this->path);
                 }
 
                 $replace = true;
+
                 if (isset($options['replace'])) {
                     $replace = (int)$options['replace'];
                 }
+
                 if ($replace === false) {
                 } else {
                     $replace = true;
@@ -168,13 +174,16 @@ Class Adapter implements FileInterface
             case 'getList':
 
                 $recursive = true;
+
                 if (isset($options['recursive'])) {
                     $recursive = (int)$options['recursive'];
                 }
+
                 if ($recursive === false) {
                 } else {
                     $recursive = true;
                 }
+
                 $this->action_results = $this->getList($recursive);
 
                 break;
@@ -182,6 +191,7 @@ Class Adapter implements FileInterface
             case 'chmod':
 
                 $mode = '';
+
                 if (isset($options['mode'])) {
                     $mode = $options['recursive'];
                 }
@@ -193,11 +203,13 @@ Class Adapter implements FileInterface
             case 'touch':
 
                 $time = null;
+
                 if (isset($options['time'])) {
                     $time = (int)$options['time'];
                 }
 
                 $atime = null;
+
                 if (isset($options['atime'])) {
                     $atime = (int)$options['atime'];
                 }
@@ -318,14 +330,14 @@ Class Adapter implements FileInterface
     /**
      * Creates or replaces the file or directory identified in path using the data value
      *
-     * @param   string  $file
+     * @param   string  $file       spaces for create directory
      * @param   bool    $replace
-     * @param   string  $data
+     * @param   string  $data       spaces for create directory
      *
      * @return  null
      * @since   1.0
      */
-    public function write($file, $replace = true, $data = '')
+    public function write($file = '', $replace = true, $data = '')
     {
         $this->filesystem->write($file, $replace, $data);
 
@@ -353,7 +365,7 @@ Class Adapter implements FileInterface
      * Note: $target_filesystem_type_object used to create new filesystem instance for target
      *
      * @param   string  $target_directory
-     * @param   bool    $replace               , defaults to true
+     * @param   bool    $replace                      , defaults to true
      * @param   string  $target_filesystem_type_object, defaults to current
      *
      * @return  void
@@ -372,7 +384,7 @@ Class Adapter implements FileInterface
      * Note: $target_filesystem_type_object used to create new filesystem instance for target
      *
      * @param   string  $target_directory
-     * @param   bool    $replace               , defaults to true
+     * @param   bool    $replace                      , defaults to true
      * @param   string  $target_filesystem_type_object, defaults to current
      *
      * @return  void

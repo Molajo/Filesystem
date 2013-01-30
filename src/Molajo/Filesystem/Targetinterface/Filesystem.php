@@ -10,16 +10,8 @@ namespace Molajo\Filesystem\Targetinterface;
 
 defined('MOLAJO') or die;
 
-use \DateTime;
-use \Exception;
-use \RuntimeException;
-
-use Molajo\Filesystem\Exception\AccessDeniedException as AccessDeniedException;
-use Molajo\Filesystem\Exception\AdapterNotFoundException as AdapterNotFoundException;
-use Molajo\Filesystem\Exception\FileException as FileException;
-use Molajo\Filesystem\Exception\FileExceptionInterface as FileExceptionInterface;
-use Molajo\Filesystem\Exception\FileNotFoundException as FileNotFoundException;
-use Molajo\Filesystem\Exception\InvalidPathException as InvalidPathException;
+use Molajo\Filesystem\Exception\FileException;
+use Molajo\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Filesystem Target Interface for Filesystem Adapter
@@ -127,33 +119,9 @@ class Filesystem extends Path implements FileInterface
      * @since   1.0
      * @throws  FileNotFoundException
      */
-
-    /**
-     * @return array|mixed|string
-     */
     public function read()
     {
-        if ($this->exists($this->path) === false) {
-            throw new FileNotFoundException ('Filesystem: could not find file at path: ', $this->path);
-        }
-
-        if ($this->isFile($this->path)) {
-        } else {
-            throw new FileNotFoundException ('Filesystem: not a valid file path: ', $this->path);
-        }
-
-        try {
-            $data = file_get_contents($this->path);
-
-        } catch (\Exception $e) {
-
-            throw new FileNotFoundException
-            ('Filesystem: error reading path ' . $this->path);
-        }
-
-        if ($data === false) {
-            throw new FileNotFoundException ('Filesystem: could not read: ', $this->path);
-        }
+        $data = $this->filesystem_type_object->read();
 
         return $data;
     }
@@ -161,57 +129,19 @@ class Filesystem extends Path implements FileInterface
     /**
      * Creates or replaces the file or directory identified in path using the data value
      *
-     * @param   string  $file
+     * @param   string  $file     default '' (create directory)
      * @param   bool    $replace  default true
      * @param   string  $data     default ''
      *
-     * @return  object  Filesystem
+     * @return  bool
      * @since   1.0
      * @throws  FileException
      */
-    function write($file, $replace = true, $data = '')
+    function write($file = '', $replace = true, $data = '')
     {
+        $results = $this->filesystem_type_object->write($file, true, $data);
 
-        if (trim($data) == '' || strlen($data) == 0) {
-            throw new FileException
-            ('Filesystem: attempting to write no data to file: ' . $this->path . '/' . $name);
-        }
-
-        //is_directory or is_file or die
-        //\mk_dir($this->path, $this->directory_permissions, true);
-
-        if (file_exists($this->path . '/' . $name)) {
-
-            if ($replace === false) {
-                throw new FileException
-                ('Filesystem: attempting to write to existing file: ' . $this->path . '/' . $name);
-            }
-
-            if ($this->isWriteable($this->path . '/' . $name) === false) {
-                throw new FileException
-                ('Filesystem: file is not writable: ' . $this->path . '/' . $name);
-            }
-
-            $handle = fopen($this->path . '/' . $name, 'r+');
-
-            if (flock($handle, LOCK_EX)) {
-            } else {
-                throw new FileException
-                ('Filesystem: Lock not obtainable for file write for: ' . $this->path . '/' . $name);
-            }
-
-            fclose($handle);
-        }
-
-        try {
-            \file_put_contents($this->path . '/' . $name, $data, LOCK_EX);
-
-        } catch (Exception $e) {
-            throw new FileException
-            ('Directories do not exist for requested file: .' . $this->path . '/' . $name);
-        }
-
-        return true;
+        return $results;
     }
 
     /**
@@ -225,36 +155,9 @@ class Filesystem extends Path implements FileInterface
      */
     public function delete($delete_subdirectories = true)
     {
+        $results = $this->filesystem_type_object->delete($delete_subdirectories);
 
-        //rmdir($this->computePath($key));
-        if (file_exists($this->path)) {
-
-            if ($this->isWriteable($this->path) === false) {
-                throw new FileException
-                ('Filesystem: file to be deleted is not writable: ' . $this->path);
-            }
-
-            $handle = fopen($this->path, 'r+');
-
-            if (flock($handle, LOCK_EX)) {
-            } else {
-                throw new FileException
-                ('Filesystem: Lock not obtainable for delete for: ' . $this->path);
-            }
-
-            fclose($handle);
-        }
-
-        try {
-            \unlink($this->path);
-
-        } catch (Exception $e) {
-
-            throw new FileException
-            ('Filesystem: Delete failed for: ' . $this->path);
-        }
-
-        return true;
+        return $results;
     }
 
     /**
@@ -273,11 +176,10 @@ class Filesystem extends Path implements FileInterface
     {
         $this->copy($target_directory, $replace, $target_filesystem_type);
 
-        $this->delete();
+        $this->delete(true);
 
         return;
     }
-
 
     /**
      * Copies the file/folder in $path to the target_directory, replacing content, if indicated
@@ -288,22 +190,17 @@ class Filesystem extends Path implements FileInterface
      * @param   bool    $replace                 defaults to true
      * @param   string  $target_filesystem_type  defaults to current
      *
-     * @return  void
+     * @return  bool
      * @since   1.0
      * @throws  FileException
      */
     public function copy($target_directory, $replace = true, $target_filesystem_type = '')
     {
-        $data = $this->read($this->path);
+        $data = $this->filesystem_type_object->read();
 
         $results = $target_filesystem_type->write($target_directory, basename($this->path), $data, $replace);
 
-        if ($results === false) {
-            throw new FileException('Could not write the "%s" key content.',
-                $target_directory . '\' . $file_name');
-        }
-
-        return;
+        return $results;
     }
 
     /**
@@ -316,24 +213,9 @@ class Filesystem extends Path implements FileInterface
      */
     public function getList($recursive = false)
     {
+        $data = $this->filesystem_type_object->getList($recursive);
 
-        if (file_exists($path)) {
-            return file_get_contents($path);
-        }
-
-        //$iterator = $this->path->rootAdapter()->getIterator($this->pathname, func_get_args());
-
-// cheap array creation
-        if (method_exists($iterator, 'toArray')) {
-            return $iterator->toArray();
-        }
-
-        $files = array();
-        foreach ($iterator as $file) {
-            $files[] = $file;
-        }
-
-        return $files;
+        return $data;
     }
 
     /**
@@ -356,30 +238,9 @@ class Filesystem extends Path implements FileInterface
      */
     public function chmod($mode = '')
     {
-        if (file_exists($this->path)) {
-        } else {
+        $results = $this->filesystem_type_object->chmod($mode);
 
-            throw new FileException
-            ('Filesystem: chmod method. File does not exist' . $this->path);
-        }
-
-        if (in_array($mode, array('0600', '0644', '0755', '0750'))) {
-        } else {
-
-            throw new FileException
-            ('Filesystem: chmod method. Mode not provided: ' . $mode);
-        }
-
-        try {
-            chmod($this->path, $mode);
-
-        } catch (Exception $e) {
-
-            throw new FileException
-            ('Filesystem: chmod method failed for path ' . $this->path . ' mode: ' . $mode);
-        }
-
-        return $mode;
+        return $results;
     }
 
     /**
@@ -394,33 +255,9 @@ class Filesystem extends Path implements FileInterface
      */
     public function touch($time = null, $atime = null)
     {
-        if (file_exists($this->path)) {
-        } else {
+        $results = $this->filesystem_type_object->touch($time, $atime);
 
-            throw new FileException
-            ('Filesystem: setModifiedDate method. File does not exist' . $this->path);
-        }
-
-        if ($time == '' || $time === null || $time == 0) {
-            $time = time();
-        }
-
-        try {
-
-            if (touch($this->path, $time)) {
-                echo $this->path . ' modification time has been changed to present time';
-
-            } else {
-                echo 'Sorry, could not change modification time of ' . $this->path;
-            }
-
-        } catch (Exception $e) {
-
-            throw new FileException
-            ('Filesystem: is_readable method failed for ' . $this->path);
-        }
-
-        return;
+        return bool;
     }
 
     /**

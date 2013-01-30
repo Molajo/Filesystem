@@ -8,6 +8,8 @@
  */
 namespace Molajo\Filesystem\Exception;
 
+use RuntimeExtension;
+
 defined ('MOLAJO') or die;
 /**
  * InvalidPathException Exception
@@ -17,17 +19,7 @@ defined ('MOLAJO') or die;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class InvalidPathException extends FileExtension implements FileExceptionInterface
+class InvalidPathException extends \RuntimeExtension implements FileExceptionInterface
 {
-    /**
-     * Constructor.
-     *
-     * @param  string  $path
-     *
-     * @since  1.0
-     */
-    public function __construct ($path)
-    {
-        parent::__construct ('The file %s could not be accessed', $path);
-    }
+    protected $code = 404;
 }
