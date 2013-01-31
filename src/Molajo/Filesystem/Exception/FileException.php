@@ -8,7 +8,7 @@
  */
 namespace Molajo\Filesystem\Exception;
 
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 
 /**
  * FileException Exception

@@ -8,7 +8,7 @@
  */
 namespace Molajo\Filesystem\Type;
 
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 
 /**
  * FTP Adapter for Filesystem
@@ -108,59 +108,59 @@ class Ftp implements File, Path, System
      *
      * @since   1.0
      */
-    public function __construct ($options = array())
+    public function __construct($options = array())
     {
-        $this->setOptions ($options);
+        $this->setOptions($options);
 
         if (isset($this->options['root'])) {
-            $this->setRoot ($this->options['root']);
+            $this->setRoot($this->options['root']);
         } else {
-            $this->setRoot ('/');
+            $this->setRoot('/');
         }
 
         if (isset($this->options['persistence'])) {
-            $this->setPersistence ($this->options['persistence']);
+            $this->setPersistence($this->options['persistence']);
         } else {
-            $this->setPersistence (0);
+            $this->setPersistence(0);
         }
 
         if (isset($this->options['username'])) {
-            $this->setUsername ($this->options['username']);
+            $this->setUsername($this->options['username']);
         } else {
-            $this->setUsername ('anonymous');
+            $this->setUsername('anonymous');
         }
 
         if (isset($this->options['password'])) {
-            $this->setPassword ($this->options['password']);
+            $this->setPassword($this->options['password']);
         } else {
-            $this->setPassword ();
+            $this->setPassword();
         }
 
         if (isset($this->options['host'])) {
-            $this->setHost ($this->options['host']);
+            $this->setHost($this->options['host']);
         } else {
-            $this->setHost ('127.0.0.1');
+            $this->setHost('127.0.0.1');
         }
 
         if (isset($this->options['port'])) {
-            $this->setPort ($this->options['port']);
+            $this->setPort($this->options['port']);
         } else {
-            $this->setPort (21);
+            $this->setPort(21);
         }
 
         if (isset($this->options['timeout'])) {
-            $this->setTimeout ($this->options['timeout']);
+            $this->setTimeout($this->options['timeout']);
         } else {
-            $this->setTimeout (15);
+            $this->setTimeout(15);
         }
 
         if (isset($this->options['passive_mode'])) {
-            $this->setPassive_mode ($this->options['passive_mode']);
+            $this->setPassive_mode($this->options['passive_mode']);
         } else {
-            $this->setPassive_mode (false);
+            $this->setPassive_mode(false);
         }
 
-        parent::__construct ($options);
+        parent::__construct($options);
 
         return;
     }
@@ -173,7 +173,7 @@ class Ftp implements File, Path, System
      * @return  mixed
      * @since   1.0
      */
-    public function setUsername ($username)
+    public function setUsername($username)
     {
         return $this->username = $username;
     }
@@ -184,7 +184,7 @@ class Ftp implements File, Path, System
      * @return  mixed
      * @since   1.0
      */
-    public function getUsername ()
+    public function getUsername()
     {
         return $this->username;
     }
@@ -197,7 +197,7 @@ class Ftp implements File, Path, System
      * @return  mixed
      * @since   1.0
      */
-    public function setPassword ($password)
+    public function setPassword($password)
     {
         return $this->password = $password;
     }
@@ -208,7 +208,7 @@ class Ftp implements File, Path, System
      * @return  mixed
      * @since   1.0
      */
-    public function getPassword ()
+    public function getPassword()
     {
         return $this->password;
     }
@@ -221,7 +221,7 @@ class Ftp implements File, Path, System
      * @return  mixed
      * @since   1.0
      */
-    public function setHost ($host)
+    public function setHost($host)
     {
         return $this->host = $host;
     }
@@ -232,7 +232,7 @@ class Ftp implements File, Path, System
      * @return  mixed
      * @since   1.0
      */
-    public function getHost ()
+    public function getHost()
     {
         return $this->host;
     }
@@ -245,7 +245,7 @@ class Ftp implements File, Path, System
      * @return  int
      * @since   1.0
      */
-    public function setPort ($port = 21)
+    public function setPort($port = 21)
     {
         return $this->port = $port;
     }
@@ -256,7 +256,7 @@ class Ftp implements File, Path, System
      * @return  mixed
      * @since   1.0
      */
-    public function getPort ()
+    public function getPort()
     {
         return $this->port;
     }
@@ -269,7 +269,7 @@ class Ftp implements File, Path, System
      * @return  int
      * @since   1.0
      */
-    public function setTimeout ($timeout = 15)
+    public function setTimeout($timeout = 15)
     {
         return $this->timeout = (int)$timeout;
     }
@@ -280,7 +280,7 @@ class Ftp implements File, Path, System
      * @return  int
      * @since   1.0
      */
-    public function getTimeout ()
+    public function getTimeout()
     {
         return (int)$this->timeout;
     }
@@ -293,7 +293,7 @@ class Ftp implements File, Path, System
      * @return  int
      * @since   1.0
      */
-    public function setPassive_mode ($passive_mode = 1)
+    public function setPassive_mode($passive_mode = 1)
     {
         $this->passive_mode = $passive_mode;
 
@@ -311,7 +311,7 @@ class Ftp implements File, Path, System
      * @return  int
      * @since   1.0
      */
-    public function getPassive_mode ()
+    public function getPassive_mode()
     {
         if ((int)$this->passive_mode == 0) {
         } else {
@@ -328,15 +328,15 @@ class Ftp implements File, Path, System
      * @since   1.0
      * @throws  \Exception
      */
-    public function connect ()
+    public function connect()
     {
-        if ($this->isConnected ()) {
+        if ($this->isConnected()) {
             return $this->connection;
         }
 
         try {
-            $id = \ftp_connect ($this->host, $this->port, $this->timeout);
-            $this->setConnection ($id);
+            $id = \ftp_connect($this->host, $this->port, $this->timeout);
+            $this->setConnection($id);
 
         } catch (\Exception $e) {
 
@@ -352,7 +352,7 @@ class Ftp implements File, Path, System
         }
 
         try {
-            \ftp_pasv ($this->connection, $this->getPassive_mode ());
+            \ftp_pasv($this->connection, $this->getPassive_mode());
 
         } catch (\Exception $e) {
 
@@ -362,7 +362,7 @@ class Ftp implements File, Path, System
         }
 
         try {
-            $this->login ();
+            $this->login();
 
         } catch (\Exception $e) {
 
@@ -371,7 +371,7 @@ class Ftp implements File, Path, System
         }
 
         try {
-            $results = ftp_chdir ($this->connection, $this->root);
+            $results = ftp_chdir($this->connection, $this->root);
 
         } catch (\Exception $e) {
 
@@ -396,18 +396,18 @@ class Ftp implements File, Path, System
      * @since   1.0
      * @throws  \RuntimeException
      */
-    public function login ()
+    public function login()
     {
-        $logged_in = ftp_login (
-            $this->getConnection (),
-            $this->getUsername (),
-            $this->getPassword ()
+        $logged_in = ftp_login(
+            $this->getConnection(),
+            $this->getUsername(),
+            $this->getPassword()
         );
 
         if ($logged_in === true) {
         } else {
             throw new \RuntimeException
-            ('Filesystem Adapter FTP: Unable to login with Username: ' . $this->getUsername ());
+            ('Filesystem Adapter FTP: Unable to login with Username: ' . $this->getUsername());
         }
 
         return true;
@@ -419,10 +419,10 @@ class Ftp implements File, Path, System
      * @return  void
      * @since   1.0
      */
-    public function __destruct ()
+    public function __destruct()
     {
-        if (is_resource ($this->connection)) {
-            $this->close ();
+        if (is_resource($this->connection)) {
+            $this->close();
         }
 
         return;
@@ -435,11 +435,11 @@ class Ftp implements File, Path, System
      * @since   1.0
      * @throws  \Exception
      */
-    public function close ()
+    public function close()
     {
-        if ($this->isConnected ()) {
+        if ($this->isConnected()) {
             try {
-                ftp_close ($this->connection);
+                ftp_close($this->connection);
 
             } catch (\Exception $e) {
 

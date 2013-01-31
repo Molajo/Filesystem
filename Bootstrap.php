@@ -8,7 +8,7 @@
  */
 define('MOLAJO', 'This is a Molajo Distribution');
 
-if (substr($_SERVER['DOCUMENT_ROOT'], -1) == '/') {
+if (substr($_SERVER['DOCUMENT_ROOT'], - 1) == '/') {
     define('ROOT_FOLDER', $_SERVER['DOCUMENT_ROOT']);
 } else {
     define('ROOT_FOLDER', $_SERVER['DOCUMENT_ROOT'] . '/');
@@ -20,7 +20,7 @@ include BASE_FOLDER . '/' . 'ClassLoader.php';
 include BASE_FOLDER . '/Tests/Filesystem/Data.php';
 
 $loader = new ClassLoader();
-$loader->add('Molajo\Filesystem', BASE_FOLDER.'/src');
-$loader->add('Tests\Filesystem', BASE_FOLDER.'/Tests');
+$loader->add('Molajo\Filesystem', BASE_FOLDER . '/src');
+$loader->add('Tests\Filesystem', BASE_FOLDER . '/Tests');
 $loader->register();
 

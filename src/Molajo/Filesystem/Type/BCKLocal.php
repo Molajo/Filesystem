@@ -1,5 +1,6 @@
 <?php
 namespace Molajo\Filesystem\Type;
+
 /**
  * Local Adapter for Filesystem
  *
@@ -26,11 +27,11 @@ class Local
      *
      * @since   1.0
      */
-    public function __construct ($path, $options = array())
+    public function __construct($path, $options = array())
     {
         $this->options = array(
-            'root'         => ROOT_FOLDER,
-            'persistence'  => true
+            'root'        => ROOT_FOLDER,
+            'persistence' => true
         );
 
         return;

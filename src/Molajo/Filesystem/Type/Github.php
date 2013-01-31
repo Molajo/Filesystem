@@ -9,7 +9,7 @@
  */
 namespace Molajo\Filesystem\Type;
 
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 
 use Molajo\Filesystem\Adapter;
 
@@ -33,14 +33,14 @@ class Github implements File, Path, System
      *
      * @since   1.0
      */
-    public function __construct ($options = array())
+    public function __construct($options = array())
     {
-        parent::__construct ($options);
+        parent::__construct($options);
 
         return;
     }
 
-    public function connect ()
+    public function connect()
     {
 
     }

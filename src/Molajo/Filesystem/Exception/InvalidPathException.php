@@ -10,7 +10,7 @@ namespace Molajo\Filesystem\Exception;
 
 use RuntimeExtension;
 
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 /**
  * InvalidPathException Exception
  *

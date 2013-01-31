@@ -8,7 +8,7 @@
  */
 namespace Molajo\Filesystem\Targetinterface;
 
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 
 /**
  * System Target Interface for Filesystem Adapter
@@ -28,7 +28,7 @@ interface SystemInterface
      * @return  string
      * @since   1.0
      */
-    public function setRoot ($root);
+    public function setRoot($root);
 
     /**
      * Set persistence indicator for Filesystem
@@ -38,7 +38,7 @@ interface SystemInterface
      * @return  bool
      * @since   1.0
      */
-    public function setPersistence ($persistence);
+    public function setPersistence($persistence);
 
     /**
      * Get Root of Filesystem
@@ -46,7 +46,7 @@ interface SystemInterface
      * @return  string
      * @since   1.0
      */
-    public function getRoot ();
+    public function getRoot();
 
     /**
      * Get Persistence indicator
@@ -54,5 +54,5 @@ interface SystemInterface
      * @return  string
      * @since   1.0
      */
-    public function getPersistence ();
+    public function getPersistence();
 }

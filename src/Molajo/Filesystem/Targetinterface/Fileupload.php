@@ -8,7 +8,7 @@
  */
 namespace Molajo\Filesystem\Targetinterface;
 
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 
 use RuntimeException;
 use Molajo\Filesystem\Exception\FileException as FileException;

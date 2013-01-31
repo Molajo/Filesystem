@@ -84,13 +84,14 @@ interface FileInterface
      * Note: $target_filesystem_type used to create new filesystem instance for target
      *
      * @param   string  $target_directory
-     * @param   bool    $replace                 defaults to true
-     * @param   string  $target_filesystem_type  defaults to current
+     * @param   bool    $target_name
+     * @param   bool    $replace                  defaults to true
+     * @param   string  $target_filesystem_type   defaults to current
      *
-     * @return  void
+     * @return  bool
      * @since   1.0
      */
-    public function copy($target_directory, $replace = true, $target_filesystem_type = '');
+    public function copy($target_directory, $target_name, $replace = true, $target_filesystem_type = '');
 
     /**
      * Moves the file/folder in $path to the target_directory, replacing content, if indicated
@@ -98,13 +99,14 @@ interface FileInterface
      * Note: $target_filesystem_type used to create new filesystem instance for target
      *
      * @param   string  $target_directory
-     * @param   bool    $replace                 defaults to true
-     * @param   string  $target_filesystem_type  defaults to current
+     * @param   bool    $target_name
+     * @param   bool    $replace                  defaults to true
+     * @param   string  $target_filesystem_type   defaults to current
      *
-     * @return  void
+     * @return  bool
      * @since   1.0
      */
-    public function move($target_directory, $replace = true, $target_filesystem_type = '');
+    public function move($target_directory, $target_name, $replace = true, $target_filesystem_type = '');
 
     /**
      * Returns a list of file and folder names located at path directory

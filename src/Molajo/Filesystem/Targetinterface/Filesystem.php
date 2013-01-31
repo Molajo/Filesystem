@@ -155,44 +155,45 @@ class Filesystem extends Path implements FileInterface
     }
 
     /**
-     * Moves the file/folder in $this->path to the target_directory, replacing content, if indicated
-     *
-     * Note: $target_filesystem_type used to create new filesystem instance for target
-     *
-     * @param   string  $target_directory
-     * @param   bool    $replace                 defaults to true
-     * @param   string  $target_filesystem_type  defaults to current
-     *
-     * @return  void
-     * @since   1.0
-     */
-    public function move($target_directory, $replace = true, $target_filesystem_type = '')
-    {
-        $this->copy($target_directory, $replace, $target_filesystem_type);
-
-        $this->delete(true);
-
-        return;
-    }
-
-    /**
      * Copies the file/folder in $path to the target_directory, replacing content, if indicated
      *
      * Note: $target_filesystem_type used to create new filesystem instance for target
      *
      * @param   string  $target_directory
-     * @param   bool    $replace                 defaults to true
-     * @param   string  $target_filesystem_type  defaults to current
+     * @param   bool    $target_name
+     * @param   bool    $replace                  defaults to true
+     * @param   string  $target_filesystem_type   defaults to current
      *
      * @return  bool
      * @since   1.0
-     * @throws  FileException
      */
-    public function copy($target_directory, $replace = true, $target_filesystem_type = '')
+    public function copy($target_directory, $target_name, $replace = true, $target_filesystem_type = '')
     {
-        $data = $this->filesystem_type_object->read();
+        $results
+            = $this->filesystem_type_object
+            ->copy($target_directory, $target_name, $replace, $target_filesystem_type);
 
-        $results = $target_filesystem_type->write($target_directory, basename($this->path), $data, $replace);
+        return $results;
+    }
+
+    /**
+     * Moves the file/folder in $this->path to the target_directory, replacing content, if indicated
+     *
+     * Note: $target_filesystem_type used to create new filesystem instance for target
+     *
+     * @param   string  $target_directory
+     * @param   bool    $target_name
+     * @param   bool    $replace                  defaults to true
+     * @param   string  $target_filesystem_type   defaults to current
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function move($target_directory, $target_name, $replace = true, $target_filesystem_type = '')
+    {
+        $results
+            = $this->filesystem_type_object
+            ->move($target_directory, $target_name, $replace, $target_filesystem_type);
 
         return $results;
     }
@@ -243,7 +244,7 @@ class Filesystem extends Path implements FileInterface
      * @param   null    $time
      * @param   null    $atime
      *
-     * @return  void
+     * @return  bool
      * @throws  FileException
      * @since   1.0
      */
@@ -251,7 +252,7 @@ class Filesystem extends Path implements FileInterface
     {
         $results = $this->filesystem_type_object->touch($time, $atime);
 
-        return bool;
+        return $results;
     }
 
     /**

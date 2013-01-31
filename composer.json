@@ -1,26 +1,28 @@
 {
-    "name": "Molajo/Filesystem",
-    "description": "Common handling of all file and directory requests for defined filesystem adapters",
-    "keywords": ["Filesystem", "Adapters", "Interface", "PSR-0"],
-    "homepage": "http://github.com/AmyStephen/Filesystem",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
+    "name":"Molajo/Filesystem",
+    "description":"Common handling of all file and directory requests for defined filesystem adapters",
+    "keywords":["Filesystem", "Adapters", "Interface", "PSR-0"],
+    "homepage":"http://github.com/AmyStephen/Filesystem",
+    "type":"library",
+    "license":"MIT",
+    "authors":[
         {
-            "name": "Amy Stephen",
-            "email": "AmyStephen@gmail.com",
-            "homepage": "http://Twitter.com/AmyStephen"
+            "name":"Amy Stephen",
+            "email":"AmyStephen@gmail.com",
+            "homepage":"http://Twitter.com/AmyStephen"
         }
     ],
-    "require": {
-        "php": ">=5.3.0"
+    "require":{
+        "php":">=5.3.0"
     },
-    "autoload": {
-        "psr-0": {"Molajo/Filesystem": "src/"}
+    "autoload":{
+        "psr-0":{
+            "Molajo/Filesystem":"src/"
+        }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.1.x-dev"
+    "extra":{
+        "branch-alias":{
+            "dev-master":"0.1.x-dev"
         }
     }
 }

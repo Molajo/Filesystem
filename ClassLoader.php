@@ -47,17 +47,17 @@ class ClassLoader
     private $useIncludePath = false;
     private $classMap = array();
 
-    public function getPrefixes ()
+    public function getPrefixes()
     {
         return $this->prefixes;
     }
 
-    public function getFallbackDirs ()
+    public function getFallbackDirs()
     {
         return $this->fallbackDirs;
     }
 
-    public function getClassMap ()
+    public function getClassMap()
     {
         return $this->classMap;
     }
@@ -65,10 +65,10 @@ class ClassLoader
     /**
      * @param array $classMap Class to filename map
      */
-    public function addClassMap (array $classMap)
+    public function addClassMap(array $classMap)
     {
         if ($this->classMap) {
-            $this->classMap = array_merge ($this->classMap, $classMap);
+            $this->classMap = array_merge($this->classMap, $classMap);
         } else {
             $this->classMap = $classMap;
         }
@@ -80,7 +80,7 @@ class ClassLoader
      * @param string       $prefix The classes prefix
      * @param array|string $paths  The location(s) of the classes
      */
-    public function add ($prefix, $paths)
+    public function add($prefix, $paths)
     {
         if (! $prefix) {
             foreach ((array)$paths as $path) {
@@ -90,7 +90,7 @@ class ClassLoader
             return;
         }
         if (isset($this->prefixes[$prefix])) {
-            $this->prefixes[$prefix] = array_merge (
+            $this->prefixes[$prefix] = array_merge(
                 $this->prefixes[$prefix],
                 (array)$paths
             );
@@ -104,7 +104,7 @@ class ClassLoader
      *
      * @param bool $useIncludePath
      */
-    public function setUseIncludePath ($useIncludePath)
+    public function setUseIncludePath($useIncludePath)
     {
         $this->useIncludePath = $useIncludePath;
     }
@@ -115,7 +115,7 @@ class ClassLoader
      *
      * @return bool
      */
-    public function getUseIncludePath ()
+    public function getUseIncludePath()
     {
         return $this->useIncludePath;
     }
@@ -125,17 +125,17 @@ class ClassLoader
      *
      * @param bool $prepend Whether to prepend the autoloader or not
      */
-    public function register ($prepend = false)
+    public function register($prepend = false)
     {
-        spl_autoload_register (array($this, 'loadClass'), true, $prepend);
+        spl_autoload_register(array($this, 'loadClass'), true, $prepend);
     }
 
     /**
      * Unregisters this instance as an autoloader.
      */
-    public function unregister ()
+    public function unregister()
     {
-        spl_autoload_unregister (array($this, 'loadClass'));
+        spl_autoload_unregister(array($this, 'loadClass'));
     }
 
     /**
@@ -152,9 +152,9 @@ class ClassLoader
      *
      * @return bool
      */
-    public function loadClass ($class)
+    public function loadClass($class)
     {
-        if ($file = $this->findFile ($class)) {
+        if ($file = $this->findFile($class)) {
             include $file;
 
             return true;
@@ -168,32 +168,32 @@ class ClassLoader
      *
      * @return string|null The path, if found
      */
-    public function findFile ($class)
+    public function findFile($class)
     {
         if ('\\' == $class[0]) {
-            $class = substr ($class, 1);
+            $class = substr($class, 1);
         }
 
         if (isset($this->classMap[$class])) {
             return $this->classMap[$class];
         }
 
-        if (false !== $pos = strrpos ($class, '\\')) {
+        if (false !== $pos = strrpos($class, '\\')) {
             // namespaced class name
-            $classPath = str_replace ('\\', DIRECTORY_SEPARATOR, substr ($class, 0, $pos)) . DIRECTORY_SEPARATOR;
-            $className = substr ($class, $pos + 1);
+            $classPath = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, 0, $pos)) . DIRECTORY_SEPARATOR;
+            $className = substr($class, $pos + 1);
         } else {
             // PEAR-like class name
             $classPath = null;
             $className = $class;
         }
 
-        $classPath .= str_replace ('_', DIRECTORY_SEPARATOR, $className) . '.php';
+        $classPath .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
 
         foreach ($this->prefixes as $prefix => $dirs) {
-            if (0 === strpos ($class, $prefix)) {
+            if (0 === strpos($class, $prefix)) {
                 foreach ($dirs as $dir) {
-                    if (file_exists ($dir . DIRECTORY_SEPARATOR . $classPath)) {
+                    if (file_exists($dir . DIRECTORY_SEPARATOR . $classPath)) {
                         return $dir . DIRECTORY_SEPARATOR . $classPath;
                     }
                 }
@@ -201,12 +201,12 @@ class ClassLoader
         }
 
         foreach ($this->fallbackDirs as $dir) {
-            if (file_exists ($dir . DIRECTORY_SEPARATOR . $classPath)) {
+            if (file_exists($dir . DIRECTORY_SEPARATOR . $classPath)) {
                 return $dir . DIRECTORY_SEPARATOR . $classPath;
             }
         }
 
-        if ($this->useIncludePath && $file = stream_resolve_include_path ($classPath)) {
+        if ($this->useIncludePath && $file = stream_resolve_include_path($classPath)) {
             return $file;
         }
 

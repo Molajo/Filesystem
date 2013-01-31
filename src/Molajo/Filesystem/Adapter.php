@@ -151,6 +151,13 @@ Class Adapter implements FileInterface
                     ('Filesystem Adapter: Must provide target_directory for copy request. Path: ' . $this->path);
                 }
 
+                if (isset($options['target_name'])) {
+                    $target_name = $options['target_name'];
+
+                } else {
+                    $target_name = '';
+                }
+
                 $replace = true;
 
                 if (isset($options['replace'])) {
@@ -162,13 +169,14 @@ Class Adapter implements FileInterface
                     $replace = true;
                 }
 
-                if (isset($options['target_filesystem_type_object'])) {
-                    $target_filesystem_type_object = $options['target_filesystem_type_object'];
+                if (isset($options['target_filesystem_type'])) {
+                    $target_filesystem_type = $options['target_filesystem_type'];
                 } else {
-                    $target_filesystem_type_object = $this->type;
+                    $target_filesystem_type = $this->type;
                 }
 
-                $this->action_results = $this->$action($target_directory, $replace, $target_filesystem_type_object);
+                $this->action_results
+                    = $this->$action($target_directory, $target_name, $replace, $target_filesystem_type);
 
                 break;
 
@@ -363,39 +371,37 @@ Class Adapter implements FileInterface
     /**
      * Copies the file/folder in $path to the target_directory, replacing content, if indicated
      *
-     * Note: $target_filesystem_type_object used to create new filesystem instance for target
+     * Note: $target_filesystem_type used to create new filesystem instance for target
      *
      * @param   string  $target_directory
-     * @param   bool    $replace                      , defaults to true
-     * @param   string  $target_filesystem_type_object, defaults to current
+     * @param   bool    $target_name
+     * @param   bool    $replace                  defaults to true
+     * @param   string  $target_filesystem_type   defaults to current
      *
-     * @return  void
+     * @return  bool
      * @since   1.0
      */
-    public function copy($target_directory, $replace = true, $target_filesystem_type_object = '')
+    public function copy($target_directory, $target_name, $replace = true, $target_filesystem_type = '')
     {
-        $this->filesystem->copy($target_directory, $replace, $target_filesystem_type_object);
-
-        return;
+        return $this->filesystem->copy($target_directory, $target_name, $replace, $target_filesystem_type);
     }
 
     /**
      * Moves the file/folder in $path to the target_directory, replacing content, if indicated
      *
-     * Note: $target_filesystem_type_object used to create new filesystem instance for target
+     * Note: $target_filesystem_type used to create new filesystem instance for target
      *
      * @param   string  $target_directory
-     * @param   bool    $replace                      , defaults to true
-     * @param   string  $target_filesystem_type_object, defaults to current
+     * @param   bool    $target_name
+     * @param   bool    $replace                  defaults to true
+     * @param   string  $target_filesystem_type   defaults to current
      *
-     * @return  void
+     * @return  bool
      * @since   1.0
      */
-    public function move($target_directory, $replace = true, $target_filesystem_type_object = '')
+    public function move($target_directory, $target_name, $replace = true, $target_filesystem_type = '')
     {
-        $this->filesystem->move($target_directory, $replace, $target_filesystem_type_object);
-
-        return;
+        return $this->filesystem->move($target_directory, $target_name, $replace, $target_filesystem_type);
     }
 
     /**

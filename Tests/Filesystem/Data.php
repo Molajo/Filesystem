@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Filesystem;
 
+use \DirectoryIterator;
 use \RecursiveDirectoryIterator;
 use \RecursiveIteratorIterator;
 use \PHPUnit_Framework_TestCase;
@@ -116,7 +117,7 @@ class Data extends PHPUnit_Framework_TestCase
      *
      * @param $path
      */
-    function copy($path, $target, $target_folder_name = '')
+    function copy($path, $target, $target_name = '')
     {
         if (file_exists($path)) {
         } else {
@@ -128,7 +129,7 @@ class Data extends PHPUnit_Framework_TestCase
             return;
         }
 
-        $new_path = $target . '/' . $target_folder_name;
+        $new_path = $target . '/' . $target_name;
 
         $this->discovery($path);
 
@@ -149,6 +150,26 @@ class Data extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Get the file size of a given file.
+     *
+     * $recursive  bool  For directory, recursively calculate file calculations default true
+     *
+     * @return  int
+     * @since   1.0
+     */
+    public function getSize($path, $recursive = true)
+    {
+        $size = 0;
+        $this->discovery($path);
+
+        foreach ($this->files as $file) {
+            $size = $size + filesize($file);
+        }
+
+        return $size;
+    }
+
+    /**
      * Discovery retrieves folder and file names
      *
      * @param   $path
@@ -160,6 +181,16 @@ class Data extends PHPUnit_Framework_TestCase
     {
         $this->directories = array();
         $this->files       = array();
+
+        if (is_file($path)) {
+            $this->files[] = $path;
+            return;
+        }
+
+        if (is_dir($path)) {
+        } else {
+            return;
+        }
 
         $this->directories[] = $path;
 

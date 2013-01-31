@@ -20,6 +20,7 @@ use \Exception;
 use \RuntimeException;
 use Molajo\Filesystem\Exception\FileException;
 use Molajo\Filesystem\Exception\FileNotFoundException;
+use Molajo\Filesystem\Adapter;
 
 /**
  * Local Adapter for Filesystem
@@ -413,7 +414,7 @@ class Local
             /** '.' means current - ignore it      */
             if ($node == '.') {
 
-                /** '..' is parent - remove the parent */
+                /** '..' is parent - remove  */
             } elseif ($node == '..') {
 
                 if (count($normalised) > 0) {
@@ -927,27 +928,12 @@ class Local
     {
         $this->size = 0;
 
-        if ($this->exists === false) {
-            return $this->size;
-        }
+        $this->discovery($this->path);
 
-        if ($this->is_file === true) {
-            $this->size = filesize($this->path);
-
-        } elseif ($this->is_directory === true) {
-
-            $directory = new DirectoryIterator($this->path);
-
-            if (count($directory) > 0) {
-                foreach ($directory as $item) {
-                    if (is_file($item)) {
-                        $this->size = $this->size + filesize($item);
-                    }
-                }
+        if (count($this->files) > 0) {
+            foreach ($this->files as $file) {
+                $this->size = $this->size + filesize($file);
             }
-
-        } else {
-            $this->size = 0;
         }
 
         return $this->size;
@@ -1036,10 +1022,8 @@ class Local
      * @param   bool    $replace
      * @param   string  $data       spaces for create directory
      *
-     * @return  null
+     * @return  bool
      * @since   1.0
-     *
-     * todo: add option $create_directories
      */
     public function write($file = '', $replace = true, $data = '')
     {
@@ -1053,27 +1037,20 @@ class Local
         }
 
         if (trim($data) == '' || strlen($data) == 0) {
-            /** only creating a directory */
+
             if ($file == '') {
-            } else {
                 throw new FileException
                 ('Local Filesystem: attempting to write no data to file: ' . $this->path . '/' . $file);
+
+            } else {
+                $results = $this->createDirectory($this->path . '/' . $file);
+                return true;
             }
         }
 
-        if (file_exists($this->path)) {
-
+        if (file_exists($this->path) ) {
         } else {
-
-            try {
-                \mkdir($this->path, $this->directory_permissions, true);
-
-            } catch (Exception $e) {
-
-                throw new FileException
-                ('Filesystem Write: error creating directory: ' . $this->path);
-            }
-
+            $results = $this->createDirectory($this->path);
         }
 
         if (file_exists($this->path . '/' . $file)) {
@@ -1091,7 +1068,9 @@ class Local
             ('Local Filesystem: file is not writable: ' . $this->path . '/' . $file);
         }
 
+
         try {
+
             \file_put_contents($this->path . '/' . $file, $data);
 
         } catch (Exception $e) {
@@ -1102,6 +1081,36 @@ class Local
 
         if (file_exists($this->path . '/' . $file) === false) {
             throw new FileNotFoundException ('Filesystem Write: error writing to file: ' . $this->path . '/' . $file);
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Create Directory
+     *
+     * @param   bool  $path
+     *
+     * @return  bool
+     * @since   1.0
+     * @throws  FileException
+     */
+    public function createDirectory($path)
+    {
+        if (file_exists($path)) {
+            return true;
+        }
+
+        try {
+            \mkdir($path, $this->directory_permissions, true);
+
+            return true;
+
+        } catch (Exception $e) {
+
+            throw new FileException
+            ('Filesystem Create Directory: error creating directory: ' . $path);
         }
 
         return true;
@@ -1170,64 +1179,71 @@ class Local
     }
 
     /**
-     * Copies the file identified in $path to the target_adapter in the new_parent_directory,
+     * Copies the file identified in $path to the target_adapter in the new_parent_name_directory,
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
      * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target portion of the copy
      *
-     * @param   string  $target_filesystem_type
      * @param   string  $target_directory
-     * @param   string  $target_folder_name
+     * @param   string  $target_name
      * @param   bool    $replace
+     * @param   string  $target_filesystem_type
      *
-     * @return  null|void
+     * @return  bool
      * @since   1.0
-     * @throws  FileException
      */
-    public function copy($target_filesystem_type, $target_directory, $target_folder_name = '', $replace = false)
+    public function copy($target_directory, $target_name = '', $replace = false, $target_filesystem_type = '')
     {
+        if ($target_filesystem_type == '') {
+            $target_filesystem_type = $this->filesystem_type;
+        }
+
         return $this->moveOrCopy(
-            $target_filesystem_type,
             $target_directory,
-            $target_folder_name,
+            $target_name,
             $replace,
+            $target_filesystem_type,
             'copy'
         );
     }
 
     /**
-     * Moves the file identified in path to the location identified in the new_parent_directory
+     * Moves the file identified in path to the location identified in the new_parent_name_directory
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * @param   string  $target_filesystem_type
      * @param   string  $target_directory
-     * @param   string  $target_folder_name
+     * @param   string  $target_name
      * @param   bool    $replace
+     * @param   string  $target_filesystem_type
      *
-     * @return  null
+     * @return  bool
      * @since   1.0
      */
-    public function move($target_filesystem_type, $target_directory, $target_folder_name, $replace = false)
+    public function move($target_directory, $target_name = '', $replace = false, $target_filesystem_type = '')
     {
+        if ($target_filesystem_type == '') {
+            $target_filesystem_type = $this->filesystem_type;
+        }
+
         return $this->moveOrCopy(
-            $target_filesystem_type,
             $target_directory,
-            $target_folder_name,
+            $target_name,
             $replace,
+            $target_filesystem_type,
             'move'
         );
     }
 
     /**
-     * Copies the file identified in $path to the target_adapter in the new_parent_directory,
-     *  replacing existing contents, if indicated, and creating directories needed, if indicated
+     * Copies the file identified in $path to the $target_directory for the $target_filesystem_type adapter
+     *  replacing existing contents and creating directories needed, if indicated
      *
-     * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target portion of the copy
+     * Note: $target_filesystem_type is an instance of the Filesystem
      *
-     * @param   string  $target_filesystem_type
      * @param   string  $target_directory
-     * @param   string  $target_folder_name
+     * @param   string  $target_name
      * @param   bool    $replace
+     * @param   string  $target_filesystem_type
      * @param   string  $move_or_copy
      *
      * @return  null|void
@@ -1236,26 +1252,47 @@ class Local
      */
     public function moveOrCopy
     (
-        $target_filesystem_type,
         $target_directory,
-        $target_folder_name = '',
+        $target_name = '',
         $replace = false,
+        $target_filesystem_type,
         $move_or_copy = 'copy'
     ) {
+        /** Defaults */
+        if ($target_directory == '') {
+            $target_directory = $this->parent;
+        }
 
+        if ($target_name == '' && $this->is_file) {
+            if ($target_directory == $this->parent) {
+                throw new FileException
+                ('Local Filesystem ' . $move_or_copy
+                    . ': Must specify new file name when using the same target path: ' . $this->path);
+            }
+            $target_name = $this->name;
+        }
+
+        if ($this->is_file === true) {
+            $base_folder = $this->parent;
+        } else {
+            $base_folder = $this->path;
+        }
+
+        /** Edits */
         if (file_exists($this->path)) {
         } else {
             throw new FileException
             ('Local Filesystem moveOrCopy: failed. This path does not exist: '
-                . $this->path . ' It was to be ' . $move_or_copy . ' to ' . $target_directory);
+                . $this->path . ' Specified as source for ' . $move_or_copy
+                . ' operation to ' . $target_directory);
         }
 
         if (file_exists($target_directory)) {
         } else {
             throw new FileException
-            ('Local Filesystem moveOrCopy: failed. This path: '
-                . $this->path . ' was to be ' . $move_or_copy
-                . ' to destination that does not exist: ' . $target_directory);
+            ('Local Filesystem moveOrCopy: failed. This path does not exist: '
+                . $this->path . ' Specified as destination for ' . $move_or_copy
+                . ' to ' . $target_directory);
         }
 
         if (is_writeable($target_directory) === false) {
@@ -1273,34 +1310,94 @@ class Local
         $this->directories = array();
         $this->files       = array();
 
+        /** Copy single file */
         if ($this->is_file === true) {
             $this->files[] = $this->path;
+
         } else {
+
             $this->discovery($this->path);
+
+            if ($target_name == '') {
+
+            } else {
+                if (is_dir($target_directory . '/' . $target_name)) {
+
+                } else {
+
+                    $connect = new Adapter($target_filesystem_type, $target_directory, 'write',
+                        $options = array('file' => $target_name)
+                    );
+                }
+                $target_directory = $target_directory . '/' . $target_name;
+                $target_name      = '';
+            }
         }
 
-        if ($target_folder_name == '') {
-            $new_path = $target_directory;
-        } else {
-            $new_path = $target_directory . '/' . $target_folder_name;
-        }
-
+        /** Create new target directories from source directories list */
         if (count($this->directories) > 0) {
+
             asort($this->directories);
+
             foreach ($this->directories as $directory) {
-                $new_directory = $new_path . '/' . substr($directory, strlen($this->path), 99999);
-                $this->write($new_directory, $replace);
+
+                if ($base_folder == $directory) {
+                    $temp = $target_directory;
+                } else {
+                    $temp = $target_directory . substr($directory, strlen($base_folder), 99999);
+                }
+
+                if (is_dir($temp)) {
+
+                } else {
+
+                    $existing = dirname($temp);
+                    $new_node = basename($temp);
+
+                    $connect = new Adapter($target_filesystem_type, $existing, 'write',
+                        $options = array('file' => $new_node)
+                    );
+                }
             }
         }
 
+        /** Once all folders are in place, add files */
         if (count($this->files) > 0) {
+
             foreach ($this->files as $file) {
-                $new_file = $new_path . '/' . substr($file, strlen($this->path), 99999);
-                $data     = $this->read($file);
-                $this->write($new_file, $replace, $data);
+
+                /** Target Folder */
+                $source_directory = dirname($file);
+
+                if ($base_folder == $source_directory) {
+                    $temp_directory = $target_directory;
+                } else {
+                    $temp_directory = $target_directory . substr($source_directory, strlen($base_folder), 99999);
+                }
+
+                /** Target File */
+                if ($this->is_file === true) {
+                    $temp_name = $target_name;
+                } else {
+                    $temp_name = basename($file);
+                }
+
+                /** Source */
+                $connect = new Adapter('Local', $file, 'read', $options = array());
+                $data    = $connect->action_results;
+
+                /** Write Target */
+                $connect = new Adapter($target_filesystem_type, $temp_directory, 'write',
+                    $options = array(
+                        'file'    => $temp_name,
+                        'replace' => $replace,
+                        'data'    => $data,
+                    )
+                );
             }
         }
 
+        /** For move, remove the files and folders just copied */
         if ($move_or_copy == 'move') {
 
             if (count($this->files) > 0) {
@@ -1330,8 +1427,14 @@ class Local
      */
     public function discovery($path)
     {
-        $this->directories = array();
-        $this->files       = array();
+        if (is_file($path)) {
+            $this->files[] = $path;
+        }
+
+        if (is_dir($path)) {
+        } else {
+            return;
+        }
 
         $this->directories[] = $path;
 
@@ -1340,6 +1443,7 @@ class Local
             RecursiveIteratorIterator::SELF_FIRST);
 
         foreach ($objects as $name => $object) {
+
             if (is_file($name)) {
                 $this->files[] = $name;
 

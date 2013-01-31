@@ -8,7 +8,7 @@
  */
 namespace Molajo\Filesystem\Type;
 
-defined ('MOLAJO') or die;
+defined('MOLAJO') or die;
 
 use Molajo\Filesystem\Adapter;
 
@@ -32,9 +32,9 @@ class Registry implements File, Path, System
      *
      * @since   1.0
      */
-    public function __construct ($options = array())
+    public function __construct($options = array())
     {
-        parent::__construct ($options);
+        parent::__construct($options);
 
         return;
     }
