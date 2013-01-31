@@ -1,8 +1,6 @@
 <?php
 namespace Tests\Filesystem;
 
-include __DIR__ . '/Data.php';
-
 use \PHPUnit_Framework_TestCase;
 
 use Molajo\Filesystem\Adapter;
@@ -61,8 +59,6 @@ class ReadTest extends Data
         $this->assertEquals(1, $connect->filesystem_type_object->read_only);
         $this->assertEquals(501, $connect->filesystem_type_object->owner);
         $this->assertEquals(20, $connect->filesystem_type_object->group);
-        $this->assertEquals('January 26 2013 08:37:22.', $connect->filesystem_type_object->create_date);
-        $this->assertEquals('January 24 2013 21:58:26.', $connect->filesystem_type_object->modified_date);
         $this->assertEquals(true, $connect->filesystem_type_object->is_readable);
         $this->assertEquals(true, $connect->filesystem_type_object->is_writable);
         $this->assertEquals(false, $connect->filesystem_type_object->is_executable);
@@ -82,7 +78,7 @@ class ReadTest extends Data
         $this->assertEquals('file', $connect->filesystem_type_object->type);
         $this->assertEquals('test1.txt', $connect->filesystem_type_object->name);
         $this->assertEquals(
-            BASE_FOLDER . '/Tests',
+            BASE_FOLDER . '/Tests/Data',
             $connect->filesystem_type_object->parent
         );
         $this->assertEquals('txt', $connect->filesystem_type_object->extension);
