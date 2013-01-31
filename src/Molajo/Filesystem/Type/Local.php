@@ -10,11 +10,14 @@ namespace Molajo\Filesystem\Type;
 
 defined('MOLAJO') or die;
 
-use \DirectoryIterator;
 use \DateTime;
+
+use \DirectoryIterator;
+use \RecursiveDirectoryIterator;
+use \RecursiveIteratorIterator;
+
 use \Exception;
 use \RuntimeException;
-
 use Molajo\Filesystem\Exception\FileException;
 use Molajo\Filesystem\Exception\FileNotFoundException;
 
@@ -95,7 +98,7 @@ class Local
     /**
      * Create Date
      *
-     * @var    date
+     * @var    Datetime
      * @since  1.0
      */
     public $create_date;
@@ -103,7 +106,7 @@ class Local
     /**
      * Access Date
      *
-     * @var    date
+     * @var    Datetime
      * @since  1.0
      */
     public $access_date;
@@ -111,7 +114,7 @@ class Local
     /**
      * Modified Date
      *
-     * @var    date
+     * @var    Datetime
      * @since  1.0
      */
     public $modified_date;
@@ -245,6 +248,22 @@ class Local
     public $mime_type;
 
     /**
+     * Directories
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $directories;
+
+    /**
+     * Files
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $files;
+
+    /**
      * Constructor
      *
      * @since  1.0
@@ -324,21 +343,15 @@ class Local
      * @since   1.0
      */
     public function setDefaultPermissions(
-        $directory_permissions = '0755',
-        $file_permissions = '0644',
+        $directory_permissions = 0,
+        $file_permissions = 0,
         $read_only = 1
     ) {
-        if ((int)$directory_permissions == 0) {
-            $directory_permissions = '0755';
-        }
-        $this->directory_permissions = $directory_permissions;
 
-        if ((int)$file_permissions == 0) {
-            $file_permissions = '0755';
-        }
-        $this->file_permissions = $file_permissions;
+        $this->directory_permissions = 0755;
+        $this->file_permissions      = 0644;
 
-        if ((int)$read_only == 1) {
+        if ($read_only == 1) {
         } else {
             $read_only = 0;
         }
@@ -499,6 +512,24 @@ class Local
     }
 
     /**
+     * Does the path exist (either as a file or a folder)?
+     *
+     * @param string $this->path
+     *
+     * @return bool|null
+     */
+    public function exists()
+    {
+        if (file_exists($this->path)) {
+            $this->exists = true;
+        } else {
+            $this->exists = false;
+        }
+
+        return $this->exists;
+    }
+
+    /**
      * Returns the owner of the file or directory defined in the path
      *
      * @return  bool
@@ -506,6 +537,12 @@ class Local
      */
     public function getOwner()
     {
+        if ($this->exists === true) {
+        } else {
+            $this->owner = null;
+            return $this->owner;
+        }
+
         $this->owner = fileowner($this->path);
 
         return $this->owner;
@@ -519,6 +556,12 @@ class Local
      */
     public function getGroup()
     {
+        if ($this->exists === true) {
+        } else {
+            $this->group = null;
+            return $this->group;
+        }
+
         $this->group = filegroup($this->path);
 
         return $this->group;
@@ -533,6 +576,12 @@ class Local
      */
     public function getCreateDate()
     {
+        if ($this->exists === true) {
+        } else {
+            $this->create_date = null;
+            return $this->create_date;
+        }
+
         try {
 
             $this->create_date = \date("F d Y H:i:s.", filectime($this->path));
@@ -540,7 +589,7 @@ class Local
         } catch (Exception $e) {
 
             throw new FileException
-            ('Filesystem: getCreateDate method failed for ' . $this->path);
+            ('Local Filesystem: getCreateDate method failed for ' . $this->path);
         }
 
         return $this->create_date;
@@ -555,6 +604,12 @@ class Local
      */
     public function getAccessDate()
     {
+        if ($this->exists === true) {
+        } else {
+            $this->access_date = null;
+            return $this->access_date;
+        }
+
         try {
 
             $this->access_date = \date("F d Y H:i:s.", fileatime($this->path));
@@ -562,7 +617,7 @@ class Local
         } catch (Exception $e) {
 
             throw new FileException
-            ('Filesystem: getCreateDate method failed for ' . $this->path);
+            ('Local Filesystem: getCreateDate method failed for ' . $this->path);
         }
 
         return $this->access_date;
@@ -577,6 +632,12 @@ class Local
      */
     public function getModifiedDate()
     {
+        if ($this->exists === true) {
+        } else {
+            $this->modified_date = null;
+            return $this->modified_date;
+        }
+
         try {
 
             $this->modified_date = \date("F d Y H:i:s.", filemtime($this->path));
@@ -584,7 +645,7 @@ class Local
         } catch (Exception $e) {
             throw new FileException
 
-            ('Filesystem: getModifiedDate method failed for ' . $this->path);
+            ('Local Filesystem: getModifiedDate method failed for ' . $this->path);
         }
 
         return $this->modified_date;
@@ -601,6 +662,12 @@ class Local
      */
     public function isReadable()
     {
+        if ($this->exists === true) {
+        } else {
+            $this->is_readable = null;
+            return $this->is_readable;
+        }
+
         $this->is_readable = is_readable($this->path);
 
         return $this->is_readable;
@@ -617,6 +684,12 @@ class Local
      */
     public function isWriteable()
     {
+        if ($this->exists === true) {
+        } else {
+            $this->is_writable = null;
+            return $this->is_writable;
+        }
+
         $this->is_writable = is_writable($this->path);
 
         return $this->is_writable;
@@ -633,30 +706,15 @@ class Local
      */
     public function isExecutable()
     {
+        if ($this->exists === true) {
+        } else {
+            $this->is_executable = null;
+            return $this->is_executable;
+        }
+
         $this->is_executable = is_executable($this->path);
 
         return $this->is_executable;
-    }
-
-    /**
-     * Get Date Time
-     *
-     * @param   $time
-     *
-     * @return  DateTime
-     * @since   1.0
-     */
-    public function getDateTime($time)
-    {
-        if ($time instanceof DateTime) {
-            return $time;
-        }
-
-        if (is_int($time) || is_float($time)) {
-            return new DateTime('@' . intval($time));
-        }
-
-        return new DateTime($time);
     }
 
     /**
@@ -669,9 +727,9 @@ class Local
      */
     public function getAbsolutePath()
     {
-        if ($this->exists($this->path) === false) {
-            throw new FileNotFoundException
-            ('Filesystem: getAbsolutePath method does not exist: ' . $this->path);
+        if ($this->exists === false) {
+            $this->absolute_path = null;
+            return $this->absolute_path;
         }
 
         $this->absolute_path = realpath($this->path);
@@ -690,6 +748,11 @@ class Local
      */
     public function isAbsolute()
     {
+        if ($this->exists === false) {
+            $this->is_absolute = null;
+            return $this->is_absolute;
+        }
+
         if (substr($this->path, 0, 1) == '/') {
             $this->is_absolute = true;
         } else {
@@ -761,6 +824,11 @@ class Local
      */
     public function getType()
     {
+        if ($this->exists === false) {
+            $this->type = null;
+            return $this->type;
+        }
+
         if ($this->is_directory === true) {
             $this->type = 'directory';
             return $this->type;
@@ -780,24 +848,6 @@ class Local
     }
 
     /**
-     * Does the path exist (either as a file or a folder)?
-     *
-     * @param string $this->path
-     *
-     * @return bool|null
-     */
-    public function exists()
-    {
-        if (file_exists($this->path)) {
-            $this->exists = true;
-        } else {
-            $this->exists = false;
-        }
-
-        return $this->exists;
-    }
-
-    /**
      * Get File or Directory Name
      *
      * @return  bool|null
@@ -806,6 +856,11 @@ class Local
      */
     public function getName()
     {
+        if ($this->exists === false) {
+            $this->name = null;
+            return $this->name;
+        }
+
         $this->name = basename($this->path);
 
         return $this->name;
@@ -820,6 +875,11 @@ class Local
      */
     public function getParent()
     {
+        if ($this->exists === false) {
+            $this->parent = null;
+            return $this->parent;
+        }
+
         $this->parent = dirname($this->path);
 
         return $this->parent;
@@ -834,6 +894,11 @@ class Local
      */
     public function getExtension()
     {
+        if ($this->exists === false) {
+            $this->extension = null;
+            return $this->extension;
+        }
+
         if ($this->is_file === true) {
 
         } elseif ($this->is_directory === true) {
@@ -860,8 +925,11 @@ class Local
      */
     public function getSize($recursive = true)
     {
-        echo $this->path . '<br />';
         $this->size = 0;
+
+        if ($this->exists === false) {
+            return $this->size;
+        }
 
         if ($this->is_file === true) {
             $this->size = filesize($this->path);
@@ -886,6 +954,42 @@ class Local
     }
 
     /**
+     * Returns the mime type of the file located at path directory
+     *
+     * @return  mixed;
+     * @since   1.0
+     */
+    public function getMimeType()
+    {
+        $this->mime_type = '';
+
+        if ($this->exists === false) {
+            $this->mime_type = null;
+        }
+
+        if ($this->is_file === true) {
+        } else {
+
+            return $this->mime_type;
+        }
+
+        if (function_exists('finfo_open')) {
+            $php_mime        = finfo_open(FILEINFO_MIME);
+            $this->mime_type = strtolower(finfo_file($php_mime, $this->path));
+            finfo_close($php_mime);
+
+        } elseif (function_exists('mime_content_type')) {
+            $this->mime_type = mime_content_type($this->path);
+
+        } else {
+            throw new \RuntimeException
+            ('Filesystem Local: getMimeType either finfo_open or mime_content_type are required in PHP');
+        }
+
+        return $this->mime_type;
+    }
+
+    /**
      * Returns the contents of the file identified by path
      *
      * @return  mixed
@@ -896,17 +1000,17 @@ class Local
     {
         if ($this->exists === false) {
             throw new FileNotFoundException
-            ('Local Filesystem Read: File does not exist: ' . $this->path);
+            ('Filesystem Local Read: File does not exist: ' . $this->path);
         }
 
         if ($this->is_file === false) {
             throw new FileNotFoundException
-            ('Local Filesystem Read: Is not a file: ' . $this->path);
+            ('Filesystem Local Read: Is not a file: ' . $this->path);
         }
 
         if ($this->is_readable === false) {
             throw new FileNotFoundException
-            ('Local Filesystem Read: No permission, not readable: ' . $this->path);
+            ('Filesystem Local Read: No permission, not readable: ' . $this->path);
         }
 
         try {
@@ -915,11 +1019,11 @@ class Local
         } catch (\Exception $e) {
 
             throw new FileNotFoundException
-            ('Local Filesystem Read: Error reading file: ' . $this->path);
+            ('Filesystem Local Read: Error reading file: ' . $this->path);
         }
 
         if ($data === false) {
-            ('Local Filesystem Read: Empty File: ' . $this->path);
+            ('Filesystem Local Read: Empty File: ' . $this->path);
         }
 
         return $data;
@@ -934,27 +1038,32 @@ class Local
      *
      * @return  null
      * @since   1.0
+     *
+     * todo: add option $create_directories
      */
     public function write($file = '', $replace = true, $data = '')
     {
-        if ($this->is_file === true || $this->is_directory === true) {
+        if ($this->exists === false) {
+
+        } elseif ($this->is_file === true || $this->is_directory === true) {
 
         } else {
             throw new FileException
-            ('Local Filesystem Write: must be directory or file: ' . $this->path . '/' . $file);
+            ('Filesystem Local Write: must be directory or file: ' . $this->path . '/' . $file);
         }
 
         if (trim($data) == '' || strlen($data) == 0) {
-            if ($this->is_directory === true) {
+            /** only creating a directory */
+            if ($file == '') {
             } else {
                 throw new FileException
-                ('Filesystem: attempting to write no data to file: ' . $this->path . '/' . $file);
+                ('Local Filesystem: attempting to write no data to file: ' . $this->path . '/' . $file);
             }
         }
 
         if (file_exists($this->path)) {
 
-        } elseif ($this->is_writable === true) {
+        } else {
 
             try {
                 \mkdir($this->path, $this->directory_permissions, true);
@@ -965,23 +1074,21 @@ class Local
                 ('Filesystem Write: error creating directory: ' . $this->path);
             }
 
-        } else {
-            throw new FileException
-            ('Filesystem Write: insufficient permission to create directory: ' . $this->path);
         }
 
         if (file_exists($this->path . '/' . $file)) {
 
             if ($replace === false) {
                 throw new FileException
-                ('Filesystem: attempting to write to existing file: ' . $this->path . '/' . $file);
+                ('Local Filesystem: attempting to write to existing file: ' . $this->path . '/' . $file);
             }
+
             \unlink($this->path . '/' . $file);
         }
 
         if ($this->isWriteable($this->path . '/' . $file) === false) {
             throw new FileException
-            ('Filesystem: file is not writable: ' . $this->path . '/' . $file);
+            ('Local Filesystem: file is not writable: ' . $this->path . '/' . $file);
         }
 
         try {
@@ -990,7 +1097,7 @@ class Local
         } catch (Exception $e) {
 
             throw new FileNotFoundException
-            ('Filesystem: error writing file ' . $this->path . '/' . $file);
+            ('Local Filesystem: error writing file ' . $this->path . '/' . $file);
         }
 
         if (file_exists($this->path . '/' . $file) === false) {
@@ -1003,39 +1110,60 @@ class Local
     /**
      * Deletes the file identified in path. Empty directories are removed if so indicated
      *
-     * @param   bool    $delete_empty
+     * @param   bool  $delete_empty  default true
      *
-     * @return  null
+     * @return  bool
      * @since   1.0
+     * @throws  FileException
+     * @throws  FileNotFoundException
      */
     public function delete($delete_empty = true)
     {
         if (file_exists($this->path)) {
+        } else {
+            throw new FileNotFoundException
+            ('Local Filesystem Delete: File not found ' . $this->path);
+        }
 
-            if ($this->is_writable === false) {
-                throw new FileException
-                ('Filesystem: file to be deleted is not writable: ' . $this->path);
-            }
-
-            $handle = fopen($this->path, $this->file_permissions);
-
-            if (flock($handle, LOCK_EX)) {
-            } else {
-
-                throw new FileException
-                ('Filesystem: Lock not obtainable for delete for: ' . $this->path);
-            }
-
-            fclose($handle);
+        if ($this->is_writable === false) {
+            throw new FileException
+            ('Local Filesystem Delete: No write access to file/path: ' . $this->path);
         }
 
         try {
-            \unlink($this->path);
+
+            if (file_exists($this->path)) {
+            } else {
+                return true;
+            }
+
+            $this->directories = array();
+            $this->files       = array();
+
+            if ($this->is_file === true) {
+                $this->files[] = $this->path;
+                $delete_empty  = false;
+            } else {
+                $this->discovery($this->path);
+            }
+
+            if (count($this->files) > 0) {
+                foreach ($this->files as $file) {
+                    unlink($file);
+                }
+            }
+
+            if (count($this->directories) > 0 || $delete_empty === true) {
+                arsort($this->directories);
+                foreach ($this->directories as $directory) {
+                    rmdir($directory);
+                }
+            }
 
         } catch (Exception $e) {
 
             throw new FileException
-            ('Filesystem: Delete failed for: ' . $this->path);
+            ('Local Filesystem Delete: failed for: ' . $this->path);
         }
 
         return true;
@@ -1049,50 +1177,182 @@ class Local
      *
      * @param   string  $target_filesystem_type
      * @param   string  $target_directory
+     * @param   string  $target_folder_name
      * @param   bool    $replace
      *
      * @return  null|void
      * @since   1.0
      * @throws  FileException
      */
-    public function copy($target_filesystem_type, $target_directory, $replace = false)
+    public function copy($target_filesystem_type, $target_directory, $target_folder_name = '', $replace = false)
     {
-        $data = $this->read($this->path);
-
-        $results = $this->write($target_directory, basename($this->path), $data, $replace);
-
-        if ($results === false) {
-            throw new FileException('Could not write the "%s" key content.',
-                $target_directory . '\' . $file_name');
-        }
-
-        return;
+        return $this->moveOrCopy(
+            $target_filesystem_type,
+            $target_directory,
+            $target_folder_name,
+            $replace,
+            'copy'
+        );
     }
 
     /**
      * Moves the file identified in path to the location identified in the new_parent_directory
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * @param   File    $target
+     * @param   string  $target_filesystem_type
      * @param   string  $target_directory
+     * @param   string  $target_folder_name
      * @param   bool    $replace
      *
      * @return  null
      * @since   1.0
      */
-    public function move($target_filesystem_type, $target_directory, $replace = false)
+    public function move($target_filesystem_type, $target_directory, $target_folder_name, $replace = false)
     {
-        $data = $this->read($this->path);
+        return $this->moveOrCopy(
+            $target_filesystem_type,
+            $target_directory,
+            $target_folder_name,
+            $replace,
+            'move'
+        );
+    }
 
-        $this->write($target_directory, $data, $replace);
+    /**
+     * Copies the file identified in $path to the target_adapter in the new_parent_directory,
+     *  replacing existing contents, if indicated, and creating directories needed, if indicated
+     *
+     * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target portion of the copy
+     *
+     * @param   string  $target_filesystem_type
+     * @param   string  $target_directory
+     * @param   string  $target_folder_name
+     * @param   bool    $replace
+     * @param   string  $move_or_copy
+     *
+     * @return  null|void
+     * @since   1.0
+     * @throws  FileException
+     */
+    public function moveOrCopy
+    (
+        $target_filesystem_type,
+        $target_directory,
+        $target_folder_name = '',
+        $replace = false,
+        $move_or_copy = 'copy'
+    ) {
 
-        $this->delete($this->path);
+        if (file_exists($this->path)) {
+        } else {
+            throw new FileException
+            ('Local Filesystem moveOrCopy: failed. This path does not exist: '
+                . $this->path . ' It was to be ' . $move_or_copy . ' to ' . $target_directory);
+        }
+
+        if (file_exists($target_directory)) {
+        } else {
+            throw new FileException
+            ('Local Filesystem moveOrCopy: failed. This path: '
+                . $this->path . ' was to be ' . $move_or_copy
+                . ' to destination that does not exist: ' . $target_directory);
+        }
+
+        if (is_writeable($target_directory) === false) {
+            throw new FileException
+            ('Local Filesystem Delete: No write access to file/path: ' . $target_directory);
+        }
+
+        if ($move_or_copy == 'move') {
+            if (is_writeable($this->path) === false) {
+                throw new FileException
+                ('Local Filesystem Delete: No write access for moving source file/path: ' . $move_or_copy);
+            }
+        }
+
+        $this->directories = array();
+        $this->files       = array();
+
+        if ($this->is_file === true) {
+            $this->files[] = $this->path;
+        } else {
+            $this->discovery($this->path);
+        }
+
+        if ($target_folder_name == '') {
+            $new_path = $target_directory;
+        } else {
+            $new_path = $target_directory . '/' . $target_folder_name;
+        }
+
+        if (count($this->directories) > 0) {
+            asort($this->directories);
+            foreach ($this->directories as $directory) {
+                $new_directory = $new_path . '/' . substr($directory, strlen($this->path), 99999);
+                $this->write($new_directory, $replace);
+            }
+        }
+
+        if (count($this->files) > 0) {
+            foreach ($this->files as $file) {
+                $new_file = $new_path . '/' . substr($file, strlen($this->path), 99999);
+                $data     = $this->read($file);
+                $this->write($new_file, $replace, $data);
+            }
+        }
+
+        if ($move_or_copy == 'move') {
+
+            if (count($this->files) > 0) {
+                foreach ($this->files as $file) {
+                    unlink($file);
+                }
+            }
+
+            if (count($this->directories) > 0) {
+                arsort($this->directories);
+                foreach ($this->directories as $directory) {
+                    rmdir($directory);
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Discovery of folders and files for specified path
+     *
+     * @param   $path
+     *
+     * @since   1.0
+     * @return  void
+     */
+    public function discovery($path)
+    {
+        $this->directories = array();
+        $this->files       = array();
+
+        $this->directories[] = $path;
+
+        $objects = new RecursiveIteratorIterator (
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::SELF_FIRST);
+
+        foreach ($objects as $name => $object) {
+            if (is_file($name)) {
+                $this->files[] = $name;
+
+            } elseif (is_dir($name)) {
+                $this->directories[] = $name;
+            }
+        }
 
         return;
     }
 
     /**
-     * Returns the contents of the file located at path directory
+     * Returns the contents of the files located at path directory
      *
      * @param   bool  $recursive
      *
@@ -1105,64 +1365,12 @@ class Local
             return file_get_contents($this->path);
         }
 
-//  $iterator = $this->pathname->rootAdapter()->getIterator($this->pathname, func_get_args());
-
-// cheap array creation
-        if (method_exists($iterator, 'toArray')) {
-            return $iterator->toArray();
-        }
-
         $files = array();
         foreach ($iterator as $file) {
             $files[] = $file;
         }
 
         return $files;
-    }
-
-    /**
-     * Returns the mime type for this file.
-     *
-     * @throws \RuntimeException if info failed to load and/or mim_content_type
-     * is unavailable
-     * @throws \LogicException if the mime type could not be interpreted from
-     * the output of finfo_file
-     *
-     * @return string
-     */
-    public function getMimeType()
-    {
-        return;
-
-        if (function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME);
-            if (! $finfo) {
-                throw new \RuntimeException('Failed to open finfo');
-            }
-
-            $mime = strtolower(finfo_file($finfo, $this->getPathname()));
-            finfo_close($finfo);
-
-            if (! preg_match(
-                '/^([a-z0-9]+\/[a-z0-9\-\.]+);\s+charset=(.*)$/',
-                $mime,
-                $matches
-            )
-            ) {
-                throw new \LogicException(
-                    'An error parsing the MIME type "' . $mime . '".'
-                );
-            }
-
-            return $matches[1];
-        } elseif (function_exists('mime_content_type')) {
-            return mime_content_type($this->getPathname());
-        }
-
-        throw new \RuntimeException(
-            'The finfo extension or mime_content_type function are needed to '
-                . 'determine the Mime Type for this file.'
-        );
     }
 
     /**
@@ -1189,7 +1397,7 @@ class Local
         } else {
 
             throw new FileException
-            ('Filesystem: chmod method. Mode not provided: ' . $mode);
+            ('Local Filesystem: chmod method. Mode not provided: ' . $mode);
         }
 
         try {
@@ -1198,7 +1406,7 @@ class Local
         } catch (Exception $e) {
 
             throw new FileException
-            ('Filesystem: chmod method failed for ' . $mode);
+            ('Local Filesystem: chmod method failed for ' . $mode);
         }
 
         return $mode;
@@ -1232,10 +1440,31 @@ class Local
         } catch (Exception $e) {
 
             throw new FileException
-            ('Filesystem: is_readable method failed for ' . $this->path);
+            ('Local Filesystem: is_readable method failed for ' . $this->path);
         }
 
         return $time;
+    }
+
+    /**
+     * Get Date Time
+     *
+     * @param   $time
+     *
+     * @return  DateTime
+     * @since   1.0
+     */
+    private function getDateTime($time)
+    {
+        if ($time instanceof \DateTime) {
+            return $time;
+        }
+
+        if (is_int($time) || is_float($time)) {
+            return new DateTime('@' . intval($time));
+        }
+
+        return new DateTime($time);
     }
 
     /**

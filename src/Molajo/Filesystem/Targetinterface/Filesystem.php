@@ -75,13 +75,14 @@ class Filesystem extends Path implements FileInterface
      */
     public function getMetadata()
     {
-        /** System Interface */
         $this->filesystem_type       = $this->getFilesystemType();
         $this->root                  = $this->getRoot();
         $this->persistence           = $this->getPersistence();
         $this->directory_permissions = $this->getDirectoryPermissions();
         $this->file_permissions      = $this->getFilePermissions();
         $this->read_only             = $this->getReadOnly();
+        $this->path                  = $this->getPath();
+        $this->exists                = $this->exists();
         $this->owner                 = $this->getOwner();
         $this->group                 = $this->getGroup();
         $this->create_date           = $this->getCreateDate();
@@ -90,24 +91,17 @@ class Filesystem extends Path implements FileInterface
         $this->is_readable           = $this->isReadable();
         $this->is_writable           = $this->isWriteable();
         $this->is_executable         = $this->isExecutable();
-
-        /** Path Interface */
-        $this->path   = $this->getPath();
-        $this->exists = $this->exists();
-
-        if ($this->exists === true) {
-            $this->absolute_path = $this->getAbsolutePath();
-            $this->is_absolute   = $this->isAbsolute();
-            $this->is_directory  = $this->isDirectory();
-            $this->is_file       = $this->isFile();
-            $this->is_link       = $this->isLink();
-            $this->type          = $this->getType();
-            $this->name          = $this->getName();
-            $this->parent        = $this->getParent();
-            $this->extension     = $this->getExtension();
-            $this->size          = $this->getSize();
-            $this->mime_type     = $this->getMimeType();
-        }
+        $this->absolute_path         = $this->getAbsolutePath();
+        $this->is_absolute           = $this->isAbsolute();
+        $this->is_directory          = $this->isDirectory();
+        $this->is_file               = $this->isFile();
+        $this->is_link               = $this->isLink();
+        $this->type                  = $this->getType();
+        $this->name                  = $this->getName();
+        $this->parent                = $this->getParent();
+        $this->extension             = $this->getExtension();
+        $this->size                  = $this->getSize();
+        $this->mime_type             = $this->getMimeType();
 
         return $this->filesystem_type_object;
     }
@@ -139,7 +133,7 @@ class Filesystem extends Path implements FileInterface
      */
     function write($file = '', $replace = true, $data = '')
     {
-        $results = $this->filesystem_type_object->write($file, true, $data);
+        $results = $this->filesystem_type_object->write($file, $replace, $data);
 
         return $results;
     }

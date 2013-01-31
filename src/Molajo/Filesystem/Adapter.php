@@ -87,6 +87,7 @@ Class Adapter implements FileInterface
         }
 
         $action = strtolower($action);
+
         switch ($action) {
 
             case 'read':
@@ -105,7 +106,7 @@ Class Adapter implements FileInterface
 
                 $replace = true;
                 if (isset($options['replace'])) {
-                    $replace = (int)$options['replace'];
+                    $replace = $options['replace'];
                 }
                 if ($replace === false) {
                 } else {

@@ -204,6 +204,20 @@ abstract class Path extends System implements PathInterface
     }
 
     /**
+     * Returns the mime_type of the file identified by path
+     *
+     * @return  mixed|string|array
+     * @since   1.0
+     * @throws  FileNotFoundException
+     */
+    public function getMimetype()
+    {
+        $this->mime_type = $this->filesystem_type_object->getMimetype();
+
+        return $this->mime_type;
+    }
+
+    /**
      * Returns the owner of the file or directory defined in the path
      *
      * @return  bool
@@ -311,48 +325,5 @@ abstract class Path extends System implements PathInterface
         $this->is_executable = $this->filesystem_type_object->isExecutable();
 
         return $this->is_executable;
-    }
-
-    /**
-     * Returns the mime type for this file.
-     *
-     * @throws \RuntimeException    if finfo_open failed or mime_content_type is not found
-     * @throws \LogicException      if the mime type could not be identified
-     *
-     * @return string
-     */
-    public function getMimeType()
-    {
-        return ' ';
-
-        if (function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME);
-            if (! $finfo) {
-                throw new \RuntimeException('Failed to open finfo');
-            }
-
-            $mime = strtolower(finfo_file($finfo, $this->getPathname()));
-            finfo_close($finfo);
-
-            if (! preg_match(
-                '/^([a-z0-9]+\/[a-z0-9\-\.]+);\s+charset=(.*)$/',
-                $mime,
-                $matches
-            )
-            ) {
-                throw new \LogicException(
-                    'An error parsing the MIME type "' . $mime . '".'
-                );
-            }
-
-            return $matches[1];
-        } elseif (function_exists('mime_content_type')) {
-            return mime_content_type($this->getPathname());
-        }
-
-        throw new \RuntimeException(
-            'The finfo extension or mime_content_type function are needed to '
-                . 'determine the Mime Type for this file.'
-        );
     }
 }
