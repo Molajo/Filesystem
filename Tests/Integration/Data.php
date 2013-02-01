@@ -110,7 +110,11 @@ class Data extends PHPUnit_Framework_TestCase
         if (count($this->directories) > 0) {
 
             foreach ($this->directories as $directory) {
-                rmdir($directory);
+
+                if ($directory == '.' || $directory == '..') {
+                } else {
+                    rmdir($directory);
+                }
             }
         }
 
@@ -210,16 +214,12 @@ class Data extends PHPUnit_Framework_TestCase
 
         foreach ($objects as $name => $object) {
 
-           if ($name == '.' || $name == '..' || $name == '.DS_Store') {
-           } else {
+            if (is_file($name)) {
+                $this->files[] = $name;
 
-                if (is_file($name)) {
-                    $this->files[] = $name;
-
-                } elseif (is_dir($name)) {
-                    $this->directories[] = $name;
-                }
-           }
+            } elseif (is_dir($name)) {
+                $this->directories[] = $name;
+            }
         }
 
         return;
