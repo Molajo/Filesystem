@@ -76,12 +76,12 @@ To access metadata for a filesystem request:
 
 ### List
 
-To list the names of files and/or directories from a filesystem for a given path:
+To list all files and folders for a given path:
+```php
     $options = array(
         'extension'    => 'txt,doc,ppt'
     );
 
-```php
     $connect = new \Molajo\Filesystem\Adapter('List', 'directory-name', $options);
     $results = $connect->fs->action_results);
 ```
