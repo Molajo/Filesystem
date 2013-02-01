@@ -137,7 +137,10 @@ class Data extends PHPUnit_Framework_TestCase
         if (count($this->directories) > 0) {
             foreach ($this->directories as $directory) {
                 $new_directory = $new_path . '/' . substr($directory, strlen($path), 99999);
-                mkdir($new_directory);
+                if (file_exists($new_directory)) {
+                } else {
+                    mkdir($new_directory);
+                }
             }
         }
 
