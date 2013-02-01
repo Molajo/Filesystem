@@ -56,8 +56,6 @@ class LocalReadTest extends Data
         $this->assertEquals(0755, $connect->filesystem_type_object->directory_permissions);
         $this->assertEquals(0644, $connect->filesystem_type_object->file_permissions);
         $this->assertEquals(1, $connect->filesystem_type_object->read_only);
-        $this->assertEquals(501, $connect->filesystem_type_object->owner);
-        $this->assertEquals(20, $connect->filesystem_type_object->group);
         $this->assertEquals(true, $connect->filesystem_type_object->is_readable);
         $this->assertEquals(true, $connect->filesystem_type_object->is_writable);
         $this->assertEquals(false, $connect->filesystem_type_object->is_executable);
