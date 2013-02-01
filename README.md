@@ -77,16 +77,19 @@ To access metadata for a filesystem request:
 ### List
 
 To list the names of files and/or directories from a filesystem for a given path:
-
+    $options = array(
+        'extension'    => 'txt,doc,ppt'
+    );
 
 ```php
-    $connect = new \Molajo\Filesystem\Adapter('directory-name', 'List', $options);
+    $connect = new \Molajo\Filesystem\Adapter('List', 'directory-name', $options);
     $results = $connect->fs->action_results);
 ```
 
 ### Write
 
-To write a file to a filesystem. :
+To write a file to a filesystem. Note: in the example, the Filesystem is identified as 'Log', indicating
+that the data written will be written to the Log.
 
 ```php
     $options = array(
@@ -100,10 +103,10 @@ To write a file to a filesystem. :
 ### Copy
 
 To write a file or folder to a specific destination on the filesystem. This example shows how to copy
-the folder(s)/file(s) located on the 'Local' filessystem at 'name/of/source/folder' to the 'FTP'
-filesystem directory 'name/of/target/folder.'
+from the 'Local' filessystem to the 'FTP' filesystem. That ease of use to copy to an Amazon backup,
+ or to copy from a zip file serving as an installer is a key benefit.
 
-In the case of a single file copy, the target name can be used. If it is omitted, the source file
+In the case of a single file copy, the target name can be specified. If it is omitted, the source file
 name is used at the new location.
 
 ```php
@@ -121,24 +124,27 @@ name is used at the new location.
 The only difference between the copy and the move is that the files copied are removed from the
 source location after the operation is complete.
 
+This example shows how to copy files from a local directory to an archive folder.
+
 Note in the example neither the source or target Filesystems are identified. That means each will
 define to Local.
 
 ```php
     $options = array(
-        'target_directory'       => 'name/of/target/folder',
-        'target_name'            => 'single-file-move.txt',
+        'target_directory'       => 'year2011/files',
+        'target_name'            => 'archive',
         'replace'                => false
     );
-    $connect = new \Molajo\Filesystem\Adapter('Copy', 'name/of/source/folder', $options);
+    $connect = new \Molajo\Filesystem\Adapter('Move', 'name/of/current/year/folder', $options);
 ```
 
 ### Delete
 
-To move a file or folder to a specific destination on the filesystem:
+As with the list, copy, and move, the delete can be used for individual files and it can be used
+to specify a folder and all dependent subfolders and files should be deleted.
 
 ```php
-    $connect = new \Molajo\Filesystem\Adapter('Local', 'name/of/source/folder', 'Delete');
+    $connect = new \Molajo\Filesystem\Adapter('Delete', 'name/of/source/folder');
 ```
 
 ### DirectoryIterator
