@@ -15,7 +15,7 @@ use Exception;
 use Molajo\Filesystem\Exception\AccessDeniedException as AccessDeniedException;
 use Molajo\Filesystem\Exception\AdapterNotFoundException as AdapterNotFoundException;
 use Molajo\Filesystem\Exception\FileException as FileException;
-use Molajo\Filesystem\Exception\FileExceptionInterface as FileExceptionInterface;
+use Molajo\Filesystem\Exception\ExceptionInterface as ExceptionInterface;
 use Molajo\Filesystem\Exception\FileNotFoundException as FileNotFoundException;
 use Molajo\Filesystem\Exception\InvalidPathException as InvalidPathException;
 
@@ -47,7 +47,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getPath()
     {
-        $this->path = $this->filesystem_type_object->getPath();
+        $this->path = $this->fs_type->getPath();
 
         return $this->path;
     }
@@ -59,7 +59,7 @@ abstract class Path extends System implements PathInterface
      */
     public function exists()
     {
-        $this->exists = $this->filesystem_type_object->exists();
+        $this->exists = $this->fs_type->exists();
 
         return $this->exists;
     }
@@ -73,7 +73,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getAbsolutePath()
     {
-        $this->absolute_path = $this->filesystem_type_object->getAbsolutePath();
+        $this->absolute_path = $this->fs_type->getAbsolutePath();
 
         return $this->absolute_path;
     }
@@ -89,7 +89,7 @@ abstract class Path extends System implements PathInterface
      */
     public function isAbsolute()
     {
-        $this->is_absolute = $this->filesystem_type_object->isAbsolute();
+        $this->is_absolute = $this->fs_type->isAbsolute();
 
         return $this->is_absolute;
     }
@@ -102,7 +102,7 @@ abstract class Path extends System implements PathInterface
      */
     public function isDirectory()
     {
-        $this->is_directory = $this->filesystem_type_object->isDirectory();
+        $this->is_directory = $this->fs_type->isDirectory();
 
         return $this->is_directory;
     }
@@ -115,7 +115,7 @@ abstract class Path extends System implements PathInterface
      */
     public function isFile()
     {
-        $this->is_file = $this->filesystem_type_object->isFile();
+        $this->is_file = $this->fs_type->isFile();
 
         return $this->is_file;
     }
@@ -128,7 +128,7 @@ abstract class Path extends System implements PathInterface
      */
     public function isLink()
     {
-        $this->is_link = $this->filesystem_type_object->isLink();
+        $this->is_link = $this->fs_type->isLink();
 
         return $this->is_link;
     }
@@ -143,7 +143,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getType()
     {
-        $this->type = $this->filesystem_type_object->getType();
+        $this->type = $this->fs_type->getType();
 
         return $this->type;
     }
@@ -157,7 +157,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getName()
     {
-        $this->name = $this->filesystem_type_object->getName();
+        $this->name = $this->fs_type->getName();
 
         return $this->name;
     }
@@ -171,7 +171,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getParent()
     {
-        $this->parent = $this->filesystem_type_object->getParent();
+        $this->parent = $this->fs_type->getParent();
 
         return $this->parent;
     }
@@ -185,7 +185,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getExtension()
     {
-        $this->extension = $this->filesystem_type_object->getExtension();
+        $this->extension = $this->fs_type->getExtension();
 
         return $this->extension;
     }
@@ -198,7 +198,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getSize()
     {
-        $this->size = $this->filesystem_type_object->getSize();
+        $this->size = $this->fs_type->getSize();
 
         return $this->size;
     }
@@ -212,7 +212,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getMimetype()
     {
-        $this->mime_type = $this->filesystem_type_object->getMimetype();
+        $this->mime_type = $this->fs_type->getMimetype();
 
         return $this->mime_type;
     }
@@ -225,7 +225,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getOwner()
     {
-        $this->owner = $this->filesystem_type_object->getOwner();
+        $this->owner = $this->fs_type->getOwner();
 
         return $this->owner;
     }
@@ -238,7 +238,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getGroup()
     {
-        $this->group = $this->filesystem_type_object->getGroup();
+        $this->group = $this->fs_type->getGroup();
 
         return $this->group;
     }
@@ -252,7 +252,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getCreateDate()
     {
-        $this->create_date = $this->filesystem_type_object->getCreateDate();
+        $this->create_date = $this->fs_type->getCreateDate();
 
         return $this->create_date;
     }
@@ -266,7 +266,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getAccessDate()
     {
-        $this->access_date = $this->filesystem_type_object->getAccessDate();
+        $this->access_date = $this->fs_type->getAccessDate();
 
         return $this->access_date;
     }
@@ -280,7 +280,7 @@ abstract class Path extends System implements PathInterface
      */
     public function getModifiedDate()
     {
-        $this->modified_date = $this->filesystem_type_object->getModifiedDate();
+        $this->modified_date = $this->fs_type->getModifiedDate();
 
         return $this->modified_date;
     }
@@ -294,7 +294,7 @@ abstract class Path extends System implements PathInterface
      */
     public function isReadable()
     {
-        $this->is_readable = $this->filesystem_type_object->isReadable();
+        $this->is_readable = $this->fs_type->isReadable();
 
         return $this->is_readable;
     }
@@ -308,7 +308,7 @@ abstract class Path extends System implements PathInterface
      */
     public function isWriteable()
     {
-        $this->is_writable = $this->filesystem_type_object->isWriteable();
+        $this->is_writable = $this->fs_type->isWriteable();
 
         return $this->is_writable;
     }
@@ -322,7 +322,7 @@ abstract class Path extends System implements PathInterface
      */
     public function isExecutable()
     {
-        $this->is_executable = $this->filesystem_type_object->isExecutable();
+        $this->is_executable = $this->fs_type->isExecutable();
 
         return $this->is_executable;
     }

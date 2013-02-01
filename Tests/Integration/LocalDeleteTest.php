@@ -86,7 +86,7 @@ class LocalDeleteTest extends Data
     /**
      * @covers Molajo\Filesystem\Type\Local::delete
      */
-    public function testCreateSingleFolder()
+    public function testDeleteSingleFolder()
     {
         $this->options = array(
             'delete_empty' => true

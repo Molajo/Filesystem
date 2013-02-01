@@ -30,7 +30,7 @@ class System implements SystemInterface
      * @var    array
      * @since  1.0
      */
-    public $filesystem_type_object;
+    public $fs_type;
 
     /**
      * Adaptee Filesystem Name
@@ -256,6 +256,15 @@ class System implements SystemInterface
      */
     public $mime_type;
 
+
+    /**
+     * Action Results
+     *
+     * @var    string
+     * @since  1.0
+     */
+    public $action_results;
+
     /**
      * Constructor
      *
@@ -276,7 +285,7 @@ class System implements SystemInterface
      */
     public function setRoot($root)
     {
-        $this->root = $this->filesystem_type_object->setRoot($root);
+        $this->root = $this->fs_type->setRoot($root);
 
         return $this->root;
     }
@@ -291,7 +300,7 @@ class System implements SystemInterface
      */
     public function setPersistence($persistence)
     {
-        $this->persistence = $this->filesystem_type_object->setPersistence($persistence);
+        $this->persistence = $this->fs_type->setPersistence($persistence);
 
         return $this->persistence;
     }
@@ -306,7 +315,7 @@ class System implements SystemInterface
      */
     public function setDirectoryPermissions($directory_permissions)
     {
-        $this->directory_permissions = $this->filesystem_type_object->setDirectoryPermissions($directory_permissions);
+        $this->directory_permissions = $this->fs_type->setDirectoryPermissions($directory_permissions);
 
         return $this->directory_permissions;
     }
@@ -321,7 +330,7 @@ class System implements SystemInterface
      */
     public function setFilePermissions($file_permissions)
     {
-        $this->file_permissions = $this->filesystem_type_object->setFilePermissions($file_permissions);
+        $this->file_permissions = $this->fs_type->setFilePermissions($file_permissions);
 
         return $this->file_permissions;
     }
@@ -336,7 +345,7 @@ class System implements SystemInterface
      */
     public function setReadOnly($read_only)
     {
-        $this->read_only = $this->filesystem_type_object->getReadOnly($read_only);
+        $this->read_only = $this->fs_type->getReadOnly($read_only);
 
         return $this->read_only;
     }
@@ -349,7 +358,7 @@ class System implements SystemInterface
      */
     public function getFilesystemType()
     {
-        $this->filesystem_type = $this->filesystem_type_object->getFilesystemType();
+        $this->filesystem_type = $this->fs_type->getFilesystemType();
 
         return $this->filesystem_type;
     }
@@ -362,7 +371,7 @@ class System implements SystemInterface
      */
     public function getRoot()
     {
-        $this->root = $this->filesystem_type_object->getRoot();
+        $this->root = $this->fs_type->getRoot();
 
         return $this->root;
     }
@@ -375,7 +384,7 @@ class System implements SystemInterface
      */
     public function getPersistence()
     {
-        $this->persistence = $this->filesystem_type_object->getPersistence();
+        $this->persistence = $this->fs_type->getPersistence();
 
         return $this->persistence;
     }
@@ -388,7 +397,7 @@ class System implements SystemInterface
      */
     public function getDirectoryPermissions()
     {
-        $this->directory_permissions = $this->filesystem_type_object->getDirectoryPermissions();
+        $this->directory_permissions = $this->fs_type->getDirectoryPermissions();
 
         return $this->directory_permissions;
     }
@@ -401,7 +410,7 @@ class System implements SystemInterface
      */
     public function getFilePermissions()
     {
-        $this->file_permissions = $this->filesystem_type_object->getFilePermissions();
+        $this->file_permissions = $this->fs_type->getFilePermissions();
 
         return $this->file_permissions;
     }
@@ -414,7 +423,7 @@ class System implements SystemInterface
      */
     public function getReadOnly()
     {
-        $this->read_only = $this->filesystem_type_object->getReadOnly();
+        $this->read_only = $this->fs_type->getReadOnly();
 
         return $this->read_only;
     }

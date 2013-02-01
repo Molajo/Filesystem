@@ -19,7 +19,7 @@ defined('MOLAJO') or die;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class InvalidPathException extends \RuntimeExtension implements FileExceptionInterface
+class InvalidPathException extends \RuntimeExtension implements ExceptionInterface
 {
     protected $code = 404;
 }

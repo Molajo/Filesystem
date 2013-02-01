@@ -63,6 +63,7 @@ class LocalWriteTest extends Data
             'data'    => 'Here are the words to write.',
         );
 
+
         $this->path = BASE_FOLDER . '/Tests';
 
         $this->assertfileNotExists($this->path . '/' . $temp);

@@ -265,6 +265,14 @@ class Local
     public $files;
 
     /**
+     * Action Results
+     *
+     * @var     mixed
+     * @since   1.0
+     */
+    public $action_results;
+
+    /**
      * Constructor
      *
      * @since  1.0
@@ -391,8 +399,14 @@ class Local
             $this->path = $path;
         }
 
-        $absolute_path = false;
+        /**  Filter: empty value
+         *
+         * @link http://tinyurl.com/arrayFilterStrlen
+         */
+        $nodes = array_filter(explode('/', $path), 'strlen');
 
+        /** Determine if it is absolute path */
+        $absolute_path = false;
         if (substr($path, 0, 1) == '/') {
             $absolute_path = true;
             $path          = substr($path, 1, strlen($path));
@@ -401,18 +415,11 @@ class Local
         /** Unescape slashes */
         $path = str_replace('\\', '/', $path);
 
-        /**  Filter: empty value
-         *
-         * @link http://tinyurl.com/arrayFilterStrlen
-         */
-        $nodes = array_filter(explode('/', $path), 'strlen');
-
+        /** Get rid of the '.' and '..' layers */
         $normalised = array();
 
         foreach ($nodes as $node) {
-
             if ($node == '.' || $node == '..' ) {
-
                 if (count($normalised) > 0) {
                     array_pop($normalised);
                 }
@@ -420,7 +427,6 @@ class Local
             } else {
                 $normalised[] = $node;
             }
-
         }
 
         $path = implode('/', $normalised);
@@ -761,6 +767,46 @@ class Local
     }
 
     /**
+     * Given an existing path, convert it to a path relative to a given starting path
+     *
+     * @param string $endPath   Absolute path of target
+     * @param string $startPath Absolute path where traversal begins
+     *
+     * @return string Path of target relative to starting path
+     */
+    public function makePathRelative($endPath, $startPath)
+    {
+        // Normalize separators on windows
+        if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+            $endPath = strtr($endPath, '\\', '/');
+            $startPath = strtr($startPath, '\\', '/');
+        }
+
+        // Split the paths into arrays
+        $startPathArr = explode('/', trim($startPath, '/'));
+        $endPathArr = explode('/', trim($endPath, '/'));
+
+        // Find for which directory the common path stops
+        $index = 0;
+        while (isset($startPathArr[$index]) && isset($endPathArr[$index]) && $startPathArr[$index] === $endPathArr[$index]) {
+            $index++;
+        }
+
+        // Determine how deep the start path is relative to the common path (ie, "web/bundles" = 2 levels)
+        $depth = count($startPathArr) - $index;
+
+        // Repeated "../" for each level need to reach the common path
+        $traverser = str_repeat('../', $depth);
+
+        $endPathRemainder = implode('/', array_slice($endPathArr, $index));
+
+        // Construct $endPath from traversing to the common path, then to the remaining $endPath
+        $relativePath = $traverser . (strlen($endPathRemainder) > 0 ? $endPathRemainder . '/' : '');
+
+        return (strlen($relativePath) === 0) ? './' : $relativePath;
+    }
+
+    /**
      * Returns true or false indicator as to whether or not the path is a directory
      *
      * @return  bool
@@ -999,7 +1045,7 @@ class Local
         }
 
         try {
-            $data = file_get_contents($this->path);
+            $this->action_results = file_get_contents($this->path);
 
         } catch (\Exception $e) {
 
@@ -1007,11 +1053,40 @@ class Local
             ('Filesystem Local Read: Error reading file: ' . $this->path);
         }
 
-        if ($data === false) {
+        if ($this->action_results === false) {
             ('Filesystem Local Read: Empty File: ' . $this->path);
         }
 
-        return $data;
+        return $this->action_results;
+    }
+
+    /**
+     * Returns the contents of the files located at path directory
+     *
+     * @param   bool  $recursive
+     *
+     * @return  mixed;
+     * @since   1.0
+     */
+    public function getList($recursive)
+    {
+        if (is_file($this->path)) {
+            return file_get_contents($this->path);
+        }
+
+        $files = array();
+
+        $this->discovery($this->path);
+
+        foreach ($this->directories as $directory) {
+            $files[] = $directory;
+        }
+        foreach ($this->files as $file) {
+            $files[] = $file;
+        }
+
+        asort($files);
+        return $files;
     }
 
     /**
@@ -1457,28 +1532,6 @@ class Local
     }
 
     /**
-     * Returns the contents of the files located at path directory
-     *
-     * @param   bool  $recursive
-     *
-     * @return  mixed;
-     * @since   1.0
-     */
-    public function getList($recursive)
-    {
-        if (file_exists($this->path)) {
-            return file_get_contents($this->path);
-        }
-
-        $files = array();
-        foreach ($iterator as $file) {
-            $files[] = $file;
-        }
-
-        return $files;
-    }
-
-    /**
      * Change the file mode for 'owner', 'group', and 'world', and read, write, execute access
      *
      * Mode: R/W for owner, nothing for everyone else '0600'
@@ -1530,7 +1583,7 @@ class Local
     public function touch($time, $atime = null)
     {
         if ($time == '' || $time === null || $time == 0) {
-            $time = getDateTime($time);
+            $time = $this->getDateTime($time);
         }
 
         try {
@@ -1559,7 +1612,7 @@ class Local
      * @return  DateTime
      * @since   1.0
      */
-    private function getDateTime($time, DateTimeZone $timezone = null)
+    protected function getDateTime($time, DateTimeZone $timezone = null)
     {
         if ($time instanceof DateTime) {
             return $time;

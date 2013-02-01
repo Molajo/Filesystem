@@ -1,6 +1,9 @@
 <?php
+
+//todo: figure out how to pass in the timezone
+
 /**
- * Adapter Class
+ * Filesystem Adapter
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -38,7 +41,7 @@ Class Adapter implements FileInterface
      * @var     object  Filesystem
      * @since   1.0
      */
-    public $filesystem_object;
+    public $fs;
 
     /**
      * Filesystem Type Instance
@@ -46,7 +49,7 @@ Class Adapter implements FileInterface
      * @var     string
      * @since   1.0
      */
-    public $filesystem_type_object;
+    public $fs_type;
 
     /**
      * Action Results
@@ -248,13 +251,16 @@ Class Adapter implements FileInterface
             $this->type = 'Local';
         }
 
-        $this->filesystem_type_object = $this->getType();
+        /** Gets an instance of the File System Type, ex. Local, FTP, Cache, etc. */
+        $this->fs_type = $this->getType();
 
-        $this->filesystem = $this->getFilesystem();
+        /** Gets an instance of the Filesystem Target Interface for Filesystem Adapter */
+        $this->fs = $this->getFilesystem();
 
-        $this->filesystem_type_object = $this->filesystem->connect($this->filesystem_type_object);
+        /** Pass the Filesystem Type into the Filesystem Interface adapter and Connect */
+        $this->fs_type = $this->fs->connect($this->fs_type);
 
-        return $this->filesystem_type_object;
+        return $this->fs_type;
     }
 
     /**
@@ -296,6 +302,18 @@ Class Adapter implements FileInterface
     }
 
     /**
+     * Does the path exist (either as a file or a folder)?
+     *
+     * @return bool|null
+     */
+    public function exists()
+    {
+        $this->exists = $this->fs->exists();
+
+        return $this->exists;
+    }
+
+    /**
      * Set the Path
      *
      * @param   string  $path
@@ -305,7 +323,7 @@ Class Adapter implements FileInterface
      */
     public function setPath($path)
     {
-        $this->path = $this->filesystem->setPath($path);
+        $this->path = $this->fs->setPath($path);
 
         return $this->path;
     }
@@ -318,9 +336,9 @@ Class Adapter implements FileInterface
      */
     public function getMetadata()
     {
-        $this->filesystem_type_object = $this->filesystem->getMetadata();
+        $this->fs_type = $this->fs->getMetadata();
 
-        return $this->filesystem_type_object;
+        return $this->fs_type;
     }
 
     /**
@@ -331,9 +349,25 @@ Class Adapter implements FileInterface
      */
     public function read()
     {
-        $contents = $this->filesystem->read();
+        $contents = $this->fs->read();
 
         return $contents;
+    }
+
+    /**
+     * Returns a list of file and folder names located at path directory
+     *
+     * @param   bool  $recursive
+     * todo: add filters, extension type, wild card, specific filenames, date ranges
+     *
+     * @return  array
+     * @since   1.0
+     */
+    public function getList($recursive = false)
+    {
+        $content = $this->fs->getList($recursive);
+
+        return $content;
     }
 
     /**
@@ -348,7 +382,7 @@ Class Adapter implements FileInterface
      */
     public function write($file = '', $replace = true, $data = '')
     {
-        $this->filesystem->write($file, $replace, $data);
+        $this->fs->write($file, $replace, $data);
 
         return;
     }
@@ -363,7 +397,7 @@ Class Adapter implements FileInterface
      */
     public function delete($delete_subdirectories = true)
     {
-        $this->filesystem->delete($delete_subdirectories);
+        $this->fs->delete($delete_subdirectories);
 
         return;
     }
@@ -383,7 +417,7 @@ Class Adapter implements FileInterface
      */
     public function copy($target_directory, $target_name, $replace = true, $target_filesystem_type = '')
     {
-        return $this->filesystem->copy($target_directory, $target_name, $replace, $target_filesystem_type);
+        return $this->fs->copy($target_directory, $target_name, $replace, $target_filesystem_type);
     }
 
     /**
@@ -401,23 +435,7 @@ Class Adapter implements FileInterface
      */
     public function move($target_directory, $target_name, $replace = true, $target_filesystem_type = '')
     {
-        return $this->filesystem->move($target_directory, $target_name, $replace, $target_filesystem_type);
-    }
-
-    /**
-     * Returns a list of file and folder names located at path directory
-     *
-     * @param   bool  $recursive
-     * todo: add filters, extension type, wild card, specific filenames, date ranges
-     *
-     * @return  array
-     * @since   1.0
-     */
-    public function getList($recursive = false)
-    {
-        $content = $this->filesystem->getList($recursive);
-
-        return $content;
+        return $this->fs->move($target_directory, $target_name, $replace, $target_filesystem_type);
     }
 
     /**
@@ -430,7 +448,7 @@ Class Adapter implements FileInterface
      */
     public function chmod($mode = '')
     {
-        $this->filesystem->chmod($mode);
+        $this->fs->chmod($mode);
 
         return;
     }
@@ -446,7 +464,7 @@ Class Adapter implements FileInterface
      */
     public function touch($time = null, $atime = null)
     {
-        $this->filesystem->touch($time, $atime);
+        $this->fs->touch($time, $atime);
 
         return;
     }

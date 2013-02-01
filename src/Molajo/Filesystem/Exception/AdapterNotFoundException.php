@@ -18,7 +18,7 @@ defined('MOLAJO') or die;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class AdapterNotFoundException extends FileExtension implements FileExceptionInterface
+class AdapterNotFoundException extends FileExtension implements ExceptionInterface
 {
     protected $code = 404;
 }

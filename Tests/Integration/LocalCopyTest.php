@@ -130,7 +130,20 @@ class LocalCopyTest extends Data
         $this->assertGreaterThan(0, $this->calculateSize($temp . '/didit'));
 
         return;
+
+        $options = array(
+            'target_directory'       => 'name/of/target/folder',
+            'target_name'            => 'single-file-copy.txt',
+            'replace'                => false,
+            'target_filesystem_type' => 'FTP'
+        );
+        $connect = new \Molajo\Filesystem\Adapter('Local', 'name/of/source/folder', 'Copy', $options);
+
+
+
     }
+
+
 
     /**
      * @covers Molajo\Filesystem\Type\Local::copyOrMove

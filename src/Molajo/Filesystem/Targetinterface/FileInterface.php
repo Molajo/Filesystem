@@ -41,6 +41,13 @@ interface FileInterface
     public function setPath($path);
 
     /**
+     * Does the path exist (either as a file or a folder)?
+     *
+     * @return bool|null
+     */
+    public function exists();
+
+    /**
      * Retrieves and sets metadata for the file specified in path
      *
      * @return  object  Filesystem
@@ -55,6 +62,16 @@ interface FileInterface
      * @since   1.0
      */
     public function read();
+
+    /**
+     * Returns a list of file and folder names located at path directory
+     *
+     * @param   bool  $recursive
+     *
+     * @return  array
+     * @since   1.0
+     */
+    public function getList($recursive = false);
 
     /**
      * Creates or replaces the file or directory identified in path using the data value
@@ -107,16 +124,6 @@ interface FileInterface
      * @since   1.0
      */
     public function move($target_directory, $target_name, $replace = true, $target_filesystem_type = '');
-
-    /**
-     * Returns a list of file and folder names located at path directory
-     *
-     * @param   bool  $recursive
-     *
-     * @return  array
-     * @since   1.0
-     */
-    public function getList($recursive = false);
 
     /**
      * Change file mode

@@ -12,49 +12,8 @@ General-purpose file and directory services package for PHP applications using t
 
 * PHP 5.3, or above
 * PSR-0 compliant autoloader
+* Platform independent
 * [optional] PHPUnit 3.5+ to execute the test suite (phpunit --version)
-
-## Installation
-
-### Install using Composer from Packagist
-
-**Step 1** Install composer in your project:
-
-```php
-    curl -s https://getcomposer.org/installer | php
-```
-
-**Step 2** Create a **composer.json** file in your project root:
-
-```php
-{
-    "require": {
-        "Molajo/Filesystem": "1.*"
-    }
-}
-```
-
-**Step 3** Install via composer:
-
-```php
-    php composer.phar install
-```
-
-**Step 4** Add this line to your application’s **index.php** file:
-
-```php
-    require 'vendor/autoload.php';
-```
-
-This instructs PHP to use Composer’s autoloader for **Filesystem** project dependencies.
-
-### Or, Install Manually
-
-Download and extract **Filesystem**.
-
-Copy the Molajo folder (first subfolder of src) into your Vendor directory.
-
-Register Molajo\Filesystem\ subfolder in your autoload process.
 
 ## Basic Usage
 
@@ -73,59 +32,83 @@ The following commands can be used for a local filesystem, FTP server, Cache sto
 To read a specific file from a filesystem:
 
 ```php
-
-    $path = 'location\of\file.txt';
-    $options = array(
-        'adapter_name' => 'local'
-    );
-    $connect = new \Molajo\Filesystem\Adapter($path, $options);
-
-    $adapter = $connect->getAdapter();
-    $data    = $adapter->read ();
-
+    $connect = new \Molajo\Filesystem\Adapter('Local', 'location/of/file.txt', 'Read');
+    $results = $connect->fs->action_results);
 ```
+
+### Metadata
+
+To access metadata for a filesystem request:
+
+```php
+   $results = $connect->fs->is_writable);
+```
+**Metadata about the Fileystem**
+* filesystem_type
+* root
+* persistence
+* directory_permissions (default)
+* file_permissions (default)
+* read_only
+
+**Metadata about path requested (file or folder)**
+* path
+* exists
+* owner
+* group
+* create_date
+* access_date
+* modified_date
+* is_readable
+* is_writable
+* is_executable
+* absolute_path
+* is_absolute
+* is_directory
+* is_file
+* is_link
+* type
+* name
+* parent
+* extension
+* size
+* mime_type
 
 ### List
 
 To list the names of files and/or directories from a filesystem for a given path:
 
-```php
-    $path = 'location\of\file.txt';
-    $options = array(
-        'adapter_name' => 'local'
-    );
-    $connect = new \Molajo\Filesystem\Adapter($path, $options);
 
-    $adapter = $connect->getAdapter();
-    $data    = $adapter->getList ();
+```php
+    $connect = new \Molajo\Filesystem\Adapter('Local', 'directory-name', 'List', $options);
+    $results = $connect->fs->action_results);
 ```
 
 ### Write
 
-To write a file to a filesystem:
+To write a file to a filesystem. :
 
 ```php
     $options = array(
-        'source_adapter' => 'local',
-        'source_path'    => '/x/y/example.txt'
+        'file'    => 'filename.txt',
+        'replace' => false,
+        'data'    => 'Here are the words to write to the file.',
     );
-
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->read ();
+    $connect      = new \Molajo\Filesystem\Adapter('Local', 'name/of/folder/here', 'Write', $options);
 ```
 
 ### Copy
 
-To write a file or folder to a specific destination on the filesystem:
+To write a file or folder to a specific destination on the filesystem (or a different filesystem)::
 
 ```php
     $options = array(
-        'source_adapter' => 'local',
-        'source_path'    => '/x/y/example.txt'
+        'target_directory'       => 'name/of/target/folder',
+        'target_name'            => 'single-file-copy.txt',
+        'replace'                => false,
+        'target_filesystem_type' => 'FTP'
     );
-
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->read ();
+    $connect = new \Molajo\Filesystem\Adapter('Local', 'name/of/source/folder', 'Copy', $options);
 ```
 
 ### Move
@@ -134,12 +117,12 @@ To move a file or folder to a specific destination on the filesystem:
 
 ```php
     $options = array(
-        'source_adapter' => 'local',
-        'source_path'    => '/x/y/example.txt'
+        'target_directory'       => 'name/of/target/folder',
+        'target_name'            => 'single-file-move.txt',
+        'replace'                => false,
+        'target_filesystem_type' => 'Local'
     );
-
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->read ();
+    $connect = new \Molajo\Filesystem\Adapter('Local', 'name/of/source/folder', 'Move', $options);
 ```
 
 ### Delete
@@ -147,15 +130,8 @@ To move a file or folder to a specific destination on the filesystem:
 To move a file or folder to a specific destination on the filesystem:
 
 ```php
-    $options = array(
-        'source_adapter' => 'local',
-        'source_path'    => '/x/y/example.txt'
-    );
-
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->read ();
+    $connect = new \Molajo\Filesystem\Adapter('Local', 'name/of/source/folder', 'Delete');
 ```
-## Lists
 
 ### DirectoryIterator
 http://us2.php.net/manual/en/class.filesystemiterator.php
@@ -233,23 +209,69 @@ This shows how to backup a file on one filesystem to another filesystem.
     $data    = $connect->backup ();
 ```
 
+## Installation
+
+### Install using Composer from Packagist
+
+**Step 1** Install composer in your project:
+
+```php
+    curl -s https://getcomposer.org/installer | php
+```
+
+**Step 2** Create a **composer.json** file in your project root:
+
+```php
+{
+    "require": {
+        "Molajo/Filesystem": "1.*"
+    }
+}
+```
+
+**Step 3** Install via composer:
+
+```php
+    php composer.phar install
+```
+
+**Step 4** Add this line to your application’s **index.php** file:
+
+```php
+    require 'vendor/autoload.php';
+```
+
+This instructs PHP to use Composer’s autoloader for **Filesystem** project dependencies.
+
+### Or, Install Manually
+
+Download and extract **Filesystem**.
+
+Copy the Molajo folder (first subfolder of src) into your Vendor directory.
+
+Register Molajo\Filesystem\ subfolder in your autoload process.
+
 About
 =====
 
-Molajo Project has adopted the following:
+Molajo Project adopted the following:
 
  * [Semantic Versioning](http://semver.org/)
  * [PSR-0 Autoloader Interoperability](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)
  * [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md)
  and [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
- * phpUnit Testing
- * phpDoc
+ * [phpDocumentor2] (https://github.com/phpDocumentor/phpDocumentor2)
+ * [phpUnit Testing] (https://github.com/sebastianbergmann/phpunit)
+ * [Travis Continuous Improvement] (https://travis-ci.org/profile/Molajo)
+ * [Packagist] (https://packagist.org)
 
 
-Submitting bugs and feature requests
+Submitting pull requests and features
 ------------------------------------
 
-Bugs and feature request are tracked on [GitHub](https://github.com/Molajo/Fileservices/issues)
+Pull requests [GitHub](https://github.com/Molajo/Fileservices/pulls)
+
+Features [GitHub](https://github.com/Molajo/Fileservices/issues)
 
 Author
 ------

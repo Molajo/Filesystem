@@ -18,7 +18,7 @@ defined('MOLAJO') or die;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class FileNotFoundException extends FileException implements FileExceptionInterface
+class FileNotFoundException extends FileException implements ExceptionInterface
 {
     protected $code = 404;
 }

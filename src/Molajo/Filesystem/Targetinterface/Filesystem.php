@@ -41,15 +41,15 @@ class Filesystem extends Path implements FileInterface
      * @return  bool
      * @since   1.0
      */
-    public function connect($filesystem_type_object)
+    public function connect($fs_type)
     {
-        $this->filesystem_type_object = $filesystem_type_object;
+        $this->fs_type = $fs_type;
 
-        $this->filesystem_type_object = $this->filesystem_type_object->connect();
+        $this->fs_type = $this->fs_type->connect();
 
         $this->connection = true;
 
-        return $this->filesystem_type_object;
+        return $this->fs_type;
     }
 
     /**
@@ -62,7 +62,7 @@ class Filesystem extends Path implements FileInterface
      */
     public function setPath($path)
     {
-        $this->path = $this->filesystem_type_object->setPath($path);
+        $this->path = $this->fs_type->setPath($path);
 
         return $this->path;
     }
@@ -103,7 +103,7 @@ class Filesystem extends Path implements FileInterface
         $this->size                  = $this->getSize();
         $this->mime_type             = $this->getMimeType();
 
-        return $this->filesystem_type_object;
+        return $this->fs_type;
     }
 
     /**
@@ -115,9 +115,9 @@ class Filesystem extends Path implements FileInterface
      */
     public function read()
     {
-        $data = $this->filesystem_type_object->read();
+        $this->action_results = $this->fs_type->read();
 
-        return $data;
+        return $this->action_results;
     }
 
     /**
@@ -133,9 +133,9 @@ class Filesystem extends Path implements FileInterface
      */
     function write($file = '', $replace = true, $data = '')
     {
-        $results = $this->filesystem_type_object->write($file, $replace, $data);
+        $this->action_results = $this->fs_type->write($file, $replace, $data);
 
-        return $results;
+        return $this->action_results;
     }
 
     /**
@@ -149,9 +149,9 @@ class Filesystem extends Path implements FileInterface
      */
     public function delete($delete_subdirectories = true)
     {
-        $results = $this->filesystem_type_object->delete($delete_subdirectories);
+        $this->action_results = $this->fs_type->delete($delete_subdirectories);
 
-        return $results;
+        return $this->action_results;
     }
 
     /**
@@ -169,11 +169,11 @@ class Filesystem extends Path implements FileInterface
      */
     public function copy($target_directory, $target_name, $replace = true, $target_filesystem_type = '')
     {
-        $results
-            = $this->filesystem_type_object
+        $this->action_results
+            = $this->fs_type
             ->copy($target_directory, $target_name, $replace, $target_filesystem_type);
 
-        return $results;
+        return $this->action_results;
     }
 
     /**
@@ -191,11 +191,11 @@ class Filesystem extends Path implements FileInterface
      */
     public function move($target_directory, $target_name, $replace = true, $target_filesystem_type = '')
     {
-        $results
-            = $this->filesystem_type_object
+        $this->action_results
+            = $this->fs_type
             ->move($target_directory, $target_name, $replace, $target_filesystem_type);
 
-        return $results;
+        return $this->action_results;
     }
 
     /**
@@ -208,9 +208,9 @@ class Filesystem extends Path implements FileInterface
      */
     public function getList($recursive = false)
     {
-        $data = $this->filesystem_type_object->getList($recursive);
+        $this->action_results = $this->fs_type->getList($recursive);
 
-        return $data;
+        return $this->action_results;
     }
 
     /**
@@ -233,9 +233,9 @@ class Filesystem extends Path implements FileInterface
      */
     public function chmod($mode = '')
     {
-        $results = $this->filesystem_type_object->chmod($mode);
+        $this->action_results = $this->fs_type->chmod($mode);
 
-        return $results;
+        return $this->action_results;
     }
 
     /**
@@ -250,9 +250,9 @@ class Filesystem extends Path implements FileInterface
      */
     public function touch($time = null, $atime = null)
     {
-        $results = $this->filesystem_type_object->touch($time, $atime);
+        $this->action_results = $this->fs_type->touch($time, $atime);
 
-        return $results;
+        return $this->action_results;
     }
 
     /**

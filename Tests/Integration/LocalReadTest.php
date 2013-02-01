@@ -50,39 +50,39 @@ class LocalReadTest extends Data
     {
         $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options = array());
 
-        $this->assertEquals('Local', $connect->filesystem_type_object->filesystem_type);
-        $this->assertEquals('/', $connect->filesystem_type_object->root);
-        $this->assertEquals(1, $connect->filesystem_type_object->persistence);
-        $this->assertEquals(0755, $connect->filesystem_type_object->directory_permissions);
-        $this->assertEquals(0644, $connect->filesystem_type_object->file_permissions);
-        $this->assertEquals(1, $connect->filesystem_type_object->read_only);
-        $this->assertEquals(true, $connect->filesystem_type_object->is_readable);
-        $this->assertEquals(true, $connect->filesystem_type_object->is_writable);
-        $this->assertEquals(false, $connect->filesystem_type_object->is_executable);
+        $this->assertEquals('Local', $connect->fs->filesystem_type);
+        $this->assertEquals('/', $connect->fs->root);
+        $this->assertEquals(1, $connect->fs->persistence);
+        $this->assertEquals(0755, $connect->fs->directory_permissions);
+        $this->assertEquals(0644, $connect->fs->file_permissions);
+        $this->assertEquals(1, $connect->fs->read_only);
+        $this->assertEquals(true, $connect->fs->is_readable);
+        $this->assertEquals(true, $connect->fs->is_writable);
+        $this->assertEquals(false, $connect->fs->is_executable);
         $this->assertEquals(
             BASE_FOLDER . '/Tests/Data/test1.txt',
-            $connect->filesystem_type_object->path
+            $connect->fs->path
         );
-        $this->assertEquals(true, $connect->filesystem_type_object->exists);
+        $this->assertEquals(true, $connect->fs->exists);
         $this->assertEquals(
             BASE_FOLDER . '/Tests/Data/test1.txt',
-            $connect->filesystem_type_object->absolute_path
+            $connect->fs->absolute_path
         );
-        $this->assertEquals(true, $connect->filesystem_type_object->is_absolute);
-        $this->assertEquals(false, $connect->filesystem_type_object->is_directory);
-        $this->assertEquals(true, $connect->filesystem_type_object->is_file);
-        $this->assertEquals(false, $connect->filesystem_type_object->is_link);
-        $this->assertEquals('file', $connect->filesystem_type_object->type);
-        $this->assertEquals('test1.txt', $connect->filesystem_type_object->name);
+        $this->assertEquals(true, $connect->fs->is_absolute);
+        $this->assertEquals(false, $connect->fs->is_directory);
+        $this->assertEquals(true, $connect->fs->is_file);
+        $this->assertEquals(false, $connect->fs->is_link);
+        $this->assertEquals('file', $connect->fs->type);
+        $this->assertEquals('test1.txt', $connect->fs->name);
         $this->assertEquals(
             BASE_FOLDER . '/Tests/Data',
-            $connect->filesystem_type_object->parent
+            $connect->fs->parent
         );
-        $this->assertEquals('txt', $connect->filesystem_type_object->extension);
-        $this->assertEquals(18, $connect->filesystem_type_object->size);
-        $this->assertEquals('text/plain; charset=us-ascii', $connect->filesystem_type_object->mime_type);
+        $this->assertEquals('txt', $connect->fs->extension);
+        $this->assertEquals(18, $connect->fs->size);
+        $this->assertEquals('text/plain; charset=us-ascii', $connect->fs->mime_type);
 
-        $this->assertEquals('yabba, dabba, doo', trim($connect->action_results));
+        $this->assertEquals('yabba, dabba, doo', trim($connect->fs->action_results));
 
         return;
     }
