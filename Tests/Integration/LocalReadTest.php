@@ -13,7 +13,7 @@ class LocalReadTest extends Data
     /**
      * @var Adapter Name
      */
-    protected $adapter_name;
+    protected $filesystem_type;
 
     /**
      * @var Path
@@ -28,7 +28,7 @@ class LocalReadTest extends Data
     /**
      * @var Filesystem
      */
-    protected $filesystem;
+    protected $fs;
 
     /**
      * Initialises Adapter
@@ -37,7 +37,7 @@ class LocalReadTest extends Data
     {
         parent::setUp();
 
-        $this->adapter_name = 'Local';
+        $this->fs_name = 'Local';
         $this->action       = 'Read';
         $this->path         = BASE_FOLDER . '/Tests/Data/test1.txt';
         $this->options      = array();
@@ -48,13 +48,13 @@ class LocalReadTest extends Data
      */
     public function testSuccessfulRead()
     {
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options = array());
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options = array());
 
         $this->assertEquals('Local', $connect->fs->filesystem_type);
         $this->assertEquals('/', $connect->fs->root);
         $this->assertEquals(1, $connect->fs->persistence);
-        $this->assertEquals(0755, $connect->fs->directory_permissions);
-        $this->assertEquals(0644, $connect->fs->file_permissions);
+        $this->assertEquals(0755, $connect->fs->default_directory_permissions);
+        $this->assertEquals(0644, $connect->fs->default_file_permissions);
         $this->assertEquals(1, $connect->fs->read_only);
         $this->assertEquals(true, $connect->fs->is_readable);
         $this->assertEquals(true, $connect->fs->is_writable);
@@ -68,7 +68,7 @@ class LocalReadTest extends Data
             BASE_FOLDER . '/Tests/Data/test1.txt',
             $connect->fs->absolute_path
         );
-        $this->assertEquals(true, $connect->fs->is_absolute);
+        $this->assertEquals(true, $connect->fs->is_absolute_path);
         $this->assertEquals(false, $connect->fs->is_directory);
         $this->assertEquals(true, $connect->fs->is_file);
         $this->assertEquals(false, $connect->fs->is_link);
@@ -94,19 +94,19 @@ class LocalReadTest extends Data
     public function testUnsuccessfulRead()
     {
         $this->path = BASE_FOLDER . '/Tests/Data/testreally-is-not-there.txt';
-        $connect    = new Adapter($this->adapter_name, $this->path, $this->action, $this->options = array());
+        $connect    = new Adapter($this->fs_name, $this->path, $this->action, $this->options = array());
 
         return;
     }
 
     /**
      * @covers Molajo\Filesystem\Targetinterface\Local::read
-     * @expectedException Molajo\Filesystem\Exception\FileNotFoundException
+     * @expectedExceptionMolajo\Filesystem\Exception\FileException
      */
     public function testNotAFile()
     {
         $this->path = BASE_FOLDER . '/Tests';
-        $connect    = new Adapter($this->adapter_name, $this->path, $this->action, $this->options = array());
+        $connect    = new Adapter($this->fs_name, $this->path, $this->action, $this->options = array());
 
         return;
     }

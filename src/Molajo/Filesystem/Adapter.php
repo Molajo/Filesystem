@@ -111,10 +111,6 @@ Class Adapter implements FileInterface
                 if (isset($options['replace'])) {
                     $replace = $options['replace'];
                 }
-                if ($replace === false) {
-                } else {
-                    $replace = true;
-                }
 
                 if (isset($options['data'])) {
                     $data = $options['data'];
@@ -134,12 +130,9 @@ Class Adapter implements FileInterface
                     $delete_subdirectories = (int)$options['delete_subdirectories'];
                 }
 
-                if ($delete_subdirectories === false) {
-                } else {
-                    $delete_subdirectories = true;
-                }
+                $delete_subdirectories = $this->fs->forceTrueOrFalse($delete_subdirectories, true);
 
-                $this->action_results = $this->delete($delete_subdirectories);
+                $this->action_results  = $this->delete($delete_subdirectories);
 
                 break;
 
@@ -167,10 +160,7 @@ Class Adapter implements FileInterface
                     $replace = (int)$options['replace'];
                 }
 
-                if ($replace === false) {
-                } else {
-                    $replace = true;
-                }
+                $replace = $this->fs->forceTrueOrFalse($replace, true);
 
                 if (isset($options['target_filesystem_type'])) {
                     $target_filesystem_type = $options['target_filesystem_type'];
@@ -191,10 +181,7 @@ Class Adapter implements FileInterface
                     $recursive = (int)$options['recursive'];
                 }
 
-                if ($recursive === false) {
-                } else {
-                    $recursive = true;
-                }
+                $recursive = $this->fs->forceTrueOrFalse($recursive, true);
 
                 $this->action_results = $this->getList($recursive);
 

@@ -70,7 +70,7 @@ class System implements SystemInterface
      * @var    string
      * @since  1.0
      */
-    public $directory_permissions;
+    public $default_directory_permissions;
 
     /**
      * File Permissions
@@ -78,7 +78,7 @@ class System implements SystemInterface
      * @var    string
      * @since  1.0
      */
-    public $file_permissions;
+    public $default_file_permissions;
 
     /**
      * Read only
@@ -118,7 +118,7 @@ class System implements SystemInterface
      * @var    bool
      * @since  1.0
      */
-    public $is_absolute;
+    public $is_absolute_path;
 
     /**
      * Is Directory
@@ -308,31 +308,31 @@ class System implements SystemInterface
     /**
      * Get Directory Permissions for Filesystem
      *
-     * @param   $directory_permissions
+     * @param   $default_directory_permissions
      *
      * @return  bool
      * @since   1.0
      */
-    public function setDirectoryPermissions($directory_permissions)
+    public function setDirectoryPermissions($default_directory_permissions)
     {
-        $this->directory_permissions = $this->fs_type->setDirectoryPermissions($directory_permissions);
+        $this->default_directory_permissions = $this->fs_type->setDirectoryPermissions($default_directory_permissions);
 
-        return $this->directory_permissions;
+        return $this->default_directory_permissions;
     }
 
     /**
      * Get File Permissions for Filesystem
      *
-     * @param   $file_permissions
+     * @param   $default_file_permissions
      *
      * @return  bool
      * @since   1.0
      */
-    public function setFilePermissions($file_permissions)
+    public function setFilePermissions($default_file_permissions)
     {
-        $this->file_permissions = $this->fs_type->setFilePermissions($file_permissions);
+        $this->default_file_permissions = $this->fs_type->setFilePermissions($default_file_permissions);
 
-        return $this->file_permissions;
+        return $this->default_file_permissions;
     }
 
     /**
@@ -397,9 +397,9 @@ class System implements SystemInterface
      */
     public function getDirectoryPermissions()
     {
-        $this->directory_permissions = $this->fs_type->getDirectoryPermissions();
+        $this->default_directory_permissions = $this->fs_type->getDirectoryPermissions();
 
-        return $this->directory_permissions;
+        return $this->default_directory_permissions;
     }
 
     /**
@@ -410,9 +410,9 @@ class System implements SystemInterface
      */
     public function getFilePermissions()
     {
-        $this->file_permissions = $this->fs_type->getFilePermissions();
+        $this->default_file_permissions = $this->fs_type->getFilePermissions();
 
-        return $this->file_permissions;
+        return $this->default_file_permissions;
     }
 
     /**

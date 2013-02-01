@@ -75,33 +75,37 @@ class Filesystem extends Path implements FileInterface
      */
     public function getMetadata()
     {
-        $this->filesystem_type       = $this->getFilesystemType();
-        $this->root                  = $this->getRoot();
-        $this->persistence           = $this->getPersistence();
-        $this->directory_permissions = $this->getDirectoryPermissions();
-        $this->file_permissions      = $this->getFilePermissions();
-        $this->read_only             = $this->getReadOnly();
-        $this->path                  = $this->getPath();
-        $this->exists                = $this->exists();
-        $this->owner                 = $this->getOwner();
-        $this->group                 = $this->getGroup();
-        $this->create_date           = $this->getCreateDate();
-        $this->access_date           = $this->getAccessDate();
-        $this->modified_date         = $this->getModifiedDate();
-        $this->is_readable           = $this->isReadable();
-        $this->is_writable           = $this->isWriteable();
-        $this->is_executable         = $this->isExecutable();
-        $this->absolute_path         = $this->getAbsolutePath();
-        $this->is_absolute           = $this->isAbsolute();
-        $this->is_directory          = $this->isDirectory();
-        $this->is_file               = $this->isFile();
-        $this->is_link               = $this->isLink();
-        $this->type                  = $this->getType();
-        $this->name                  = $this->getName();
-        $this->parent                = $this->getParent();
-        $this->extension             = $this->getExtension();
-        $this->size                  = $this->getSize();
-        $this->mime_type             = $this->getMimeType();
+        $this->filesystem_type               = $this->getFilesystemType();
+        $this->root                          = $this->getRoot();
+        $this->persistence                   = $this->getPersistence();
+        $this->default_directory_permissions = $this->getDirectoryPermissions();
+        $this->default_file_permissions      = $this->getFilePermissions();
+        $this->read_only                     = $this->getReadOnly();
+        $this->path                          = $this->getPath();
+        $this->is_absolute_path              = $this->isAbsolutePath();
+        $this->absolute_path                 = $this->getAbsolutePath();
+//$this->relative_path                 = $this->getRelativePath();
+        $this->exists                        = $this->exists();
+        $this->name                          = $this->getName();
+
+        $this->is_directory                  = $this->isDirectory();
+        $this->is_file                       = $this->isFile();
+        $this->is_link                       = $this->isLink();
+        $this->type                          = $this->getType();
+
+        $this->parent                        = $this->getParent();
+        $this->extension                     = $this->getExtension();
+        $this->size                          = $this->getSize();
+        $this->mime_type                     = $this->getMimeType();
+        $this->owner                         = $this->getOwner();
+        $this->group                         = $this->getGroup();
+        $this->create_date                   = $this->getCreateDate();
+        $this->access_date                   = $this->getAccessDate();
+        $this->modified_date                 = $this->getModifiedDate();
+        $this->is_readable                   = $this->isReadable();
+        $this->is_writable                   = $this->isWriteable();
+        $this->is_executable                 = $this->isExecutable();
+
 
         return $this->fs_type;
     }
@@ -264,5 +268,33 @@ class Filesystem extends Path implements FileInterface
     public function close()
     {
         return;
+    }
+
+    /**
+     * Utility method - force consistency in True and False
+     *
+     * @param   bool  $variable
+     * @param   bool  $default
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function forceTrueOrFalse($variable, $default = false)
+    {
+        if ($default === true) {
+
+            if ($variable === false) {
+            } else {
+                $variable = true;
+            }
+
+        } else {
+            if ($variable === true) {
+            } else {
+                $variable = false;
+            }
+        }
+
+        return $default;
     }
 }

@@ -33,7 +33,7 @@ To read a specific file from a filesystem:
 
 ```php
     $connect = new \Molajo\Filesystem\Adapter('Read', 'location/of/file.txt');
-    $results = $connect->fs->action_results);
+    $results = $connect->fs->action_results;
 ```
 
 ### Metadata
@@ -51,8 +51,11 @@ To access metadata for a filesystem request:
 * file_permissions (default)
 * read_only
 
-**Metadata about path requested (file or folder)**
+**Metadata about requested path (be it a file or folder)**
 * path
+* is_absolute
+* absolute_path
+* relative_path
 * exists
 * owner
 * group
@@ -62,8 +65,6 @@ To access metadata for a filesystem request:
 * is_readable
 * is_writable
 * is_executable
-* absolute_path
-* is_absolute
 * is_directory
 * is_file
 * is_link

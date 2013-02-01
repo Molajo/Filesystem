@@ -62,7 +62,7 @@ class Local
      * @var    string
      * @since  1.0
      */
-    public $directory_permissions;
+    public $default_directory_permissions;
 
     /**
      * File Permissions
@@ -70,7 +70,7 @@ class Local
      * @var    string
      * @since  1.0
      */
-    public $file_permissions;
+    public $default_file_permissions;
 
     /**
      * Read only
@@ -174,7 +174,7 @@ class Local
      * @var    bool
      * @since  1.0
      */
-    public $is_absolute;
+    public $is_absolute_path;
 
     /**
      * Is Directory
@@ -329,12 +329,9 @@ class Local
      * @return  bool
      * @since   1.0
      */
-    public function setPersistence($persistence = 1)
+    public function setPersistence($persistence = true)
     {
-        if ($persistence == 1) {
-        } else {
-            $persistence = 0;
-        }
+        $persistence = $this->forceTrueOrFalse($persistence, true);
 
         $this->persistence = $persistence;
 
@@ -344,26 +341,24 @@ class Local
     /**
      * Set default permissions
      *
-     * @param   string  $directory_permissions
-     * @param   string  $file_permissions
+     * @param   string  $default_directory_permissions
+     * @param   string  $default_file_permissions
      * @param   int     $read_only
      *
      * @return  void
      * @since   1.0
      */
     public function setDefaultPermissions(
-        $directory_permissions = 0,
-        $file_permissions = 0,
+        $default_directory_permissions = 0,
+        $default_file_permissions = 0,
         $read_only = 1
     ) {
 
-        $this->directory_permissions = 0755;
-        $this->file_permissions      = 0644;
+        $this->default_directory_permissions = 0755;
+        $this->default_file_permissions      = 0644;
 
-        if ($read_only == 1) {
-        } else {
-            $read_only = 0;
-        }
+        $read_only = $this->forceTrueOrFalse($read_only, false);
+
         $this->read_only = $read_only;
 
         return;
@@ -419,7 +414,7 @@ class Local
         $normalised = array();
 
         foreach ($nodes as $node) {
-            if ($node == '.' || $node == '..' ) {
+            if ($node == '.' || $node == '..') {
                 if (count($normalised) > 0) {
                     array_pop($normalised);
                 }
@@ -479,7 +474,7 @@ class Local
      */
     public function getDirectoryPermissions()
     {
-        return $this->directory_permissions;
+        return $this->default_directory_permissions;
     }
 
     /**
@@ -490,7 +485,7 @@ class Local
      */
     public function getFilePermissions()
     {
-        return $this->file_permissions;
+        return $this->default_file_permissions;
     }
 
     /**
@@ -593,7 +588,7 @@ class Local
         } catch (Exception $e) {
 
             throw new FileException
-            ('Local Filesystem: getCreateDate method failed for ' . $this->path);
+            ('Local Filesystem getCreateDate failed for ' . $this->path);
         }
 
         return $this->create_date;
@@ -621,7 +616,7 @@ class Local
         } catch (Exception $e) {
 
             throw new FileException
-            ('Local Filesystem: getCreateDate method failed for ' . $this->path);
+            ('Local Filesystem getAccessDate failed for ' . $this->path);
         }
 
         return $this->access_date;
@@ -750,20 +745,20 @@ class Local
      * @return  bool
      * @since   1.0
      */
-    public function isAbsolute()
+    public function isAbsolutePath()
     {
         if ($this->exists === false) {
-            $this->is_absolute = null;
-            return $this->is_absolute;
+            $this->is_absolute_path = null;
+            return $this->is_absolute_path;
         }
 
         if (substr($this->path, 0, 1) == '/') {
-            $this->is_absolute = true;
+            $this->is_absolute_path = true;
         } else {
-            $this->is_absolute = false;
+            $this->is_absolute_path = false;
         }
 
-        return $this->is_absolute;
+        return $this->is_absolute_path;
     }
 
     /**
@@ -778,18 +773,18 @@ class Local
     {
         // Normalize separators on windows
         if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-            $endPath = strtr($endPath, '\\', '/');
+            $endPath   = strtr($endPath, '\\', '/');
             $startPath = strtr($startPath, '\\', '/');
         }
 
         // Split the paths into arrays
         $startPathArr = explode('/', trim($startPath, '/'));
-        $endPathArr = explode('/', trim($endPath, '/'));
+        $endPathArr   = explode('/', trim($endPath, '/'));
 
         // Find for which directory the common path stops
         $index = 0;
         while (isset($startPathArr[$index]) && isset($endPathArr[$index]) && $startPathArr[$index] === $endPathArr[$index]) {
-            $index++;
+            $index ++;
         }
 
         // Determine how deep the start path is relative to the common path (ie, "web/bundles" = 2 levels)
@@ -1177,7 +1172,7 @@ class Local
         }
 
         try {
-            \mkdir($path, $this->directory_permissions, true);
+            \mkdir($path, $this->default_directory_permissions, true);
 
         } catch (Exception $e) {
 
@@ -1228,18 +1223,9 @@ class Local
                 $this->discovery($this->path);
             }
 
-            if (count($this->files) > 0) {
-                foreach ($this->files as $file) {
-                    unlink($file);
-                }
-            }
+            $this->_processDiscoveryFilesArray();
 
-            if (count($this->directories) > 0 || $delete_empty === true) {
-                arsort($this->directories);
-                foreach ($this->directories as $directory) {
-                    rmdir($directory);
-                }
-            }
+            $this->_processDiscoveryDirectoriesArray();
 
         } catch (Exception $e) {
 
@@ -1411,47 +1397,50 @@ class Local
 
             asort($this->directories);
 
+            $parent = '';
+            $new_node = '';
+            $new_path = '';
+
             foreach ($this->directories as $directory) {
 
-                if ($base_folder == $directory) {
-                    $temp = $target_directory;
-                } else {
-                    $temp = $target_directory . substr($directory, strlen($base_folder), 99999);
-                }
+                $new_path = $this->_build_new_path($directory, $target_directory, $base_folder);
 
-                if (is_dir($temp)) {
+                if (is_dir($new_path)) {
 
                 } else {
 
-                    $existing = dirname($temp);
-                    $new_node = basename($temp);
+                    $parent = dirname($new_path);
+                    $new_node = basename($new_path);
 
-                    $connect = new Adapter($target_filesystem_type, $existing, 'write',
+                    $connect = new Adapter($target_filesystem_type, $parent, 'write',
                         $options = array('file' => $new_node)
                     );
                 }
+
+                $parent = '';
+                $new_node = '';
+                $new_path = '';
             }
         }
 
-        /** Once all folders are in place, add files */
+        /** Once all directories are in place, create files */
         if (count($this->files) > 0) {
+
+            $path_name = '';
+            $file_name = '';
 
             foreach ($this->files as $file) {
 
                 /** Target Folder */
                 $source_directory = dirname($file);
 
-                if ($base_folder == $source_directory) {
-                    $temp_directory = $target_directory;
-                } else {
-                    $temp_directory = $target_directory . substr($source_directory, strlen($base_folder), 99999);
-                }
+                $new_path = $this->_build_new_path($file, $target_directory, $base_folder);
 
                 /** Target File */
                 if ($this->is_file === true) {
-                    $temp_name = $target_name;
+                    $path_name = $target_name;
                 } else {
-                    $temp_name = basename($file);
+                    $file_name = basename($file);
                 }
 
                 /** Source */
@@ -1459,34 +1448,47 @@ class Local
                 $data    = $connect->action_results;
 
                 /** Write Target */
-                $connect = new Adapter($target_filesystem_type, $temp_directory, 'write',
+                $connect = new Adapter($target_filesystem_type, $path_name, 'write',
                     $options = array(
-                        'file'    => $temp_name,
+                        'file'    => $file_name,
                         'replace' => $replace,
                         'data'    => $data,
                     )
                 );
+
+                $path_name = '';
+                $file_name = '';
             }
         }
 
         /** For move, remove the files and folders just copied */
         if ($move_or_copy == 'move') {
-
-            if (count($this->files) > 0) {
-                foreach ($this->files as $file) {
-                    unlink($file);
-                }
-            }
-
-            if (count($this->directories) > 0) {
-                arsort($this->directories);
-                foreach ($this->directories as $directory) {
-                    rmdir($directory);
-                }
-            }
+            $this->_processDiscoveryFilesArray();
+            $this->_processDiscoveryDirectoriesArray();
         }
 
         return true;
+    }
+
+    /**
+     * Common method for creating new path for copy or move
+     *
+     * @param   $directory
+     * @param   $target_directory
+     * @param   $base_folder
+     *
+     * @since   1.0
+     * @return  string
+     */
+    private function _build_new_path($directory, $target_directory, $base_folder)
+    {
+        if ($base_folder == $directory) {
+            $temp = $target_directory;
+        } else {
+            $temp = $target_directory . substr($directory, strlen($base_folder), 99999);
+        }
+
+        return $temp;
     }
 
     /**
@@ -1521,10 +1523,45 @@ class Local
 
             } elseif (is_dir($name)) {
 
-                if (basename($name) == '.' || basename($name) == '..' ) {
+                if (basename($name) == '.' || basename($name) == '..') {
                 } else {
                     $this->directories[] = $name;
                 }
+            }
+        }
+
+        return;
+    }
+
+    /**
+     *  Common code for processing the Discovery File Array
+     *
+     *  @return  void
+     *  @since   1.0
+     */
+    private function _processDiscoveryFilesArray()
+    {
+        if (count($this->files) > 0) {
+            foreach ($this->files as $file) {
+                unlink($file);
+            }
+        }
+
+        return;
+    }
+
+    /**
+     *  Common code for processing the Discovery File Array
+     *
+     *  @return  void
+     *  @since   1.0
+     */
+    private function _processDiscoveryDirectoriesArray()
+    {
+        if (count($this->directories) > 0) {
+            arsort($this->directories);
+            foreach ($this->directories as $directory) {
+                rmdir($directory);
             }
         }
 
@@ -1641,7 +1678,6 @@ class Local
         return;
     }
 
-
     /**
      * Extensions for Text files
      *
@@ -1652,5 +1688,34 @@ class Local
     {
         return '(app|avi|doc|docx|exe|ico|mid|midi|mov|mp3|
                  mpg|mpeg|pdf|psd|qt|ra|ram|rm|rtf|txt|wav|word|xls)';
+    }
+
+
+    /**
+     * Utility method - force consistency in True and False
+     *
+     * @param   bool  $variable
+     * @param   bool  $default
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function forceTrueOrFalse($variable, $default = false)
+    {
+        if ($default === true) {
+
+            if ($variable === false) {
+            } else {
+                $variable = true;
+            }
+
+        } else {
+            if ($variable === true) {
+            } else {
+                $variable = false;
+            }
+        }
+
+        return $default;
     }
 }

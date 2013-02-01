@@ -15,7 +15,7 @@ class LocalMoveTest extends Data
     /**
      * @var Adapter Name
      */
-    protected $adapter_name;
+    protected $filesystem_type;
 
     /**
      * @var Action
@@ -35,7 +35,7 @@ class LocalMoveTest extends Data
     /**
      * @var Filesystem
      */
-    protected $filesystem;
+    protected $fs;
 
     /**
      * @var Directories
@@ -55,7 +55,7 @@ class LocalMoveTest extends Data
         parent::setUp();
 
         /** initialise call */
-        $this->adapter_name = 'Local';
+        $this->fs_name = 'Local';
         $this->action       = 'Move';
 
         return;
@@ -79,7 +79,7 @@ class LocalMoveTest extends Data
 
         $this->path    = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileExists($temp . '/test2.txt');
         $this->assertfileNotExists($this->path);
@@ -103,7 +103,7 @@ class LocalMoveTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileExists($temp . '/test2.txt');
         $this->assertfileNotExists($this->path);
@@ -126,7 +126,7 @@ class LocalMoveTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/doit';
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileExists($temp . '/didit');
         $this->assertfileNotExists($this->path);
@@ -149,7 +149,7 @@ class LocalMoveTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/Testcases';
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileExists($temp . '/Amy');
         $this->assertfileNotExists($this->path);
@@ -171,7 +171,7 @@ class LocalMoveTest extends Data
         );
 
         $this->path    = BASE_FOLDER . '/Tests/Dataeeeeee';
-        $connect       = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect       = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         return;
     }

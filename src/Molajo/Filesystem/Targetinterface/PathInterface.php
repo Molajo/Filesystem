@@ -53,7 +53,7 @@ interface PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isAbsolute();
+    public function isAbsolutePath();
 
     /**
      * Returns true or false indicator as to whether or not the path is a directory

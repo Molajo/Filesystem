@@ -87,11 +87,11 @@ abstract class Path extends System implements PathInterface
      * @return  bool
      * @since   1.0
      */
-    public function isAbsolute()
+    public function isAbsolutePath()
     {
-        $this->is_absolute = $this->fs_type->isAbsolute();
+        $this->is_absolute_path = $this->fs_type->isAbsolutePath();
 
-        return $this->is_absolute;
+        return $this->is_absolute_path;
     }
 
     /**

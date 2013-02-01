@@ -13,7 +13,7 @@ class LocalWriteTest extends Data
     /**
      * @var Adapter Name
      */
-    protected $adapter_name;
+    protected $filesystem_type;
 
     /**
      * @var Action
@@ -33,7 +33,7 @@ class LocalWriteTest extends Data
     /**
      * @var Filesystem
      */
-    protected $filesystem;
+    protected $fs;
 
     /**
      * Initialises Adapter
@@ -42,7 +42,7 @@ class LocalWriteTest extends Data
     {
         parent::setUp();
 
-        $this->adapter_name = 'Local';
+        $this->fs_name = 'Local';
         $this->action       = 'Write';
     }
 
@@ -68,7 +68,7 @@ class LocalWriteTest extends Data
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 
@@ -90,9 +90,14 @@ class LocalWriteTest extends Data
 
         $this->path = BASE_FOLDER . '/Tests';
 
+        if (file_exists($this->path . '/' . $temp)) {
+        } else {
+            \file_put_contents($this->path . '/' . $temp, 'data');
+        }
+
         $this->assertfileExists($this->path . '/' . $temp);
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 
@@ -116,7 +121,7 @@ class LocalWriteTest extends Data
 
         $this->path = BASE_FOLDER . '/Tests';
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         return;
 
@@ -139,7 +144,7 @@ class LocalWriteTest extends Data
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 
@@ -166,7 +171,7 @@ class LocalWriteTest extends Data
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 

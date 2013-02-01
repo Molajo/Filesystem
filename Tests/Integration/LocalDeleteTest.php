@@ -14,7 +14,7 @@ class LocalDeleteTest extends Data
     /**
      * @var Adapter Name
      */
-    protected $adapter_name;
+    protected $filesystem_type;
 
     /**
      * @var Action
@@ -34,7 +34,7 @@ class LocalDeleteTest extends Data
     /**
      * @var Filesystem
      */
-    protected $filesystem;
+    protected $fs;
 
     /**
      * @var Directories
@@ -54,7 +54,7 @@ class LocalDeleteTest extends Data
         parent::setUp();
 
         /** initialise call */
-        $this->adapter_name = 'Local';
+        $this->fs_name = 'Local';
         $this->action       = 'Delete';
 
         $this->options = array(
@@ -76,7 +76,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -95,7 +95,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -115,7 +115,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $connect       = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect       = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -135,7 +135,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $connect       = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect       = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -154,7 +154,7 @@ class LocalDeleteTest extends Data
 
         $this->path    = BASE_FOLDER . '/Tests/Dataeeeeee';
 
-        $connect       = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $connect       = new Adapter($this->fs_name, $this->path, $this->action, $this->options);
 
         return;
     }

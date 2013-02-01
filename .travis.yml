@@ -13,5 +13,15 @@ matrix:
 services: MySQL
 
 before_script:
+ - composer selfupdate --quiet
+ - composer install --dev
+ - vendor/phpunit/phpunit/composer/bin/phpunit
+ - composer update --dev
 
-script: phpunit
+script:
+ - vendor/phpunit/phpunit/composer/bin/phpunit
+
+notifications:
+  irc: "irc.freenode.org#molajo"
+  email:
+    - amystephen@gmail.com

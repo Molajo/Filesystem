@@ -306,22 +306,6 @@ class Ftp implements File, Path, System
     }
 
     /**
-     * Get the Passive indicator
-     *
-     * @return  int
-     * @since   1.0
-     */
-    public function getPassive_mode()
-    {
-        if ((int)$this->passive_mode == 0) {
-        } else {
-            $this->passive_mode = 1;
-        }
-
-        return (int)$this->passive_mode;
-    }
-
-    /**
      * Method to connect to a FTP server
      *
      * @return  object|resource

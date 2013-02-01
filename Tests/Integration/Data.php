@@ -13,29 +13,29 @@ use PHPUnit_Framework_TestCase;
 class Data extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Adapter Name
+     * @var Type of Filesystem (ex. Local, Ftp, Stream)
      */
-    protected $adapter_name;
+    protected $filesystem_type;
 
     /**
-     * @var Action
+     * @var Filesystem Adapter
+     */
+    protected $fs;
+
+    /**
+     * @var Action (ex. Read, List, Write, Copy, Delete, Set, etc.)
      */
     protected $action;
 
     /**
-     * @var Path
+     * @var Path specified by the caller
      */
     protected $path;
 
     /**
-     * @var Options
+     * @var Options - associative array related to the Action and Path specified
      */
     protected $options = array();
-
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
 
     /**
      * @var Directories
@@ -65,8 +65,8 @@ class Data extends PHPUnit_Framework_TestCase
         $this->copyOrMove($from, $to, $folder);
 
         /** initialise call */
-        $this->adapter_name = 'Local';
-        $this->action       = 'Delete';
+        $this->fs_name = 'Local';
+        $this->action  = 'Delete';
 
         $this->options = array(
             'delete_empty' => false
@@ -145,7 +145,7 @@ class Data extends PHPUnit_Framework_TestCase
 
                 $new_directory = $new_path . '/' . substr($directory, strlen($path), 99999);
 
-                if (basename($new_directory) == '.' || basename($new_directory) == '..' ) {
+                if (basename($new_directory) == '.' || basename($new_directory) == '..') {
 
                 } elseif (file_exists($new_directory)) {
 
@@ -173,7 +173,7 @@ class Data extends PHPUnit_Framework_TestCase
             if (count($this->directories) > 0) {
                 arsort($this->directories);
                 foreach ($this->directories as $directory) {
-                    if (basename($directory) == '.' || basename($directory) == '..' ) {
+                    if (basename($directory) == '.' || basename($directory) == '..') {
                     } else {
                         rmdir($directory);
                     }
@@ -214,7 +214,7 @@ class Data extends PHPUnit_Framework_TestCase
 
             foreach ($this->directories as $directory) {
 
-                if (basename($directory) == '.' || basename($directory) == '..' ) {
+                if (basename($directory) == '.' || basename($directory) == '..') {
                 } else {
                     rmdir($directory);
                 }
@@ -260,7 +260,7 @@ class Data extends PHPUnit_Framework_TestCase
 
             } elseif (is_dir($name)) {
 
-                if (basename($name) == '.' || basename($name) == '..' ) {
+                if (basename($name) == '.' || basename($name) == '..') {
                 } else {
                     $this->directories[] = $name;
                 }
