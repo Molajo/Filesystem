@@ -41,13 +41,6 @@ interface FileInterface
     public function setPath($path);
 
     /**
-     * Does the path exist (either as a file or a folder)?
-     *
-     * @return bool|null
-     */
-    public function exists();
-
-    /**
      * Retrieves and sets metadata for the file specified in path
      *
      * @return  object  Filesystem

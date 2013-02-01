@@ -302,18 +302,6 @@ Class Adapter implements FileInterface
     }
 
     /**
-     * Does the path exist (either as a file or a folder)?
-     *
-     * @return bool|null
-     */
-    public function exists()
-    {
-        $this->exists = $this->fs->exists();
-
-        return $this->exists;
-    }
-
-    /**
      * Set the Path
      *
      * @param   string  $path
