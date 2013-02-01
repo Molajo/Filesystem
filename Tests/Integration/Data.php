@@ -203,11 +203,11 @@ class Data extends PHPUnit_Framework_TestCase
 
         foreach ($objects as $name => $object) {
 
-            if (is_file($name)) {
-                $this->files[] = $name;
-
-            } elseif (is_dir($name)) {
+            if (is_dir($name)) {
                 $this->directories[] = $name;
+
+            } else {
+                $this->files[] = $name;
             }
         }
 
