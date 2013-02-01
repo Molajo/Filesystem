@@ -11,3 +11,7 @@ matrix:
     - php: 5.5
 
 services: MySQL
+
+before_script:
+
+script: phpunit
