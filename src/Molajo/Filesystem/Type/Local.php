@@ -411,11 +411,7 @@ class Local
 
         foreach ($nodes as $node) {
 
-            /** '.' means current - ignore it      */
-            if ($node == '.') {
-
-                /** '..' is parent - remove  */
-            } elseif ($node == '..') {
+            if ($node == '.' || $node == '..' ) {
 
                 if (count($normalised) > 0) {
                     array_pop($normalised);
@@ -428,6 +424,7 @@ class Local
         }
 
         $path = implode('/', $normalised);
+
         if ($absolute_path === true) {
             $path = '/' . $path;
         }
@@ -931,6 +928,7 @@ class Local
         $this->discovery($this->path);
 
         if (count($this->files) > 0) {
+
             foreach ($this->files as $file) {
                 $this->size = $this->size + filesize($file);
             }
@@ -962,6 +960,7 @@ class Local
         if (function_exists('finfo_open')) {
             $php_mime        = finfo_open(FILEINFO_MIME);
             $this->mime_type = strtolower(finfo_file($php_mime, $this->path));
+
             finfo_close($php_mime);
 
         } elseif (function_exists('mime_content_type')) {
@@ -1044,6 +1043,7 @@ class Local
 
             } else {
                 $results = $this->createDirectory($this->path . '/' . $file);
+
                 return true;
             }
         }
@@ -1070,7 +1070,6 @@ class Local
 
 
         try {
-
             \file_put_contents($this->path . '/' . $file, $data);
 
         } catch (Exception $e) {
@@ -1080,12 +1079,12 @@ class Local
         }
 
         if (file_exists($this->path . '/' . $file) === false) {
-            throw new FileNotFoundException ('Filesystem Write: error writing to file: ' . $this->path . '/' . $file);
+            throw new FileNotFoundException
+            ('Filesystem Write: error writing to file: ' . $this->path . '/' . $file);
         }
 
         return true;
     }
-
 
     /**
      * Create Directory
@@ -1104,8 +1103,6 @@ class Local
 
         try {
             \mkdir($path, $this->directory_permissions, true);
-
-            return true;
 
         } catch (Exception $e) {
 
@@ -1448,7 +1445,11 @@ class Local
                 $this->files[] = $name;
 
             } elseif (is_dir($name)) {
-                $this->directories[] = $name;
+
+                if (basename($name) == '.' || basename($name) == '..' ) {
+                } else {
+                    $this->directories[] = $name;
+                }
             }
         }
 
@@ -1585,5 +1586,18 @@ class Local
     public function close()
     {
         return;
+    }
+
+
+    /**
+     * Extensions for Text files
+     *
+     * @return string
+     * @since  1.0
+     */
+    function textFileExtensions()
+    {
+        return '(app|avi|doc|docx|exe|ico|mid|midi|mov|mp3|
+                 mpg|mpeg|pdf|psd|qt|ra|ram|rm|rtf|txt|wav|word|xls)';
     }
 }

@@ -62,7 +62,7 @@ class Data extends PHPUnit_Framework_TestCase
         $to     = BASE_FOLDER . '/Tests';
         $folder = 'Data';
 
-        $this->copy($from, $to, $folder);
+        $this->copyOrMove($from, $to, $folder);
 
         /** initialise call */
         $this->adapter_name = 'Local';
@@ -86,9 +86,112 @@ class Data extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Recursive Delete
+     * Get the file size of a given file or for the aggregate number of bytes in all directory files
      *
-     * @param $path
+     * Recursive handling of files - uses file arrays created in Discovery
+     *
+     * $recursive  bool  For directory, recursively calculate file calculations default true
+     *
+     * @param   $path
+     *
+     * @return  int
+     * @since   1.0
+     */
+    public function calculateSize($path, $recursive = true)
+    {
+        $size = 0;
+
+        $this->discovery($path);
+
+        foreach ($this->files as $file) {
+            $size = $size + filesize($file);
+        }
+
+        return $size;
+    }
+
+    /**
+     * Recursive Copy or Delete - uses Directory and File arrays created in Discovery
+     *
+     * Copy uses Directory array first to create folders, then copies the files
+     *
+     * @param   string  $path
+     * @param   string  $target
+     * @param   string  $target_name
+     * @param   string  $copyOrMove
+     *
+     * @return  void
+     * @since   1.0
+     */
+    function copyOrMove($path, $target, $target_name = '', $copyOrMove = 'copy')
+    {
+        if (file_exists($path)) {
+        } else {
+            return;
+        }
+
+        if (file_exists($target)) {
+        } else {
+            return;
+        }
+
+        $new_path = $target . '/' . $target_name;
+
+        $this->discovery($path);
+
+        if (count($this->directories) > 0) {
+            asort($this->directories);
+            foreach ($this->directories as $directory) {
+
+                $new_directory = $new_path . '/' . substr($directory, strlen($path), 99999);
+
+                if (basename($new_directory) == '.' || basename($new_directory) == '..' ) {
+
+                } elseif (file_exists($new_directory)) {
+
+                } else {
+                    mkdir($new_directory);
+                }
+            }
+        }
+
+        if (count($this->files) > 0) {
+            foreach ($this->files as $file) {
+                $new_file = $new_path . '/' . substr($file, strlen($path), 99999);
+                \copy($file, $new_file);
+            }
+        }
+
+        if ($copyOrMove == 'move') {
+
+            if (count($this->files) > 0) {
+                foreach ($this->files as $file) {
+                    unlink($file);
+                }
+            }
+
+            if (count($this->directories) > 0) {
+                arsort($this->directories);
+                foreach ($this->directories as $directory) {
+                    if (basename($directory) == '.' || basename($directory) == '..' ) {
+                    } else {
+                        rmdir($directory);
+                    }
+                }
+            }
+        }
+
+        return;
+    }
+
+    /**
+     * Recursive Delete, uses discovery Directory and File arrays to first delete files
+     *  and then remove the folders
+     *
+     * @param   $path
+     *
+     * @return  int
+     * @since   1.0
      */
     function delete($path)
     {
@@ -105,86 +208,24 @@ class Data extends PHPUnit_Framework_TestCase
             }
         }
 
-        arsort($this->directories);
-
         if (count($this->directories) > 0) {
+
+            arsort($this->directories);
 
             foreach ($this->directories as $directory) {
 
-                if ($directory == '.' || $directory == '..') {
+                if (basename($directory) == '.' || basename($directory) == '..' ) {
                 } else {
                     rmdir($directory);
                 }
             }
         }
 
-
         return;
     }
 
-
     /**
-     * Recursive Copy
-     *
-     * @param $path
-     */
-    function copy($path, $target, $target_name = '')
-    {
-        if (file_exists($path)) {
-        } else {
-            return;
-        }
-
-        if (file_exists($target)) {
-        } else {
-            return;
-        }
-
-        $new_path = $target . '/' . $target_name;
-
-        $this->discovery($path);
-
-        asort($this->directories);
-        if (count($this->directories) > 0) {
-            foreach ($this->directories as $directory) {
-                $new_directory = $new_path . '/' . substr($directory, strlen($path), 99999);
-                if (file_exists($new_directory)) {
-                } else {
-                    mkdir($new_directory);
-                }
-            }
-        }
-
-        if (count($this->files) > 0) {
-            foreach ($this->files as $file) {
-                $new_file = $new_path . '/' . substr($file, strlen($path), 99999);
-                copy($file, $new_file);
-            }
-        }
-    }
-
-    /**
-     * Get the file size of a given file.
-     *
-     * $recursive  bool  For directory, recursively calculate file calculations default true
-     *
-     * @return  int
-     * @since   1.0
-     */
-    public function calculateSize($path, $recursive = true)
-    {
-        $size = 0;
-        $this->discovery($path);
-
-        foreach ($this->files as $file) {
-            $size = $size + filesize($file);
-        }
-
-        return $size;
-    }
-
-    /**
-     * Discovery retrieves folder and file names
+     * Discovery retrieves folder and file names, useful for other file/folder operations
      *
      * @param   $path
      *
@@ -218,6 +259,7 @@ class Data extends PHPUnit_Framework_TestCase
                 $this->files[] = $name;
 
             } elseif (is_dir($name)) {
+
                 if (basename($name) == '.' || basename($name) == '..' ) {
                 } else {
                     $this->directories[] = $name;
@@ -226,13 +268,6 @@ class Data extends PHPUnit_Framework_TestCase
         }
 
         return;
-    }
-
-    function getexts()
-    {
-        //list acceptable file extensions here
-        return '(app|avi|doc|docx|exe|ico|mid|midi|mov|mp3|
-                 mpg|mpeg|pdf|psd|qt|ra|ram|rm|rtf|txt|wav|word|xls)';
     }
 }
 

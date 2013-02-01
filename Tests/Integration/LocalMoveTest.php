@@ -64,7 +64,7 @@ class LocalMoveTest extends Data
     /**
      * Should default target directory to $this->path
      *
-     * @covers Molajo\Filesystem\Type\Local::copy
+     * @covers Molajo\Filesystem\Type\Local::copyOrMove
      */
     public function testSuccessfulMoveSingleFileBlankDirectory()
     {
@@ -89,7 +89,7 @@ class LocalMoveTest extends Data
 
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::copy
+     * @covers Molajo\Filesystem\Type\Local::copyOrMove
      */
     public function testSuccessfulMoveSingleFile()
     {
@@ -112,7 +112,7 @@ class LocalMoveTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::copy
+     * @covers Molajo\Filesystem\Type\Local::copyOrMove
      */
     public function testCreateSingleFolder()
     {
@@ -135,7 +135,7 @@ class LocalMoveTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::copy
+     * @covers Molajo\Filesystem\Type\Local::copyOrMove
      */
     public function testMoveMultipleFolder()
     {
@@ -158,7 +158,7 @@ class LocalMoveTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::copy
+     * @covers Molajo\Filesystem\Type\Local::copyOrMove
      * @expectedException Molajo\Filesystem\Exception\FileException
      */
     public function testNotAFile()
