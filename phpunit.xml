@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <phpunit bootstrap="Bootstrap.php" colors="true">
-
     <testsuites>
-        <testsuite name="Unit">
-            <directory>Tests/Filesystem/</directory>
+        <testsuite name="Integration">
+            <directory>Tests/Integration/</directory>
         </testsuite>
     </testsuites>
-
-    <php>
-        <ini name="intl.default_locale" value="en-GB"/>
-        <ini name="intl.error_level" value="0"/>
-        <ini name="memory_limit" value="-1"/>
-    </php>
-
-
     <filter>
         <whitelist>
             <directory suffix=".php">src/Molajo/Filesystem/</directory>

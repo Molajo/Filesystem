@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Filesystem;
+namespace Tests\Integration;
 
 use \PHPUnit_Framework_TestCase;
 

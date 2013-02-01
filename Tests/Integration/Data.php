@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Filesystem;
+namespace Tests\Integration;
 
 use \DirectoryIterator;
 use \RecursiveDirectoryIterator;

@@ -4,6 +4,8 @@
 Filesystem
 =======
 
+[![Build Status](https://travis-ci.org/Molajo/Filesystem.png?branch=master)](https://travis-ci.org/Molajo/Filesystem)
+
 General-purpose file and directory services package for PHP applications using the same API with different filesystems.
 
 ## System Requirements

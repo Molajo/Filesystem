@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Filesystem;
+namespace Tests\Integration;
 
 use \PHPUnit_Framework_TestCase;
 
@@ -63,9 +63,13 @@ class LocalWriteTest extends Data
             'data'    => 'Here are the words to write.',
         );
 
-        $this->path         = BASE_FOLDER . '/Tests';
+        $this->path = BASE_FOLDER . '/Tests';
+
+        $this->assertfileNotExists($this->path . '/' . $temp);
 
         $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+
+        $this->assertfileExists($this->path . '/' . $temp);
 
         return;
     }
@@ -83,9 +87,13 @@ class LocalWriteTest extends Data
             'data'    => 'Here are the words to write.',
         );
 
-        $this->path         = BASE_FOLDER . '/Tests';
+        $this->path = BASE_FOLDER . '/Tests';
+
+        $this->assertfileExists($this->path . '/' . $temp);
 
         $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+
+        $this->assertfileExists($this->path . '/' . $temp);
 
         return;
     }
@@ -105,7 +113,7 @@ class LocalWriteTest extends Data
             'data'    => 'Here are the words to write.',
         );
 
-        $this->path         = BASE_FOLDER . '/Tests';
+        $this->path = BASE_FOLDER . '/Tests';
 
         $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
 
@@ -126,14 +134,16 @@ class LocalWriteTest extends Data
             'data'    => ''
         );
 
-
         $this->path = BASE_FOLDER . '/Tests/Data';
 
-        $connect    = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $this->assertfileNotExists($this->path . '/' . $temp);
+
+        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+
+        $this->assertfileExists($this->path . '/' . $temp);
 
         return;
     }
-
 
     /**
      * rmdir($filePath);
@@ -151,10 +161,13 @@ class LocalWriteTest extends Data
             'data'    => 'Poop'
         );
 
-
         $this->path = BASE_FOLDER . '/Tests/Data/OneMoreFolder/Cats/love/Dogs';
 
-        $connect    = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+        $this->assertfileNotExists($this->path . '/' . $temp);
+
+        $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+
+        $this->assertfileExists($this->path . '/' . $temp);
 
         return;
     }

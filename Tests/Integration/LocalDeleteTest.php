@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Filesystem;
+namespace Tests\Integration;
 
 use \PHPUnit_Framework_TestCase;
 
@@ -74,7 +74,11 @@ class LocalDeleteTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
 
+        $this->assertfileExists($this->path);
+
         $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+
+        $this->assertfileNotExists($this->path);
 
         return;
     }
@@ -89,7 +93,11 @@ class LocalDeleteTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/doit';
 
+        $this->assertfileExists($this->path);
+
         $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+
+        $this->assertfileNotExists($this->path);
 
         return;
     }
@@ -102,8 +110,14 @@ class LocalDeleteTest extends Data
         $this->options = array(
             'delete_empty' => false
         );
+
         $this->path    = BASE_FOLDER . '/Tests/Data/Testcases/Directorytree1';
+
+        $this->assertfileExists($this->path);
+
         $connect       = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+
+        $this->assertfileNotExists($this->path);
 
         return;
     }
@@ -116,8 +130,14 @@ class LocalDeleteTest extends Data
         $this->options = array(
             'delete_empty' => true
         );
+
         $this->path    = BASE_FOLDER . '/Tests/Data';
+
+        $this->assertfileExists($this->path);
+
         $connect       = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
+
+        $this->assertfileNotExists($this->path);
 
         return;
     }
@@ -131,7 +151,9 @@ class LocalDeleteTest extends Data
         $this->options = array(
             'delete_empty' => true
         );
+
         $this->path    = BASE_FOLDER . '/Tests/Dataeeeeee';
+
         $connect       = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
 
         return;

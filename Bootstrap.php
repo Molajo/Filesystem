@@ -17,10 +17,11 @@ define('BASE_FOLDER', __DIR__);
 
 /** Load Classloader */
 include BASE_FOLDER . '/' . 'ClassLoader.php';
-include BASE_FOLDER . '/Tests/Filesystem/Data.php';
+include BASE_FOLDER . '/Tests/Integration/Data.php';
 
 $loader = new ClassLoader();
 $loader->add('Molajo\Filesystem', BASE_FOLDER . '/src');
-$loader->add('Tests\Filesystem', BASE_FOLDER . '/Tests');
+$loader->add('Tests\Integration', BASE_FOLDER . '/Tests');
+
 $loader->register();
 

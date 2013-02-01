@@ -1,6 +1,6 @@
 {
     "name":"Molajo/Filesystem",
-    "description":"Common handling of all file and directory requests for defined filesystem adapters",
+    "description":"Common handling of file and directory requests for adapter filesystems",
     "keywords":["Filesystem", "Adapters", "Interface", "PSR-0"],
     "homepage":"http://github.com/AmyStephen/Filesystem",
     "type":"library",
@@ -13,7 +13,7 @@
         }
     ],
     "require":{
-        "php":">=5.3.0"
+        "php":">=5.3.3"
     },
     "autoload":{
         "psr-0":{
