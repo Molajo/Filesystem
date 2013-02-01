@@ -107,23 +107,15 @@ class Data extends PHPUnit_Framework_TestCase
         arsort($this->directories);
         if (count($this->directories) > 0) {
             foreach ($this->directories as $directory) {
-                $this->removeDir($directory);
-
+                if (strlen(strstr($directory, '.', true)) < 1) {
+                } else {
+                    rmdir($directory);
+                }
             }
         }
-    }
 
-    function removeDir($path) {
-        $dir = new DirectoryIterator($path);
-        foreach ($dir as $fileinfo) {
-            if ($fileinfo->isFile() || $fileinfo->isLink()) {
-                unlink($fileinfo->getPathName());
-            } elseif (!$fileinfo->isDot() && $fileinfo->isDir()) {
-                //removeDir($fileinfo->getPathName());
-            }
-        }
-        rmdir($path);
-       return;
+
+        return;
     }
 
     /**
@@ -228,7 +220,8 @@ class Data extends PHPUnit_Framework_TestCase
         return;
     }
 
-    function getexts(){
+    function getexts()
+    {
         //list acceptable file extensions here
         return '(app|avi|doc|docx|exe|ico|mid|midi|mov|mp3|
                  mpg|mpeg|pdf|psd|qt|ra|ram|rm|rtf|txt|wav|word|xls)';
