@@ -80,8 +80,8 @@ class LocalCopyTest extends Data
 
         $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
 
-        $this->assertEquals($this->getSize($this->path), $this->getSize($temp . '/test2.txt'));
-        $this->assertGreaterThan(0, $this->getSize($temp . '/test2.txt'));
+        $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/test2.txt'));
+        $this->assertGreaterThan(0, $this->calculateSize($temp . '/test2.txt'));
 
         return;
     }
@@ -103,8 +103,8 @@ class LocalCopyTest extends Data
 
         $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
 
-        $this->assertEquals($this->getSize($this->path), $this->getSize($temp . '/test2.txt'));
-        $this->assertGreaterThan(0, $this->getSize($temp . '/test2.txt'));
+        $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/test2.txt'));
+        $this->assertGreaterThan(0, $this->calculateSize($temp . '/test2.txt'));
 
         return;
     }
@@ -126,8 +126,8 @@ class LocalCopyTest extends Data
 
         $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
 
-        $this->assertEquals($this->getSize($this->path), $this->getSize($temp . '/didit'));
-        $this->assertGreaterThan(0, $this->getSize($temp . '/didit'));
+        $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/didit'));
+        $this->assertGreaterThan(0, $this->calculateSize($temp . '/didit'));
 
         return;
     }
@@ -149,8 +149,8 @@ class LocalCopyTest extends Data
 
         $connect = new Adapter($this->adapter_name, $this->path, $this->action, $this->options);
 
-        $this->assertEquals($this->getSize($this->path), $this->getSize($temp . '/Amy'));
-        $this->assertGreaterThan(0, $this->getSize($temp . '/Amy'));
+        $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/Amy'));
+        $this->assertGreaterThan(0, $this->calculateSize($temp . '/Amy'));
 
         return;
     }

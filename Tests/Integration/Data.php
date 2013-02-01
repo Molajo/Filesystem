@@ -157,7 +157,7 @@ class Data extends PHPUnit_Framework_TestCase
      * @return  int
      * @since   1.0
      */
-    public function getSize($path, $recursive = true)
+    public function calculateSize($path, $recursive = true)
     {
         $size = 0;
         $this->discovery($path);
