@@ -218,7 +218,10 @@ class Data extends PHPUnit_Framework_TestCase
                 $this->files[] = $name;
 
             } elseif (is_dir($name)) {
-                $this->directories[] = $name;
+                if (basename($name) == '.' || basename($name) == '..' ) {
+                } else {
+                    $this->directories[] = $name;
+                }
             }
         }
 
