@@ -32,7 +32,7 @@ The following commands can be used for a local filesystem, FTP server, Cache sto
 To read a specific file from a filesystem:
 
 ```php
-    $connect = new \Molajo\Filesystem\Adapter('Local', 'location/of/file.txt', 'Read');
+    $connect = new \Molajo\Filesystem\Adapter('Read', 'location/of/file.txt');
     $results = $connect->fs->action_results);
 ```
 
@@ -41,7 +41,7 @@ To read a specific file from a filesystem:
 To access metadata for a filesystem request:
 
 ```php
-   $results = $connect->fs->is_writable);
+   $results = $connect->fs->is_writable;
 ```
 **Metadata about the Fileystem**
 * filesystem_type
@@ -80,7 +80,7 @@ To list the names of files and/or directories from a filesystem for a given path
 
 
 ```php
-    $connect = new \Molajo\Filesystem\Adapter('Local', 'directory-name', 'List', $options);
+    $connect = new \Molajo\Filesystem\Adapter('directory-name', 'List', $options);
     $results = $connect->fs->action_results);
 ```
 
@@ -94,12 +94,17 @@ To write a file to a filesystem. :
         'replace' => false,
         'data'    => 'Here are the words to write to the file.',
     );
-    $connect      = new \Molajo\Filesystem\Adapter('Local', 'name/of/folder/here', 'Write', $options);
+    $connect      = new \Molajo\Filesystem\Adapter('Write', 'name/of/folder/here', $options, 'Log');
 ```
 
 ### Copy
 
-To write a file or folder to a specific destination on the filesystem (or a different filesystem)::
+To write a file or folder to a specific destination on the filesystem. This example shows how to copy
+the folder(s)/file(s) located on the 'Local' filessystem at 'name/of/source/folder' to the 'FTP'
+filesystem directory 'name/of/target/folder.'
+
+In the case of a single file copy, the target name can be used. If it is omitted, the source file
+name is used at the new location.
 
 ```php
     $options = array(
@@ -108,21 +113,24 @@ To write a file or folder to a specific destination on the filesystem (or a diff
         'replace'                => false,
         'target_filesystem_type' => 'FTP'
     );
-    $connect = new \Molajo\Filesystem\Adapter('Local', 'name/of/source/folder', 'Copy', $options);
+    $connect = new \Molajo\Filesystem\Adapter('Copy', 'name/of/source/folder', $options, 'Local');
 ```
 
 ### Move
 
-To move a file or folder to a specific destination on the filesystem:
+The only difference between the copy and the move is that the files copied are removed from the
+source location after the operation is complete.
+
+Note in the example neither the source or target Filesystems are identified. That means each will
+define to Local.
 
 ```php
     $options = array(
         'target_directory'       => 'name/of/target/folder',
         'target_name'            => 'single-file-move.txt',
-        'replace'                => false,
-        'target_filesystem_type' => 'Local'
+        'replace'                => false
     );
-    $connect = new \Molajo\Filesystem\Adapter('Local', 'name/of/source/folder', 'Move', $options);
+    $connect = new \Molajo\Filesystem\Adapter('Copy', 'name/of/source/folder', $options);
 ```
 
 ### Delete
