@@ -10,14 +10,14 @@ namespace Molajo\Filesystem\Type;
 
 defined('MOLAJO') or die;
 
-use \DateTime;
+use DateTime;
+use DateTimeZone;
 
-use \DirectoryIterator;
-use \RecursiveDirectoryIterator;
-use \RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
-use \Exception;
-use \RuntimeException;
+use Exception;
+use RuntimeException;
 use Molajo\Filesystem\Exception\FileException;
 use Molajo\Filesystem\Exception\FileNotFoundException;
 use Molajo\Filesystem\Adapter;
@@ -1048,7 +1048,7 @@ class Local
             }
         }
 
-        if (file_exists($this->path) ) {
+        if (file_exists($this->path)) {
         } else {
             $results = $this->createDirectory($this->path);
         }
@@ -1558,17 +1558,22 @@ class Local
      * @return  DateTime
      * @since   1.0
      */
-    private function getDateTime($time)
+    private function getDateTime($time, DateTimeZone $timezone = null)
     {
-        if ($time instanceof \DateTime) {
+        if ($time instanceof DateTime) {
             return $time;
         }
 
         if (is_int($time) || is_float($time)) {
-            return new DateTime('@' . intval($time));
+
+            $time = new DateTime('@' . intval($time), $timezone);
+
+        } else {
+
+            $time = new DateTime(null, $timezone);
         }
 
-        return new DateTime($time);
+        return;
     }
 
     /**
