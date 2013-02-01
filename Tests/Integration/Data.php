@@ -211,15 +211,16 @@ class Data extends PHPUnit_Framework_TestCase
 
         foreach ($objects as $name => $object) {
 
-            echo '<pre>';
-            var_dump($object);
-            echo '</pre>';
-
             if (is_file($name)) {
                 $this->files[] = $name;
 
             } elseif (is_dir($name)) {
                 $this->directories[] = $name;
+            }  else {
+
+                echo '<pre>';
+                var_dump($object);
+                echo '</pre>';
             }
         }
 
