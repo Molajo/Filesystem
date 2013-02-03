@@ -6,8 +6,9 @@ Filesystem
 
 [![Build Status](https://travis-ci.org/Molajo/Filesystem.png?branch=master)](https://travis-ci.org/Molajo/Filesystem)
 
-Object-oriented file and directory services for PHP to access disparate
-filesystems (ex., Local, FTP, Github, LDAP, etc.) using the same API.
+Simple, uniform File and Directory Services API for PHP applications enabling interaction with multiple Filesystem types
+(ex., Local, FTP, Github, LDAP, etc.). If you create an adapter to another filesystems that you would like to share,
+please do so using a [pull-request](https://github.com/Molajo/Filesystem/pulls). (Thanks!)
 
 ## System Requirements ##
 
@@ -18,18 +19,15 @@ filesystems (ex., Local, FTP, Github, LDAP, etc.) using the same API.
 
 ## What is Filesystem? ##
 
-**Filesystem** provides a common API to read, list, write, delete, copy or move files and folders
-on (and between) filesystems using an adapter interface.
-
-Benefits include a simple API, the ability to copy and move files from one filesystem to another,
-and use with application services like Cache, Logging, Message, and Cache.
+**Filesystem** provides a common API to read, list, write, rename, delete, copy or move files and folders
+on (and between) filesystems using adapters. Using the same command, the application can also change owner,
+group, file dates, and file and folder permissions. Benefits include a simple, uniform API,
+the ability to copy and move files between filesystems, and an interface to application services
+like Cache, Logging, Message, and Cache.
 
 ## Basic Usage ##
 
-Each **Filesystem** command shares the same syntax and the same four parameters
-enabling the application to read, list write, delete, copy, and move files and folders.
-Using the same command, the application can also change owner, group, file dates, and file and folder
-permissions.
+Each **Filesystem** command shares the same syntax and the same four parameters:
 
 ### Filesystem Request ###
 
@@ -45,9 +43,8 @@ permissions.
 
 #### Results ####
 
-The output from the filesystem operation are returned as an object and stored in the target specified for the call.
-The example above stores the results in $adapter. In addition to the specific action requested, **Filesystem**
-retrieves metadata and makes that information available in the object, along with the specific results requested.
+The output from the filesystem action request, along with relevant metadata, can be accessed from the returned
+object, as follows:
 
 **Action Results:** For any request where data is to be returned, this example shows how to retrieve the output:
 
@@ -55,8 +52,8 @@ retrieves metadata and makes that information available in the object, along wit
     echo $adapter-fs->data
 ```
 
-**Metadata**  is always returned with the object, making it possible to access the file or folder (name), parent,
-name without extension (no_extension), extension, mime_type, and size, as shown:
+**Metadata** such as the name of the file or folder (name), parent, name without extension (no_extension), extension,
+mime_type, and size, etc, is accessed in this manner:
 
 ```php
     echo $adapter-fs->size;
@@ -82,6 +79,7 @@ class can be extended and customized, as needed, by Filesystem.
 * absolute_path
 * exists
 * owner
+
 * group
 * create_date
 * access_date
@@ -102,9 +100,6 @@ class can be extended and customized, as needed, by Filesystem.
 
 ### Filesystem Commands ###
 
-Examples of how to use **Filesystem* to Read, List, Write, Delete, Rename, Copy, Move, GetRelativePath,
-Chmod, Touch, Metadata commands are provided, below.
-
 #### Read ####
 
 To read a specific file from a filesystem:
@@ -113,7 +108,6 @@ To read a specific file from a filesystem:
 
     $adapter = new \Molajo\Filesystem\Adapter('Read', 'location/of/file.txt');
     echo $adapter->fs->data;
-
 ```
 
 #### List
@@ -183,11 +177,9 @@ to specify a folder and all dependent subfolders and files should be deleted.
     $adapter = new \Molajo\Filesystem\Adapter('Delete', 'name/of/source/folder');
 ```
 
-#### Merged Filesystems
+### Special Purpose File Operations
 
-Many times, a developer must work with groups of files that are located in different folders and potentially
-in a different filesystem. **Merged filesystems** allow you to define a set of directories as though it were
-the same location in order to use the output together.
+### Merged Filesystems
 
 ```php
 
@@ -197,13 +189,8 @@ the same location in order to use the output together.
     $adapter = new \Molajo\Filesystem\Adapter('List', '/second/location');
     $data2   = $adapter->fs->data;
 
-
-
+    $merged  = array_merge($data1, $data2);
 ```
-
-
-### Special Purpose File Operations
-
 #### Backup
 
 This shows how to backup a file on one filesystem to another filesystem.
