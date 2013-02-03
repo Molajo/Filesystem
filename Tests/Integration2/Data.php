@@ -19,7 +19,7 @@ class Data extends PHPUnit_Framework_TestCase
     /**
      * @var Filesystem Adapter
      */
-    protected $fsAdapter;
+    protected $fs;
 
     /**
      * @var Action (ex. Read, List, Write, Copy, Delete, Set, etc.)

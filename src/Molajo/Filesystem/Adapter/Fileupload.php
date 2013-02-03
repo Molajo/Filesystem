@@ -1,26 +1,27 @@
 <?php
 /**
- * AccessDeniedException Exception
+ * File Class
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @license   MIT
  */
-namespace Molajo\Filesystem\Exception;
+namespace Molajo\Filesystem\Adapter;
 
 defined('MOLAJO') or die;
 
-use Exception;
+use RuntimeException;
+use Molajo\Filesystem\Exception\FilesystemException as FilesystemException;
 
 /**
- * AccessDeniedException
+ * File Class
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class AccessDeniedException extends Exception implements FilesystemExceptionInterface
+Class Fileupload
 {
-    protected $code = 304;
+
 }

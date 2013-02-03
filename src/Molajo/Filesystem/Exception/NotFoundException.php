@@ -1,6 +1,6 @@
 <?php
 /**
- * AccessDeniedException Exception
+ * NotFoundException Exception
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -13,14 +13,14 @@ defined('MOLAJO') or die;
 use Exception;
 
 /**
- * AccessDeniedException
+ * AdapterNotFoundException Exception
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class AccessDeniedException extends Exception implements FilesystemExceptionInterface
+class NotFoundException extends Exception implements FilesystemExceptionInterface
 {
-    protected $code = 304;
+    protected $code = 404;
 }

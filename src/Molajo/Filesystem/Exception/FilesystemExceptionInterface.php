@@ -1,6 +1,6 @@
 <?php
 /**
- * AccessDeniedException Exception
+ * FilesystemExceptionInterface
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -10,17 +10,15 @@ namespace Molajo\Filesystem\Exception;
 
 defined('MOLAJO') or die;
 
-use Exception;
-
 /**
- * AccessDeniedException
+ * FilesystemExceptionInterface
  *
  * @package   Molajo
  * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class AccessDeniedException extends Exception implements FilesystemExceptionInterface
+interface FilesystemExceptionInterface
 {
-    protected $code = 304;
+
 }
