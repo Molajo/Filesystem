@@ -176,6 +176,14 @@ abstract class FilesystemProperties
      * @var    string
      * @since  1.0
      */
+    public $no_extension;
+
+    /**
+     * Extension
+     *
+     * @var    string
+     * @since  1.0
+     */
     public $extension;
 
     /**
@@ -410,7 +418,7 @@ abstract class FilesystemProperties
         }
 
         if ($default_directory_permissions == '') {
-            $this->default_directory_permissions = 0755;
+            $this->default_directory_permissions = '0755';
         } else {
             $this->default_directory_permissions = $default_directory_permissions;
         }
@@ -433,7 +441,7 @@ abstract class FilesystemProperties
         }
 
         if ($default_file_permissions == '') {
-            $this->default_file_permissions = 0644;
+            $this->default_file_permissions = '0644';
         } else {
             $this->default_file_permissions = $default_file_permissions;
         }
@@ -489,10 +497,10 @@ abstract class FilesystemProperties
     /**
      * Get Directory Permissions for Filesystem
      *
-     * @return  int
+     * @return  string
      * @since   1.0
      */
-    public function getDirectoryPermissions()
+    public function getDirectoryDefaultPermissions()
     {
         return $this->default_directory_permissions;
     }
@@ -500,10 +508,10 @@ abstract class FilesystemProperties
     /**
      * Get File Permissions for Filesystem
      *
-     * @return  int
+     * @return  string
      * @since   1.0
      */
-    public function getFilePermissions()
+    public function getFileDefaultPermissions()
     {
         return $this->default_file_permissions;
     }
@@ -538,6 +546,7 @@ abstract class FilesystemProperties
         }
 
         if (is_int($time) || is_float($time)) {
+            //todo test and remove @
             $time = new DateTime('@' . intval($time), $timezone);
 
         } else {

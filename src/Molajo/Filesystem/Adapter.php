@@ -29,7 +29,7 @@ Class Adapter implements FilesystemInterface
      * @var     string
      * @since   1.0
      */
-    public $fsType;
+    public $fs;
 
     /**
      * Construct
@@ -64,7 +64,7 @@ Class Adapter implements FilesystemInterface
 
         $this->close();
 
-        return $this->fsType;
+        return $this->fs;
     }
 
     /**
@@ -86,7 +86,7 @@ Class Adapter implements FilesystemInterface
             ('Filesystem Type Class ' . $class . ' does not exist.');
         }
 
-        $this->fsType = new $class($filesystem_type);
+        $this->fs = new $class($filesystem_type);
 
         return;
     }
@@ -101,7 +101,7 @@ Class Adapter implements FilesystemInterface
      */
     public function connect($options = array())
     {
-        $this->fsType->connect($options);
+        $this->fs->connect($options);
 
         return;
     }
@@ -116,7 +116,7 @@ Class Adapter implements FilesystemInterface
      */
     public function setPath($path)
     {
-        $this->fsType->setPath($path);
+        $this->fs->setPath($path);
 
         return;
     }
@@ -129,7 +129,7 @@ Class Adapter implements FilesystemInterface
      */
     public function getMetadata()
     {
-        $this->fsType->getMetadata();
+        $this->fs->getMetadata();
 
         return;
     }
@@ -145,16 +145,14 @@ Class Adapter implements FilesystemInterface
      */
     public function doAction($action = '')
     {
-        var_dump($this->fsType);
-        die;
-
         try {
-            $this->fsType->doAction($action);
+
+            $this->fs->doAction($action);
 
         } catch (\Exception $e) {
 
             throw new FilesystemException
-            ('Filesystem Adapter Method ' . $action . ' $action. ' . $e->getMessage());
+            ('Filesystem Type doAction Method: ' . $action . ' failed. ' . $e->getMessage());
         }
 
         return;
@@ -168,7 +166,7 @@ Class Adapter implements FilesystemInterface
      */
     public function close()
     {
-        $this->fsType->close();
+        $this->fs->close();
     }
 
     /**

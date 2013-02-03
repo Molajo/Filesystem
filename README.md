@@ -6,90 +6,80 @@ Filesystem
 
 [![Build Status](https://travis-ci.org/Molajo/Filesystem.png?branch=master)](https://travis-ci.org/Molajo/Filesystem)
 
-General-purpose file and directory services package for PHP applications using the same API with different filesystems.
+Object-oriented file and directory services for PHP to access disparate
+filesystems (ex., Local, FTP, Github, LDAP, etc.) using the same API.
 
 ## System Requirements ##
 
-* PHP 5.3, or above
-* PSR-0 compliant autoloader
-* Platform independent
+* PHP 5.3.3, or above
+* [PSR-0 compliant Autoloader](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)
+* PHP Framework independent
 * [optional] PHPUnit 3.5+ to execute the test suite (phpunit --version)
 
 ## What is Filesystem? ##
 
-**Filesystem** provides a common API for interaction with different file systems. The syntax is the
-same whether the request is for files or folders, whether the action is to read, list,
-write, delete, copy or move folders or files on any filesystem defined to the **Filesystem**
-interface.
+**Filesystem** provides a common API to read, list, write, delete, copy or move files and folders
+on (and between) filesystems using an adapter interface.
 
-Added benefits include ability to easily copy and move files from one file system to another and to
-simplify interaction with fileservices by application services like Cache, Logging, Message, and Cache.
+Benefits include a simple API, the ability to copy and move files from one filesystem to another,
+and use with application services like Cache, Logging, Message, and Cache.
 
 ## Basic Usage ##
 
-**Filesystem** has a simple API. Each command has the same syntax, the same four parameters,
-enabling the application to read, get metadata, write, copy, move,
-delete and list files for filesystems. Administration commands needed to change file
-dates, owner and group assignments, permissions, and so on, are available.
+Each **Filesystem** command shares the same syntax and the same four parameters
+enabling the application to read, list write, delete, copy, and move files and folders.
+Using the same command, the application can also change owner, group, file dates, and file and folder
+permissions.
 
-### The Command ###
-
-Requesting file and/or folder services is always accomplished with four parameters, using this
-syntax, and results are always returned, as indicated.
-
-#### Filesystem Request ####
+### Filesystem Request ###
 
 ```php
-    $results = new Molajo/Filesystem/Request($action, $path, $filesystem_type, $options);
+    $adapter = new Molajo/Filesystem/Adapter($action, $path, $filesystem_type, $options);
 ```
-##### Parameters #####
+#### Parameters ####
 
-These are the four parameters used with filesystem.
+- **$action** valid values: Read, List, Write, Delete, Rename, Copy, Move, GetRelativePath, Chmod, Touch, Metadata;
+- **$path** contains an absolute path from the filesystem root to be used to fulfill the action requested;
+- **$filesystem_type** Identifier for the file system. Examples include Local (default), Ftp, Virtual, Dropbox, etc.;
+- **$options** Associative array of named pair values needed for the specific Action (examples below).
 
-- **$action** valid values include: Read, List, Write, Delete, Copy, or Move;
-- **$path** contains an absolute path from the filesystem root which will be used to fulfill the request;
-- **$filesystem_type** Identifier for the file system. Examples include Local (default), Ftp, Virtual, Dropbox.
-- **$options** Associative array of named pair values needed for the request.
+#### Results ####
 
-#### Filesystem Results ####
+The output from the filesystem operation are returned as an object and stored in the target specified for the call.
+The example above stores the results in $adapter. In addition to the specific action requested, **Filesystem**
+retrieves metadata and makes that information available in the object, along with the specific results requested.
 
-The output from the filesystem operation are returned from the call and can be accessed in this manner:
-
-##### Data #####
+**Action Results:** For any request where data is to be returned, this example shows how to retrieve the output:
 
 ```php
-    $results->data
+    echo $adapter-fs->data
 ```
 
-#### Read ####
-
-To read a specific file from a filesystem:
+**Metadata**  is always returned with the object, making it possible to access the file or folder (name), parent,
+name without extension (no_extension), extension, mime_type, and size, as shown:
 
 ```php
-    $connect = new \Molajo\Filesystem\Adapter('Read', 'location/of/file.txt');
-    $results = $connect->fs->action_results;
+    echo $adapter-fs->size;
+    echo $adapter-fs->mime_type;
+    echo $adapter-fs->parent;
+    echo 'etc';
 ```
 
-#### Metadata
+Standard metadata attributes are listed below and defined in the *Molajo\Filesystem\Properties* class. The Properties
+class can be extended and customized, as needed, by Filesystem.
 
-To access metadata for a filesystem request:
-
-```php
-   $results = $connect->fs->is_writable;
-```
 **Metadata about the Fileystem**
-* filesystem_type
-* root
-* persistence
-* directory_permissions (default)
-* file_permissions (default)
-* read_only
+* filesystem_type;
+* root;
+* persistence;
+* directory_permissions (default);
+* file_permissions (default);
+* read_only.
 
 **Metadata about requested path (be it a file or folder)**
 * path
 * is_absolute
 * absolute_path
-* relative_path
 * exists
 * owner
 * group
@@ -106,52 +96,65 @@ To access metadata for a filesystem request:
 * name
 * parent
 * extension
+* no_extension
 * size
 * mime_type
 
+### Filesystem Commands ###
+
+Examples of how to use **Filesystem* to Read, List, Write, Delete, Rename, Copy, Move, GetRelativePath,
+Chmod, Touch, Metadata commands are provided, below.
+
+#### Read ####
+
+To read a specific file from a filesystem:
+
+```php
+
+    $adapter = new \Molajo\Filesystem\Adapter('Read', 'location/of/file.txt');
+    echo $adapter->fs->data;
+
+```
+
 #### List
 
-To list all files and folders for a given path:
+To list all files and folders for a given path, limiting the results to those files which
+have the extension types identified:
+
 ```php
     $options = array(
         'extension'    => 'txt,doc,ppt'
     );
 
-    $connect = new \Molajo\Filesystem\Adapter('List', 'directory-name', $options);
-    $results = $connect->fs->action_results);
+    $adapter = new \Molajo\Filesystem\Adapter('List', 'directory-name', $options);
+    $results = $adapter->fs->data);
 ```
 
 #### Write
 
-To write a file to a filesystem. Note: in the example, the Filesystem is identified as 'Log', indicating
-that the data written will be written to the Log.
+To write the information in **$data** to the **Log** filesystem using the **standard** log.
 
 ```php
     $options = array(
-        'file'    => 'filename.txt',
-        'replace' => false,
         'data'    => 'Here are the words to write to the file.',
     );
-    $connect      = new \Molajo\Filesystem\Adapter('Write', 'name/of/folder/here', $options, 'Log');
+    $adapter      = new \Molajo\Filesystem\Adapter('Write', 'standard', $options, 'Log');
 ```
 
 #### Copy
 
-To write a file or folder to a specific destination on the filesystem. This example shows how to copy
-from the 'Local' filessystem to the 'FTP' filesystem. That ease of use to copy to an Amazon backup,
- or to copy from a zip file serving as an installer is a key benefit.
+To copy file(s) and folder(s) from a filesystem to a location on the same or a different filesystem.
 
-In the case of a single file copy, the target name can be specified. If it is omitted, the source file
-name is used at the new location.
+This example shows how to backup a local file to a remote location.
 
 ```php
     $options = array(
         'target_directory'       => 'name/of/target/folder',
         'target_name'            => 'single-file-copy.txt',
         'replace'                => false,
-        'target_filesystem_type' => 'FTP'
+        'target_filesystem_type' => 'Cloud'
     );
-    $connect = new \Molajo\Filesystem\Adapter('Copy', 'name/of/source/folder', $options, 'Local');
+    $adapter = new \Molajo\Filesystem\Adapter('Copy', 'name/of/source/file', $options);
 ```
 
 #### Move
@@ -159,18 +162,16 @@ name is used at the new location.
 The only difference between the copy and the move is that the files copied are removed from the
 source location after the operation is complete.
 
-This example shows how to copy files from a local directory to an archive folder.
+This example shows how to move files from a local directory to an archive location on the local filesystem.
 
-Note in the example neither the source or target Filesystems are identified. That means each will
-define to Local.
 
 ```php
     $options = array(
-        'target_directory'       => 'year2011/files',
-        'target_name'            => 'archive',
+        'target_directory'       => '/archive/year2012',
         'replace'                => false
     );
-    $connect = new \Molajo\Filesystem\Adapter('Move', 'name/of/current/year/folder', $options);
+
+    $adapter = new \Molajo\Filesystem\Adapter('Move', 'current/folder/year2012', $options);
 ```
 
 #### Delete
@@ -179,15 +180,8 @@ As with the list, copy, and move, the delete can be used for individual files an
 to specify a folder and all dependent subfolders and files should be deleted.
 
 ```php
-    $connect = new \Molajo\Filesystem\Adapter('Delete', 'name/of/source/folder');
+    $adapter = new \Molajo\Filesystem\Adapter('Delete', 'name/of/source/folder');
 ```
-
-### Special Purpose Usage
-
-
-
-#### Directory Iterator
-http://us2.php.net/manual/en/class.filesystemiterator.php
 
 #### Merged Filesystems
 
@@ -196,18 +190,17 @@ in a different filesystem. **Merged filesystems** allow you to define a set of d
 the same location in order to use the output together.
 
 ```php
-    $options = array(
-        'source_adapter' => 'local',
-        'source_path'    => '/x/y/example.txt'
-    );
 
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->read ();
+    $adapter = new \Molajo\Filesystem\Adapter('List', '/first/location');
+    $data1   = $adapter->fs->data;
+
+    $adapter = new \Molajo\Filesystem\Adapter('List', '/second/location');
+    $data2   = $adapter->fs->data;
+
+
+
 ```
-#### RecursiveTreeIterator
 
-http://us2.php.net/manual/en/class.recursivetreeiterator.php
-http://us2.php.net/manual/en/class.recursivetreeiterator.php
 
 ### Special Purpose File Operations
 
@@ -224,8 +217,8 @@ This shows how to backup a file on one filesystem to another filesystem.
         'archive'        => 'zip'
     );
 
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->backup ();
+    $adapter = new \Molajo\Filesystem\File($options);
+    $data    = $adapter->backup ();
 ```
 
 #### Download
@@ -241,8 +234,8 @@ This shows how to backup a file on one filesystem to another filesystem.
         'archive'        => 'zip'
     );
 
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->backup ();
+    $adapter = new \Molajo\Filesystem\File($options);
+    $data    = $adapter->backup ();
 ```
 
 #### FTP Server
@@ -258,8 +251,8 @@ This shows how to backup a file on one filesystem to another filesystem.
         'archive'        => 'zip'
     );
 
-    $connect = new \Molajo\Filesystem\File($options);
-    $data    = $connect->backup ();
+    $adapter = new \Molajo\Filesystem\File($options);
+    $data    = $adapter->backup ();
 ```
 
 ### Installation

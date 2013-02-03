@@ -19,10 +19,12 @@ class LocalReadTest extends Data
     {
         parent::setUp();
 
-        $this->filesystem_type = 'Local';
-        $this->action          = 'Read';
-        $this->path            = BASE_FOLDER . '/Tests/Data/test1.txt';
-        $this->options         = array();
+        $this->filesystem_type     = 'Local';
+        $this->action              = 'Read';
+        $this->path                = BASE_FOLDER . '/Tests/Data/test1.txt';
+        $this->options             = array();
+        $this->options['timezone'] = 'America/Chicago';
+
     }
 
     /**
@@ -30,8 +32,9 @@ class LocalReadTest extends Data
      */
     public function testReadSuccessful()
     {
-        $connect    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options = array());
-
+        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        var_dump($this->connect);
+        die;
         $this->assertEquals('Local', $connect->fs->filesystem_type);
         $this->assertEquals('/', $connect->fs->root);
         $this->assertEquals(1, $connect->fs->persistence);
@@ -66,30 +69,8 @@ class LocalReadTest extends Data
 
         $this->assertEquals('yabba, dabba, doo', trim($connect->fs->data));
 
-        return;
-    }
-
-    /**
-     * @covers Molajo\Filesystem\Type\Local::read
-     * @expectedException Molajo\Filesystem\Exception\NotFoundException
-     */
-    public function testReadUnsuccessful()
-    {
-        $this->path = BASE_FOLDER . '/Tests/Data/testreally-is-not-there.txt';
-        $connect    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options = array());
-
-        return;
-    }
-
-    /**
-     * @covers Molajo\Filesystem\Type\Local::read
-     * @expectedExceptionMolajo\Filesystem\Exception\FilesystemException
-     */
-    public function testReadNotAFile()
-    {
-        $this->path = BASE_FOLDER . '/Tests';
-        $connect    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options = array());
-
+        var_dump($this->connect);
+        die;
         return;
     }
 

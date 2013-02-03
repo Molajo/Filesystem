@@ -13,6 +13,7 @@ if (substr($_SERVER['DOCUMENT_ROOT'], - 1) == '/') {
 } else {
     define('ROOT_FOLDER', $_SERVER['DOCUMENT_ROOT'] . '/');
 }
+
 define('BASE_FOLDER', __DIR__);
 
 /** Load Classloader */

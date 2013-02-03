@@ -82,7 +82,7 @@ interface SystemInterface
      * @return  int
      * @since   1.0
      */
-    public function getDirectoryPermissions();
+    public function getDirectoryDefaultPermissions();
 
     /**
      * Get File Permissions for Filesystem
@@ -90,7 +90,7 @@ interface SystemInterface
      * @return  int
      * @since   1.0
      */
-    public function getFilePermissions();
+    public function getFileDefaultPermissions();
 
     /**
      * Get Read Only for Filesystem

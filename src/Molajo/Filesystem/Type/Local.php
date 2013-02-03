@@ -130,6 +130,7 @@ class Local extends FilesystemProperties
         $this->getName();
         $this->getParent();
         $this->getExtension();
+        $this->getNoextension();
 
         $this->discovery($this->path); // must follow the is_file, etc., series
 
@@ -161,8 +162,12 @@ class Local extends FilesystemProperties
         $action = strtolower($action);
 
         switch ($action) {
+            case 'metadata':
+                // simply return with what is already available
+                break;
+
             case 'read':
-                $this->data = $this->read();
+                $this->read();
                 break;
 
             case 'write':
@@ -204,6 +209,10 @@ class Local extends FilesystemProperties
 
                 break;
 
+            case 'rename':
+                $this->data = 'Not implemented.';
+                break;
+
             case 'copy':
             case 'move':
 
@@ -241,7 +250,7 @@ class Local extends FilesystemProperties
 
                 break;
 
-            case 'setRelativePath':
+            case 'getRelativePath':
 
                 if (isset($this->options['target_directory'])) {
                     $target_directory = $this->options['target_directory'];
@@ -293,10 +302,11 @@ class Local extends FilesystemProperties
                 return $this->data;
 
                 break;
-        }
 
-        throw new FilesystemException
-        ('Filesystem Adapter Method ' . $action . ' does not exist.');
+            default:
+                throw new NotFoundException
+                ($this->filesystem_type . ' Filesystem doAction Method ' . $action . ' does not exist.');
+        }
 
         return;
     }
@@ -353,7 +363,7 @@ class Local extends FilesystemProperties
             ('Filesystem Local Read: Empty File: ' . $this->path);
         }
 
-        return $this->data;
+        return;
     }
 
     /**
@@ -793,7 +803,7 @@ class Local extends FilesystemProperties
      * @throws  FilesystemException
      * @since   1.0
      */
-    public function setRelativePath($absolute_path_of_target = '')
+    public function getRelativePath($absolute_path_of_target = '')
     {
         // Normalize separators on windows
         if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
@@ -978,25 +988,6 @@ class Local extends FilesystemProperties
     }
 
     /**
-     * Get File or Directory Name
-     *
-     * @return  void
-     * @since   1.0
-     * @throws  NotFoundException
-     */
-    public function getName()
-    {
-        if ($this->exists === false) {
-            $this->name = null;
-            return;
-        }
-
-        $this->name = basename($this->path);
-
-        return;
-    }
-
-    /**
      * Returns true or false indicator as to whether or not the path is a directory
      *
      * @return  void
@@ -1095,7 +1086,26 @@ class Local extends FilesystemProperties
             return;
         }
 
-        $this->parent = dirname($this->path);
+        $this->parent = pathinfo($this->path, PATHINFO_DIRNAME);
+
+        return;
+    }
+
+    /**
+     * Get File or Directory Name
+     *
+     * @return  void
+     * @since   1.0
+     * @throws  NotFoundException
+     */
+    public function getName()
+    {
+        if ($this->exists === false) {
+            $this->name = null;
+            return;
+        }
+
+        $this->name = pathinfo($this->path, PATHINFO_FILENAME);
 
         return;
     }
@@ -1125,7 +1135,37 @@ class Local extends FilesystemProperties
             ('Filesystem Local: not a valid file. Path: ' . $this->path);
         }
 
-        $this->extension = pathinfo(basename($this->path), PATHINFO_EXTENSION);
+        $this->extension = pathinfo($this->path, PATHINFO_EXTENSION);
+
+        return;
+    }
+
+    /**
+     * Get File without Extension
+     *
+     * @return  void
+     * @since   1.0
+     * @throws  NotFoundException
+     */
+    public function getNoExtension()
+    {
+        if ($this->exists === false) {
+            $this->no_extension = null;
+            return;
+        }
+
+        if ($this->is_file === true) {
+
+        } elseif ($this->is_directory === true) {
+            $this->no_extension = '';
+            return;
+
+        } else {
+            throw new NotFoundException
+            ('Filesystem Local: not a valid file. Path: ' . $this->path);
+        }
+
+        $this->no_extension = pathinfo($this->path, PATHINFO_FILENAME);
 
         return;
     }

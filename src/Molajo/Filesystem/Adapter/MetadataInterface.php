@@ -23,7 +23,7 @@ interface MetadataInterface
     /**
      * Retrieves the absolute path, which is the relative path from the root directory
      *
-     * @return  string
+     * @return  void
      * @since   1.0
      */
     public function getAbsolutePath();
@@ -34,7 +34,7 @@ interface MetadataInterface
      * Relative path - describes how to get from a particular directory to a file or directory
      * Absolute Path - relative path from the root directory, prepended with a '/'.
      *
-     * @return  bool
+     * @return  void
      * @since   1.0
      */
     public function isAbsolutePath();
@@ -42,7 +42,7 @@ interface MetadataInterface
     /**
      * Returns true or false indicator as to whether or not the path is a directory
      *
-     * @return  bool
+     * @return  void
      * @since   1.0
      */
     public function isDirectory();
@@ -50,7 +50,7 @@ interface MetadataInterface
     /**
      * Returns true or false indicator as to whether or not the path is a file
      *
-     * @return  bool
+     * @return  void
      * @since   1.0
      */
     public function isFile();
@@ -58,7 +58,7 @@ interface MetadataInterface
     /**
      * Returns true or false indicator as to whether or not the path is a link
      *
-     * @return  bool
+     * @return  void
      * @since   1.0
      */
     public function isLink();
@@ -67,7 +67,7 @@ interface MetadataInterface
      * Returns the value 'directory', 'file' or 'link' for the type determined
      *  dependent upon isDirectory, isFile, isLink
      *
-     * @return  string
+     * @return  void
      * @since   1.0
      */
     public function getType();
@@ -75,7 +75,7 @@ interface MetadataInterface
     /**
      * Get File or Directory Name
      *
-     * @return  string
+     * @return  void
      * @since   1.0
      */
     public function getName();
@@ -83,7 +83,7 @@ interface MetadataInterface
     /**
      * Get Parent for current path
      *
-     * @return  string
+     * @return  void
      * @since   1.0
      */
     public function getParent();
@@ -91,7 +91,7 @@ interface MetadataInterface
     /**
      * Get File Extension
      *
-     * @return  string
+     * @return  void
      * @since   1.0
      */
     public function getExtension();
@@ -99,7 +99,7 @@ interface MetadataInterface
     /**
      * Get the file size of a given file.
      *
-     * @return  string
+     * @return  void
      * @since   1.0
      */
     public function getSize();
@@ -147,7 +147,7 @@ interface MetadataInterface
     /**
      * Tests for read access, returning true or false
      *
-     * @return  bool
+     * @return  void
      * @since   1.0
      */
     public function isReadable();
@@ -155,7 +155,7 @@ interface MetadataInterface
     /**
      * Tests for write access, returning true or false
      *
-     * @return  bool
+     * @return  void
      * @since   1.0
      */
     public function isWriteable();
@@ -163,7 +163,7 @@ interface MetadataInterface
     /**
      * Tests for execute access, returning true or false
      *
-     * @return  bool
+     * @return  void
      * @since   1.0
      */
     public function isExecutable();
@@ -171,7 +171,7 @@ interface MetadataInterface
     /**
      * Get the mimetype of a given file.
      *
-     * @return  string
+     * @return  void
      * @since   1.0
      */
     public function getMimeType();

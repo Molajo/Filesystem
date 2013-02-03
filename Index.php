@@ -13,13 +13,14 @@ if (substr($_SERVER['DOCUMENT_ROOT'], - 1) == '/') {
 } else {
     define('ROOT_FOLDER', $_SERVER['DOCUMENT_ROOT'] . '/');
 }
+
 define('BASE_FOLDER', __DIR__);
 
 /** Load Classloader */
 include BASE_FOLDER . '/' . 'ClassLoader.php';
 
 $loader = new ClassLoader();
-$loader->add('Molajo\Filesystem', BASE_FOLDER . '/src/Molajo');
-$loader->add('Tests\Integration', BASE_FOLDER . '/Tests/Integration');
+$loader->add('Molajo\Filesystem', BASE_FOLDER . '/src');
+
 $loader->register();
 

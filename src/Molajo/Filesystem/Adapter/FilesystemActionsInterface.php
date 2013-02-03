@@ -98,7 +98,7 @@ interface FilesystemActionsInterface
      * @return  void
      * @since   1.0
      */
-    public function setRelativePath($absolute_path_of_target = '');
+    public function getRelativePath($absolute_path_of_target = '');
 
     /**
      * Change file mode
