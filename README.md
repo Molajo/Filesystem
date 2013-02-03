@@ -7,8 +7,7 @@ Filesystem
 [![Build Status](https://travis-ci.org/Molajo/Filesystem.png?branch=master)](https://travis-ci.org/Molajo/Filesystem)
 
 Simple, uniform File and Directory Services API for PHP applications enabling interaction with multiple Filesystem types
-(ex., Local, FTP, Github, LDAP, etc.). If you create an adapter to another filesystems that you would like to share,
-please do so using a [pull-request](https://github.com/Molajo/Filesystem/pulls). (Thanks!)
+(ex., Local, FTP, Github, LDAP, etc.).
 
 ## System Requirements ##
 
@@ -20,10 +19,10 @@ please do so using a [pull-request](https://github.com/Molajo/Filesystem/pulls).
 ## What is Filesystem? ##
 
 **Filesystem** provides a common API to read, list, write, rename, delete, copy or move files and folders
-on (and between) filesystems using adapters. Using the same command, the application can also change owner,
-group, file dates, and file and folder permissions. Benefits include a simple, uniform API,
-the ability to copy and move files between filesystems, and an interface to application services
-like Cache, Logging, Message, and Cache.
+on (and between) filesystems using adapters. In addition, the API enables applications to perform system
+administrative tasks like changing the owner, group, file dates, and file and folder permissions. Benefits
+include a simple, uniform API, ability to copy and move files between filesystems, and an interface
+to fileservices for application support services, like Cache, Logging, Message, and Cache.
 
 ## Basic Usage ##
 
@@ -49,11 +48,10 @@ object, as follows:
 **Action Results:** For any request where data is to be returned, this example shows how to retrieve the output:
 
 ```php
-    echo $adapter-fs->data
+    echo $adapter-fs->data;
 ```
 
-**Metadata** such as the name of the file or folder (name), parent, name without extension (no_extension), extension,
-mime_type, and size, etc, is accessed in this manner:
+**Metadata** including the file or folder (name), parent, extension, etc., is accessed in this manner:
 
 ```php
     echo $adapter-fs->size;
@@ -61,16 +59,15 @@ mime_type, and size, etc, is accessed in this manner:
     echo $adapter-fs->parent;
     echo 'etc';
 ```
-
-Standard metadata attributes are listed below and defined in the *Molajo\Filesystem\Properties* class. The Properties
-class can be extended and customized, as needed, by Filesystem.
-
 **Metadata about the Fileystem** filesystem_type, root, persistence, default_directory_permissions,
 default_file_permissions, read_only.
 
 **Metadata about requested path** (be it a file or folder) path, is_absolute, absolute_path, exists, owner,
 group, create_date, access_date, modified_date, is_readable, is_writable, is_executable, is_directory,
-is_file, is_link, type, name, parent, extension, no_extension, size, and mime_type
+is_file, is_link, type, name, parent, extension, no_extension, size, and mime_type.
+
+Metadata is defined in the [Molajo\Filesystem\Properties](https://github.com/Molajo/Filesystem/blob/master/src/Molajo/Filesystem/Type/FilesystemProperties.php) class. The Properties
+class can be extended and customized, as needed, by Filesystem.
 
 ### Filesystem Commands ###
 

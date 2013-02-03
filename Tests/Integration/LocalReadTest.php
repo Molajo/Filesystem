@@ -30,17 +30,17 @@ class LocalReadTest extends Data
      */
     public function testReadSuccessful()
     {
-        $adapter    = new fsAdapter($this->action, $this->path);
+        $adapter = new fsAdapter($this->action, $this->path);
 
-        $this->assertEquals('Local',    $adapter->fs->filesystem_type);
-        $this->assertEquals('/',        $adapter->fs->root);
-        $this->assertEquals(1,          $adapter->fs->persistence);
-        $this->assertEquals(0755,       $adapter->fs->default_directory_permissions);
-        $this->assertEquals(0644,       $adapter->fs->default_file_permissions);
-        $this->assertEquals(1,          $adapter->fs->read_only);
-        $this->assertEquals(true,       $adapter->fs->is_readable);
-        $this->assertEquals(true,       $adapter->fs->is_writable);
-        $this->assertEquals(false,      $adapter->fs->is_executable);
+        $this->assertEquals('Local', $adapter->fs->filesystem_type);
+        $this->assertEquals('/', $adapter->fs->root);
+        $this->assertEquals(true, $adapter->fs->persistence);
+        $this->assertEquals('0755', $adapter->fs->default_directory_permissions);
+        $this->assertEquals('0644', $adapter->fs->default_file_permissions);
+        $this->assertEquals(false, $adapter->fs->read_only);
+        $this->assertEquals(true, $adapter->fs->is_readable);
+        $this->assertEquals(true, $adapter->fs->is_writable);
+        $this->assertEquals(false, $adapter->fs->is_executable);
 
         $this->assertEquals(
             BASE_FOLDER . '/Tests/Data/test1.txt',
@@ -84,7 +84,7 @@ class LocalReadTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Type\Local::read
-     * @expectedExceptionMolajo\Filesystem\Exception\FilesystemException
+     * @expectedException Molajo\Filesystem\Exception\NotFoundException
      */
     public function testReadNotAFile()
     {

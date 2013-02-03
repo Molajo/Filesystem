@@ -171,25 +171,27 @@ class Local extends FilesystemProperties
                 break;
 
             case 'write':
-                if (isset($options['file'])) {
-                    $file = $options['file'];
+                if (isset($this->options['file'])) {
+                    $file = $this->options['file'];
                 } else {
                     throw new \BadMethodCallException
-                    ('Filesystem Adapter: Must provide filename for write request. Path: ' . $this->path);
+                    ('Local Filesystem: Filename required for Write Action. Path: ' . $this->path);
                 }
 
                 $replace = true;
-                if (isset($options['replace'])) {
-                    $replace = $options['replace'];
+                if (isset($this->options['replace'])) {
+                    $replace = $this->options['replace'];
                 }
 
-                if (isset($options['data'])) {
-                    $data = $options['data'];
+                $replace = $this->setTorF($replace, true);
+
+                if (isset($this->options['data'])) {
+                    $data = $this->options['data'];
                 } else {
                     $data = '';
                 }
 
-                $this->data = $this->fsType->write($file, $replace, $data);
+                $this->write($file, $replace, $data);
 
                 break;
 
@@ -197,15 +199,13 @@ class Local extends FilesystemProperties
 
                 $delete_subdirectories = true;
 
-                if (isset($options['delete_subdirectories'])) {
-                    $delete_subdirectories = (int)$options['delete_subdirectories'];
+                if (isset($this->options['delete_subdirectories'])) {
+                    $delete_subdirectories = (int)$this->options['delete_subdirectories'];
                 }
 
-                $delete_subdirectories = $this->fsType->setTorF($delete_subdirectories, true);
+                $delete_subdirectories = $this->setTorF($delete_subdirectories, true);
 
-                $this->data = $this->delete($delete_subdirectories);
-
-                $this->data = $this->fsType->delete($delete_subdirectories);
+                $this->delete($delete_subdirectories);
 
                 break;
 
@@ -221,7 +221,7 @@ class Local extends FilesystemProperties
 
                 } else {
                     throw new \BadMethodCallException
-                    ('Filesystem Adapter: Must provide target_directory for copy request. Path: ' . $this->path);
+                    ('Local Filesystem: MTarget_directory for Copy Action. Path: ' . $this->path);
                 }
 
                 if (isset($this->options['target_name'])) {
@@ -234,15 +234,15 @@ class Local extends FilesystemProperties
                 $replace = true;
 
                 if (isset($this->options['replace'])) {
-                    $replace = (int)$this->options['replace'];
+                    $replace = $this->options['replace'];
                 }
 
-                $replace = $this->fsType->setTorF($replace, true);
+                $replace = $this->setTorF($replace, true);
 
                 if (isset($this->options['target_filesystem_type'])) {
                     $target_filesystem_type = $this->options['target_filesystem_type'];
                 } else {
-                    $target_filesystem_type = $this->fsType->filesystem_type;
+                    $target_filesystem_type = $this->filesystem_type;
                 }
 
                 $this->data
@@ -257,29 +257,20 @@ class Local extends FilesystemProperties
 
                 } else {
                     throw new \BadMethodCallException
-                    ('Filesystem Adapter: Must provide target_directory for copy request. Path: ' . $this->path);
+                    ('Local Filesystem: Must provide target_directory for copy request. Path: ' . $this->path);
                 }
 
                 break;
 
             case 'chmod':
 
-                $recursive = true;
+                $mode = '';
 
-                if (isset($this->options['recursive'])) {
-                    $recursive = (int)$this->options['recursive'];
+                if (isset($this->options['mode'])) {
+                    $mode = (int)$this->options['mode'];
                 }
 
-                $recursive = $this->fsType->setTorF($recursive, true);
-
-                $this->data = $this->getList($recursive);
-
-                $this->fsType->chmod($mode);
-
-
-                $this->data = $this->fsType->chmod($mode);
-
-                return $this->data;
+                $this->chmod($mode);
 
                 break;
 
@@ -297,9 +288,7 @@ class Local extends FilesystemProperties
                     $atime = (int)$this->options['atime'];
                 }
 
-                $this->data = $this->fsType->touch($time, $atime);
-
-                return $this->data;
+                $this->touch($time, $atime);
 
                 break;
 
@@ -376,10 +365,10 @@ class Local extends FilesystemProperties
      */
     public function getList($recursive = false)
     {
-        if (isset($options['recursive'])) {
-            $recursive = $options['recursive'];
+        if (isset($this->options['recursive'])) {
+            $recursive = $this->options['recursive'];
         }
-        $this->data = $this->fsType->getList($recursive);
+        $this->data = $this->getList($recursive);
 
         return $this->data;
 
@@ -712,7 +701,7 @@ class Local extends FilesystemProperties
             } else {
 
                 new fsAdapter('write', $target_directory, $target_filesystem_type,
-                    $options = array('file' => $target_name)
+                    $this->options = array('file' => $target_name)
                 );
             }
             $target_directory = $target_directory . '/' . $target_name;
@@ -740,7 +729,7 @@ class Local extends FilesystemProperties
                     $new_node = basename($new_path);
 
                     new fsAdapter('write', $parent, $target_filesystem_type,
-                        $options = array('file' => $new_node)
+                        $this->options = array('file' => $new_node)
                     );
                 }
 
@@ -768,12 +757,12 @@ class Local extends FilesystemProperties
                 }
 
                 /** Source */
-                $connect = new fsAdapter('Read', $file, 'Local', $options = array());
+                $connect = new fsAdapter('Read', $file, 'Local', $this->options = array());
                 $data    = $connect->data;
 
                 /** Write Target */
                 new fsAdapter('Write', $new_path, $target_filesystem_type,
-                    $options = array(
+                    $this->options = array(
                         'file'    => $file_name,
                         'replace' => $replace,
                         'data'    => $data,
@@ -1105,7 +1094,7 @@ class Local extends FilesystemProperties
             return;
         }
 
-        $this->name = pathinfo($this->path, PATHINFO_FILENAME);
+        $this->name = pathinfo($this->path, PATHINFO_BASENAME);
 
         return;
     }

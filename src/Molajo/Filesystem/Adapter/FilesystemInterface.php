@@ -35,7 +35,7 @@ interface FilesystemInterface
      *
      * @param   $path
      *
-     * @return  string
+     * @return  void
      * @since   1.0
      */
     public function setPath($path);

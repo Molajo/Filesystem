@@ -11,13 +11,12 @@ namespace Molajo\Filesystem;
 include '../../../' . 'index.php';
 
 use Molajo\Filesystem\Adapter as fsAdapter;
-$read = BASE_FOLDER . '/Tests/Hold/test1.txt';
-$read = BASE_FOLDER;
-$adapter = new fsAdapter('Rename', $read);
+$read = BASE_FOLDER . '/Tests/Hold/testreally-is-not-there.txt';
+$adapter = new fsAdapter('Read', $read);
 
-echo $adapter->fs->data;
+echo '<pre>';
+echo var_dump($adapter->fs);
 
-echo $adapter->fs->size;
 
 
 

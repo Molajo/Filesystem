@@ -1,29 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Integration" tests="3" assertions="5" failures="2" errors="1" time="0.082757">
-    <testsuite name="Tests\Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/Tests/Integration/LocalReadTest.php" namespace="Tests\Integration" fullPackage="Tests.Integration" tests="3" assertions="5" failures="2" errors="1" time="0.082757">
-      <testcase name="testReadSuccessful" class="Tests\Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/Tests/Integration/LocalReadTest.php" line="31" assertions="4" time="0.052329">
-        <failure type="PHPUnit_Framework_ExpectationFailedException">Tests\Integration\LocalReadTest::testReadSuccessful
-Failed asserting that '0755' matches expected 493.
-
-/Users/amystephen/Sites/Filesystem/Tests/Integration/LocalReadTest.php:38
-</failure>
-      </testcase>
-      <testcase name="testReadUnsuccessful" class="Tests\Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/Tests/Integration/LocalReadTest.php" line="77" assertions="1" time="0.011188">
-        <failure type="PHPUnit_Framework_ExpectationFailedException">Tests\Integration\LocalReadTest::testReadUnsuccessful
-Failed asserting that exception of type "Molajo\Filesystem\Exception\FilesystemException" matches expected exception "Molajo\Filesystem\Exception\NotFoundException".
-
-</failure>
-      </testcase>
-      <testcase name="testReadNotAFile" class="Tests\Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/Tests/Integration/LocalReadTest.php" line="89" assertions="0" time="0.019240">
-        <error type="Molajo\Filesystem\Exception\FilesystemException">Tests\Integration\LocalReadTest::testReadNotAFile
-Molajo\Filesystem\Exception\FilesystemException: Filesystem Type doAction Method: Read failed. Filesystem Local Read: Is not a file: /Users/amystephen/Sites/Filesystem/Tests
-
-/Users/amystephen/Sites/Filesystem/src/Molajo/Filesystem/Adapter.php:155
-/Users/amystephen/Sites/Filesystem/src/Molajo/Filesystem/Adapter.php:63
-/Users/amystephen/Sites/Filesystem/Tests/Integration/LocalReadTest.php:92
-</error>
-      </testcase>
+  <testsuite name="Integration" tests="3" assertions="25" failures="0" errors="0" time="0.045121">
+    <testsuite name="Tests\Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/Tests/Integration/LocalReadTest.php" namespace="Tests\Integration" fullPackage="Tests.Integration" tests="3" assertions="25" failures="0" errors="0" time="0.045121">
+      <testcase name="testReadSuccessful" class="Tests\Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/Tests/Integration/LocalReadTest.php" line="31" assertions="23" time="0.021596"/>
+      <testcase name="testReadUnsuccessful" class="Tests\Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/Tests/Integration/LocalReadTest.php" line="77" assertions="1" time="0.009574"/>
+      <testcase name="testReadNotAFile" class="Tests\Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/Tests/Integration/LocalReadTest.php" line="89" assertions="1" time="0.013951"/>
     </testsuite>
   </testsuite>
 </testsuites>

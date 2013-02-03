@@ -145,15 +145,7 @@ Class Adapter implements FilesystemInterface
      */
     public function doAction($action = '')
     {
-        try {
-
-            $this->fs->doAction($action);
-
-        } catch (\Exception $e) {
-
-            throw new FilesystemException
-            ('Filesystem Type doAction Method: ' . $action . ' failed. ' . $e->getMessage());
-        }
+        $this->fs->doAction($action);
 
         return;
     }
