@@ -65,38 +65,12 @@ mime_type, and size, etc, is accessed in this manner:
 Standard metadata attributes are listed below and defined in the *Molajo\Filesystem\Properties* class. The Properties
 class can be extended and customized, as needed, by Filesystem.
 
-**Metadata about the Fileystem**
-* filesystem_type;
-* root;
-* persistence;
-* directory_permissions (default);
-* file_permissions (default);
-* read_only.
+**Metadata about the Fileystem** filesystem_type, root, persistence, default_directory_permissions,
+default_file_permissions, read_only.
 
-**Metadata about requested path (be it a file or folder)**
-* path
-* is_absolute
-* absolute_path
-* exists
-* owner
-
-* group
-* create_date
-* access_date
-* modified_date
-* is_readable
-* is_writable
-* is_executable
-* is_directory
-* is_file
-* is_link
-* type
-* name
-* parent
-* extension
-* no_extension
-* size
-* mime_type
+**Metadata about requested path** (be it a file or folder) path, is_absolute, absolute_path, exists, owner,
+group, create_date, access_date, modified_date, is_readable, is_writable, is_executable, is_directory,
+is_file, is_link, type, name, parent, extension, no_extension, size, and mime_type
 
 ### Filesystem Commands ###
 
@@ -105,7 +79,6 @@ class can be extended and customized, as needed, by Filesystem.
 To read a specific file from a filesystem:
 
 ```php
-
     $adapter = new \Molajo\Filesystem\Adapter('Read', 'location/of/file.txt');
     echo $adapter->fs->data;
 ```
@@ -158,7 +131,6 @@ source location after the operation is complete.
 
 This example shows how to move files from a local directory to an archive location on the local filesystem.
 
-
 ```php
     $options = array(
         'target_directory'       => '/archive/year2012',
@@ -182,7 +154,6 @@ to specify a folder and all dependent subfolders and files should be deleted.
 ### Merged Filesystems
 
 ```php
-
     $adapter = new \Molajo\Filesystem\Adapter('List', '/first/location');
     $data1   = $adapter->fs->data;
 
