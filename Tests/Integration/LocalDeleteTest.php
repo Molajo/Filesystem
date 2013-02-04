@@ -1,10 +1,6 @@
 <?php
 namespace Tests\Integration;
 
-use Exception;
-use Molajo\Filesystem\Exception\NotFoundException;
-use Molajo\Filesystem\Exception\FilesystemException;
-
 use Molajo\Filesystem\Adapter as fsAdapter;
 
 /**
@@ -42,7 +38,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -61,7 +57,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -81,7 +77,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $connect       = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter       = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -101,7 +97,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $connect       = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter       = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -120,7 +116,7 @@ class LocalDeleteTest extends Data
 
         $this->path    = BASE_FOLDER . '/Tests/Dataeeeeee';
 
-        $connect       = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter       = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         return;
     }

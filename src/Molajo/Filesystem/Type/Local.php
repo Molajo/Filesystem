@@ -131,10 +131,6 @@ class Local extends FilesystemProperties
         $this->getParent();
         $this->getExtension();
         $this->getNoextension();
-
-        $this->discovery($this->path); // must follow the is_file, etc., series
-
-        $this->getSize();
         $this->getMimeType();
         $this->getOwner();
         $this->getGroup();
@@ -144,6 +140,15 @@ class Local extends FilesystemProperties
         $this->isReadable();
         $this->isWriteable();
         $this->isExecutable();
+
+        /**
+         *  Discovery creates an array of Files and Directories based on Path
+         */
+        if ($this->exists === true) {
+            $this->discovery($this->path);
+        }
+
+        $this->getSize();
 
         return;
     }
@@ -324,6 +329,7 @@ class Local extends FilesystemProperties
      */
     public function read()
     {
+
         if ($this->exists === false) {
             throw new NotFoundException
             ('Filesystem Local Read: File does not exist: ' . $this->path);
@@ -375,10 +381,6 @@ class Local extends FilesystemProperties
         if (is_file($this->path)) {
             return $this->read();
         }
-
-        $files = array();
-
-        $this->discovery();
 
         foreach ($this->directories as $directory) {
             $files[] = $directory;
@@ -479,9 +481,8 @@ class Local extends FilesystemProperties
         if (file_exists($path)) {
             return;
         }
-
         try {
-            \mkdir($path, $this->default_directory_permissions, true);
+            mkdir($path, $this->default_directory_permissions, true);
 
         } catch (Exception $e) {
 
@@ -506,11 +507,13 @@ class Local extends FilesystemProperties
     {
         if (file_exists($this->path)) {
         } else {
+
             throw new NotFoundException
             ('Local Filesystem Delete: File not found ' . $this->path);
         }
 
         if ($this->is_writable === false) {
+
             throw new FilesystemException
             ('Local Filesystem Delete: No write access to file/path: ' . $this->path);
         }
@@ -519,7 +522,7 @@ class Local extends FilesystemProperties
 
             if (file_exists($this->path)) {
             } else {
-                return true;
+                return;
             }
 
             $this->_deleteDiscoveryFilesArray();
@@ -642,6 +645,7 @@ class Local extends FilesystemProperties
         $target_filesystem_type,
         $move_or_copy = 'copy'
     ) {
+
         /** Defaults */
         if ($target_directory == '') {
             $target_directory = $this->parent;
@@ -690,8 +694,6 @@ class Local extends FilesystemProperties
                 ('Local Filesystem Delete: No write access for moving source file/path: ' . $move_or_copy);
             }
         }
-
-        $this->discovery();
 
         if ($this->is_file === true || $target_name == '') {
 
@@ -757,8 +759,8 @@ class Local extends FilesystemProperties
                 }
 
                 /** Source */
-                $connect = new fsAdapter('Read', $file, 'Local', $this->options = array());
-                $data    = $connect->data;
+                $adapter = new fsAdapter('Read', $file);
+                $data    = $adapter->fs->data;
 
                 /** Write Target */
                 new fsAdapter('Write', $new_path, $target_filesystem_type,
@@ -848,7 +850,7 @@ class Local extends FilesystemProperties
      */
     public function chmod($mode = 0)
     {
-        if (in_array($mode, array('0600', '0644', '0755', '0750'))) {
+        if (in_array($mode, array(0600, 0644, 0755, 0750))) {
         } else {
 
             throw new FilesystemException
@@ -924,6 +926,7 @@ class Local extends FilesystemProperties
     public function exists()
     {
         $this->exists = false;
+
         if (file_exists($this->path)) {
             $this->exists = true;
         }

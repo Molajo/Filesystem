@@ -20,8 +20,9 @@ class LocalWriteTest extends Data
         parent::setUp();
 
         $this->filesystem_type = 'Local';
-        $this->action       = 'Write';
+        $this->action          = 'Write';
     }
+
 
     /**
      * @covers Molajo\Filesystem\Type\Local::write
@@ -45,7 +46,7 @@ class LocalWriteTest extends Data
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 
@@ -74,7 +75,7 @@ class LocalWriteTest extends Data
 
         $this->assertfileExists($this->path . '/' . $temp);
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 
@@ -87,7 +88,6 @@ class LocalWriteTest extends Data
      */
     public function testUnsuccessfulRewrite()
     {
-
         $temp = 'test2.txt';
 
         $this->options = array(
@@ -98,10 +98,9 @@ class LocalWriteTest extends Data
 
         $this->path = BASE_FOLDER . '/Tests';
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         return;
-
     }
 
     /**
@@ -121,7 +120,7 @@ class LocalWriteTest extends Data
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 
@@ -148,7 +147,7 @@ class LocalWriteTest extends Data
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 
@@ -163,5 +162,4 @@ class LocalWriteTest extends Data
     {
         parent::tearDown();
     }
-
 }

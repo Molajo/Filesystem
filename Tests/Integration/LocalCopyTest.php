@@ -39,7 +39,7 @@ class LocalCopyTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/test2.txt'));
         $this->assertGreaterThan(0, $this->calculateSize($temp . '/test2.txt'));
@@ -62,7 +62,7 @@ class LocalCopyTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/test2.txt'));
         $this->assertGreaterThan(0, $this->calculateSize($temp . '/test2.txt'));
@@ -85,7 +85,7 @@ class LocalCopyTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/doit';
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/didit'));
         $this->assertGreaterThan(0, $this->calculateSize($temp . '/didit'));
@@ -108,7 +108,7 @@ class LocalCopyTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/Testcases';
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/Amy'));
         $this->assertGreaterThan(0, $this->calculateSize($temp . '/Amy'));
@@ -129,7 +129,7 @@ class LocalCopyTest extends Data
             'target_filesystem_type' => 'Local'
         );
         $this->path    = BASE_FOLDER . '/Tests/Dataeeeeee';
-        $connect       = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter       = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         return;
     }

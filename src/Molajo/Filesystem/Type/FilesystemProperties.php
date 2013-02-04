@@ -289,7 +289,7 @@ abstract class FilesystemProperties
     /**
      * Directory Permissions
      *
-     * @var    string
+     * @var    int
      * @since  1.0
      */
     public $default_directory_permissions;
@@ -297,7 +297,7 @@ abstract class FilesystemProperties
     /**
      * File Permissions
      *
-     * @var    string
+     * @var    int
      * @since  1.0
      */
     public $default_file_permissions;
@@ -325,7 +325,7 @@ abstract class FilesystemProperties
     /**
      * Set Options
      *
-     * @param   int  $default_directory_permissions
+     * @param   array  $options
      *
      * @return  void
      * @since   1.0
@@ -411,14 +411,14 @@ abstract class FilesystemProperties
      */
     public function setDirectoryDefaultPermissions()
     {
-        $default_directory_permissions = '';
+        $default_directory_permissions = null;
 
         if (isset($this->options['default_directory_permissions'])) {
             $default_directory_permissions = $this->options['default_directory_permissions'];
         }
 
-        if ($default_directory_permissions == '') {
-            $this->default_directory_permissions = '0755';
+        if ($default_directory_permissions === null) {
+            $this->default_directory_permissions = 0755;
         } else {
             $this->default_directory_permissions = $default_directory_permissions;
         }
@@ -434,14 +434,14 @@ abstract class FilesystemProperties
      */
     public function setFileDefaultPermissions()
     {
-        $default_file_permissions = '';
+        $default_file_permissions = null;
 
         if (isset($this->options['default_file_permissions'])) {
             $default_file_permissions = $this->options['default_file_permissions'];
         }
 
-        if ($default_file_permissions == '') {
-            $this->default_file_permissions = '0644';
+        if ($default_file_permissions === null) {
+            $this->default_file_permissions = 0644;
         } else {
             $this->default_file_permissions = $default_file_permissions;
         }
@@ -508,7 +508,7 @@ abstract class FilesystemProperties
     /**
      * Get File Permissions for Filesystem
      *
-     * @return  string
+     * @return  int
      * @since   1.0
      */
     public function getFileDefaultPermissions()
@@ -611,7 +611,7 @@ abstract class FilesystemProperties
     }
 
     /**
-     * discovery of folders and files for specified path
+     * Discovery of folders and files for specified path
      *
      * @since   1.0
      * @return  void
@@ -620,6 +620,11 @@ abstract class FilesystemProperties
     {
         $this->directories = array();
         $this->files       = array();
+
+        if ($this->exists === true) {
+        } else {
+            return;
+        }
 
         if ($this->is_file === true) {
             $this->files[] = $this->path;
@@ -630,11 +635,19 @@ abstract class FilesystemProperties
             return;
         }
 
+        if (count(glob($this->path . '/*')) == 0) {
+            return;
+        }
+
         $this->directories[] = $this->path;
 
         $objects = new RecursiveIteratorIterator (
             new RecursiveDirectoryIterator($this->path),
             RecursiveIteratorIterator::SELF_FIRST);
+
+        if (count($objects) === 0) {
+            return;
+        }
 
         foreach ($objects as $name => $object) {
 
@@ -656,19 +669,21 @@ abstract class FilesystemProperties
     /**
      * Common method for creating new path for copy or move
      *
-     * @param   $directory
-     * @param   $target_directory
-     * @param   $base_folder
+     * @param   string  $path (file or folder)
+     * @param   string  $target_directory
+     * @param   string  $base_folder
      *
      * @since   1.0
      * @return  string
      */
-    protected function build_new_path($directory, $target_directory, $base_folder)
+    protected function build_new_path($path, $target_directory, $base_folder)
     {
-        if ($base_folder == $directory) {
+
+        if ($base_folder == $path
+            || $target_directory == $base_folder) {
             $temp = $target_directory;
         } else {
-            $temp = $target_directory . substr($directory, strlen($base_folder), 99999);
+            $temp = $target_directory . substr($path, strlen($base_folder), 99999);
         }
 
         return $temp;

@@ -35,8 +35,8 @@ class LocalReadTest extends Data
         $this->assertEquals('Local', $adapter->fs->filesystem_type);
         $this->assertEquals('/', $adapter->fs->root);
         $this->assertEquals(true, $adapter->fs->persistence);
-        $this->assertEquals('0755', $adapter->fs->default_directory_permissions);
-        $this->assertEquals('0644', $adapter->fs->default_file_permissions);
+        $this->assertEquals(0755, $adapter->fs->default_directory_permissions);
+        $this->assertEquals(0644, $adapter->fs->default_file_permissions);
         $this->assertEquals(false, $adapter->fs->read_only);
         $this->assertEquals(true, $adapter->fs->is_readable);
         $this->assertEquals(true, $adapter->fs->is_writable);
@@ -102,5 +102,4 @@ class LocalReadTest extends Data
     {
         parent::tearDown();
     }
-
 }

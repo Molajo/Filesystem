@@ -1,10 +1,6 @@
 <?php
 namespace Tests\Integration;
 
-use Exception;
-use Molajo\Filesystem\Exception\NotFoundException;
-use Molajo\Filesystem\Exception\FilesystemException;
-
 use Molajo\Filesystem\Adapter as fsAdapter;
 
 /**
@@ -44,7 +40,7 @@ class LocalMoveTest extends Data
 
         $this->path = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileExists($temp . '/test2.txt');
         $this->assertfileNotExists($this->path);
@@ -67,7 +63,7 @@ class LocalMoveTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileExists($temp . '/test2.txt');
         $this->assertfileNotExists($this->path);
@@ -90,7 +86,7 @@ class LocalMoveTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/doit';
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileExists($temp . '/didit');
         $this->assertfileNotExists($this->path);
@@ -113,7 +109,7 @@ class LocalMoveTest extends Data
         );
         $this->path    = BASE_FOLDER . '/Tests/Data/Testcases';
 
-        $connect = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertfileExists($temp . '/Amy');
         $this->assertfileNotExists($this->path);
@@ -135,7 +131,7 @@ class LocalMoveTest extends Data
         );
 
         $this->path = BASE_FOLDER . '/Tests/Dataeeeeee';
-        $connect    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         return;
     }
