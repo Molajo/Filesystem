@@ -40,6 +40,7 @@ Class Adapter implements FilesystemInterface
      * @param   array   $options
      *
      * @since   1.0
+     * @throws  FilesystemException
      */
     public function __construct($action = '', $path = '', $filesystem_type = 'Local', $options = array())
     {
@@ -192,7 +193,7 @@ Class Adapter implements FilesystemInterface
             $timezone = 'UTC';
         }
 
-        ini_set ('date.timezone', $timezone);
+        ini_set('date.timezone', $timezone);
         $options['timezone'] = $timezone;
 
         return $options;

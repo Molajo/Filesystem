@@ -16,8 +16,8 @@ use Molajo\Filesystem\Adapter;
  * Remote Adapter for Filesystem
  *
  * @package   Molajo
- * @license   MIT
  * @copyright 2013 Amy Stephen. All rights reserved.
+ * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
  * @since     1.0
  */
 class Remote implements File, Path, System
