@@ -3,6 +3,3 @@
 .idea
 .project
 .settings
-vendor
-composer.phar
-composer.lock
