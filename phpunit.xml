@@ -7,10 +7,10 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">src/Molajo/Filesystem/</directory>
+            <directory suffix=".php">Src/Molajo/Filesystem/</directory>
         </whitelist>
     </filter>
     <logging>
-        <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false" />
+        <log type="junit" target="Build/logs/junit.xml" logIncompleteSkipped="false" />
     </logging>
 </phpunit>

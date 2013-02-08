@@ -20,7 +20,7 @@
     },
     "autoload":{
         "psr-0":{
-            "Molajo/Filesystem":"src/"
+            "Molajo/Filesystem":"Src/"
         }
     }
 }
