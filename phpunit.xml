@@ -1,7 +1,7 @@
 <phpunit bootstrap="./Autoload.php">
     <testsuites>
         <testsuite name="Integration">
-            <directory>./tests/Integration/</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -9,10 +9,4 @@
             <directory>./src/</directory>
         </whitelist>
     </filter>
-    <logging>
-        <log type="junit"
-             target="Build/logs/junit.xml"
-             logIncompleteSkipped="false"
-                />
-    </logging>
 </phpunit>
