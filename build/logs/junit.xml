@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="Integration" tests="23" assertions="61" failures="0" errors="0" time="0.441900">
-    <testsuite name="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" namespace="Integration" fullPackage="Integration" tests="5" assertions="9" failures="0" errors="0" time="0.158746">
-      <testcase name="testCopySuccessfulSingleFileBlankDirectory" class="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" line="32" assertions="2" time="0.047176"/>
-      <testcase name="testCopySuccessfulSingleFile" class="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" line="55" assertions="2" time="0.014155"/>
-      <testcase name="testCopySingleFolder" class="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" line="78" assertions="2" time="0.017793"/>
-      <testcase name="testCopyMultipleFolder" class="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" line="101" assertions="2" time="0.068841"/>
-      <testcase name="testCopyNotAFile" class="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" line="125" assertions="1" time="0.010781"/>
+  <testsuite name="Integration" tests="23" assertions="61" failures="0" errors="0" time="0.427786">
+    <testsuite name="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" namespace="Integration" fullPackage="Integration" tests="5" assertions="9" failures="0" errors="0" time="0.129530">
+      <testcase name="testCopySuccessfulSingleFileBlankDirectory" class="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" line="32" assertions="2" time="0.024028"/>
+      <testcase name="testCopySuccessfulSingleFile" class="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" line="55" assertions="2" time="0.014200"/>
+      <testcase name="testCopySingleFolder" class="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" line="78" assertions="2" time="0.016234"/>
+      <testcase name="testCopyMultipleFolder" class="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" line="101" assertions="2" time="0.061589"/>
+      <testcase name="testCopyNotAFile" class="Integration\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalCopyTest.php" line="125" assertions="1" time="0.013479"/>
     </testsuite>
-    <testsuite name="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" namespace="Integration" fullPackage="Integration" tests="5" assertions="9" failures="0" errors="0" time="0.061213">
-      <testcase name="testSuccessfulDeleteSingleFile" class="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" line="32" assertions="2" time="0.011303"/>
-      <testcase name="testDeleteSingleFolder" class="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" line="51" assertions="2" time="0.010940"/>
-      <testcase name="testDeleteMultipleFolderOnlyFiles" class="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" line="70" assertions="2" time="0.017234"/>
-      <testcase name="testDeleteMultipleFolderDeleteAll" class="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" line="90" assertions="2" time="0.010993"/>
-      <testcase name="testNotAFile" class="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" line="111" assertions="1" time="0.010743"/>
+    <testsuite name="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" namespace="Integration" fullPackage="Integration" tests="5" assertions="9" failures="0" errors="0" time="0.069074">
+      <testcase name="testSuccessfulDeleteSingleFile" class="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" line="32" assertions="2" time="0.017041"/>
+      <testcase name="testDeleteSingleFolder" class="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" line="51" assertions="2" time="0.012203"/>
+      <testcase name="testDeleteMultipleFolderOnlyFiles" class="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" line="70" assertions="2" time="0.012551"/>
+      <testcase name="testDeleteMultipleFolderDeleteAll" class="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" line="90" assertions="2" time="0.013660"/>
+      <testcase name="testNotAFile" class="Integration\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalDeleteTest.php" line="111" assertions="1" time="0.013619"/>
     </testsuite>
-    <testsuite name="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" namespace="Integration" fullPackage="Integration" tests="5" assertions="9" failures="0" errors="0" time="0.107552">
-      <testcase name="testSuccessfulMoveSingleFileBlankDirectory" class="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" line="30" assertions="2" time="0.014621"/>
-      <testcase name="testSuccessfulMoveSingleFile" class="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" line="54" assertions="2" time="0.013821"/>
-      <testcase name="testMoveSingleFolder" class="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" line="77" assertions="2" time="0.014102"/>
-      <testcase name="testMoveMultipleFolder" class="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" line="100" assertions="2" time="0.051541"/>
-      <testcase name="testNotAFile" class="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" line="124" assertions="1" time="0.013467"/>
+    <testsuite name="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" namespace="Integration" fullPackage="Integration" tests="5" assertions="9" failures="0" errors="0" time="0.120663">
+      <testcase name="testSuccessfulMoveSingleFileBlankDirectory" class="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" line="30" assertions="2" time="0.015388"/>
+      <testcase name="testSuccessfulMoveSingleFile" class="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" line="54" assertions="2" time="0.015774"/>
+      <testcase name="testMoveSingleFolder" class="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" line="77" assertions="2" time="0.015769"/>
+      <testcase name="testMoveMultipleFolder" class="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" line="100" assertions="2" time="0.053704"/>
+      <testcase name="testNotAFile" class="Integration\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalMoveTest.php" line="124" assertions="1" time="0.020028"/>
     </testsuite>
-    <testsuite name="Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalReadTest.php" namespace="Integration" fullPackage="Integration" tests="3" assertions="25" failures="0" errors="0" time="0.040253">
-      <testcase name="testReadSuccessful" class="Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalReadTest.php" line="31" assertions="23" time="0.012595"/>
-      <testcase name="testReadUnsuccessful" class="Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalReadTest.php" line="77" assertions="1" time="0.011445"/>
-      <testcase name="testReadNotAFile" class="Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalReadTest.php" line="89" assertions="1" time="0.016213"/>
+    <testsuite name="Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalReadTest.php" namespace="Integration" fullPackage="Integration" tests="3" assertions="25" failures="0" errors="0" time="0.038612">
+      <testcase name="testReadSuccessful" class="Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalReadTest.php" line="31" assertions="23" time="0.011801"/>
+      <testcase name="testReadUnsuccessful" class="Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalReadTest.php" line="77" assertions="1" time="0.011663"/>
+      <testcase name="testReadNotAFile" class="Integration\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalReadTest.php" line="89" assertions="1" time="0.015148"/>
     </testsuite>
-    <testsuite name="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" namespace="Integration" fullPackage="Integration" tests="5" assertions="9" failures="0" errors="0" time="0.074136">
-      <testcase name="testSuccessfulWrite" class="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" line="30" assertions="2" time="0.016308"/>
-      <testcase name="testSuccessfulRewrite" class="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" line="59" assertions="2" time="0.014872"/>
-      <testcase name="testUnsuccessfulRewrite" class="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" line="89" assertions="1" time="0.017320"/>
-      <testcase name="testWriteSingleFolder" class="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" line="109" assertions="2" time="0.012666"/>
-      <testcase name="testWriteMultipleFolders" class="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" line="136" assertions="2" time="0.012970"/>
+    <testsuite name="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" namespace="Integration" fullPackage="Integration" tests="5" assertions="9" failures="0" errors="0" time="0.069907">
+      <testcase name="testSuccessfulWrite" class="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" line="30" assertions="2" time="0.015489"/>
+      <testcase name="testSuccessfulRewrite" class="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" line="59" assertions="2" time="0.014704"/>
+      <testcase name="testUnsuccessfulRewrite" class="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" line="89" assertions="1" time="0.014084"/>
+      <testcase name="testWriteSingleFolder" class="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" line="109" assertions="2" time="0.013457"/>
+      <testcase name="testWriteMultipleFolders" class="Integration\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/tests/Integration/LocalWriteTest.php" line="136" assertions="2" time="0.012173"/>
     </testsuite>
   </testsuite>
 </testsuites>
