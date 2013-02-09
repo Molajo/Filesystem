@@ -17,7 +17,7 @@ if (substr($_SERVER['DOCUMENT_ROOT'], - 1) == '/') {
 //$base = substr(__DIR__, 0, strlen(__DIR__) - 6);
 define('BASE_FOLDER', __DIR__);
 
-include BASE_FOLDER . '/Tests/Integration/Data.php';
+include BASE_FOLDER . '/Tests/Local/Data.php';
 
 $classMap = array(
     'Molajo\\Filesystem\\Adapter'                                 => BASE_FOLDER . '/src/Molajo/Filesystem/Adapter.php',
@@ -32,13 +32,12 @@ $classMap = array(
     'Molajo\\Filesystem\\Exception\\NotFoundException'            => BASE_FOLDER . '/src/Molajo/Filesystem/Exception/NotFoundException.php',
     'Molajo\\Filesystem\\Type\\Local'                             => BASE_FOLDER . '/src/Molajo/Filesystem/Type/Local.php',
     'Molajo\\Filesystem\\Type\\FilesystemProperties'              => BASE_FOLDER . '/src/Molajo/Filesystem/Type/FilesystemProperties.php',
-
-    'Integration\\Data'                                           => BASE_FOLDER . '/Tests/Integration/Data.php',
-    'Integration\\LocalCopyTest'                                  => BASE_FOLDER . '/Tests/Integration/LocalCopyTest.php',
-    'Integration\\LocalDeleteTest'                                => BASE_FOLDER . '/Tests/Integration/LocalDeleteTest.php',
-    'Integration\\LocalMoveTest'                                  => BASE_FOLDER . '/Tests/Integration/LocalMoveTest.php',
-    'Integration\\LocalReadTest'                                  => BASE_FOLDER . '/Tests/Integration/LocalReadTest.php',
-    'Integration\\LocalWriteTest'                                 => BASE_FOLDER . '/Tests/Integration/LocalWriteTest.php'
+    'Local\\Data'                                                 => BASE_FOLDER . '/Tests/Local/Data.php',
+    'Local\\LocalCopyTest'                                        => BASE_FOLDER . '/Tests/Local/LocalCopyTest.php',
+    'Local\\LocalDeleteTest'                                      => BASE_FOLDER . '/Tests/Local/LocalDeleteTest.php',
+    'Local\\LocalMoveTest'                                        => BASE_FOLDER . '/Tests/Local/LocalMoveTest.php',
+    'Local\\LocalReadTest'                                        => BASE_FOLDER . '/Tests/Local/LocalReadTest.php',
+    'Local\\LocalWriteTest'                                       => BASE_FOLDER . '/Tests/Local/LocalWriteTest.php'
 );
 spl_autoload_register(
     function ($class) use ($classMap) {
@@ -53,6 +52,6 @@ spl_autoload_register(
 include BASE_FOLDER . '/' . 'ClassLoader.php';
 $loader = new ClassLoader();
 $loader->add('Molajo', BASE_FOLDER . '/src/');
-$loader->add('Integration', BASE_FOLDER . '/Tests/');
+$loader->add('Local', BASE_FOLDER . '/Tests/');
 $loader->register();
 */

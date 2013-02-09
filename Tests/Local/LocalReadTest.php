@@ -1,5 +1,5 @@
 <?php
-namespace Integration;
+namespace Local;
 
 use Exception;
 use Molajo\Filesystem\Exception\NotFoundException;

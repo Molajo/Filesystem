@@ -1,5 +1,5 @@
 <?php
-namespace Integration;
+namespace Local;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
