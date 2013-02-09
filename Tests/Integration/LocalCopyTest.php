@@ -1,7 +1,6 @@
 <?php
 namespace Integration;
 
-use Integration\Data as Data;
 use Molajo\Filesystem\Adapter as fsAdapter;
 
 /**
