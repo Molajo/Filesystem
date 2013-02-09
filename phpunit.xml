@@ -1,7 +1,7 @@
 <phpunit bootstrap="Bootstrap.php" colors="true">
     <testsuites>
         <testsuite name="Integration">
-            <directory>tests/</directory>
+            <directory>./tests/Integration/</directory>
         </testsuite>
     </testsuites>
     <filter>
