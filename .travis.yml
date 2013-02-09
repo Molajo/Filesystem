@@ -6,9 +6,4 @@ php:
   - 5.4
 
 script:
- - phpunit -c phpunit.xml
-
-notifications:
-  irc: "irc.freenode.org#molajo"
-  email:
-    - amystephen@gmail.com
+ - phpunit
