@@ -16,7 +16,6 @@ if (substr($_SERVER['DOCUMENT_ROOT'], - 1) == '/') {
 
 define('BASE_FOLDER', __DIR__);
 
-/** Load Classloader */
 include BASE_FOLDER . '/' . 'ClassLoader.php';
 
 $loader = new ClassLoader();

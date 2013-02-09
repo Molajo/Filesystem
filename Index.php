@@ -16,10 +16,4 @@ if (substr($_SERVER['DOCUMENT_ROOT'], - 1) == '/') {
 
 define('BASE_FOLDER', __DIR__);
 
-/** Load Classloader */
-include BASE_FOLDER . '/' . 'ClassLoader.php';
-
-$loader = new ClassLoader();
-$loader->add('Molajo\Filesystem', BASE_FOLDER . '/Src');
-
-$loader->register();
+include BASE_FOLDER . '/' . 'Bootstrap.php';
