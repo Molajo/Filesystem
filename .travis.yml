@@ -6,7 +6,7 @@ php:
   - 5.4
 
 script:
- - phpunit -c tests/phpunit.xml
+ - phpunit -c ./tests/phpunit.xml
 
 notifications:
   irc: "irc.freenode.org#molajo"
