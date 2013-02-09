@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Integration;
+namespace Integration;
 
 use Exception;
 use Molajo\Filesystem\Exception\NotFoundException;

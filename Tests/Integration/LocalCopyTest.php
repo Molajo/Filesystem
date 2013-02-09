@@ -1,7 +1,7 @@
 <?php
-namespace Tests\Integration;
+namespace Integration;
 
-use Tests\Integration\Data as Data;
+use Integration\Data as Data;
 use Molajo\Filesystem\Adapter as fsAdapter;
 
 /**

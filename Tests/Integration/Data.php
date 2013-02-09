@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Integration;
+namespace Integration;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

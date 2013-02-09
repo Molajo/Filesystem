@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Integration;
+namespace Integration;
 
 use Molajo\Filesystem\Adapter as fsAdapter;
 
