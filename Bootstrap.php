@@ -33,12 +33,12 @@ $classMap = array(
     'Molajo\\Filesystem\\Type\\Local'                             => BASE_FOLDER . '/src/Molajo/Filesystem/Type/Local.php',
     'Molajo\\Filesystem\\Type\\FilesystemProperties'              => BASE_FOLDER . '/src/Molajo/Filesystem/Type/FilesystemProperties.php',
 
-    'Integration\\Data'                                           => BASE_FOLDER . '/tests/Integration/Data.php',
-    'Integration\\LocalCopyTest'                                  => BASE_FOLDER . '/tests/Integration/LocalCopyTest.php',
-    'Integration\\LocalDeleteTest'                                => BASE_FOLDER . '/tests/Integration/LocalDeleteTest.php',
-    'Integration\\LocalMoveTest'                                  => BASE_FOLDER . '/tests/Integration/LocalMoveTest.php',
-    'Integration\\LocalReadTest'                                  => BASE_FOLDER . '/tests/Integration/LocalReadTest.php',
-    'Integration\\LocalWriteTest'                                 => BASE_FOLDER . '/tests/IntegrationLocalWriteTest.php'
+    'Integration\\Data'                                           => BASE_FOLDER . '/Tests/Integration/Data.php',
+    'Integration\\LocalCopyTest'                                  => BASE_FOLDER . '/Tests/Integration/LocalCopyTest.php',
+    'Integration\\LocalDeleteTest'                                => BASE_FOLDER . '/Tests/Integration/LocalDeleteTest.php',
+    'Integration\\LocalMoveTest'                                  => BASE_FOLDER . '/Tests/Integration/LocalMoveTest.php',
+    'Integration\\LocalReadTest'                                  => BASE_FOLDER . '/Tests/Integration/LocalReadTest.php',
+    'Integration\\LocalWriteTest'                                 => BASE_FOLDER . '/Tests/Integration/LocalWriteTest.php'
 );
 spl_autoload_register(
     function ($class) use ($classMap) {
@@ -48,10 +48,11 @@ spl_autoload_register(
     }
 );
 
+
 /*
 include BASE_FOLDER . '/' . 'ClassLoader.php';
 $loader = new ClassLoader();
 $loader->add('Molajo', BASE_FOLDER . '/src/');
-$loader->add('Integration', BASE_FOLDER . '/tests/');
+$loader->add('Integration', BASE_FOLDER . '/Tests/');
 $loader->register();
 */

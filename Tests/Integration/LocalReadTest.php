@@ -21,7 +21,7 @@ class LocalReadTest extends Data
 
         $this->filesystem_type = 'Local';
         $this->action          = 'Read';
-        $this->path            = BASE_FOLDER . '/tests/Data/test1.txt';
+        $this->path            = BASE_FOLDER . '/Tests/Data/test1.txt';
         $this->options         = array();
     }
 
@@ -43,12 +43,12 @@ class LocalReadTest extends Data
         $this->assertEquals(false, $adapter->fs->is_executable);
 
         $this->assertEquals(
-            BASE_FOLDER . '/tests/Data/test1.txt',
+            BASE_FOLDER . '/Tests/Data/test1.txt',
             $adapter->fs->path
         );
         $this->assertEquals(true, $adapter->fs->exists);
         $this->assertEquals(
-            BASE_FOLDER . '/tests/Data/test1.txt',
+            BASE_FOLDER . '/Tests/Data/test1.txt',
             $adapter->fs->absolute_path
         );
         $this->assertEquals(true, $adapter->fs->is_absolute_path);
@@ -58,7 +58,7 @@ class LocalReadTest extends Data
         $this->assertEquals('file', $adapter->fs->type);
         $this->assertEquals('test1.txt', $adapter->fs->name);
         $this->assertEquals(
-            BASE_FOLDER . '/tests/Data',
+            BASE_FOLDER . '/Tests/Data',
             $adapter->fs->parent
         );
         $this->assertEquals('txt', $adapter->fs->extension);
@@ -76,7 +76,7 @@ class LocalReadTest extends Data
      */
     public function testReadUnsuccessful()
     {
-        $this->path = BASE_FOLDER . '/tests/Data/testreally-is-not-there.txt';
+        $this->path = BASE_FOLDER . '/Tests/Data/testreally-is-not-there.txt';
         $adapter    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options = array());
 
         return;
@@ -88,7 +88,7 @@ class LocalReadTest extends Data
      */
     public function testReadNotAFile()
     {
-        $this->path = BASE_FOLDER . '/tests';
+        $this->path = BASE_FOLDER . '/Tests';
         $adapter    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options = array());
 
         return;
