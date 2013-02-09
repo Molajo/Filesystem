@@ -45,7 +45,7 @@ $loader->add('Molajo\\Filesystem\\Exception\\NotFoundException',
 $loader->add('Molajo\\Filesystem\\Type\\Local',
     BASE_FOLDER . '/Src/Molajo/Filesystem/Type/Local.php');
 */
-$loader->add('Molajo\\Filesystem',
+$loader->add('Molajo\\Filesystem\\',
     BASE_FOLDER . '/Src/');
 $loader->add('Molajo\\Filesystem\\Adapter',
     BASE_FOLDER . '/Src/Molajo/Filesystem/Adapter');
@@ -59,6 +59,3 @@ $loader->add('Molajo\\Filesystem\\Type\\Local',
 $loader->add('Integration\\', 'Tests/');
 
 $loader->register();
-
-echo '<pre>';
-var_dump($loader);
