@@ -51,13 +51,13 @@ class Data extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Remove Existing */
-        $this->path = BASE_FOLDER . '/Tests/Data';
+        $this->path = BASE_FOLDER . '/tests/Data';
         if (file_exists($this->path)) {
             $this->delete($this->path);
         }
 
-        $from   = BASE_FOLDER . '/Tests/Hold';
-        $to     = BASE_FOLDER . '/Tests';
+        $from   = BASE_FOLDER . '/tests/Hold';
+        $to     = BASE_FOLDER . '/tests';
         $folder = 'Data';
 
         $this->copyOrMove($from, $to, $folder);
@@ -79,7 +79,7 @@ class Data extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->path = BASE_FOLDER . '/Tests/Data';
+        $this->path = BASE_FOLDER . '/tests/Data';
         $this->delete($this->path);
     }
 

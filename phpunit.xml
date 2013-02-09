@@ -2,15 +2,18 @@
 <phpunit bootstrap="Autoload.php" colors="true">
     <testsuites>
         <testsuite name="Integration">
-            <directory>./Tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory>./Src</directory>
+            <directory>./src</directory>
         </whitelist>
     </filter>
     <logging>
-        <log type="junit" target="Build/logs/junit.xml" logIncompleteSkipped="false" />
+        <log type="junit"
+             target="Build/logs/junit.xml"
+             logIncompleteSkipped="false"
+                />
     </logging>
 </phpunit>

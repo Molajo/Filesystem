@@ -29,7 +29,7 @@ class LocalMoveTest extends Data
      */
     public function testSuccessfulMoveSingleFileBlankDirectory()
     {
-        $temp = BASE_FOLDER . '/Tests/Data/Testcases';
+        $temp = BASE_FOLDER . '/tests/Data/Testcases';
 
         $this->options = array(
             'target_directory'       => '',
@@ -38,7 +38,7 @@ class LocalMoveTest extends Data
             'target_filesystem_type' => 'Local'
         );
 
-        $this->path = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
+        $this->path = BASE_FOLDER . '/tests/Data/Testcases/test1.txt';
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
@@ -53,7 +53,7 @@ class LocalMoveTest extends Data
      */
     public function testSuccessfulMoveSingleFile()
     {
-        $temp = BASE_FOLDER . '/Tests/Data/Testcases';
+        $temp = BASE_FOLDER . '/tests/Data/Testcases';
 
         $this->options = array(
             'target_directory'       => '',
@@ -61,7 +61,7 @@ class LocalMoveTest extends Data
             'replace'                => false,
             'target_filesystem_type' => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
+        $this->path    = BASE_FOLDER . '/tests/Data/Testcases/test1.txt';
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
@@ -76,7 +76,7 @@ class LocalMoveTest extends Data
      */
     public function testMoveSingleFolder()
     {
-        $temp = BASE_FOLDER . '/Tests/Data';
+        $temp = BASE_FOLDER . '/tests/Data';
 
         $this->options = array(
             'target_directory'       => $temp,
@@ -84,7 +84,7 @@ class LocalMoveTest extends Data
             'replace'                => false,
             'target_filesystem_type' => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/Tests/Data/doit';
+        $this->path    = BASE_FOLDER . '/tests/Data/doit';
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
@@ -99,7 +99,7 @@ class LocalMoveTest extends Data
      */
     public function testMoveMultipleFolder()
     {
-        $temp = BASE_FOLDER . '/Tests/Data';
+        $temp = BASE_FOLDER . '/tests/Data';
 
         $this->options = array(
             'target_directory'       => $temp,
@@ -107,7 +107,7 @@ class LocalMoveTest extends Data
             'replace'                => false,
             'target_filesystem_type' => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/Tests/Data/Testcases';
+        $this->path    = BASE_FOLDER . '/tests/Data/Testcases';
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
@@ -124,13 +124,13 @@ class LocalMoveTest extends Data
     public function testNotAFile()
     {
         $this->options = array(
-            'target_directory'       => BASE_FOLDER . '/Tests/Data',
+            'target_directory'       => BASE_FOLDER . '/tests/Data',
             'target_name'            => 'Amy',
             'replace'                => false,
             'target_filesystem_type' => 'Local'
         );
 
-        $this->path = BASE_FOLDER . '/Tests/Dataeeeeee';
+        $this->path = BASE_FOLDER . '/tests/Dataeeeeee';
         $adapter    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         return;

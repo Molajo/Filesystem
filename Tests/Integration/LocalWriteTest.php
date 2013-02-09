@@ -29,8 +29,8 @@ class LocalWriteTest extends Data
      */
     public function testSuccessfulWrite()
     {
-        if (file_exists(BASE_FOLDER . '/Tests' . '/' . 'test2.txt')) {
-            \unlink(BASE_FOLDER . '/Tests' . '/' . 'test2.txt');
+        if (file_exists(BASE_FOLDER . '/tests' . '/' . 'test2.txt')) {
+            \unlink(BASE_FOLDER . '/tests' . '/' . 'test2.txt');
         }
 
         $temp = 'test2.txt';
@@ -42,7 +42,7 @@ class LocalWriteTest extends Data
         );
 
 
-        $this->path = BASE_FOLDER . '/Tests';
+        $this->path = BASE_FOLDER . '/tests';
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
@@ -66,7 +66,7 @@ class LocalWriteTest extends Data
             'data'    => 'Here are the words to write.',
         );
 
-        $this->path = BASE_FOLDER . '/Tests';
+        $this->path = BASE_FOLDER . '/tests';
 
         if (file_exists($this->path . '/' . $temp)) {
         } else {
@@ -96,7 +96,7 @@ class LocalWriteTest extends Data
             'data'    => 'Here are the words to write.',
         );
 
-        $this->path = BASE_FOLDER . '/Tests';
+        $this->path = BASE_FOLDER . '/tests';
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
@@ -116,7 +116,7 @@ class LocalWriteTest extends Data
             'data'    => ''
         );
 
-        $this->path = BASE_FOLDER . '/Tests/Data';
+        $this->path = BASE_FOLDER . '/tests/Data';
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
@@ -143,7 +143,7 @@ class LocalWriteTest extends Data
             'data'    => 'Poop'
         );
 
-        $this->path = BASE_FOLDER . '/Tests/Data/OneMoreFolder/Cats/love/Dogs';
+        $this->path = BASE_FOLDER . '/tests/Data/OneMoreFolder/Cats/love/Dogs';
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 

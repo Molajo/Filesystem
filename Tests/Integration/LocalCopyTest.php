@@ -31,7 +31,7 @@ class LocalCopyTest extends Data
      */
     public function testCopySuccessfulSingleFileBlankDirectory()
     {
-        $temp = BASE_FOLDER . '/Tests/Data/Testcases';
+        $temp = BASE_FOLDER . '/tests/Data/Testcases';
 
         $this->options = array(
             'target_directory'       => '',
@@ -39,7 +39,7 @@ class LocalCopyTest extends Data
             'replace'                => false,
             'target_filesystem_type' => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
+        $this->path    = BASE_FOLDER . '/tests/Data/Testcases/test1.txt';
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
@@ -54,7 +54,7 @@ class LocalCopyTest extends Data
      */
     public function testCopySuccessfulSingleFile()
     {
-        $temp = BASE_FOLDER . '/Tests/Data/Testcases';
+        $temp = BASE_FOLDER . '/tests/Data/Testcases';
 
         $this->options = array(
             'target_directory'       => '',
@@ -62,7 +62,7 @@ class LocalCopyTest extends Data
             'replace'                => false,
             'target_filesystem_type' => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/Tests/Data/Testcases/test1.txt';
+        $this->path    = BASE_FOLDER . '/tests/Data/Testcases/test1.txt';
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
@@ -77,7 +77,7 @@ class LocalCopyTest extends Data
      */
     public function testCopySingleFolder()
     {
-        $temp = BASE_FOLDER . '/Tests/Data';
+        $temp = BASE_FOLDER . '/tests/Data';
 
         $this->options = array(
             'target_directory'       => $temp,
@@ -85,7 +85,7 @@ class LocalCopyTest extends Data
             'replace'                => false,
             'target_filesystem_type' => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/Tests/Data/doit';
+        $this->path    = BASE_FOLDER . '/tests/Data/doit';
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
@@ -100,7 +100,7 @@ class LocalCopyTest extends Data
      */
     public function testCopyMultipleFolder()
     {
-        $temp = BASE_FOLDER . '/Tests/Data';
+        $temp = BASE_FOLDER . '/tests/Data';
 
         $this->options = array(
             'target_directory'       => $temp,
@@ -108,7 +108,7 @@ class LocalCopyTest extends Data
             'replace'                => false,
             'target_filesystem_type' => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/Tests/Data/Testcases';
+        $this->path    = BASE_FOLDER . '/tests/Data/Testcases';
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
@@ -125,12 +125,12 @@ class LocalCopyTest extends Data
     public function testCopyNotAFile()
     {
         $this->options = array(
-            'target_directory'       => BASE_FOLDER . '/Tests/Data',
+            'target_directory'       => BASE_FOLDER . '/tests/Data',
             'target_name'            => 'Amy',
             'replace'                => false,
             'target_filesystem_type' => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/Tests/Dataeeeeee';
+        $this->path    = BASE_FOLDER . '/tests/Dataeeeeee';
         $adapter       = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         return;
