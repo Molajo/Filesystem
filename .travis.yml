@@ -11,8 +11,8 @@ matrix:
     - php: 5.5
 
 services: MySQL
-
-script:
+  - wget http://getcomposer.org/composer.phar
+  - php composer.phar install
   - phpunit
 
 notifications:
