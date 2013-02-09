@@ -1,12 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="Bootstrap.php" colors="true">
     <testsuites>
         <testsuite name="Integration">
-            <directory>./tests/Integration/</directory>
+            <directory>Tests/Integration/</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory>./src/</directory>
+            <directory suffix=".php">Src/Molajo/Filters/</directory>
         </whitelist>
     </filter>
+    <logging>
+        <log type="junit" target="Build/logs/junit.xml" logIncompleteSkipped="false" />
+    </logging>
 </phpunit>
