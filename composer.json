@@ -10,10 +10,14 @@
             "name":"Amy Stephen",
             "email":"AmyStephen@gmail.com",
             "homepage":"http://AmyStephen.github.com"
+        },
+        {
+            "name": "Other Contributors",
+            "homepage": "http://github.com/molajo/filesystem/contributors"
         }
     ],
     "require":{
-        "php":">=5.3.2"
+        "php":">=5.3.3"
     },
 
     "support":{
@@ -24,6 +28,13 @@
     "autoload":{
         "psr-0":{
             "Molajo\\Filesystem":"src/"
+        }
+    },
+    "target-dir": "Molajo/Filesystem",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
         }
     }
 }
