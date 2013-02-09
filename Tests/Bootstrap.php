@@ -30,6 +30,7 @@ $classMap = array(
     'Molajo\\Filesystem\\Exception\\NotFoundException'            => BASE_FOLDER . '/src/Molajo/Filesystem/Exception/NotFoundException.php',
     'Molajo\\Filesystem\\Type\\Local'                             => BASE_FOLDER . '/src/Molajo/Filesystem/Type/Local.php',
     'Molajo\\Filesystem\\Type\\FilesystemProperties'              => BASE_FOLDER . '/src/Molajo/Filesystem/Type/FilesystemProperties.php',
+
     'Integration\\Data'                                           => BASE_FOLDER . '/tests/Integration/Data.php',
     'Integration\\LocalCopyTest'                                  => BASE_FOLDER . '/tests/Integration/LocalCopyTest.php',
     'Integration\\LocalDeleteTest'                                => BASE_FOLDER . '/tests/Integration/LocalDeleteTest.php',
