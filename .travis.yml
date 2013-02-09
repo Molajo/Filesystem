@@ -13,6 +13,9 @@ matrix:
 services: MySQL
 
 before_script:
+   - wget http://getcomposer.org/composer.phar
+   - php composer.phar install
+   - phpunit
 
 script:
  - phpunit
