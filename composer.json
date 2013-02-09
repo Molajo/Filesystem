@@ -30,11 +30,11 @@
             "Molajo\\Filesystem":"src/"
         }
     },
-    "target-dir": "Molajo/Filesystem",
+    "target-dir": "Vendor",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1-dev"
+            "dev-master": "0.0.1-dev"
         }
     }
 }
