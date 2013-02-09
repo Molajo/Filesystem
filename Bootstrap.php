@@ -18,7 +18,7 @@ if (substr($_SERVER['DOCUMENT_ROOT'], - 1) == '/') {
 define('BASE_FOLDER', __DIR__);
 
 //include BASE_FOLDER . '/Tests/Local/Data.php';
-
+/*
 $classMap = array(
     'Molajo\\Filesystem\\Adapter'                                 => BASE_FOLDER . '/src/Molajo/Filesystem/Adapter.php',
     'Molajo\\Filesystem\\Adapter\\FilesystemActionsInterface'     => BASE_FOLDER . '/src/Molajo/Filesystem/Adapter/FilesystemActionsInterface.php',
@@ -46,12 +46,12 @@ spl_autoload_register(
         }
     }
 );
+*/
 
 
-/*
 include BASE_FOLDER . '/' . 'ClassLoader.php';
 $loader = new ClassLoader();
 $loader->add('Molajo', BASE_FOLDER . '/src/');
 $loader->add('Local', BASE_FOLDER . '/Tests/');
 $loader->register();
-*/
+
