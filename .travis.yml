@@ -13,7 +13,8 @@ matrix:
 services: MySQL
 
 script:
- - phpunit
+  - php bin/phpspec run -fpretty --verbose
+  - phpunit
 
 notifications:
   irc: "irc.freenode.org#molajo"
