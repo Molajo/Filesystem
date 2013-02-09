@@ -14,8 +14,8 @@ if (substr($_SERVER['DOCUMENT_ROOT'], - 1) == '/') {
     define('ROOT_FOLDER', $_SERVER['DOCUMENT_ROOT'] . '/');
 }
 
-$base = substr(__DIR__, 0, strlen(__DIR__) - 6);
-define('BASE_FOLDER', $base);
+//$base = substr(__DIR__, 0, strlen(__DIR__) - 6);
+define('BASE_FOLDER', __DIR__);
 
 $classMap = array(
     'Molajo\\Filesystem\\Adapter'                                 => BASE_FOLDER . '/src/Molajo/Filesystem/Adapter.php',
