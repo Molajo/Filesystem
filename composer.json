@@ -1,5 +1,5 @@
 {
-    "name":"Molajo/Filesystem",
+    "name":"molajo/filesystem",
     "type":"molajo-bundle",
     "description":"Molajo Filesystem: File and Directory Services supports various Filesystems using Adapters, PHP platform independent",
     "keywords":["Filesystem", "Adapters", "Interface", "PSR-0"],
