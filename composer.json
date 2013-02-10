@@ -25,7 +25,7 @@
         "irc":"irc://irc.freenode.org/molajo"
     },
     "autoload": {
-        "psr-0": {"Molajo": "/src"}
+        "psr-0": {"Molajo\\Filesystem": "./"}
     },
     "minimum-stability": "dev",
     "extra": {
