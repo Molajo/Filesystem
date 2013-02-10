@@ -33,12 +33,12 @@ $classMap = array(
     'Molajo\\Filesystem\\Type\\Local'                             => BASE_FOLDER . '/Type/Local.php',
     'Molajo\\Filesystem\\Type\\FilesystemProperties'              => BASE_FOLDER . '/Type/FilesystemProperties.php',
 
-    'Local\\Data'                                                 => BASE_FOLDER . '/_dev/Tests/Local/Data.php',
-    'Local\\LocalCopyTest'                                        => BASE_FOLDER . '/_dev/Tests/Local/LocalCopyTest.php',
-    'Local\\LocalDeleteTest'                                      => BASE_FOLDER . '/_dev/Tests/Local/LocalDeleteTest.php',
-    'Local\\LocalMoveTest'                                        => BASE_FOLDER . '/_dev/Tests/Local/LocalMoveTest.php',
-    'Local\\LocalReadTest'                                        => BASE_FOLDER . '/_dev/Tests/Local/LocalReadTest.php',
-    'Local\\LocalWriteTest'                                       => BASE_FOLDER . '/_dev/Tests/Local/LocalWriteTest.php'
+    'Local\\Data'                                                 => BASE_FOLDER . '/.dev/Tests/Local/Data.php',
+    'Local\\LocalCopyTest'                                        => BASE_FOLDER . '/.dev/Tests/Local/LocalCopyTest.php',
+    'Local\\LocalDeleteTest'                                      => BASE_FOLDER . '/.dev/Tests/Local/LocalDeleteTest.php',
+    'Local\\LocalMoveTest'                                        => BASE_FOLDER . '/.dev/Tests/Local/LocalMoveTest.php',
+    'Local\\LocalReadTest'                                        => BASE_FOLDER . '/.dev/Tests/Local/LocalReadTest.php',
+    'Local\\LocalWriteTest'                                       => BASE_FOLDER . '/.dev/Tests/Local/LocalWriteTest.php'
 );
 
 spl_autoload_register(

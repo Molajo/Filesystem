@@ -11,4 +11,4 @@ notifications:
     - amystephen@gmail.com
 
 script:
- - phpunit  -c _dev/phpunit.xml
+ - phpunit  -c .dev/phpunit.xml

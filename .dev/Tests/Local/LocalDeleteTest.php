@@ -34,7 +34,7 @@ class LocalDeleteTest extends Data
         $this->options = array(
             'delete_empty' => false
         );
-        $this->path    = BASE_FOLDER . '/_dev/Tests/Data/Testcases/test1.txt';
+        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
 
         $this->assertfileExists($this->path);
 
@@ -53,7 +53,7 @@ class LocalDeleteTest extends Data
         $this->options = array(
             'delete_empty' => true
         );
-        $this->path    = BASE_FOLDER . '/_dev/Tests/Data/doit';
+        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/doit';
 
         $this->assertfileExists($this->path);
 
@@ -73,7 +73,7 @@ class LocalDeleteTest extends Data
             'delete_empty' => false
         );
 
-        $this->path    = BASE_FOLDER . '/_dev/Tests/Data/Testcases/Directorytree1';
+        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/Directorytree1';
 
         $this->assertfileExists($this->path);
 
@@ -93,7 +93,7 @@ class LocalDeleteTest extends Data
             'delete_empty' => true
         );
 
-        $this->path    = BASE_FOLDER . '/_dev/Tests/Data';
+        $this->path    = BASE_FOLDER . '/.dev/Tests/Data';
 
         $this->assertfileExists($this->path);
 
@@ -114,7 +114,7 @@ class LocalDeleteTest extends Data
             'delete_empty' => true
         );
 
-        $this->path    = BASE_FOLDER . '/_dev/Tests/Dataeeeeee';
+        $this->path    = BASE_FOLDER . '/.dev/Tests/Dataeeeeee';
 
         $adapter       = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
