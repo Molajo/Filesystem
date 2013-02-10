@@ -13,7 +13,7 @@
         },
         {
             "name": "Other Contributors",
-            "homepage": "http://github.com/molajo/filesystem/contributors"
+            "homepage": "http://github.com/Molajo/Filesystem/contributors"
         }
     ],
     "require":{
@@ -24,7 +24,6 @@
         "email":"hello@molajo.org",
         "irc":"irc://irc.freenode.org/molajo"
     },
-    "target-dir": "Molajo/Filesystem",
     "autoload": {
         "psr-0": {"Molajo\\Filesystem": "./"}
     },

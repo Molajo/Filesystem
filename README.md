@@ -48,15 +48,15 @@ object, as follows:
 **Action Results:** For any request where data is to be returned, this example shows how to retrieve the output:
 
 ```php
-    echo $adapter-fs->data;
+    echo $adapter->fs->data;
 ```
 
 **Metadata** including the file or folder (name), parent, extension, etc., is accessed in this manner:
 
 ```php
-    echo $adapter-fs->size;
-    echo $adapter-fs->mime_type;
-    echo $adapter-fs->parent;
+    echo $adapter->fs->size;
+    echo $adapter->fs->mime_type;
+    echo $adapter->fs->parent;
     echo 'etc';
 ```
 **Metadata about the Fileystem** filesystem_type, root, persistence, default_directory_permissions,
