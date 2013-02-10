@@ -24,11 +24,8 @@
         "email":"hello@molajo.org",
         "irc":"irc://irc.freenode.org/molajo"
     },
-
-    "autoload":{
-        "psr-0":{
-            "Molajo\\Filesystem":"src/"
-        }
+    "autoload": {
+        "psr-0": {"Molajo": "/src"}
     },
     "minimum-stability": "dev",
     "extra": {
