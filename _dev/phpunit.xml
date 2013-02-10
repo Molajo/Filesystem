@@ -7,7 +7,10 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">./Src/Molajo/Filesystem/</directory>
+            <directory suffix=".php">.././</directory>
+            <exclude>
+                <directory suffix=".php">.././_dev</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
