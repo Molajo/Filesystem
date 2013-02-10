@@ -9,3 +9,6 @@ notifications:
   irc: "irc.freenode.org#molajo"
   email:
     - amystephen@gmail.com
+
+script:
+ - phpunit  -c _dev/phpunit.xml
