@@ -175,28 +175,75 @@ class Local extends FilesystemProperties
                 $this->read();
                 break;
 
+
             case 'write':
+                $file = '';
                 if (isset($this->options['file'])) {
                     $file = $this->options['file'];
-                } else {
-                    throw new \BadMethodCallException
-                    ('Local Filesystem: Filename required for Write Action. Path: ' . $this->path);
                 }
 
-                $replace = true;
+                $data = '';
+                if (isset($this->options['data'])) {
+                    $data = $this->options['data'];
+                }
+
+                $replace = false;
                 if (isset($this->options['replace'])) {
                     $replace = $this->options['replace'];
                 }
-
                 $replace = $this->setTorF($replace, true);
 
-                if (isset($this->options['data'])) {
-                    $data = $this->options['data'];
-                } else {
-                    $data = '';
+                $append = false;
+                if (isset($this->options['append'])) {
+                    $append = $this->options['append'];
+                }
+                $append = $this->setTorF($append, true);
+
+                $truncate = false;
+                if (isset($this->options['truncate'])) {
+                    $truncate = $this->options['truncate'];
+                }
+                $truncate = $this->setTorF($truncate, true);
+
+                $this->write($file, $data, $replace, $append, $truncate);
+
+                break;
+
+            case 'getlist':
+
+                $recursive = false;
+                if (isset($this->options['recursive'])) {
+                    $recursive = $this->options['recursive'];
+                }
+                $recursive = $this->setTorF($recursive, false);
+
+                $exclude_files = false;
+                if (isset($this->options['exclude_files'])) {
+                    $exclude_files = $this->options['exclude_files'];
+                }
+                $exclude_files = $this->setTorF($exclude_files, false);
+
+                $exclude_folders = false;
+                if (isset($this->options['exclude_folders'])) {
+                    $exclude_folders = $this->options['exclude_folders'];
+                }
+                $exclude_folders = $this->setTorF($exclude_folders, false);
+
+                $extension_list = array();
+                if (isset($this->options['extension_list'])) {
+                    $extension_list = $this->options['extension_list'];
+                }
+                $extension_list = $this->setTorF($extension_list, array());
+
+                $name_mask = null;
+                if (isset($this->options['name_mask'])) {
+                    $name_mask = $this->options['name_mask'];
+                }
+                if ($name_mask == '' || trim($name_mask)) {
+                    $name_mask = null;
                 }
 
-                $this->write($file, $replace, $data);
+                $this->getList($recursive, $exclude_files, $exclude_folders, $extension_list, $name_mask);
 
                 break;
 
@@ -364,32 +411,59 @@ class Local extends FilesystemProperties
     /**
      * Returns the contents of the files located at path directory
      *
-     * @param   bool  $recursive
+     * @param   bool    $recursive
+     * @param   bool    $exclude_files
+     * @param   bool    $exclude_folders
+     * @param   array   $extension_list
+     * @param   string  $name_mask
      *
      * @return  array
      * @since   1.0
      */
-    public function getList($recursive = false)
-    {
-        if (isset($this->options['recursive'])) {
-            $recursive = $this->options['recursive'];
-        }
-        $this->data = $this->getList($recursive);
-
-        return $this->data;
-
+    public function getList(
+        $recursive = false,
+        $exclude_files = false,
+        $exclude_folders = false,
+        $extension_list = array(),
+        $name_mask = null
+    ) {
         if (is_file($this->path)) {
             return $this->read();
         }
 
-        foreach ($this->directories as $directory) {
-            $files[] = $directory;
-        }
-        foreach ($this->files as $file) {
-            $files[] = $file;
+        if ($exclude_folders === true) {
+        } else {
+            foreach ($this->directories as $directory) {
+
+                if ($recursive === false) {
+                    if ($this->path == $directory) {
+                        $files[] = $directory;
+                    }
+                } else {
+                    $files[] = $directory;
+                }
+            }
         }
 
-        asort($files);
+        if ($exclude_files === true) {
+        } else {
+            foreach ($this->files as $file) {
+
+                if ($recursive === false) {
+                    if ($this->path == pathinfo($file, PATHINFO_DIRNAME)) {
+                        $files[] = $file;
+                    }
+
+                } else {
+                    $files[] = $file;
+                }
+            }
+        }
+
+        if (count($files) > 0) {
+            asort($files);
+        }
+
         $this->data = $files;
 
         return;

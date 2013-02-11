@@ -17,7 +17,7 @@ class LocalMoveTest extends Data
 
         /** initialise call */
         $this->filesystem_type = 'Local';
-        $this->action  = 'Move';
+        $this->action          = 'Move';
 
         return;
     }

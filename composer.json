@@ -12,8 +12,8 @@
             "homepage":"http://AmyStephen.github.com"
         },
         {
-            "name": "Other Contributors",
-            "homepage": "http://github.com/Molajo/Filesystem/contributors"
+            "name":"Other Contributors",
+            "homepage":"http://github.com/Molajo/Filesystem/contributors"
         }
     ],
     "require":{
@@ -24,13 +24,15 @@
         "email":"hello@molajo.org",
         "irc":"irc://irc.freenode.org/molajo"
     },
-    "autoload": {
-        "psr-0": {"Molajo\\Filesystem": "./"}
+    "autoload":{
+        "psr-0":{
+            "Molajo\\Filesystem":"./"
+        }
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.1.0-dev"
+    "minimum-stability":"dev",
+    "extra":{
+        "branch-alias":{
+            "dev-master":"0.1.0-dev"
         }
     }
 }

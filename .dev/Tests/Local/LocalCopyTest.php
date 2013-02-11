@@ -19,7 +19,7 @@ class LocalCopyTest extends Data
 
         /** initialise call */
         $this->filesystem_type = 'Local';
-        $this->action  = 'Copy';
+        $this->action          = 'Copy';
 
         return;
     }

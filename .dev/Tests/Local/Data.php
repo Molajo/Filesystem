@@ -52,6 +52,7 @@ class Data extends PHPUnit_Framework_TestCase
     {
         /** Remove Existing */
         $this->path = BASE_FOLDER . '/.dev/Tests/Data';
+
         if (file_exists($this->path)) {
             $this->delete($this->path);
         }
@@ -64,7 +65,7 @@ class Data extends PHPUnit_Framework_TestCase
 
         /** initialise call */
         $this->filesystem_type = 'Local';
-        $this->action  = 'Delete';
+        $this->action          = 'Delete';
 
         $this->options = array(
             'delete_empty' => false

@@ -341,7 +341,7 @@ abstract class FilesystemProperties
 
         if (isset($this->options['timezone'])) {
             $this->timezone = $this->options['timezone'];
-        }  else {
+        } else {
             $this->timezone = 'GMT';
         }
 
@@ -680,7 +680,8 @@ abstract class FilesystemProperties
     {
 
         if ($base_folder == $path
-            || $target_directory == $base_folder) {
+            || $target_directory == $base_folder
+        ) {
             $temp = $target_directory;
         } else {
             $temp = $target_directory . substr($path, strlen($base_folder), 99999);

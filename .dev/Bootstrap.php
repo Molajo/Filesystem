@@ -17,8 +17,6 @@ if (substr($_SERVER['DOCUMENT_ROOT'], - 1) == '/') {
 $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
 define('BASE_FOLDER', $base);
 
-//include BASE_FOLDER . '/Tests/Local/Data.php';
-
 $classMap = array(
     'Molajo\\Filesystem\\Adapter'                                 => BASE_FOLDER . '/Adapter.php',
     'Molajo\\Filesystem\\Adapter\\FilesystemActionsInterface'     => BASE_FOLDER . '/Adapter/FilesystemActionsInterface.php',
@@ -32,7 +30,6 @@ $classMap = array(
     'Molajo\\Filesystem\\Exception\\NotFoundException'            => BASE_FOLDER . '/Exception/NotFoundException.php',
     'Molajo\\Filesystem\\Type\\Local'                             => BASE_FOLDER . '/Type/Local.php',
     'Molajo\\Filesystem\\Type\\FilesystemProperties'              => BASE_FOLDER . '/Type/FilesystemProperties.php',
-
     'Local\\Data'                                                 => BASE_FOLDER . '/.dev/Tests/Local/Data.php',
     'Local\\LocalCopyTest'                                        => BASE_FOLDER . '/.dev/Tests/Local/LocalCopyTest.php',
     'Local\\LocalDeleteTest'                                      => BASE_FOLDER . '/.dev/Tests/Local/LocalDeleteTest.php',
@@ -49,10 +46,3 @@ spl_autoload_register(
     }
 );
 
-/*
-include BASE_FOLDER . '/' . 'ClassLoader.php';
-$loader = new ClassLoader();
-$loader->add('Molajo', BASE_FOLDER . '/src/');
-$loader->add('Local', BASE_FOLDER . '/Tests/');
-$loader->register();
-*/
