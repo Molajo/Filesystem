@@ -45,6 +45,8 @@ class LocalCopyTest extends Data
 
         $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/test2.txt'));
         $this->assertGreaterThan(0, $this->calculateSize($temp . '/test2.txt'));
+          die;
+        return;
     }
 
     /**
