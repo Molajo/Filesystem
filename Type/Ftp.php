@@ -169,6 +169,8 @@ class FTP extends FilesystemProperties
             $ftpSystemType = \ftp_systype($this->getConnection());
 
             if (stripos($ftpSystemType, 'win') == false) {
+                $this->is_windoews = false;
+            } else {
                 $this->is_windows = true;
             }
 

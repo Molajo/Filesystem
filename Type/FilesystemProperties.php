@@ -275,7 +275,7 @@ abstract class FilesystemProperties
      * @var    string
      * @since  1.0
      */
-    protected $username;
+    public $username;
 
     /**
      * Password
@@ -283,7 +283,7 @@ abstract class FilesystemProperties
      * @var    string
      * @since  1.0
      */
-    protected $password;
+    public $password;
 
     /**
      * Host
@@ -291,7 +291,7 @@ abstract class FilesystemProperties
      * @var    string
      * @since  1.0
      */
-    protected $host;
+    public $host;
 
     /**
      * Connection Type
@@ -299,7 +299,7 @@ abstract class FilesystemProperties
      * @var    string
      * @since  1.0
      */
-    protected $connection_type;
+    public $connection_type;
 
     /**
      * Port
@@ -307,7 +307,7 @@ abstract class FilesystemProperties
      * @var    string
      * @since  1.0
      */
-    protected $port = 21;
+    public $port = 21;
 
     /**
      * Timeout in minutes
@@ -315,7 +315,7 @@ abstract class FilesystemProperties
      * @var    string
      * @since  1.0
      */
-    protected $timeout = 15;
+    public $timeout = 15;
 
     /**
      * Passive Mode
@@ -323,7 +323,7 @@ abstract class FilesystemProperties
      * @var    bool
      * @since  1.0
      */
-    protected $passive_mode = false;
+    public $passive_mode = false;
 
     /**
      * Initial Directory after Connection
@@ -331,7 +331,7 @@ abstract class FilesystemProperties
      * @var    object|resource
      * @since  1.0
      */
-    protected $initial_directory;
+    public $initial_directory;
 
     /**
      * Connection
@@ -339,7 +339,7 @@ abstract class FilesystemProperties
      * @var    object|resource
      * @since  1.0
      */
-    protected $connection;
+    public $connection;
 
     /**
      * Is Connected?
@@ -347,7 +347,7 @@ abstract class FilesystemProperties
      * @var    bool
      * @since  1.0
      */
-    protected $is_connected;
+    public $is_connected;
 
     /**
      * Root Directory for Filesystem
@@ -967,7 +967,7 @@ abstract class FilesystemProperties
      * @return  object  Datetime
      * @since   1.0
      */
-    protected function getDateTime($time, DateTimeZone $timezone = null)
+    public function getDateTime($time, DateTimeZone $timezone = null)
     {
         if ($time instanceof DateTime) {
             return $time;
@@ -993,7 +993,7 @@ abstract class FilesystemProperties
      * @return  string
      * @since   1.0
      */
-    protected function normalise($path = '')
+    public function normalise($path = '')
     {
         if ($path == '') {
             $this->path = $path;
@@ -1044,7 +1044,7 @@ abstract class FilesystemProperties
      * @since   1.0
      * @return  void
      */
-    protected function discovery()
+    public function discovery()
     {
         $this->directories = array();
         $this->files       = array();
@@ -1104,7 +1104,7 @@ abstract class FilesystemProperties
      * @since   1.0
      * @return  string
      */
-    protected function build_new_path($path, $target_directory, $base_folder)
+    public function build_new_path($path, $target_directory, $base_folder)
     {
 
         if ($base_folder == $path
@@ -1127,7 +1127,7 @@ abstract class FilesystemProperties
      * @return  bool
      * @since   1.0
      */
-    protected function setTorF($variable, $default = false)
+    public function setTorF($variable, $default = false)
     {
         if ($default === true) {
 
