@@ -66,7 +66,7 @@ default_file_permissions, read_only.
 group, create_date, access_date, modified_date, is_readable, is_writable, is_executable, is_directory,
 is_file, is_link, type, name, parent, extension, no_extension, size, and mime_type.
 
-Metadata is defined in the [Molajo\Filesystem\Properties](https://github.com/Molajo/Filesystem/blob/master/src/Molajo/Filesystem/Type/FilesystemProperties.php) class. The Properties
+Metadata is defined in the [Molajo\Filesystem\Properties](https://github.com/Molajo/Filesystem/blob/master/src/Molajo/Filesystem/Type/FilesystemType.php) class. The Properties
 class can be extended and customized, as needed, by Filesystem.
 
 ### Filesystem Commands ###

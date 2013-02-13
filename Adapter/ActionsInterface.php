@@ -1,24 +1,24 @@
 <?php
 /**
- * Filesystem Actions Interface for Adapter
+ * Actions Interface for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   MIT
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  */
 namespace Molajo\Filesystem\Adapter;
 
 defined('MOLAJO') or die;
 
 /**
- * Filesystem Actions Interface for Adapter
+ * Actions Interface which further defines the doAction method in AdapterInterface
  *
  * @package   Molajo
- * @license   MIT
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-interface FilesystemActionsInterface
+interface ActionsInterface
 {
     /**
      * Returns the contents of the file identified in path

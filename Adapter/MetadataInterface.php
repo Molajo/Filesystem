@@ -1,20 +1,20 @@
 <?php
 /**
- * Path Target Interface for Filesystem Adapter
+ * Metadata Interface for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   MIT
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  */
 namespace Molajo\Filesystem\Adapter;
 
 defined('MOLAJO') or die;
 
 /**
- * Path Target Interface for Filesystem Adapter
+ * Metadata Interface for Filesystem which further defines the getMetadata method for the Adapter
  *
  * @package   Molajo
- * @license   MIT
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */

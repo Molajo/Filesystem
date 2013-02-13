@@ -1,32 +1,32 @@
 <?php
 /**
- * Request for Filesystem Services Class
+ * Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   MIT
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  */
 namespace Molajo\Filesystem;
 
 defined('MOLAJO') or die;
 
-use Molajo\Filesystem\Adapter\FilesystemInterface;
+use Molajo\Filesystem\Adapter\AdapterInterface;
 use Molajo\Filesystem\Exception\FilesystemException;
 
 /**
- * Request for Filesystem Services Class
+ * Adapter for Filesystem
  *
  * @package   Molajo
- * @license   MIT
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-Class Adapter implements FilesystemInterface
+Class Adapter implements AdapterInterface
 {
     /**
      * Filesystem Type
      *
-     * @var     string
+     * @var     object
      * @since   1.0
      */
     public $fs;

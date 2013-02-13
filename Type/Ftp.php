@@ -4,41 +4,21 @@
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   MIT
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  */
 namespace Molajo\Filesystem\Type;
 
 defined('MOLAJO') or die;
 
-use DateTime;
-use DateTimeZone;
-
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-
-use Exception;
-use RuntimeException;
-
-use Molajo\Filesystem\Adapter as fsAdapter;
-
-use Molajo\Filesystem\Adapter\FilesystemInterface;
-use Molajo\Filesystem\Adapter\FilesystemActionsInterface;
-use Molajo\Filesystem\Adapter\MetadataInterface;
-use Molajo\Filesystem\Adapter\SystemInterface;
-
-use Molajo\Filesystem\Exception\FilesystemException;
-use Molajo\Filesystem\Exception\NotFoundException;
-
 /**
- * FTP Adapter for Filesystem
+ * FTP Filesystem Type
  *
  * @package   Molajo
- * @license   MIT
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class FTP extends FilesystemProperties
-    implements FilesystemInterface, FilesystemActionsInterface, MetadataInterface, SystemInterface
+class FTP extends FilesystemType
 {
     /**
      * @var $temp for holding file name
@@ -46,17 +26,12 @@ class FTP extends FilesystemProperties
     private $temp;
 
     /**
-     * @var $temp for holding file contents from a get for the path
+     * @var used when parsing ftprawlist data that is then used for determining metadata values
      */
-    private $temp_contents;
+    private $temp_files = array();
 
     /**
-     * @var Temporary for parsing FTPRawlist data
-     */
-    public $temp_files = array();
-
-    /**
-     * @var $is_windows;
+     * @var  $is_windows;
      */
     public $is_windows;
 
@@ -64,37 +39,15 @@ class FTP extends FilesystemProperties
      * Class constructor
      *
      * @since   1.0
-     * @throws  FilesystemException
      */
     public function __construct()
     {
-        /** minimize memory http://php.net/manual/en/function.debug-backtrace.php */
-        if (phpversion() < 50306) {
-            $trace = debug_backtrace(1); // does not return objects
-        }
-        if (phpversion() > 50305) {
-            $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS);
-        }
-        if (phpversion() > 50399) {
-            $trace = debug_backtrace(1, 1); // limit objects and arguments retrieved
-        }
+        parent::__construct();
 
-        if (isset($trace[1])) {
-            if ($trace[1]['class'] == 'Molajo\\Filesystem\\Adapter'
-                && $trace[1]['function'] == 'getFilesystemType'
-            ) {
-                $this->filesystem_type = 'FTP';
-                return $this;
-            }
-        }
+        $this->filesystem_type = 'FTP';
 
-        throw new FilesystemException
-        ('Direct access only allowed via the File System Adapter Class-getFilesystemType method.');
+        return $this;
     }
-
-    /**
-     *  FilesystemInterface
-     */
 
     /**
      * Method to connect and logon to a FTP server
@@ -109,7 +62,7 @@ class FTP extends FilesystemProperties
         //todo can this be a stream?
         $this->temp = '/Users/amystephen/Sites/Filesystem/.dev/Tests/Hold/amy.txt';
 
-        $this->setOptions($options);
+        parent::connect($options);
 
         if ($this->is_connected === true) {
             return;
@@ -119,7 +72,8 @@ class FTP extends FilesystemProperties
             if ($this->getConnectType() == 'ftps') {
 
                 if (function_exists('ftp_ssl_connect')) {
-                    throw new Exception('ftp_ssl_connect must be enabled in PHP to use SSL over FTP');
+                    throw new InvalidArgumentException
+                    ('ftp_ssl_connect must be enabled in PHP to use SSL over FTP');
                 }
 
                 $id = \ftp_ssl_connect($this->host, $this->port, $this->timeout);
@@ -148,7 +102,7 @@ class FTP extends FilesystemProperties
 
         } catch (\Exception $e) {
 
-            throw new \Exception
+            throw new \InvalidArgumentException
             ('Filesystem Adapter FTP: Unable to set passive mode for FTP Server '
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
@@ -169,14 +123,14 @@ class FTP extends FilesystemProperties
             $ftpSystemType = \ftp_systype($this->getConnection());
 
             if (stripos($ftpSystemType, 'win') == false) {
-                $this->is_windoews = false;
+                $this->is_windows = false;
             } else {
                 $this->is_windows = true;
             }
 
         } catch (\Exception $e) {
 
-            throw new \Exception
+            throw new \InvalidArgumentException
             ('Filesystem Adapter FTP: Login failed for ' . ' User: ' . $this->username
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
@@ -190,12 +144,12 @@ class FTP extends FilesystemProperties
 
         } catch (\Exception $e) {
 
-            throw new \Exception
+            throw new \InvalidArgumentException
             ('Filesystem Adapter FTP: Changing FTP Directory failed. Directory: ' . $this->initial_directory);
         }
 
         if ($results === false) {
-            throw new \Exception
+            throw new \InvalidArgumentException
             ('Filesystem Adapter FTP: Unable to change directory: '
                 . $this->root . ' for FTP Server '
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
@@ -227,6 +181,7 @@ class FTP extends FilesystemProperties
     }
 
     /**
+     * Adapter Interface Step 2:
      * Set the Path
      *
      * @param   string  $path
@@ -236,12 +191,12 @@ class FTP extends FilesystemProperties
      */
     public function setPath($path)
     {
-        $this->path = $path;
-
-        return $this->path;
+        return parent::setPath($path);
     }
 
     /**
+     * Adapter Interface Step 3:
+     *
      * Retrieves and sets metadata for the file specified in path
      *
      * @return  void
@@ -250,29 +205,8 @@ class FTP extends FilesystemProperties
     public function getMetadata()
     {
         $this->getFTPMetadata();
-        $this->exists();
-        $this->getAbsolutePath();
-        $this->isAbsolutePath();
-        $this->isRoot();
-        $this->isDirectory();
-        $this->isFile();
-        $this->isLink();
-        $this->getType();
-        $this->getName();
-        $this->getParent();
-        $this->getExtension();
-        $this->getNoextension();
-        $this->getMimeType();
-        $this->getOwner();
-        $this->getGroup();
-        $this->getCreateDate();
-        $this->getAccessDate();
-        $this->getModifiedDate();
-        $this->isReadable();
-        $this->isWriteable();
-        $this->isExecutable();
-        $this->hashFileMd5();
-        $this->hashFileSha1();
+
+        parent::getMetadata();
 
         /**
          *  Discovery creates an array of Files and Directories based on Path
@@ -484,7 +418,7 @@ class FTP extends FilesystemProperties
     }
 
     /**
-     *  FilesystemActionsInterface
+     *  ActionsInterface
      */
 
     /**
@@ -1109,16 +1043,7 @@ class FTP extends FilesystemProperties
     }
 
     /**
-     * Change the file mode for 'owner', 'group', and 'world', and read, write, execute access
-     *
-     * Mode: R/W for owner, nothing for everyone else '0600'
-     *  R/W for owner, read for everyone else '0644'
-     *  Everything for owner, R/E for others - '0755'
-     *  Everything for owner, read and execute for group - '0750'
-     *
-     * Notes: The current user is the user under which PHP runs. It is probably not the same
-     *  user you use for normal shell or FTP access. The mode can be changed only by user
-     *  who owns the file on most systems.
+     * Change the file mode for user for read, write, execute access
      *
      * @param   int     $mode
      *
@@ -1128,12 +1053,7 @@ class FTP extends FilesystemProperties
      */
     public function chmod($mode = 0)
     {
-        if (in_array($mode, array(0600, 0644, 0755, 0750))) {
-        } else {
-
-            throw new FilesystemException
-            ('FTP Filesystem: chmod method. Mode not provided: ' . $mode);
-        }
+        $mode = octdec(str_pad($mode, 4, '0', STR_PAD_LEFT));
 
         try {
             chmod($this->path, $mode);
@@ -1143,8 +1063,6 @@ class FTP extends FilesystemProperties
             throw new FilesystemException
             ('FTP Filesystem: chmod method failed for ' . $mode);
         }
-
-        return;
     }
 
     /**
@@ -1179,21 +1097,6 @@ class FTP extends FilesystemProperties
         }
 
         return;
-    }
-
-    /**
-     *  Path
-     */
-
-    /**
-     * Get the Path
-     *
-     * @since   1.0
-     * @return  string
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 
     /**
@@ -1298,28 +1201,6 @@ class FTP extends FilesystemProperties
     }
 
     /**
-     * Is this the root folder?
-     *
-     * @return  void
-     * @since   1.0
-     * @throws  NotFoundException
-     */
-    public function isRoot()
-    {
-        $this->is_root = false;
-
-        if ($this->path == $this->root) {
-            $this->is_root = true;
-        } else {
-            if ($this->path == '/' || $this->path == '\\') {
-                $this->is_root = true;
-            }
-        }
-
-        return;
-    }
-
-    /**
      * Returns true or false indicator as to whether or not the path is a directory
      *
      * @ - added to prevent PHP from throwing a warning if it is a file, not a directory
@@ -1383,40 +1264,6 @@ class FTP extends FilesystemProperties
     }
 
     /**
-     * Returns the value 'directory, 'file' or 'link' for the type determined
-     *  from the path
-     *
-     * @return  void
-     * @since   1.0
-     * @throws  FilesystemException
-     * @throws  NotFoundException
-     */
-    public function getType()
-    {
-        if ($this->exists === false) {
-            $this->type = null;
-            return;
-        }
-
-        if ($this->is_directory === true) {
-            $this->type = 'directory';
-            return;
-        }
-
-        if ($this->is_file === true) {
-            $this->type = 'file';
-            return;
-        }
-
-        if ($this->is_link === true) {
-            $this->type = 'link';
-            return;
-        }
-
-        throw new FilesystemException ('Not a directory, file or a link.');
-    }
-
-    /**
      * Get Parent
      *
      * @return  void
@@ -1457,85 +1304,6 @@ class FTP extends FilesystemProperties
         }
 
         ftp_chdir($this->getConnection(), $current);
-
-        return;
-    }
-
-    /**
-     * Get File or Directory Name
-     *
-     * @return  void
-     * @since   1.0
-     * @throws  NotFoundException
-     */
-    public function getName()
-    {
-        if ($this->exists === false) {
-            $this->name = null;
-            return;
-        }
-
-        $this->name = pathinfo($this->path, PATHINFO_BASENAME);
-
-        return;
-    }
-
-    /**
-     * Get File Extension
-     *
-     * @return  void
-     * @since   1.0
-     * @throws  NotFoundException
-     */
-    public function getExtension()
-    {
-        if ($this->exists === false) {
-            $this->extension = null;
-            return;
-        }
-
-        if ($this->is_file === true) {
-
-        } elseif ($this->is_directory === true) {
-            $this->extension = '';
-            return;
-
-        } else {
-            throw new NotFoundException
-            ('FTP Filesystem: not a valid file. Path: ' . $this->path);
-        }
-
-        $this->extension = pathinfo($this->path, PATHINFO_EXTENSION);
-
-        return;
-    }
-
-    /**
-     * Get File without Extension
-     *
-     * @return  void
-     * @since   1.0
-     * @throws  NotFoundException
-     */
-    public function getNoExtension()
-    {
-        if ($this->exists === false) {
-            $this->no_extension = null;
-            return;
-        }
-
-        if ($this->is_file === true) {
-
-        } elseif ($this->is_directory === true) {
-            $this->no_extension = '';
-            return;
-
-        } else {
-            throw new NotFoundException
-            ('FTP Filesystem: not a valid file. Path: ' . $this->path);
-        }
-
-        $this->no_extension = pathinfo($this->path, PATHINFO_FILENAME);
 
         return;
     }
@@ -1872,3 +1640,4 @@ class FTP extends FilesystemProperties
         return;
     }
 }
+

@@ -4,7 +4,7 @@
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   MIT
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  *            https://github.com/ryanharkins/mysql-php-backup/blob/master/backup.php
  */
 namespace Molajo\Filesystem\Type;
@@ -17,7 +17,7 @@ use Molajo\Filesystem\Adapter;
  * Github Adapter for Filesystem
  *
  * @package   Molajo
- * @license   MIT
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  *
