@@ -11,8 +11,8 @@
          syntaxCheck="false"
         >
     <testsuites>
-        <testsuite name="Ftp">
-            <directory>./.dev/Tests/Ftp</directory>
+        <testsuite name="Local">
+            <directory>./.dev/Tests/Local</directory>
         </testsuite>
     </testsuites>
 </phpunit>
