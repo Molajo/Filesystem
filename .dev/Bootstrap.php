@@ -29,14 +29,25 @@ $classMap = array(
     'Molajo\\Filesystem\\Exception\\FilesystemExceptionInterface' => BASE_FOLDER . '/Exception/FilesystemExceptionInterface.php',
     'Molajo\\Filesystem\\Exception\\NotFoundException'            => BASE_FOLDER . '/Exception/NotFoundException.php',
     'Molajo\\Filesystem\\Type\\Local'                             => BASE_FOLDER . '/Type/Local.php',
+    'Molajo\\Filesystem\\Type\\Ftp'                               => BASE_FOLDER . '/Type/Ftp.php',
     'Molajo\\Filesystem\\Type\\FilesystemProperties'              => BASE_FOLDER . '/Type/FilesystemProperties.php',
+
+    'Ftp\\Data'                                                   => BASE_FOLDER . '/.dev/Tests/Ftp/Data.php',
+    'Ftp\\FtpCopyTest'                                            => BASE_FOLDER . '/.dev/Tests/Ftp/FtpCopyTest.php',
+    'Ftp\\FtpDeleteTest'                                          => BASE_FOLDER . '/.dev/Tests/Ftp/FtpDeleteTest.php',
+    'Ftp\\FtpMoveTest'                                            => BASE_FOLDER . '/.dev/Tests/Ftp/FtpMoveTest.php',
+    'Ftp\\FtpReadTest'                                            => BASE_FOLDER . '/.dev/Tests/Ftp/FtpReadTest.php',
+    'Ftp\\FtpWriteTest'                                           => BASE_FOLDER . '/.dev/Tests/Ftp/FtpWriteTest.php',
+    'Ftp\\FtpListTest'                                            => BASE_FOLDER . '/.dev/Tests/Ftp/FtpListTest.php',
 
     'Local\\Data'                                                 => BASE_FOLDER . '/.dev/Tests/Local/Data.php',
     'Local\\LocalCopyTest'                                        => BASE_FOLDER . '/.dev/Tests/Local/LocalCopyTest.php',
     'Local\\LocalDeleteTest'                                      => BASE_FOLDER . '/.dev/Tests/Local/LocalDeleteTest.php',
     'Local\\LocalMoveTest'                                        => BASE_FOLDER . '/.dev/Tests/Local/LocalMoveTest.php',
     'Local\\LocalReadTest'                                        => BASE_FOLDER . '/.dev/Tests/Local/LocalReadTest.php',
-    'Local\\LocalWriteTest'                                       => BASE_FOLDER . '/.dev/Tests/Local/LocalWriteTest.php'
+    'Local\\LocalWriteTest'                                       => BASE_FOLDER . '/.dev/Tests/Local/LocalWriteTest.php',
+    'Local\\LocalListTest'                                        => BASE_FOLDER . '/.dev/Tests/Local/LocalListTest.php'
+
 );
 
 spl_autoload_register(

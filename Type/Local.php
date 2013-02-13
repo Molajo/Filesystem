@@ -263,10 +263,6 @@ class Local extends FilesystemProperties
 
                 break;
 
-            case 'rename':
-                $this->data = 'Not implemented.';
-                break;
-
             case 'copy':
             case 'move':
 
@@ -813,7 +809,6 @@ class Local extends FilesystemProperties
         return;
     }
 
-//if (!@rename($this->getPathname(), $target)) {
     /**
      * Copies the file identified in $path to the $target_directory for the $target_filesystem_type adapter
      *  replacing existing contents and creating directories needed, if indicated
@@ -996,7 +991,6 @@ class Local extends FilesystemProperties
         chdir($hold);
 
         return;
-
     }
 
     /**

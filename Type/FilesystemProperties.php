@@ -81,7 +81,6 @@ abstract class FilesystemProperties
      */
     public $data;
 
-
     /**
      * File
      */
@@ -271,6 +270,86 @@ abstract class FilesystemProperties
      */
 
     /**
+     * Username
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $username;
+
+    /**
+     * Password
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $password;
+
+    /**
+     * Host
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $host;
+
+    /**
+     * Connection Type
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $connection_type;
+
+    /**
+     * Port
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $port = 21;
+
+    /**
+     * Timeout in minutes
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $timeout = 15;
+
+    /**
+     * Passive Mode
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    protected $passive_mode = false;
+
+    /**
+     * Initial Directory after Connection
+     *
+     * @var    object|resource
+     * @since  1.0
+     */
+    protected $initial_directory;
+
+    /**
+     * Connection
+     *
+     * @var    object|resource
+     * @since  1.0
+     */
+    protected $connection;
+
+    /**
+     * Is Connected?
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    protected $is_connected;
+
+    /**
      * Root Directory for Filesystem
      *
      * @var    string
@@ -345,6 +424,20 @@ abstract class FilesystemProperties
             $this->timezone = 'GMT';
         }
 
+        $this->setUsername();
+        $this->setPassword();
+        $this->setPort();
+        $this->setHost();
+        $this->setConnectionType();
+        $this->setTimeout();
+        $this->setPassiveMode();
+
+        $this->setRoot();
+        $this->setPersistence();
+        $this->setDirectoryDefaultPermissions();
+        $this->setFileDefaultPermissions();
+        $this->setReadOnly();
+
         return;
     }
 
@@ -363,7 +456,7 @@ abstract class FilesystemProperties
         }
 
         if ($root === '') {
-            $root = ROOT_FOLDER;
+            $root = '/';
         }
 
         if (file_exists($root)) {
@@ -473,6 +566,60 @@ abstract class FilesystemProperties
     }
 
     /**
+     * Set Initial Directory for the System Connection
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function setInitialDirectory()
+    {
+        $initial_directory = null;
+
+        if (isset($this->options['initial_directory'])) {
+            $initial_directory = $this->options['initial_directory'];
+        }
+
+        if ($initial_directory === null) {
+            $this->initial_directory = $initial_directory;
+        }
+
+        return;
+    }
+
+    /**
+     * Set Connection
+     *
+     * @param   integer  $connection
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function setConnection($connection)
+    {
+        $this->connection = $connection;
+
+        $this->is_connected = false;
+
+        if ($this->connection === null || $this->connection === false) {
+        } else {
+            $this->is_connected = true;
+        }
+
+        return;
+    }
+
+    /**
+     * get Connection
+     *
+     * @return  mixed
+     * @since   1.0
+     */
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    /**
      * Get Root of Filesystem
      *
      * @return  string
@@ -525,6 +672,287 @@ abstract class FilesystemProperties
     public function getReadOnly()
     {
         return $this->read_only;
+    }
+
+    /**
+     *  Connection
+     */
+
+    /**
+     * Set the username
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function setUsername()
+    {
+        $username = null;
+
+        if (isset($this->options['username'])) {
+            $username = $this->options['username'];
+        }
+
+        if ($username === null) {
+            $this->username = 'anonymous';
+        } else {
+            $this->username = $username;
+        }
+
+        return;
+    }
+
+    /**
+     * Get the username
+     *
+     * @return  string
+     * @since   1.0
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Set the password
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function setPassword()
+    {
+        $password = null;
+
+        if (isset($this->options['password'])) {
+            $password = $this->options['password'];
+        }
+
+        if ($password === null) {
+        } else {
+            $this->password = $password;
+        }
+
+        return;
+    }
+
+    /**
+     * Get the password
+     *
+     * @return  mixed
+     * @since   1.0
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set the Host
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function setHost()
+    {
+        $host = null;
+
+        if (isset($this->options['host'])) {
+            $host = $this->options['host'];
+        }
+
+        if ($host === null) {
+            $this->host = 'host';
+        } else {
+            $this->host = $host;
+        }
+
+        return;
+    }
+
+    /**
+     * Get the Host
+     *
+     * @return  mixed
+     * @since   1.0
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * Set the Port
+     *
+     * @return  int
+     * @since   1.0
+     */
+    public function setPort()
+    {
+        $port = null;
+
+        if (isset($this->options['port'])) {
+            $port = $this->options['port'];
+        }
+
+        if ($port === null) {
+            $this->port = 21;
+        } else {
+            $this->port = $port;
+        }
+
+        return;
+    }
+
+    /**
+     * Get the Port
+     *
+     * @return  mixed
+     * @since   1.0
+     */
+    public function getPort()
+    {
+        return $this->port;
+    }
+
+    /**
+     * Set the Port
+     *
+     * @return  int
+     * @since   1.0
+     */
+    public function setConnectionType()
+    {
+        $connection_type = null;
+
+        if (isset($this->options['connection_type'])) {
+            $connection_type = $this->options['connection_type'];
+        }
+
+        if ($connection_type === 'ftps') {
+            $this->connection_type = 'ftps';
+        } else {
+            $this->connection_type = 'ftp';
+        }
+
+        return;
+    }
+
+    /**
+     * Get the Connection Type
+     *
+     * @return  mixed
+     * @since   1.0
+     */
+    public function getConnectType()
+    {
+        return $this->connection_type;
+    }
+
+    /**
+     * Set the Timeout
+     *
+     * @param   int  $timeout
+     *
+     * @return  int
+     * @since   1.0
+     */
+    public function setTimeout($timeout = 15)
+    {
+        $timeout = null;
+
+        if (isset($this->options['timeout'])) {
+            $timeout = $this->options['timeout'];
+        }
+
+        if ($timeout === null) {
+            $this->timeout = 21;
+        } else {
+            $this->timeout = $timeout;
+        }
+
+        return;
+    }
+
+    /**
+     * Get the Timeout
+     *
+     * @return  int
+     * @since   1.0
+     */
+    public function getTimeout()
+    {
+        return (int)$this->timeout;
+    }
+
+    /**
+     * Set the Passive Indicator
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function setPassiveMode()
+    {
+        $passive_mode = null;
+
+        if (isset($this->options['passive_mode'])) {
+            $passive_mode = $this->options['passive_mode'];
+        }
+
+        if ($passive_mode === true) {
+            $this->passive_mode = true;
+        } else {
+            $this->passive_mode = false;
+        }
+
+        return;
+    }
+
+    /**
+     * Get Passive Mode Setting
+     *
+     * @return  int
+     * @since   1.0
+     */
+    public function getPassiveMode()
+    {
+        return  $this->passive_mode;
+    }
+
+    /**
+     * Destruct Method
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function __destruct()
+    {
+        if (is_resource($this->connection)) {
+            $this->close();
+        }
+
+        return;
+    }
+
+    /**
+     * Close the FTP Connection
+     *
+     * @return  void
+     * @since   1.0
+     * @throws  \Exception
+     */
+    public function close()
+    {
+        if ($this->is_connected === true) {
+            try {
+                ftp_close($this->connection);
+
+            } catch (\Exception $e) {
+
+                throw new \Exception
+                ('Filesystem Adapter FTP: Closing FTP Connection Failed');
+            }
+        }
+
+        return;
     }
 
     /**

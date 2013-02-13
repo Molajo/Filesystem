@@ -41,9 +41,9 @@ interface FilesystemActionsInterface
     /**
      * Creates or replaces the file or directory identified in path using the data value
      *
-     * @param   string  $file       spaces for create directory
+     * @param   string  $file
      * @param   bool    $replace
-     * @param   string  $data       spaces for create directory
+     * @param   string  $data
      *
      * @return  void
      * @since   1.0
@@ -53,7 +53,7 @@ interface FilesystemActionsInterface
     /**
      * Deletes the file or folder identified in path. Deletes subdirectories, if so indicated
      *
-     * @param   bool    $delete_subdirectories  defaults true (for directories)
+     * @param   bool    $delete_subdirectories
      *
      * @return  void
      * @since   1.0
@@ -67,8 +67,8 @@ interface FilesystemActionsInterface
      *
      * @param   string  $target_directory
      * @param   bool    $target_name
-     * @param   bool    $replace                  defaults to true
-     * @param   string  $target_filesystem_type   defaults to current
+     * @param   bool    $replace
+     * @param   string  $target_filesystem_type
      *
      * @return  void
      * @since   1.0
@@ -82,8 +82,8 @@ interface FilesystemActionsInterface
      *
      * @param   string  $target_directory
      * @param   bool    $target_name
-     * @param   bool    $replace                  defaults to true
-     * @param   string  $target_filesystem_type   defaults to current
+     * @param   bool    $replace
+     * @param   string  $target_filesystem_type
      *
      * @return  void
      * @since   1.0
