@@ -437,6 +437,7 @@ abstract class FilesystemProperties
         $this->setDirectoryDefaultPermissions();
         $this->setFileDefaultPermissions();
         $this->setReadOnly();
+        $this->setInitialDirectory();
 
         return;
     }
@@ -580,6 +581,7 @@ abstract class FilesystemProperties
         }
 
         if ($initial_directory === null) {
+        } else {
             $this->initial_directory = $initial_directory;
         }
 

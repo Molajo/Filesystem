@@ -132,7 +132,7 @@ class FTP extends FilesystemProperties
             $this->setConnection($id);
 
         } catch (\Exception $e) {
-            throw new \Exception
+            throw new \InvalidArgumentException
             ('Filesystem Adapter FTP: Unable to connect to the FTP Server '
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
@@ -158,7 +158,7 @@ class FTP extends FilesystemProperties
 
         } catch (\Exception $e) {
 
-            throw new \Exception
+            throw new \InvalidArgumentException
             ('Filesystem Adapter FTP: Login failed for ' . ' User: ' . $this->username
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
