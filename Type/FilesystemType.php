@@ -1887,7 +1887,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
 
                 break;
 
-            case 'changePermission':
+            case 'changepermission':
 
                 $permission = null;
 
