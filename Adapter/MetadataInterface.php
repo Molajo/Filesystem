@@ -14,12 +14,30 @@ defined('MOLAJO') or die;
  * Metadata Interface for Filesystem which further defines the getMetadata method for the Adapter
  *
  * @package   Molajo
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @since     1.0
  */
 interface MetadataInterface
 {
+
+    /**
+     * Does the path exist (as either a file or a folder)?
+     *
+     * @return void
+     */
+    public function exists();
+
+    /**
+     * Determine the relative path for the current path
+     *
+     * @param   string  $absolute_path_of_target
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function getRelativePath($absolute_path_of_target = '');
+
     /**
      * Retrieves the absolute path, which is the relative path from the root directory
      *
@@ -31,7 +49,7 @@ interface MetadataInterface
     /**
      * Indicates whether the given path is absolute or not
      *
-     * Relative path - describes how to get from a particular directory to a file or directory
+     * Relative Path - describes how to get from a particular directory to a file or directory
      * Absolute Path - relative path from the root directory, prepended with a '/'.
      *
      * @return  void
@@ -97,12 +115,28 @@ interface MetadataInterface
     public function getExtension();
 
     /**
+     * Get Filename without Extension
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function getNoExtension();
+
+    /**
      * Get the file size of a given file.
      *
      * @return  void
      * @since   1.0
      */
     public function getSize();
+
+    /**
+     * Returns the mime type of the file located at path directory
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function getMimeType();
 
     /**
      * Returns the owner of the file or directory defined in the path
@@ -129,20 +163,20 @@ interface MetadataInterface
     public function getCreateDate();
 
     /**
-     * Retrieves Last Access Date for directory or file identified in the path
-     *
-     * @return  object  Datetime
-     * @since   1.0
-     */
-    public function getAccessDate();
-
-    /**
      * Retrieves Last Update Date for directory or file identified in the path
      *
      * @return  object  Datetime
      * @since   1.0
      */
     public function getModifiedDate();
+
+    /**
+     * Retrieves Last Access Date for directory or file identified in the path
+     *
+     * @return  object  Datetime
+     * @since   1.0
+     */
+    public function getAccessDate();
 
     /**
      * Tests for read access, returning true or false
@@ -167,13 +201,4 @@ interface MetadataInterface
      * @since   1.0
      */
     public function isExecutable();
-
-    /**
-     * Get the mimetype of a given file.
-     *
-     * @return  void
-     * @since   1.0
-     */
-    public function getMimeType();
-
 }

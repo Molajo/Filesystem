@@ -11,11 +11,13 @@ namespace Molajo\Filesystem\Adapter;
 defined('MOLAJO') or die;
 
 /**
- * Actions Interface which further defines the doAction method in AdapterInterface
+ * Actions Interface for Filesystem
+ *
+ * Further defines the doAction method in AdapterInterface
  *
  * @package   Molajo
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @since     1.0
  */
 interface ActionsInterface
@@ -66,11 +68,11 @@ interface ActionsInterface
      * Note: $target_filesystem_type used to create new filesystem instance for target
      *
      * @param   string  $target_directory
-     * @param   bool    $target_name
+     * @param   string  $target_name
      * @param   bool    $replace
      * @param   string  $target_filesystem_type
      *
-     * @return  void
+     * @return  mixed
      * @since   1.0
      */
     public function copy($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '');
@@ -81,43 +83,53 @@ interface ActionsInterface
      * Note: $target_filesystem_type used to create new filesystem instance for target
      *
      * @param   string  $target_directory
-     * @param   bool    $target_name
+     * @param   string  $target_name
      * @param   bool    $replace
      * @param   string  $target_filesystem_type
      *
-     * @return  void
+     * @return  mixed
      * @since   1.0
      */
     public function move($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '');
 
     /**
-     * Determine the relative path for the current path
+     * Change owner for file or folder identified in path
      *
-     * @param   string  $absolute_path_of_target
+     * @param   string  $user_name
      *
      * @return  void
      * @since   1.0
      */
-    public function getRelativePath($absolute_path_of_target = '');
+    public function changeOwner($user_name);
 
     /**
-     * Change file mode
+     * Change group for file or folder identified in path
      *
-     * @param   string  $mode
+     * @param   string  $group_id
      *
      * @return  void
      * @since   1.0
      */
-    public function chmod($mode = 0);
+    public function changeGroup($group_id);
 
     /**
-     * Update the touch time and/or the access time for the directory or file identified in the path
+     * Change permissions for file or folder identified in path
      *
-     * @param   null    $time
-     * @param   null    $atime
+     * @param   int  $permission
      *
      * @return  void
      * @since   1.0
      */
-    public function touch($time = null, $atime = null);
+    public function changePermission($permission);
+
+    /**
+     * Update the modification time and access time (touch) for the directory or file identified in the path
+     *
+     * @param   null    $modification_time
+     * @param   null    $access_time
+     *
+     * @return  void
+     * @since   1.0
+     */
+    public function touch($modification_time = null, $access_time = null);
 }

@@ -29,7 +29,7 @@ class Local extends FilesystemType
     {
         parent::__construct();
 
-        $this->filesystem_type = 'Local';
+        $this->setFilesystemType('Local');
 
         return $this;
     }
@@ -77,7 +77,9 @@ class Local extends FilesystemType
      */
     public function getMetadata()
     {
-        return parent::getMetadata();
+        parent::getMetadata();
+
+        return;
     }
 
     /**
@@ -89,23 +91,22 @@ class Local extends FilesystemType
      *
      * @return  void
      * @since   1.0
-     * @throws  FilesystemException
      */
     public function doAction($action = '')
     {
         parent::doAction($action);
+
         return;
     }
 
     /**
      * Close the Local Connection
      *
-     * @return  null
+     * @return  void
      * @since   1.0
      */
     public function close()
     {
         return;
     }
-
 }

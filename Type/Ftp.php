@@ -44,7 +44,7 @@ class FTP extends FilesystemType
     {
         parent::__construct();
 
-        $this->filesystem_type = 'FTP';
+        $this->setFilesystemType('Ftp');
 
         return $this;
     }
@@ -79,7 +79,6 @@ class FTP extends FilesystemType
                 $id = \ftp_ssl_connect($this->host, $this->port, $this->timeout);
 
             } else {
-
                 $id = \ftp_connect($this->host, $this->port, $this->timeout);
             }
 
@@ -92,7 +91,7 @@ class FTP extends FilesystemType
         }
 
         if ($this->is_connected === false) {
-            throw new \Exception
+            throw new \InvalidArgumentException
             ('Filesystem Adapter FTP: Not connected '
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
@@ -145,10 +144,12 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new \InvalidArgumentException
-            ('Filesystem Adapter FTP: Changing FTP Directory failed. Directory: ' . $this->initial_directory);
+            ('Filesystem Adapter FTP: Changing FTP Directory failed. Directory: '
+                . $this->initial_directory);
         }
 
         if ($results === false) {
+
             throw new \InvalidArgumentException
             ('Filesystem Adapter FTP: Unable to change directory: '
                 . $this->root . ' for FTP Server '
@@ -171,7 +172,6 @@ class FTP extends FilesystemType
 
         if ($logged_in === true) {
         } else {
-
             throw new \RuntimeException
             ('Filesystem Adapter FTP: Unable to login with Password: ' . $this->getPassword()
                 . ' Password: ' . $this->getPassword());
@@ -219,207 +219,6 @@ class FTP extends FilesystemType
 
         return;
     }
-
-    /**
-     * Execute the action requested
-     *
-     * @param   string  $action
-     *
-     * @return  void
-     * @since   1.0
-     * @throws  FilesystemException
-     */
-    public function doAction($action = '')
-    {
-        $action = strtolower($action);
-
-        switch ($action) {
-            case 'metadata':
-                // simply return with what is already available
-                break;
-
-            case 'read':
-                $this->read();
-                break;
-
-            case 'write':
-                $file = '';
-                if (isset($this->options['file'])) {
-                    $file = $this->options['file'];
-                }
-
-                $data = '';
-                if (isset($this->options['data'])) {
-                    $data = $this->options['data'];
-                }
-
-                $replace = false;
-                if (isset($this->options['replace'])) {
-                    $replace = $this->options['replace'];
-                }
-                $replace = $this->setTorF($replace, true);
-
-                $append = false;
-                if (isset($this->options['append'])) {
-                    $append = $this->options['append'];
-                }
-                $append = $this->setTorF($append, true);
-
-                $truncate = false;
-                if (isset($this->options['truncate'])) {
-                    $truncate = $this->options['truncate'];
-                }
-                $truncate = $this->setTorF($truncate, true);
-
-                $this->write($file, $data, $replace, $append, $truncate);
-
-                break;
-
-            case 'getlist':
-
-                $recursive = false;
-                if (isset($this->options['recursive'])) {
-                    $recursive = $this->options['recursive'];
-                }
-                $recursive = $this->setTorF($recursive, false);
-
-                $exclude_files = false;
-                if (isset($this->options['exclude_files'])) {
-                    $exclude_files = $this->options['exclude_files'];
-                }
-                $exclude_files = $this->setTorF($exclude_files, false);
-
-                $exclude_folders = false;
-                if (isset($this->options['exclude_folders'])) {
-                    $exclude_folders = $this->options['exclude_folders'];
-                }
-                $exclude_folders = $this->setTorF($exclude_folders, false);
-
-                $extension_list = array();
-                if (isset($this->options['extension_list'])) {
-                    $extension_list = $this->options['extension_list'];
-                }
-                $extension_list = $this->setTorF($extension_list, array());
-
-                $name_mask = null;
-                if (isset($this->options['name_mask'])) {
-                    $name_mask = $this->options['name_mask'];
-                }
-                if ($name_mask == '' || trim($name_mask)) {
-                    $name_mask = null;
-                }
-
-                $this->getList($recursive, $exclude_files, $exclude_folders, $extension_list, $name_mask);
-
-                break;
-
-            case 'delete':
-
-                $delete_subdirectories = true;
-
-                if (isset($this->options['delete_subdirectories'])) {
-                    $delete_subdirectories = (int)$this->options['delete_subdirectories'];
-                }
-
-                $delete_subdirectories = $this->setTorF($delete_subdirectories, true);
-
-                $this->delete($delete_subdirectories);
-
-                break;
-
-            case 'copy':
-            case 'move':
-
-                if (isset($this->options['target_directory'])) {
-                    $target_directory = $this->options['target_directory'];
-
-                } else {
-                    throw new \BadMethodCallException
-                    ('FTP Filesystem: MTarget_directory for Copy Action. Path: ' . $this->path);
-                }
-
-                if (isset($this->options['target_name'])) {
-                    $target_name = $this->options['target_name'];
-
-                } else {
-                    $target_name = '';
-                }
-
-                $replace = true;
-
-                if (isset($this->options['replace'])) {
-                    $replace = $this->options['replace'];
-                }
-
-                $replace = $this->setTorF($replace, true);
-
-                if (isset($this->options['target_filesystem_type'])) {
-                    $target_filesystem_type = $this->options['target_filesystem_type'];
-                } else {
-                    $target_filesystem_type = $this->filesystem_type;
-                }
-
-                $this->data
-                    = $this->$action($target_directory, $target_name, $replace, $target_filesystem_type);
-
-                break;
-
-            case 'getrelativepath':
-
-                if (isset($this->options['relative_to_this_path'])) {
-                    $relative_to_this_path = $this->options['relative_to_this_path'];
-
-                } else {
-                    throw new \BadMethodCallException
-                    ('FTP Filesystem: Must provide relative_to_this_path for relative_path request. Path: '
-                        . $this->path);
-                }
-
-                $this->getRelativePath($relative_to_this_path);
-
-                break;
-
-            case 'chmod':
-
-                $mode = '';
-
-                if (isset($this->options['mode'])) {
-                    $mode = (int)$this->options['mode'];
-                }
-
-                $this->chmod($mode);
-
-                break;
-
-            case 'touch':
-
-                $time = null;
-
-                if (isset($this->options['time'])) {
-                    $time = (int)$this->options['time'];
-                }
-
-                $atime = null;
-
-                if (isset($this->options['atime'])) {
-                    $atime = (int)$this->options['atime'];
-                }
-
-                $this->touch($time, $atime);
-
-                break;
-
-            default:
-                throw new NotFoundException
-                ($this->filesystem_type . ' Filesystem doAction Method ' . $action . ' does not exist.');
-        }
-
-        return;
-    }
-
-    /**
-     *  ActionsInterface
-     */
 
     /**
      * Returns the contents of the file identified by path
@@ -522,11 +321,11 @@ class FTP extends FilesystemType
      * For a file request, creates, appends to, replaces or truncates the file identified in path
      * For a folder request, create is the only valid option
      *
-     * @param   string  $file       Will be empty when the write action is to create directory
-     * @param   string  $data       Will be empty when the write action is to create directory
-     * @param   bool    $replace    Default false
-     * @param   bool    $append     Default false
-     * @param   bool    $truncate   Default false
+     * @param   string  $file
+     * @param   string  $data
+     * @param   bool    $replace
+     * @param   bool    $append
+     * @param   bool    $truncate
      *
      * @return  void
      * @since   1.0
@@ -551,21 +350,24 @@ class FTP extends FilesystemType
 
         } else {
             throw new FilesystemException
-            ('FTP Filesystem Write: must be directory or file: ' . $this->path . '/' . $file);
+            ('FTP Filesystem Write: must be directory or file: '
+                . $this->path . '/' . $file);
         }
 
         if (trim($data) == '' || strlen($data) == 0) {
             if ($this->is_file === true) {
 
                 throw new FilesystemException
-                ('FTP Filesystem: attempting to write no data to file: ' . $this->path . '/' . $file);
+                ('FTP Filesystem: attempting to write no data to file: '
+                    . $this->path . '/' . $file);
             }
         }
 
         if (trim($data) == '' || strlen($data) == 0) {
             if ($file == '') {
                 throw new FilesystemException
-                ('FTP Filesystem: attempting to write no data to file: ' . $this->path . '/' . $file);
+                ('FTP Filesystem: attempting to write no data to file: '
+                    . $this->path . '/' . $file);
 
             } else {
                 $this->createDirectory($this->path . '/' . $file);
@@ -588,7 +390,8 @@ class FTP extends FilesystemType
 
             if ($replace === false) {
                 throw new FilesystemException
-                ('FTP Filesystem: attempting to write to existing file: ' . $this->path . '/' . $file);
+                ('FTP Filesystem: attempting to write to existing file: '
+                    . $this->path . '/' . $file);
             }
 
             \unlink($this->path . '/' . $file);
@@ -597,7 +400,7 @@ class FTP extends FilesystemType
         try {
             \file_put_contents($this->path . '/' . $file, $data);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             throw new NotFoundException
             ('FTP Filesystem: error writing file ' . $this->path . '/' . $file);
@@ -609,11 +412,11 @@ class FTP extends FilesystemType
     /**
      * Append data to file identified in path using the data value
      *
-     * @param   string  $file       Will be empty when the write action is to create directory
-     * @param   string  $data       Will be empty when the write action is to create directory
-     * @param   bool    $replace    Default false
-     * @param   bool    $append     Default false
-     * @param   bool    $truncate   Default false
+     * @param   string  $file
+     * @param   string  $data
+     * @param   bool    $replace
+     * @param   bool    $append
+     * @param   bool    $truncate
      *
      * @return  void
      * @since   1.0
@@ -629,13 +432,14 @@ class FTP extends FilesystemType
 
         if ($replace === true || $truncate === true) {
             throw new FilesystemException
-            ('FTP Filesystem Write: replace and truncate must both be false for append action: ' . $this->path);
+            ('FTP Filesystem Write: replace and truncate must both be false for append action: '
+                . $this->path);
         }
 
         try {
             \file_put_contents($this->path, $data, FILE_APPEND);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             throw new NotFoundException
             ('FTP Filesystem: error appending to file ' . $this->path);
@@ -647,11 +451,11 @@ class FTP extends FilesystemType
     /**
      * Truncate file identified in path using the data value
      *
-     * @param   string  $file       Will be empty when the write action is to create directory
-     * @param   string  $data       Will be empty when the write action is to create directory
-     * @param   bool    $replace    Default false
-     * @param   bool    $append     Default false
-     * @param   bool    $truncate   Default false
+     * @param   string  $file
+     * @param   string  $data
+     * @param   bool    $replace
+     * @param   bool    $append
+     * @param   bool    $truncate
      *
      * @return  void
      * @since   1.0
@@ -660,7 +464,8 @@ class FTP extends FilesystemType
     {
         if ($this->exists === false) {
             throw new FilesystemException
-            ('FTP Filesystem: attempting to truncate file that does not exist. ' . $this->path);
+            ('FTP Filesystem: attempting to truncate file that does not exist. '
+                . $this->path);
         }
 
         if ($this->is_file === true) {
@@ -671,7 +476,8 @@ class FTP extends FilesystemType
 
         if ($replace === true || $append === true) {
             throw new FilesystemException
-            ('FTP Filesystem Write: replace and append must both be false for truncate action: ' . $this->path . '/' . $file);
+            ('FTP Filesystem Write: replace and append must both be false for truncate action: '
+                . $this->path . '/' . $file);
         }
 
         if (trim($data) == '' || strlen($data) == 0) {
@@ -689,9 +495,9 @@ class FTP extends FilesystemType
             $fp = \fopen($this->path, "w");
             fclose($fp);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
-            throw new NotFoundException
+            throw new FilesystemException
             ('FTP Filesystem: error truncating file ' . $this->path);
         }
 
@@ -715,7 +521,7 @@ class FTP extends FilesystemType
         try {
             mkdir($path, $this->default_directory_permissions, true);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             throw new FilesystemException
             ('Filesystem Create Directory: error creating directory: ' . $path);
@@ -766,7 +572,7 @@ class FTP extends FilesystemType
 
             $this->_deleteDiscoveryDirectoriesArray();
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             throw new FilesystemException
             ('FTP Filesystem Delete: failed for: ' . $this->path);
@@ -814,7 +620,8 @@ class FTP extends FilesystemType
      * Copies the file identified in $path to the target_adapter in the new_parent_name_directory,
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target portion of the copy
+     * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target
+     *  portion of the copy
      *
      * @param   string  $target_directory
      * @param   string  $target_name
@@ -827,10 +634,11 @@ class FTP extends FilesystemType
     public function copy($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '')
     {
         if ($target_filesystem_type == '') {
-            $target_filesystem_type = $this->filesystem_type;
+            $target_filesystem_type = $this->getFilesystemType();
         }
 
-        $this->moveOrCopy($target_directory, $target_name, $replace, $target_filesystem_type, 'copy');
+        $this->moveOrCopy($target_directory, $target_name,
+            $replace, $target_filesystem_type, 'copy');
 
         return;
     }
@@ -850,10 +658,11 @@ class FTP extends FilesystemType
     public function move($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '')
     {
         if ($target_filesystem_type == '') {
-            $target_filesystem_type = $this->filesystem_type;
+            $target_filesystem_type = $this->getFilesystemType();
         }
 
-        $this->moveOrCopy($target_directory, $target_name, $replace, $target_filesystem_type, 'move');
+        $this->moveOrCopy($target_directory, $target_name,
+            $replace, $target_filesystem_type, 'move');
 
         return;
     }
@@ -870,7 +679,7 @@ class FTP extends FilesystemType
      * @param   string  $target_filesystem_type
      * @param   string  $move_or_copy
      *
-     * @return  null|void
+     * @return  void|void
      * @since   1.0
      * @throws  FilesystemException
      */
@@ -892,7 +701,8 @@ class FTP extends FilesystemType
             if ($target_directory == $this->parent) {
                 throw new FilesystemException
                 ('FTP Filesystem ' . $move_or_copy
-                    . ': Must specify new file name when using the same target path: ' . $this->path);
+                    . ': Must specify new file name when using the same target path: '
+                    . $this->path);
             }
             $target_name = $this->name;
         }
@@ -928,7 +738,8 @@ class FTP extends FilesystemType
         if ($move_or_copy == 'move') {
             if (is_writeable($this->path) === false) {
                 throw new FilesystemException
-                ('FTP Filesystem Delete: No write access for moving source file/path: ' . $move_or_copy);
+                ('FTP Filesystem Delete: No write access for moving source file/path: '
+                    . $move_or_copy);
             }
         }
 
@@ -1045,23 +856,23 @@ class FTP extends FilesystemType
     /**
      * Change the file mode for user for read, write, execute access
      *
-     * @param   int     $mode
+     * @param   int  $permission
      *
      * @return  void
      * @throws  FilesystemException
      * @since   1.0
      */
-    public function chmod($mode = 0)
+    public function changePermission($permission)
     {
-        $mode = octdec(str_pad($mode, 4, '0', STR_PAD_LEFT));
+        $permission = octdec(str_pad($permission, 4, '0', STR_PAD_LEFT));
 
         try {
-            chmod($this->path, $mode);
+            chmod($this->path, $permission);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             throw new FilesystemException
-            ('FTP Filesystem: chmod method failed for ' . $mode);
+            ('FTP Filesystem: changePermission method failed for ' . $permission);
         }
     }
 
@@ -1082,15 +893,13 @@ class FTP extends FilesystemType
         }
 
         try {
-
             if (touch($this->path, $time)) {
                 echo $atime . ' modification time has been changed to present time';
-
             } else {
                 echo 'Sorry, could not change modification time of ' . $this->path;
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             throw new FilesystemException
             ('FTP Filesystem: is_readable method failed for ' . $this->path);
@@ -1221,7 +1030,7 @@ class FTP extends FilesystemType
                 $this->is_file = false;
             }
 
-        } catch (FtpException $e) {
+        } catch (\Exception $e) {
 
         }
 
@@ -1246,7 +1055,7 @@ class FTP extends FilesystemType
                 $this->is_file = true;
             }
 
-        } catch (FtpException $e) {
+        } catch (\Exception $e) {
         }
 
         return;
@@ -1292,7 +1101,7 @@ class FTP extends FilesystemType
         try {
             chdir($this->getConnection(), $this->path);
 
-        } catch (FtpException $e) {
+        } catch (\Exception $e) {
         }
 
         try {
@@ -1300,7 +1109,7 @@ class FTP extends FilesystemType
 
             $this->parent = ftp_pwd($this->getConnection());
 
-        } catch (FtpException $e) {
+        } catch (\Exception $e) {
         }
 
         ftp_chdir($this->getConnection(), $current);
@@ -1311,13 +1120,12 @@ class FTP extends FilesystemType
     /**
      * Get the file size of a given file.
      *
-     * $param  bool  $recursive  Always false for FTP
-     * todo: see if it is needed
+     * todo: see if $recursive is needed
      *
      * @return  void
      * @since   1.0
      */
-    public function getSize($recursive = false)
+    public function getSize()
     {
         $this->size = 0;
 
@@ -1528,6 +1336,7 @@ class FTP extends FilesystemType
         }
 
         $w = substr($this->temp_files[$this->path]->permissions, 2, 1);
+
         if ($w == 'w') {
             $this->is_writable = true;
         } else {
@@ -1640,4 +1449,3 @@ class FTP extends FilesystemType
         return;
     }
 }
-

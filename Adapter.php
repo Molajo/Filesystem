@@ -17,8 +17,8 @@ use Molajo\Filesystem\Exception\FilesystemException;
  * Adapter for Filesystem
  *
  * @package   Molajo
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
+ * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @since     1.0
  */
 Class Adapter implements AdapterInterface
@@ -69,7 +69,7 @@ Class Adapter implements AdapterInterface
     }
 
     /**
-     * Get the Filesystem Type (ex., Local, Ftp, Virtual, etc.)
+     * Get the Filesystem Type (ex., Local, Ftp, etc.)
      *
      * @param   string  $filesystem_type
      *
@@ -123,7 +123,7 @@ Class Adapter implements AdapterInterface
     }
 
     /**
-     * Retrieves and sets metadata for the file specified in path
+     * Retrieves and set metadata for the file specified in path
      *
      * @return  void
      * @since   1.0
@@ -154,7 +154,7 @@ Class Adapter implements AdapterInterface
     /**
      * Close the Connection
      *
-     * @return  null
+     * @return  void
      * @since   1.0
      */
     public function close()
