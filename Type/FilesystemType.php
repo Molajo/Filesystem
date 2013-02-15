@@ -2680,7 +2680,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     }
 
     /**
-     * Close the FTP Connection
+     * Close the Ftp Connection
      *
      * @return  void
      * @since   1.0
@@ -2695,7 +2695,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
             } catch (\Exception $e) {
 
                 throw new \Exception
-                ('Filesystem Adapter FTP: Closing FTP Connection Failed');
+                ('Filesystem Adapter Ftp: Closing Ftp Connection Failed');
             }
         }
 

@@ -3,7 +3,7 @@ Filesystem Package
 
 This document describes the Molajo Filesystem, a collection of interfaces, adapters, and concrete classes which
 provide a common approach for applications to interact with files and folders regardless of the type of host filesystem.
-Adapters are used to define filesystems in a common way so that interacting with FTP services is done using
+Adapters are used to define filesystems in a common way so that interacting with Ftp services is done using
 the same approach as local services or remote cloud-based services.
 
 The approach borrows liberally from [W3C File API: Directories and System] W3C Working Draft 17 April 2012 → http://www.w3.org/TR/file-system-api/
@@ -21,7 +21,7 @@ Following are the filesystem interfaces:
     Namespace: Molajo\Filesystem
 
 1. **Filesystem Interface** represents a filesystem.
-2. **Adapter Interface** represents a specific type of filesystem, like a local server, an FTP server, a temporary registry, or a cloud-based filesystem service.
+2. **Adapter Interface** represents a specific type of filesystem, like a local server, an Ftp server, a temporary registry, or a cloud-based filesystem service.
 3. **Entry Interface** represents a set of shared properties and methods used by directory and file interfaces within a filesystem.
 4. **Directory Interface** represents a directory and methods needed to create, read, update, delete, and list directory data.
 5. **File Interface** represents a file and methods needed to create, read, update, delete, and list file data.
@@ -45,7 +45,7 @@ Defines a specific type of filesystem and implement of common set of methods for
     Namespace: Molajo\Filesystem\Adapter
 
 1. **Adapter** abstract class that represents an adapter and implements the Adapter Interface.
-2. **Ftp** FTP server adapter (extends the **Adapter** class, as do each of the following.)
+2. **Ftp** Ftp server adapter (extends the **Adapter** class, as do each of the following.)
 3. **Github** Github adapter
 4. **Ldap** Ldap adapter
 5. **Local** Local filesystem adapter
@@ -99,7 +99,7 @@ Constants are not defined for this interface.
 1. **root** The root directory of the filesystem is REQUIRED.
 2. **adapter** The adapter instance is REQUIRED and should be injected into the class constructor.
 3. **options** Options CAN be provided as an associative array of key value pairs. The following values
-    are used within the FTP Adapter for securing access to the FTP Server. Values needed by
+    are used within the Ftp Adapter for securing access to the Ftp Server. Values needed by
     the Adapter can be passed in this way.
 
 *  **username**
@@ -687,7 +687,7 @@ If desired, you could simply use this.
 ##### 3.2.2.1 Protocol-specific
 - HTTP
 - cURL
-- FTP Server
+- Ftp Server
 
 ##### 3.2.3.1 Segmenting Fileservices for Application
 

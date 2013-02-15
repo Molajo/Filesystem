@@ -5,7 +5,7 @@ Filesystem is available on Packagist ([Molajo/Filesystem](http://packagist.org/p
 and as such installable via [Composer](http://getcomposer.org/).
 
 Filesystem's built-in adapters provide sufficient directory and file services for most projects. Out of the box,
-local filesystem, FTP Server, Github, Registry, and Streaming are supported. Creating new Adapters is a simple
+local filesystem, Ftp Server, Github, Registry, and Streaming are supported. Creating new Adapters is a simple
 process for most PHP programmers.
 
 ## Usage

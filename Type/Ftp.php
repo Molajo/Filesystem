@@ -1,6 +1,6 @@
 <?php
 /**
- * FTP Adapter for Filesystem
+ * Ftp Adapter for Filesystem
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -11,14 +11,14 @@ namespace Molajo\Filesystem\Type;
 defined('MOLAJO') or die;
 
 /**
- * FTP Filesystem Type
+ * Ftp Filesystem Type
  *
  * @package   Molajo
  * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class FTP extends FilesystemType
+class Ftp extends FilesystemType
 {
     /**
      * @var $temp for holding file name
@@ -50,7 +50,7 @@ class FTP extends FilesystemType
     }
 
     /**
-     * Method to connect and logon to a FTP server
+     * Method to connect and logon to a Ftp server
      *
      * @param   array   $options
      *
@@ -73,7 +73,7 @@ class FTP extends FilesystemType
 
                 if (function_exists('ftp_ssl_connect')) {
                     throw new InvalidArgumentException
-                    ('ftp_ssl_connect must be enabled in PHP to use SSL over FTP');
+                    ('ftp_ssl_connect must be enabled in PHP to use SSL over Ftp');
                 }
 
                 $id = \ftp_ssl_connect($this->host, $this->port, $this->timeout);
@@ -86,13 +86,13 @@ class FTP extends FilesystemType
 
         } catch (\Exception $e) {
             throw new \InvalidArgumentException
-            ('Filesystem Adapter FTP: Unable to connect to the FTP Server '
+            ('Filesystem Adapter Ftp: Unable to connect to the Ftp Server '
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
         if ($this->is_connected === false) {
             throw new \InvalidArgumentException
-            ('Filesystem Adapter FTP: Not connected '
+            ('Filesystem Adapter Ftp: Not connected '
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
@@ -102,7 +102,7 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new \InvalidArgumentException
-            ('Filesystem Adapter FTP: Unable to set passive mode for FTP Server '
+            ('Filesystem Adapter Ftp: Unable to set passive mode for Ftp Server '
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
@@ -112,7 +112,7 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new \InvalidArgumentException
-            ('Filesystem Adapter FTP: Login failed for ' . ' User: ' . $this->username
+            ('Filesystem Adapter Ftp: Login failed for ' . ' User: ' . $this->username
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
@@ -130,7 +130,7 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new \InvalidArgumentException
-            ('Filesystem Adapter FTP: Login failed for ' . ' User: ' . $this->username
+            ('Filesystem Adapter Ftp: Login failed for ' . ' User: ' . $this->username
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
@@ -144,15 +144,15 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new \InvalidArgumentException
-            ('Filesystem Adapter FTP: Changing FTP Directory failed. Directory: '
+            ('Filesystem Adapter Ftp: Changing Ftp Directory failed. Directory: '
                 . $this->initial_directory);
         }
 
         if ($results === false) {
 
             throw new \InvalidArgumentException
-            ('Filesystem Adapter FTP: Unable to change directory: '
-                . $this->root . ' for FTP Server '
+            ('Filesystem Adapter Ftp: Unable to change directory: '
+                . $this->root . ' for Ftp Server '
                 . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
@@ -173,7 +173,7 @@ class FTP extends FilesystemType
         if ($logged_in === true) {
         } else {
             throw new \RuntimeException
-            ('Filesystem Adapter FTP: Unable to login with Password: ' . $this->getPassword()
+            ('Filesystem Adapter Ftp: Unable to login with Password: ' . $this->getPassword()
                 . ' Password: ' . $this->getPassword());
         }
 
@@ -204,7 +204,7 @@ class FTP extends FilesystemType
      */
     public function getMetadata()
     {
-        $this->getFTPMetadata();
+        $this->getFtpMetadata();
 
         parent::getMetadata();
 
@@ -231,12 +231,12 @@ class FTP extends FilesystemType
     {
         if ($this->exists === false) {
             throw new NotFoundException
-            ('FTP Filesystem Read: File does not exist: ' . $this->path);
+            ('Ftp Filesystem Read: File does not exist: ' . $this->path);
         }
 
         if ($this->is_file === false) {
             throw new NotFoundException
-            ('FTP Filesystem Read: Is not a file: ' . $this->path);
+            ('Ftp Filesystem Read: Is not a file: ' . $this->path);
         }
 
         /** Already available in $this->temp file */
@@ -246,11 +246,11 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new NotFoundException
-            ('FTP Filesystem Read: Error reading file: ' . $this->path);
+            ('Ftp Filesystem Read: Error reading file: ' . $this->path);
         }
 
         if ($this->data === false) {
-            ('FTP Filesystem Read: Empty File: ' . $this->path);
+            ('Ftp Filesystem Read: Empty File: ' . $this->path);
         }
 
         return;
@@ -350,7 +350,7 @@ class FTP extends FilesystemType
 
         } else {
             throw new FilesystemException
-            ('FTP Filesystem Write: must be directory or file: '
+            ('Ftp Filesystem Write: must be directory or file: '
                 . $this->path . '/' . $file);
         }
 
@@ -358,7 +358,7 @@ class FTP extends FilesystemType
             if ($this->is_file === true) {
 
                 throw new FilesystemException
-                ('FTP Filesystem: attempting to write no data to file: '
+                ('Ftp Filesystem: attempting to write no data to file: '
                     . $this->path . '/' . $file);
             }
         }
@@ -366,7 +366,7 @@ class FTP extends FilesystemType
         if (trim($data) == '' || strlen($data) == 0) {
             if ($file == '') {
                 throw new FilesystemException
-                ('FTP Filesystem: attempting to write no data to file: '
+                ('Ftp Filesystem: attempting to write no data to file: '
                     . $this->path . '/' . $file);
 
             } else {
@@ -383,14 +383,14 @@ class FTP extends FilesystemType
 
         if ($this->isWriteable($this->path . '/' . $file) === false) {
             throw new FilesystemException
-            ('FTP Filesystem: file is not writable: ' . $this->path . '/' . $file);
+            ('Ftp Filesystem: file is not writable: ' . $this->path . '/' . $file);
         }
 
         if (file_exists($this->path . '/' . $file)) {
 
             if ($replace === false) {
                 throw new FilesystemException
-                ('FTP Filesystem: attempting to write to existing file: '
+                ('Ftp Filesystem: attempting to write to existing file: '
                     . $this->path . '/' . $file);
             }
 
@@ -403,7 +403,7 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new NotFoundException
-            ('FTP Filesystem: error writing file ' . $this->path . '/' . $file);
+            ('Ftp Filesystem: error writing file ' . $this->path . '/' . $file);
         }
 
         return;
@@ -427,12 +427,12 @@ class FTP extends FilesystemType
         } elseif ($this->is_file === false) {
         } else {
             throw new FilesystemException
-            ('FTP Filesystem: attempting to append to a folder, not a file ' . $this->path);
+            ('Ftp Filesystem: attempting to append to a folder, not a file ' . $this->path);
         }
 
         if ($replace === true || $truncate === true) {
             throw new FilesystemException
-            ('FTP Filesystem Write: replace and truncate must both be false for append action: '
+            ('Ftp Filesystem Write: replace and truncate must both be false for append action: '
                 . $this->path);
         }
 
@@ -442,7 +442,7 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new NotFoundException
-            ('FTP Filesystem: error appending to file ' . $this->path);
+            ('Ftp Filesystem: error appending to file ' . $this->path);
         }
 
         return;
@@ -464,31 +464,31 @@ class FTP extends FilesystemType
     {
         if ($this->exists === false) {
             throw new FilesystemException
-            ('FTP Filesystem: attempting to truncate file that does not exist. '
+            ('Ftp Filesystem: attempting to truncate file that does not exist. '
                 . $this->path);
         }
 
         if ($this->is_file === true) {
         } else {
             throw new FilesystemException
-            ('FTP Filesystem: only a file can be truncated. ' . $this->path);
+            ('Ftp Filesystem: only a file can be truncated. ' . $this->path);
         }
 
         if ($replace === true || $append === true) {
             throw new FilesystemException
-            ('FTP Filesystem Write: replace and append must both be false for truncate action: '
+            ('Ftp Filesystem Write: replace and append must both be false for truncate action: '
                 . $this->path . '/' . $file);
         }
 
         if (trim($data) == '' || strlen($data) == 0) {
         } else {
             throw new FilesystemException
-            ('FTP Filesystem: data cannot be defined for truncate action. ' . $this->path);
+            ('Ftp Filesystem: data cannot be defined for truncate action. ' . $this->path);
         }
 
         if ($this->isWriteable($this->path) === false) {
             throw new FilesystemException
-            ('FTP Filesystem: file is not writable and cannot be truncated: ' . $this->path);
+            ('Ftp Filesystem: file is not writable and cannot be truncated: ' . $this->path);
         }
 
         try {
@@ -498,7 +498,7 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new FilesystemException
-            ('FTP Filesystem: error truncating file ' . $this->path);
+            ('Ftp Filesystem: error truncating file ' . $this->path);
         }
 
         return;
@@ -545,20 +545,20 @@ class FTP extends FilesystemType
     {
         if ($this->is_root === true) {
             throw new NotFoundException
-            ('FTP Filesystem Delete: Request to delete root is not allowed' . $this->path);
+            ('Ftp Filesystem Delete: Request to delete root is not allowed' . $this->path);
         }
 
         if (file_exists($this->path)) {
         } else {
 
             throw new NotFoundException
-            ('FTP Filesystem Delete: File not found ' . $this->path);
+            ('Ftp Filesystem Delete: File not found ' . $this->path);
         }
 
         if ($this->is_writable === false) {
 
             throw new FilesystemException
-            ('FTP Filesystem Delete: No write access to file/path: ' . $this->path);
+            ('Ftp Filesystem Delete: No write access to file/path: ' . $this->path);
         }
 
         try {
@@ -575,7 +575,7 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new FilesystemException
-            ('FTP Filesystem Delete: failed for: ' . $this->path);
+            ('Ftp Filesystem Delete: failed for: ' . $this->path);
         }
 
         return;
@@ -700,7 +700,7 @@ class FTP extends FilesystemType
         if ($target_name == '' && $this->is_file) {
             if ($target_directory == $this->parent) {
                 throw new FilesystemException
-                ('FTP Filesystem ' . $move_or_copy
+                ('Ftp Filesystem ' . $move_or_copy
                     . ': Must specify new file name when using the same target path: '
                     . $this->path);
             }
@@ -717,7 +717,7 @@ class FTP extends FilesystemType
         if (file_exists($this->path)) {
         } else {
             throw new FilesystemException
-            ('FTP Filesystem moveOrCopy: failed. This path does not exist: '
+            ('Ftp Filesystem moveOrCopy: failed. This path does not exist: '
                 . $this->path . ' Specified as source for ' . $move_or_copy
                 . ' operation to ' . $target_directory);
         }
@@ -725,20 +725,20 @@ class FTP extends FilesystemType
         if (file_exists($target_directory)) {
         } else {
             throw new FilesystemException
-            ('FTP Filesystem moveOrCopy: failed. This path does not exist: '
+            ('Ftp Filesystem moveOrCopy: failed. This path does not exist: '
                 . $this->path . ' Specified as destination for ' . $move_or_copy
                 . ' to ' . $target_directory);
         }
 
         if (is_writeable($target_directory) === false) {
             throw new FilesystemException
-            ('FTP Filesystem Delete: No write access to file/path: ' . $target_directory);
+            ('Ftp Filesystem Delete: No write access to file/path: ' . $target_directory);
         }
 
         if ($move_or_copy == 'move') {
             if (is_writeable($this->path) === false) {
                 throw new FilesystemException
-                ('FTP Filesystem Delete: No write access for moving source file/path: '
+                ('Ftp Filesystem Delete: No write access for moving source file/path: '
                     . $move_or_copy);
             }
         }
@@ -872,7 +872,7 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new FilesystemException
-            ('FTP Filesystem: changePermission method failed for ' . $permission);
+            ('Ftp Filesystem: changePermission method failed for ' . $permission);
         }
     }
 
@@ -902,18 +902,18 @@ class FTP extends FilesystemType
         } catch (\Exception $e) {
 
             throw new FilesystemException
-            ('FTP Filesystem: is_readable method failed for ' . $this->path);
+            ('Ftp Filesystem: is_readable method failed for ' . $this->path);
         }
 
         return;
     }
 
     /**
-     * Get FTP Metadata for parsing and using to see if the path exists
+     * Get Ftp Metadata for parsing and using to see if the path exists
      *
      * @return void
      */
-    function getFTPMetadata()
+    function getFtpMetadata()
     {
         $ftp_metadata = ftp_rawlist($this->getConnection(), $this->path);
 
@@ -1051,7 +1051,7 @@ class FTP extends FilesystemType
 
         try {
 
-            if (@ftp_get($this->getConnection(), $this->temp, $this->path, FTP_ASCII, 0)) {
+            if (@ftp_get($this->getConnection(), $this->temp, $this->path, Ftp_ASCII, 0)) {
                 $this->is_file = true;
             }
 
@@ -1168,7 +1168,7 @@ class FTP extends FilesystemType
 
         } else {
             throw new \RuntimeException
-            ('FTP Filesystem: getMimeType either finfo_open or mime_content_type are required in PHP');
+            ('Ftp Filesystem: getMimeType either finfo_open or mime_content_type are required in PHP');
         }
 
         return;
@@ -1225,7 +1225,7 @@ class FTP extends FilesystemType
     }
 
     /**
-     * Create Date is not implemented for FTP
+     * Create Date is not implemented for Ftp
      *
      * @return  void
      * @since   1.0

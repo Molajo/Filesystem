@@ -7,7 +7,7 @@ Filesystem
 [![Build Status](https://travis-ci.org/Molajo/Filesystem.png?branch=master)](https://travis-ci.org/Molajo/Filesystem)
 
 Simple, uniform File and Directory Services API for PHP applications enabling interaction with multiple Filesystem types
-(ex., Local, FTP, Github, LDAP, etc.).
+(ex., Local, Ftp, Github, LDAP, etc.).
 
 ## System Requirements ##
 
@@ -193,7 +193,7 @@ This shows how to backup a file on one filesystem to another filesystem.
     $data    = $adapter->backup ();
 ```
 
-#### FTP Server
+#### Ftp Server
 
 This shows how to backup a file on one filesystem to another filesystem.
 

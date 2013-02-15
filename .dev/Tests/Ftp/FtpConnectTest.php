@@ -46,7 +46,7 @@ class FtpConnectTest extends Data
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
-        $this->assertEquals('FTP', $adapter->fs->filesystem_type);
+        $this->assertEquals('Ftp', $adapter->fs->filesystem_type);
         $this->assertEquals('/', $adapter->fs->root);
         $this->assertEquals(false, $adapter->fs->persistence);
         $this->assertEquals(0755, $adapter->fs->default_directory_permissions);

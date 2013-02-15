@@ -36,6 +36,11 @@ class LocalPermissionsTest extends Data
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
         $this->action  = 'changePermission';
 
+        var_dump(stat($this->path ));
+        $stat = stat($this->path );
+        print_r(posix_getpwuid($stat['uid']));
+        die;
+
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
         $this->assertEquals(true, is_readable($this->path));
