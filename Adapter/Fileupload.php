@@ -10,9 +10,6 @@ namespace Molajo\Filesystem\Adapter;
 
 defined('MOLAJO') or die;
 
-use RuntimeException;
-use Molajo\Filesystem\Exception\FilesystemException as FilesystemException;
-
 /**
  * File Class
  *

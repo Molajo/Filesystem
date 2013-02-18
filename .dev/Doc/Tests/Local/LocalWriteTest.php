@@ -2,7 +2,6 @@
 namespace Local;
 
 use Exception;
-use Molajo\Filesystem\Exception\NotFoundException;
 use Molajo\Filesystem\Exception\FilesystemException;
 
 use Molajo\Filesystem\Adapter as fsAdapter;
@@ -23,7 +22,6 @@ class LocalWriteTest extends Data
         $this->action          = 'Write';
     }
 
-
     /**
      * @covers Molajo\Filesystem\Type\Local::write
      */
@@ -40,7 +38,6 @@ class LocalWriteTest extends Data
             'replace' => false,
             'data'    => 'Here are the words to write.',
         );
-
 
         $this->path = BASE_FOLDER . '/.dev/Tests';
 

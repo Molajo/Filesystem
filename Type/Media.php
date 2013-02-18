@@ -28,7 +28,7 @@ class Media implements File, Path, System
     /**
      * Constructor
      *
-     * @param   array  $options
+     * @param array $options
      *
      * @since   1.0
      */

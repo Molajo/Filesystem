@@ -106,7 +106,7 @@ class FtpDeleteTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Type\Ftp::delete
-     * @expectedException Molajo\Filesystem\Exception\NotFoundException
+     * @expectedException Molajo\Filesystem\Exception\FilesystemException
      */
     public function testNotAFile()
     {

@@ -106,7 +106,7 @@ class LocalDeleteTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Type\Local::delete
-     * @expectedException Molajo\Filesystem\Exception\NotFoundException
+     * @expectedException Molajo\Filesystem\Exception\FilesystemException
      */
     public function testNotAFile()
     {

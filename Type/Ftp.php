@@ -52,9 +52,9 @@ class Ftp extends FilesystemType
     /**
      * Method to connect and logon to a Ftp server
      *
-     * @param   array   $options
+     * @param array $options
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function connect($options = array())
@@ -162,9 +162,9 @@ class Ftp extends FilesystemType
     /**
      * Method to login to a server once connected
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
-     * @throws  \RuntimeException
+     * @throws \RuntimeException
      */
     public function login()
     {
@@ -184,9 +184,9 @@ class Ftp extends FilesystemType
      * Adapter Interface Step 2:
      * Set the Path
      *
-     * @param   string  $path
+     * @param string $path
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function setPath($path)
@@ -199,7 +199,7 @@ class Ftp extends FilesystemType
      *
      * Retrieves and sets metadata for the file specified in path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getMetadata()
@@ -223,19 +223,19 @@ class Ftp extends FilesystemType
     /**
      * Returns the contents of the file identified by path
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
-     * @throws  NotFoundException when file does not exist
+     * @throws FilesystemException when file does not exist
      */
     public function read()
     {
         if ($this->exists === false) {
-            throw new NotFoundException
+            throw new FilesystemException
             ('Ftp Filesystem Read: File does not exist: ' . $this->path);
         }
 
         if ($this->is_file === false) {
-            throw new NotFoundException
+            throw new FilesystemException
             ('Ftp Filesystem Read: Is not a file: ' . $this->path);
         }
 
@@ -245,7 +245,7 @@ class Ftp extends FilesystemType
 
         } catch (\Exception $e) {
 
-            throw new NotFoundException
+            throw new FilesystemException
             ('Ftp Filesystem Read: Error reading file: ' . $this->path);
         }
 
@@ -259,13 +259,13 @@ class Ftp extends FilesystemType
     /**
      * Returns the contents of the files located at path directory
      *
-     * @param   bool    $recursive
-     * @param   bool    $exclude_files
-     * @param   bool    $exclude_folders
-     * @param   array   $extension_list
-     * @param   string  $name_mask
+     * @param bool   $recursive
+     * @param bool   $exclude_files
+     * @param bool   $exclude_folders
+     * @param array  $extension_list
+     * @param string $name_mask
      *
-     * @return  array
+     * @return array
      * @since   1.0
      */
     public function getList(
@@ -321,26 +321,28 @@ class Ftp extends FilesystemType
      * For a file request, creates, appends to, replaces or truncates the file identified in path
      * For a folder request, create is the only valid option
      *
-     * @param   string  $file
-     * @param   string  $data
-     * @param   bool    $replace
-     * @param   bool    $append
-     * @param   bool    $truncate
+     * @param string $file
+     * @param string $data
+     * @param bool   $replace
+     * @param bool   $append
+     * @param bool   $truncate
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
-     * @throws  NotFoundException
+     * @throws FilesystemException
+     * @throws FilesystemException
      */
     public function write($file = '', $data = '', $replace = false, $append = false, $truncate = false)
     {
         if ($append === true) {
             $this->append($file, $data, $replace, $append, $truncate);
+
             return;
         }
 
         if ($truncate === true) {
             $this->truncate($file, $data, $replace, $append, $truncate);
+
             return;
         }
 
@@ -402,7 +404,7 @@ class Ftp extends FilesystemType
 
         } catch (\Exception $e) {
 
-            throw new NotFoundException
+            throw new FilesystemException
             ('Ftp Filesystem: error writing file ' . $this->path . '/' . $file);
         }
 
@@ -412,13 +414,13 @@ class Ftp extends FilesystemType
     /**
      * Append data to file identified in path using the data value
      *
-     * @param   string  $file
-     * @param   string  $data
-     * @param   bool    $replace
-     * @param   bool    $append
-     * @param   bool    $truncate
+     * @param string $file
+     * @param string $data
+     * @param bool   $replace
+     * @param bool   $append
+     * @param bool   $truncate
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     private function append($file = '', $data = '', $replace = false, $append = false, $truncate = false)
@@ -441,7 +443,7 @@ class Ftp extends FilesystemType
 
         } catch (\Exception $e) {
 
-            throw new NotFoundException
+            throw new FilesystemException
             ('Ftp Filesystem: error appending to file ' . $this->path);
         }
 
@@ -451,13 +453,13 @@ class Ftp extends FilesystemType
     /**
      * Truncate file identified in path using the data value
      *
-     * @param   string  $file
-     * @param   string  $data
-     * @param   bool    $replace
-     * @param   bool    $append
-     * @param   bool    $truncate
+     * @param string $file
+     * @param string $data
+     * @param bool   $replace
+     * @param bool   $append
+     * @param bool   $truncate
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     private function truncate($file = '', $data = '', $replace = false, $append = false, $truncate = false)
@@ -507,11 +509,11 @@ class Ftp extends FilesystemType
     /**
      * Create Directory
      *
-     * @param   bool  $path
+     * @param bool $path
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     protected function createDirectory($path)
     {
@@ -534,24 +536,24 @@ class Ftp extends FilesystemType
      * Deletes the file identified in path.
      * Empty subdirectories are removed if $delete_subdirectories is true
      *
-     * @param   bool  $delete_subdirectories  default true
+     * @param bool $delete_subdirectories default true
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
-     * @throws  NotFoundException
+     * @throws FilesystemException
+     * @throws FilesystemException
      */
     public function delete($delete_subdirectories = true)
     {
         if ($this->is_root === true) {
-            throw new NotFoundException
+            throw new FilesystemException
             ('Ftp Filesystem Delete: Request to delete root is not allowed' . $this->path);
         }
 
         if (file_exists($this->path)) {
         } else {
 
-            throw new NotFoundException
+            throw new FilesystemException
             ('Ftp Filesystem Delete: File not found ' . $this->path);
         }
 
@@ -584,7 +586,7 @@ class Ftp extends FilesystemType
     /**
      * Common code for processing the discovery File Array
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     private function _deleteDiscoveryFilesArray()
@@ -601,7 +603,7 @@ class Ftp extends FilesystemType
     /**
      * Common code for processing the discovery File Array
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     private function _deleteDiscoveryDirectoriesArray()
@@ -623,12 +625,12 @@ class Ftp extends FilesystemType
      * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target
      *  portion of the copy
      *
-     * @param   string  $target_directory
-     * @param   string  $target_name
-     * @param   bool    $replace
-     * @param   string  $target_filesystem_type
+     * @param string $target_directory
+     * @param string $target_name
+     * @param bool   $replace
+     * @param string $target_filesystem_type
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function copy($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '')
@@ -647,12 +649,12 @@ class Ftp extends FilesystemType
      * Moves the file identified in path to the location identified in the new_parent_name_directory
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * @param   string  $target_directory
-     * @param   string  $target_name
-     * @param   bool    $replace
-     * @param   string  $target_filesystem_type
+     * @param string $target_directory
+     * @param string $target_name
+     * @param bool   $replace
+     * @param string $target_filesystem_type
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function move($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '')
@@ -673,15 +675,15 @@ class Ftp extends FilesystemType
      *
      * Note: $target_filesystem_type is an instance of the Filesystem
      *
-     * @param   string  $target_directory
-     * @param   string  $target_name
-     * @param   bool    $replace
-     * @param   string  $target_filesystem_type
-     * @param   string  $move_or_copy
+     * @param string $target_directory
+     * @param string $target_name
+     * @param bool   $replace
+     * @param string $target_filesystem_type
+     * @param string $move_or_copy
      *
-     * @return  void|void
+     * @return void|void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function moveOrCopy
     (
@@ -836,10 +838,10 @@ class Ftp extends FilesystemType
     /**
      * Convert the path into a path relative to the path passed in
      *
-     * @param  string  $relative_to_this_path
+     * @param string $relative_to_this_path
      *
-     * @return  void
-     * @throws  FilesystemException
+     * @return void
+     * @throws FilesystemException
      * @since   1.0
      */
     public function getRelativePath($relative_to_this_path = '')
@@ -856,10 +858,10 @@ class Ftp extends FilesystemType
     /**
      * Change the file mode for user for read, write, execute access
      *
-     * @param   int  $permission
+     * @param int $permission
      *
-     * @return  void
-     * @throws  FilesystemException
+     * @return void
+     * @throws FilesystemException
      * @since   1.0
      */
     public function changePermission($permission)
@@ -879,11 +881,11 @@ class Ftp extends FilesystemType
     /**
      * Update the touch time and/or the access time for the directory or file identified in the path
      *
-     * @param   int     $time
-     * @param   int     $atime
+     * @param int $time
+     * @param int $atime
      *
-     * @return  void
-     * @throws  FilesystemException
+     * @return void
+     * @throws FilesystemException
      * @since   1.0
      */
     public function touch($time = null, $atime = null)
@@ -913,7 +915,7 @@ class Ftp extends FilesystemType
      *
      * @return void
      */
-    function getFtpMetadata()
+    public function getFtpMetadata()
     {
         $ftp_metadata = ftp_rawlist($this->getConnection(), $this->path);
 
@@ -942,7 +944,7 @@ class Ftp extends FilesystemType
 
             if ($metadata->name == '.'
                 || $metadata->name == '..'
-            ) {
+) {
 
             } else {
                 $name                    = $metadata->name;
@@ -974,9 +976,9 @@ class Ftp extends FilesystemType
     /**
      * Implemented in isAbsolutePath
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  NotFoundException
+     * @throws FilesystemException
      */
     public function getAbsolutePath()
     {
@@ -989,13 +991,14 @@ class Ftp extends FilesystemType
      * Relative path - describes how to get from a particular directory to a file or directory
      * Absolute Path - relative path from the root directory, prepended with a '/'.
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isAbsolutePath()
     {
         if ($this->exists === false) {
             $this->is_absolute_path = null;
+
             return;
         }
 
@@ -1014,7 +1017,7 @@ class Ftp extends FilesystemType
      *
      * @ - added to prevent PHP from throwing a warning if it is a file, not a directory
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isDirectory()
@@ -1042,7 +1045,7 @@ class Ftp extends FilesystemType
     /**
      * Returns true or false indicator as to whether or not the path is a file
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isFile()
@@ -1064,7 +1067,7 @@ class Ftp extends FilesystemType
     /**
      * Not implemented
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isLink()
@@ -1075,24 +1078,27 @@ class Ftp extends FilesystemType
     /**
      * Get Parent
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  NotFoundException
+     * @throws FilesystemException
      */
     public function getParent()
     {
         if ($this->exists === false) {
             $this->parent = null;
+
             return;
         }
 
         if ($this->is_root === true) {
             $this->parent = null;
+
             return;
         }
 
         if ($this->is_file === true) {
             $this->parent = substr($this->path, 0, strrpos($this->path, '/'));
+
             return;
         }
 
@@ -1122,7 +1128,7 @@ class Ftp extends FilesystemType
      *
      * todo: see if $recursive is needed
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getSize()
@@ -1132,7 +1138,7 @@ class Ftp extends FilesystemType
         if (count($this->temp_files) > 0) {
 
             foreach ($this->temp_files as $file) {
-                $this->size = $this->size + (int)$file->size;
+                $this->size = $this->size + (int) $file->size;
             }
         }
 
@@ -1142,7 +1148,7 @@ class Ftp extends FilesystemType
     /**
      * Returns the mime type of the file located at path directory
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getMimeType()
@@ -1177,7 +1183,7 @@ class Ftp extends FilesystemType
     /**
      * Returns the owner of the file or directory defined in the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getOwner()
@@ -1202,7 +1208,7 @@ class Ftp extends FilesystemType
     /**
      * Returns the group for the file or directory defined in the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getGroup()
@@ -1227,9 +1233,9 @@ class Ftp extends FilesystemType
     /**
      * Create Date is not implemented for Ftp
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function getCreateDate()
     {
@@ -1241,9 +1247,9 @@ class Ftp extends FilesystemType
     /**
      * Not implemented
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function getAccessDate()
     {
@@ -1255,9 +1261,9 @@ class Ftp extends FilesystemType
     /**
      * Retrieves Last Update Date for directory or file identified in the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function getModifiedDate()
     {
@@ -1286,7 +1292,7 @@ class Ftp extends FilesystemType
      * Tests if the current user has read access
      *  Returns true or false
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isReadable()
@@ -1318,7 +1324,7 @@ class Ftp extends FilesystemType
      * Tests if the current user has write access
      *  Returns true or false
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isWriteable()
@@ -1350,7 +1356,7 @@ class Ftp extends FilesystemType
      * Tests if the current user has executable access
      *  Returns true or false
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isExecutable()
@@ -1381,7 +1387,7 @@ class Ftp extends FilesystemType
     /**
      * Calculates the md5 hash of a given file
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function hashFileMd5()
@@ -1405,7 +1411,7 @@ class Ftp extends FilesystemType
      * Hash file sha1
      * http://www.php.net/manual/en/function.sha1-file.php
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function hashFileSha1()
@@ -1429,7 +1435,7 @@ class Ftp extends FilesystemType
      * Hash file sha1 20
      * http://www.php.net/manual/en/function.sha1-file.php
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function hashFileSha1_20()

@@ -31,9 +31,9 @@ interface MetadataInterface
     /**
      * Determine the relative path for the current path
      *
-     * @param   string  $absolute_path_of_target
+     * @param string $absolute_path_of_target
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getRelativePath($absolute_path_of_target = '');
@@ -41,7 +41,7 @@ interface MetadataInterface
     /**
      * Retrieves the absolute path, which is the relative path from the root directory
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getAbsolutePath();
@@ -52,7 +52,7 @@ interface MetadataInterface
      * Relative Path - describes how to get from a particular directory to a file or directory
      * Absolute Path - relative path from the root directory, prepended with a '/'.
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isAbsolutePath();
@@ -60,7 +60,7 @@ interface MetadataInterface
     /**
      * Returns true or false indicator as to whether or not the path is a directory
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isDirectory();
@@ -68,7 +68,7 @@ interface MetadataInterface
     /**
      * Returns true or false indicator as to whether or not the path is a file
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isFile();
@@ -76,7 +76,7 @@ interface MetadataInterface
     /**
      * Returns true or false indicator as to whether or not the path is a link
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isLink();
@@ -85,7 +85,7 @@ interface MetadataInterface
      * Returns the value 'directory', 'file' or 'link' for the type determined
      *  dependent upon isDirectory, isFile, isLink
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getType();
@@ -93,7 +93,7 @@ interface MetadataInterface
     /**
      * Get File or Directory Name
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getName();
@@ -101,7 +101,7 @@ interface MetadataInterface
     /**
      * Get Parent for current path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getParent();
@@ -109,7 +109,7 @@ interface MetadataInterface
     /**
      * Get File Extension
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getExtension();
@@ -117,7 +117,7 @@ interface MetadataInterface
     /**
      * Get Filename without Extension
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getNoExtension();
@@ -125,7 +125,7 @@ interface MetadataInterface
     /**
      * Get the file size of a given file.
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getSize();
@@ -133,7 +133,7 @@ interface MetadataInterface
     /**
      * Returns the mime type of the file located at path directory
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getMimeType();
@@ -141,7 +141,7 @@ interface MetadataInterface
     /**
      * Returns the owner of the file or directory defined in the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getOwner();
@@ -149,7 +149,7 @@ interface MetadataInterface
     /**
      * Returns the group for the file or directory defined in the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getGroup();
@@ -157,7 +157,7 @@ interface MetadataInterface
     /**
      * Retrieves Create Date for directory or file identified in the path
      *
-     * @return  object  Datetime
+     * @return object Datetime
      * @since   1.0
      */
     public function getCreateDate();
@@ -165,7 +165,7 @@ interface MetadataInterface
     /**
      * Retrieves Last Update Date for directory or file identified in the path
      *
-     * @return  object  Datetime
+     * @return object Datetime
      * @since   1.0
      */
     public function getModifiedDate();
@@ -173,7 +173,7 @@ interface MetadataInterface
     /**
      * Retrieves Last Access Date for directory or file identified in the path
      *
-     * @return  object  Datetime
+     * @return object Datetime
      * @since   1.0
      */
     public function getAccessDate();
@@ -181,7 +181,7 @@ interface MetadataInterface
     /**
      * Tests for read access, returning true or false
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isReadable();
@@ -189,7 +189,7 @@ interface MetadataInterface
     /**
      * Tests for write access, returning true or false
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isWriteable();
@@ -197,7 +197,7 @@ interface MetadataInterface
     /**
      * Tests for execute access, returning true or false
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isExecutable();

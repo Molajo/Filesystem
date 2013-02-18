@@ -23,9 +23,9 @@ interface SystemInterface
     /**
      * Set the FilesystemType
      *
-     * @param  string  $filesystem_type
+     * @param string $filesystem_type
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setFilesystemType($filesystem_type);
@@ -33,7 +33,7 @@ interface SystemInterface
     /**
      * Get the Filesystem Type
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getFilesystemType();
@@ -41,7 +41,7 @@ interface SystemInterface
     /**
      * Set Root of Filesystem
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setRoot();
@@ -49,7 +49,7 @@ interface SystemInterface
     /**
      * Get Root of Filesystem
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getRoot();
@@ -57,7 +57,7 @@ interface SystemInterface
     /**
      * Set persistence indicator for Filesystem
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function setPersistence();
@@ -65,7 +65,7 @@ interface SystemInterface
     /**
      * Get Persistence indicator
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function getPersistence();
@@ -73,7 +73,7 @@ interface SystemInterface
     /**
      * Get Directory Permissions for Filesystem
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setDirectoryDefaultPermissions();
@@ -81,7 +81,7 @@ interface SystemInterface
     /**
      * Get Directory Permissions for Filesystem
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function getDirectoryDefaultPermissions();
@@ -89,7 +89,7 @@ interface SystemInterface
     /**
      * Get File Permissions for Filesystem
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setFileDefaultPermissions();
@@ -97,7 +97,7 @@ interface SystemInterface
     /**
      * Get File Permissions for Filesystem
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function getFileDefaultPermissions();
@@ -105,7 +105,7 @@ interface SystemInterface
     /**
      * Get Read Only for Filesystem
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setReadOnly();
@@ -113,7 +113,7 @@ interface SystemInterface
     /**
      * Get Read Only for Filesystem
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function getReadOnly();
@@ -121,7 +121,7 @@ interface SystemInterface
     /**
      * Set Filesystem Username for Logging On
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setUsername();
@@ -129,7 +129,7 @@ interface SystemInterface
     /**
      * Get Filesystem Username for Logging On
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getUsername();
@@ -137,7 +137,7 @@ interface SystemInterface
     /**
      * Set Filesystem Password for Logging On
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setPassword();
@@ -145,7 +145,7 @@ interface SystemInterface
     /**
      * Get Filesystem Password for Logging On
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getPassword();
@@ -153,7 +153,7 @@ interface SystemInterface
     /**
      * Set Filesystem Host
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setHost();
@@ -161,7 +161,7 @@ interface SystemInterface
     /**
      * Get Filesystem Host
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getHost();
@@ -169,7 +169,7 @@ interface SystemInterface
     /**
      * Set Host Port
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setPort();
@@ -177,7 +177,7 @@ interface SystemInterface
     /**
      * Get Host Port
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function getPort();
@@ -185,7 +185,7 @@ interface SystemInterface
     /**
      * Set Filesystem Connection Type
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setConnectionType();
@@ -193,7 +193,7 @@ interface SystemInterface
     /**
      * Get Filesystem Connection Type
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getConnectionType();
@@ -201,7 +201,7 @@ interface SystemInterface
     /**
      * Set Filesystem Timeout
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setTimeout();
@@ -209,7 +209,7 @@ interface SystemInterface
     /**
      * Get Filesystem Timeout
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function getTimeout();
@@ -217,7 +217,7 @@ interface SystemInterface
     /**
      * Set Filesystem PassiveMode
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setPassiveMode();
@@ -225,7 +225,7 @@ interface SystemInterface
     /**
      * Get Filesystem PassiveMode
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function getPassiveMode();
@@ -233,7 +233,7 @@ interface SystemInterface
     /**
      * Set Filesystem PassiveMode
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setInitialDirectory();
@@ -241,7 +241,7 @@ interface SystemInterface
     /**
      * Get Filesystem PassiveMode
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getInitialDirectory();
@@ -249,9 +249,9 @@ interface SystemInterface
     /**
      * Set Filesystem Connection
      *
-     * @param   resource  $connection
+     * @param resource $connection
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setConnection($connection);
@@ -259,7 +259,7 @@ interface SystemInterface
     /**
      * Get Filesystem Connection
      *
-     * @return  resource
+     * @return resource
      * @since   1.0
      */
     public function getConnection();
@@ -267,7 +267,7 @@ interface SystemInterface
     /**
      * Set Filesystem Is Connected
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setIsConnected();
@@ -275,7 +275,7 @@ interface SystemInterface
     /**
      * Get Filesystem Is Connected
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function getIsConnected();
@@ -283,7 +283,7 @@ interface SystemInterface
     /**
      * Set Filesystem Timezone
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setTimezone();
@@ -291,7 +291,7 @@ interface SystemInterface
     /**
      * Get Filesystem Timezone
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getTimezone();

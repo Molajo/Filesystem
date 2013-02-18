@@ -34,18 +34,16 @@ Class Adapter implements AdapterInterface
     /**
      * Construct
      *
-     * @param   string  $action
-     * @param   string  $path
-     * @param   string  $filesystem_type
-     * @param   array   $options
+     * @param string $action
+     * @param string $path
+     * @param string $filesystem_type
+     * @param array  $options
      *
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function __construct($action = '', $path = '', $filesystem_type = 'Local', $options = array())
     {
-        $options = $this->getTimeZone($options);
-
         if ($filesystem_type == '') {
             $filesystem_type = 'Local';
         }
@@ -71,11 +69,11 @@ Class Adapter implements AdapterInterface
     /**
      * Get the Filesystem Type (ex., Local, Ftp, etc.)
      *
-     * @param   string  $filesystem_type
+     * @param string $filesystem_type
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     protected function getFilesystemType($filesystem_type)
     {
@@ -95,9 +93,9 @@ Class Adapter implements AdapterInterface
     /**
      * Connect to the Filesystem Type
      *
-     * @param   array   $options
+     * @param array $options
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function connect($options = array())
@@ -110,9 +108,9 @@ Class Adapter implements AdapterInterface
     /**
      * Set the Path
      *
-     * @param   string  $path
+     * @param string $path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setPath($path)
@@ -125,7 +123,7 @@ Class Adapter implements AdapterInterface
     /**
      * Retrieves and set metadata for the file specified in path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getMetadata()
@@ -138,11 +136,11 @@ Class Adapter implements AdapterInterface
     /**
      * Execute the action requested
      *
-     * @param   string  $action
+     * @param string $action
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  Exception\FilesystemException
+     * @throws Exception\FilesystemException
      */
     public function doAction($action = '')
     {
@@ -154,48 +152,11 @@ Class Adapter implements AdapterInterface
     /**
      * Close the Connection
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function close()
     {
         $this->fs->close();
-    }
-
-    /**
-     * Get timezone
-     *
-     * @param   array  $options
-     *
-     * @return  array
-     * @since   1.0
-     */
-    protected function getTimeZone($options)
-    {
-        $timezone = '';
-
-        if (is_array($options)) {
-        } else {
-            $options = array();
-        }
-
-        if (isset($options['timezone'])) {
-            $timezone = $options['timezone'];
-        }
-
-        if ($timezone === '') {
-            if (ini_get('date.timezone')) {
-                $timezone = ini_get('date.timezone');
-            }
-        }
-
-        if ($timezone === '') {
-            $timezone = 'UTC';
-        }
-
-        ini_set('date.timezone', $timezone);
-        $options['timezone'] = $timezone;
-
-        return $options;
     }
 }

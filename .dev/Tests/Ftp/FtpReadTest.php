@@ -1,10 +1,6 @@
 <?php
 namespace Ftp;
 
-use Exception;
-use Molajo\Filesystem\Exception\NotFoundException;
-use Molajo\Filesystem\Exception\FilesystemException;
-
 use Molajo\Filesystem\Adapter as fsAdapter;
 
 /**

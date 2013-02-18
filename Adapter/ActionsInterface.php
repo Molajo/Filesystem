@@ -25,7 +25,7 @@ interface ActionsInterface
     /**
      * Returns the contents of the file identified in path
      *
-     * @return  mixed|string|array
+     * @return mixed|string|array
      * @since   1.0
      */
     public function read();
@@ -33,9 +33,9 @@ interface ActionsInterface
     /**
      * Returns a list of file and folder names located at path directory
      *
-     * @param   bool  $recursive
+     * @param bool $recursive
      *
-     * @return  array
+     * @return array
      * @since   1.0
      */
     public function getList($recursive = false);
@@ -43,11 +43,11 @@ interface ActionsInterface
     /**
      * Creates or replaces the file or directory identified in path using the data value
      *
-     * @param   string  $file
-     * @param   bool    $replace
-     * @param   string  $data
+     * @param string $file
+     * @param bool   $replace
+     * @param string $data
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function write($file = '', $replace = true, $data = '');
@@ -55,9 +55,9 @@ interface ActionsInterface
     /**
      * Deletes the file or folder identified in path. Deletes subdirectories, if so indicated
      *
-     * @param   bool    $delete_subdirectories
+     * @param bool $delete_subdirectories
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function delete($delete_subdirectories = true);
@@ -67,12 +67,12 @@ interface ActionsInterface
      *
      * Note: $target_filesystem_type used to create new filesystem instance for target
      *
-     * @param   string  $target_directory
-     * @param   string  $target_name
-     * @param   bool    $replace
-     * @param   string  $target_filesystem_type
+     * @param string $target_directory
+     * @param string $target_name
+     * @param bool   $replace
+     * @param string $target_filesystem_type
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
      */
     public function copy($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '');
@@ -82,12 +82,12 @@ interface ActionsInterface
      *
      * Note: $target_filesystem_type used to create new filesystem instance for target
      *
-     * @param   string  $target_directory
-     * @param   string  $target_name
-     * @param   bool    $replace
-     * @param   string  $target_filesystem_type
+     * @param string $target_directory
+     * @param string $target_name
+     * @param bool   $replace
+     * @param string $target_filesystem_type
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
      */
     public function move($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '');
@@ -95,9 +95,9 @@ interface ActionsInterface
     /**
      * Change owner for file or folder identified in path
      *
-     * @param   string  $user_name
+     * @param string $user_name
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function changeOwner($user_name);
@@ -105,9 +105,9 @@ interface ActionsInterface
     /**
      * Change group for file or folder identified in path
      *
-     * @param   string  $group_id
+     * @param string $group_id
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function changeGroup($group_id);
@@ -115,9 +115,9 @@ interface ActionsInterface
     /**
      * Change permissions for file or folder identified in path
      *
-     * @param   int  $permission
+     * @param int $permission
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function changePermission($permission);
@@ -125,10 +125,10 @@ interface ActionsInterface
     /**
      * Update the modification time and access time (touch) for the directory or file identified in the path
      *
-     * @param   null    $modification_time
-     * @param   null    $access_time
+     * @param null $modification_time
+     * @param null $access_time
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function touch($modification_time = null, $access_time = null);

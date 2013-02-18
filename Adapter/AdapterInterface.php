@@ -23,9 +23,9 @@ interface AdapterInterface
     /**
      * Connect to the Filesystem
      *
-     * @param   array  $options
+     * @param array $options
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function connect($options = array());
@@ -35,7 +35,7 @@ interface AdapterInterface
      *
      * @param   $path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setPath($path);
@@ -43,7 +43,7 @@ interface AdapterInterface
     /**
      * Retrieves and sets metadata for the file specified in path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getMetadata();
@@ -51,9 +51,9 @@ interface AdapterInterface
     /**
      * Execute the action requested
      *
-     * @param   string  $action
+     * @param string $action
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function doAction($action = '');
@@ -61,7 +61,7 @@ interface AdapterInterface
     /**
      * Close the Connection
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function close();

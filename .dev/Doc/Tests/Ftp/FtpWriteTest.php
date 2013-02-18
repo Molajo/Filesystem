@@ -2,7 +2,6 @@
 namespace Ftp;
 
 use Exception;
-use Molajo\Filesystem\Exception\NotFoundException;
 use Molajo\Filesystem\Exception\FilesystemException;
 
 use Molajo\Filesystem\Adapter as fsAdapter;
@@ -23,7 +22,6 @@ class FtpWriteTest extends Data
         $this->action          = 'Write';
     }
 
-
     /**
      * @covers Molajo\Filesystem\Type\Ftp::write
      */
@@ -40,7 +38,6 @@ class FtpWriteTest extends Data
             'replace' => false,
             'data'    => 'Here are the words to write.',
         );
-
 
         $this->path = BASE_FOLDER . '/.dev/Tests';
 

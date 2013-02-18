@@ -39,10 +39,10 @@ class Local extends FilesystemType
      *
      * Method to connect to a Local server
      *
-     * @param   string  $type
-     * @param   array   $options
+     * @param string $type
+     * @param array  $options
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function connect($options = array())
@@ -57,9 +57,9 @@ class Local extends FilesystemType
      *
      * Set the Path
      *
-     * @param   string  $path
+     * @param string $path
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function setPath($path)
@@ -72,7 +72,7 @@ class Local extends FilesystemType
      *
      * Retrieves and sets metadata for the file specified in path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getMetadata()
@@ -87,9 +87,9 @@ class Local extends FilesystemType
      *
      * Execute the action requested
      *
-     * @param   string  $action
+     * @param string $action
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function doAction($action = '')
@@ -102,7 +102,7 @@ class Local extends FilesystemType
     /**
      * Close the Local Connection
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function close()

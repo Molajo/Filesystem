@@ -93,7 +93,7 @@ class Data extends PHPUnit_Framework_TestCase
      *
      * @param   $path
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function calculateSize($path, $recursive = true)
@@ -114,15 +114,15 @@ class Data extends PHPUnit_Framework_TestCase
      *
      * Copy uses Directory array first to create folders, then copies the files
      *
-     * @param   string  $path
-     * @param   string  $target
-     * @param   string  $target_name
-     * @param   string  $copyOrMove
+     * @param string $path
+     * @param string $target
+     * @param string $target_name
+     * @param string $copyOrMove
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
-    function copyOrMove($path, $target, $target_name = '', $copyOrMove = 'copy')
+    public function copyOrMove($path, $target, $target_name = '', $copyOrMove = 'copy')
     {
         if (file_exists($path)) {
         } else {
@@ -189,10 +189,10 @@ class Data extends PHPUnit_Framework_TestCase
      *
      * @param   $path
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
-    function delete($path)
+    public function delete($path)
     {
         if (file_exists($path)) {
         } else {
@@ -228,7 +228,7 @@ class Data extends PHPUnit_Framework_TestCase
      *
      * @param   $path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function discovery($path)
@@ -238,6 +238,7 @@ class Data extends PHPUnit_Framework_TestCase
 
         if (is_file($path)) {
             $this->files[] = $path;
+
             return;
         }
 
@@ -277,4 +278,3 @@ class Data extends PHPUnit_Framework_TestCase
         return;
     }
 }
-

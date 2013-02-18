@@ -25,10 +25,8 @@ $classMap = array(
     'Molajo\\Filesystem\\Adapter\\Fileupload'                     => BASE_FOLDER . '/Adapter/Fileupload.php',
     'Molajo\\Filesystem\\Adapter\\MetadataInterface'              => BASE_FOLDER . '/Adapter/MetadataInterface.php',
     'Molajo\\Filesystem\\Adapter\\SystemInterface'                => BASE_FOLDER . '/Adapter/SystemInterface.php',
-    'Molajo\\Filesystem\\Exception\\AccessDeniedException'        => BASE_FOLDER . '/Exception/AccessDeniedException.php',
     'Molajo\\Filesystem\\Exception\\FilesystemException'          => BASE_FOLDER . '/Exception/FilesystemException.php',
     'Molajo\\Filesystem\\Exception\\FilesystemExceptionInterface' => BASE_FOLDER . '/Exception/FilesystemExceptionInterface.php',
-    'Molajo\\Filesystem\\Exception\\NotFoundException'            => BASE_FOLDER . '/Exception/NotFoundException.php',
     'Molajo\\Filesystem\\Type\\Local'                             => BASE_FOLDER . '/Type/Local.php',
     'Molajo\\Filesystem\\Type\\Ftp'                               => BASE_FOLDER . '/Type/Ftp.php',
     'Molajo\\Filesystem\\Type\\FilesystemType'                    => BASE_FOLDER . '/Type/FilesystemType.php',
@@ -55,4 +53,3 @@ spl_autoload_register(
         }
     }
 );
-

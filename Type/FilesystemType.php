@@ -23,9 +23,7 @@ use Molajo\Filesystem\Adapter\MetadataInterface;
 use Molajo\Filesystem\Adapter\SystemInterface;
 
 use Exception;
-use RuntimeException;
 use Molajo\Filesystem\Exception\FilesystemException;
-use Molajo\Filesystem\Exception\NotFoundException;
 
 /**
  * FilesystemType Abstract Class
@@ -198,7 +196,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Timezone
      *
-     * @var    bool
+     * @var    DateTimeZone
      * @since  1.0
      */
     public $timezone;
@@ -208,7 +206,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      *
      * Directories
      *
-     * @var    string
+     * @var    array
      * @since  1.0
      */
     public $directories;
@@ -216,7 +214,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Files
      *
-     * @var    string
+     * @var    array
      * @since  1.0
      */
     public $files;
@@ -399,7 +397,6 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      */
     public $is_executable;
 
-
     /**
      * Hash File Sha1
      *
@@ -436,7 +433,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Class constructor
      *
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function __construct()
     {
@@ -448,9 +445,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      *
      * Method to connect to a Local server
      *
-     * @param   array   $options
+     * @param array $options
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function connect($options = array())
@@ -469,9 +466,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Adapter Interface Step 2:
      * Set the Path
      *
-     * @param   string  $path
+     * @param string $path
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function setPath($path)
@@ -485,7 +482,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Get the Path
      *
      * @since   1.0
-     * @return  string
+     * @return string
      */
     public function getPath()
     {
@@ -495,9 +492,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Options
      *
-     * @param   array  $options
+     * @param array $options
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setOptions($options = array())
@@ -531,9 +528,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Filesystem Type
      *
-     * @param   string  $filesystem_type
+     * @param string $filesystem_type
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setFilesystemType($filesystem_type)
@@ -546,7 +543,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Filesystem Type
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getFilesystemType()
@@ -557,9 +554,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Root of Filesystem
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function setRoot()
     {
@@ -576,6 +573,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
         if (file_exists($root)) {
             if (is_dir($root)) {
                 $this->root = $root;
+
                 return;
             }
         }
@@ -587,7 +585,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set persistence indicator for Filesystem
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setPersistence()
@@ -613,7 +611,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Directory Permissions for Filesystem
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setDirectoryDefaultPermissions()
@@ -636,7 +634,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Default Filesystem Permissions for Files
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setFileDefaultPermissions()
@@ -659,7 +657,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Read Only Setting for Filesystem
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setReadOnly()
@@ -682,7 +680,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Initial Directory for the System Connection
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setInitialDirectory()
@@ -704,7 +702,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get Initial Directory
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getInitialDirectory()
@@ -715,16 +713,30 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Timezone
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setTimezone()
     {
+        $tz = '';
+
         if (isset($this->options['timezone'])) {
-            $this->timezone = $this->options['timezone'];
-        } else {
-            $this->timezone = 'GMT';
+            $tz = $this->options['timezone'];
         }
+
+        if ($tz === '') {
+            if (ini_get('date.timezone')) {
+                $tz = ini_get('date.timezone');
+            }
+        }
+
+        if ($tz === '') {
+            $tz = 'UTC';
+        }
+
+        ini_set('date.timezone', $tz);
+
+        $this->timezone = new DateTimeZone($tz);
 
         return;
     }
@@ -732,7 +744,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get Timezone
      *
-     * @return  string
+     * @return mixed
      * @since   1.0
      */
     public function getTimezone()
@@ -743,9 +755,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Connection
      *
-     * @param   resource  $connection
+     * @param resource $connection
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setConnection($connection)
@@ -767,7 +779,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * get Connection
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
      */
     public function getConnection()
@@ -778,7 +790,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set Connection
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setIsConnected()
@@ -798,7 +810,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * get IsConnected
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
      */
     public function getIsConnected()
@@ -809,7 +821,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get Root of Filesystem
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getRoot()
@@ -820,7 +832,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get Persistence indicator
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function getPersistence()
@@ -831,7 +843,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get Directory Permissions for Filesystem
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getDirectoryDefaultPermissions()
@@ -842,7 +854,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get File Permissions for Filesystem
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function getFileDefaultPermissions()
@@ -853,7 +865,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get Read Only for Filesystem
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function getReadOnly()
@@ -864,7 +876,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set the username
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setUsername()
@@ -887,7 +899,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get the username
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function getUsername()
@@ -898,7 +910,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set the password
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setPassword()
@@ -917,7 +929,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get the password
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
      */
     public function getPassword()
@@ -928,7 +940,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set the Host
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function setHost()
@@ -947,7 +959,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get the Host
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
      */
     public function getHost()
@@ -958,7 +970,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set the Port
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function setPort()
@@ -977,7 +989,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get the Port
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
      */
     public function getPort()
@@ -988,7 +1000,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set the Port
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function setConnectionType()
@@ -1011,7 +1023,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get the Connection Type
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
      */
     public function getConnectionType()
@@ -1022,9 +1034,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set the Timeout (default 900 seconds/15 minutes)
      *
-     * @param   int  $timeout
+     * @param int $timeout
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function setTimeout($timeout = 900)
@@ -1047,7 +1059,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get the Timeout
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function getTimeout()
@@ -1058,7 +1070,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Set the Passive Indicator
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function setPassiveMode()
@@ -1081,7 +1093,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get Passive Mode Setting
      *
-     * @return  int
+     * @return int
      * @since   1.0
      */
     public function getPassiveMode()
@@ -1094,7 +1106,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      *
      * Retrieves and sets metadata for the file specified in path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getMetadata()
@@ -1156,14 +1168,15 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Retrieves the absolute path, which is the relative path from the root directory,
      *  prepended with a '/'.
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  NotFoundException
+     * @throws FilesystemException
      */
     public function getAbsolutePath()
     {
         if ($this->exists === false) {
             $this->absolute_path = null;
+
             return;
         }
 
@@ -1178,13 +1191,14 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Relative path - describes how to get from a particular directory to a file or directory
      * Absolute Path - relative path from the root directory, prepended with a '/'.
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isAbsolutePath()
     {
         if ($this->exists === false) {
             $this->is_absolute_path = null;
+
             return;
         }
 
@@ -1200,9 +1214,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Is this the root folder?
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  NotFoundException
+     * @throws FilesystemException
      */
     public function isRoot()
     {
@@ -1222,7 +1236,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Returns true or false indicator as to whether or not the path is a directory
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isDirectory()
@@ -1239,7 +1253,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Returns true or false indicator as to whether or not the path is a file
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isFile()
@@ -1256,7 +1270,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Returns true or false indicator as to whether or not the path is a link
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isLink()
@@ -1274,30 +1288,34 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Returns the value 'directory, 'file' or 'link' for the type determined
      *  from the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
-     * @throws  NotFoundException
+     * @throws FilesystemException
+     * @throws FilesystemException
      */
     public function getType()
     {
         if ($this->exists === false) {
             $this->type = null;
+
             return;
         }
 
         if ($this->is_directory === true) {
             $this->type = 'directory';
+
             return;
         }
 
         if ($this->is_file === true) {
             $this->type = 'file';
+
             return;
         }
 
         if ($this->is_link === true) {
             $this->type = 'link';
+
             return;
         }
 
@@ -1307,19 +1325,21 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get Parent
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  NotFoundException
+     * @throws FilesystemException
      */
     public function getParent()
     {
         if ($this->exists === false) {
             $this->parent = null;
+
             return;
         }
 
         if ($this->is_root === true) {
             $this->parent = null;
+
             return;
         }
 
@@ -1331,14 +1351,15 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get File or Directory Name
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  NotFoundException
+     * @throws FilesystemException
      */
     public function getName()
     {
         if ($this->exists === false) {
             $this->name = null;
+
             return;
         }
 
@@ -1350,14 +1371,15 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get File Extension
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  NotFoundException
+     * @throws FilesystemException
      */
     public function getExtension()
     {
         if ($this->exists === false) {
             $this->extension = null;
+
             return;
         }
 
@@ -1365,10 +1387,11 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
 
         } elseif ($this->is_directory === true) {
             $this->extension = '';
+
             return;
 
         } else {
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(strtolower($this->getFilesystemType())) . ' Filesystem:  not a valid file. Path: '
                 . $this->path);
         }
@@ -1381,14 +1404,15 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get File without Extension
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  NotFoundException
+     * @throws FilesystemException
      */
     public function getNoExtension()
     {
         if ($this->exists === false) {
             $this->no_extension = null;
+
             return;
         }
 
@@ -1396,10 +1420,11 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
 
         } elseif ($this->is_directory === true) {
             $this->no_extension = '';
+
             return;
 
         } else {
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(strtolower($this->getFilesystemType())) . ' Filesystem:  not a valid file. Path: '
                 . $this->path);
         }
@@ -1412,9 +1437,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get the file size of a given file.
      *
-     * @param   bool $recursive
+     * @param bool $recursive
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getSize($recursive = true)
@@ -1434,9 +1459,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Returns the mime type of the file located at path directory
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function getMimeType()
     {
@@ -1471,7 +1496,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Returns the owner of the file or directory defined in the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getOwner()
@@ -1491,7 +1516,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Returns the group for the file or directory defined in the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getGroup()
@@ -1511,9 +1536,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Retrieves Create Date for directory or file identified in the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function getCreateDate()
     {
@@ -1539,9 +1564,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Retrieves Last Access Date for directory or file identified in the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function getAccessDate()
     {
@@ -1567,9 +1592,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Retrieves Last Update Date for directory or file identified in the path
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function getModifiedDate()
     {
@@ -1596,7 +1621,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Tests if the current user has read access
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isReadable()
@@ -1616,7 +1641,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Tests if the current user has write access
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isWriteable()
@@ -1636,7 +1661,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Tests if the current user has executable access
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function isExecutable()
@@ -1656,7 +1681,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Calculates the md5 hash of a given file
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function hashFileMd5()
@@ -1680,7 +1705,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Hash file sha1
      * http://www.php.net/manual/en/function.sha1-file.php
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function hashFileSha1()
@@ -1704,7 +1729,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Hash file sha1 20
      * http://www.php.net/manual/en/function.sha1-file.php
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function hashFileSha1_20()
@@ -1729,12 +1754,11 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      *
      * Execute the action requested
      *
-     * @param   string  $action
+     * @param string $action
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
-     * @throws  BadMethodCallException
+     * @throws FilesystemException
      */
     public function doAction($action = '')
     {
@@ -1877,7 +1901,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
                     $relative_to_this_path = $this->options['relative_to_this_path'];
 
                 } else {
-                    throw new BadMethodCallException
+                    throw new FilesystemException
                     (ucfirst(strtolower($this->getFilesystemType()))
                         . ' Filesystem:  Must provide relative_to_this_path for relative_path request. Path: '
                         . $this->path);
@@ -1894,12 +1918,14 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
                 if (isset($this->options['permission'])) {
                     $permission = $this->options['permission'];
                 }
+
                 if ($permission === null) {
                     throw new FilesystemException
                     ($this->getFilesystemType(
                     ) . ' Filesystem doAction Method ' . $action . ' no permission value provided.');
                 }
-                $this->changePermission($permission);
+
+                $this->changePermission((int)$permission);
 
                 break;
 
@@ -1937,24 +1963,24 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Returns the contents of the file identified by path
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
-     * @throws  NotFoundException when file does not exist
+     * @throws FilesystemException when file does not exist
      */
     public function read()
     {
         if ($this->exists === false) {
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(strtolower($this->getFilesystemType())) . ' Filesystem Read: File does not exist: ' . $this->path);
         }
 
         if ($this->is_file === false) {
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(strtolower($this->getFilesystemType())) . ' Filesystem Read: Is not a file: ' . $this->path);
         }
 
         if ($this->is_readable === false) {
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(
                 strtolower($this->getFilesystemType())
             ) . ' Filesystem Read: Not permitted to read: ' . $this->path);
@@ -1965,7 +1991,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
 
         } catch (\Exception $e) {
 
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(strtolower($this->getFilesystemType())) . ' Filesystem Read: Error reading file: ' . $this->path);
         }
 
@@ -1979,13 +2005,13 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Returns the contents of the files located at path directory
      *
-     * @param   bool    $recursive
-     * @param   bool    $exclude_files
-     * @param   bool    $exclude_folders
-     * @param   array   $extension_list
-     * @param   string  $name_mask
+     * @param bool   $recursive
+     * @param bool   $exclude_files
+     * @param bool   $exclude_folders
+     * @param array  $extension_list
+     * @param string $name_mask
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getList(
@@ -1997,6 +2023,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     ) {
         if (is_file($this->path)) {
             $this->read();
+
             return;
         }
 
@@ -2048,26 +2075,28 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * For a file request, creates, appends to, replaces or truncates the file identified in path
      * For a folder request, create is the only valid option
      *
-     * @param   string  $file
-     * @param   string  $data
-     * @param   bool    $replace
-     * @param   bool    $append
-     * @param   bool    $truncate
+     * @param string $file
+     * @param string $data
+     * @param bool   $replace
+     * @param bool   $append
+     * @param bool   $truncate
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
-     * @throws  NotFoundException
+     * @throws FilesystemException
+     * @throws FilesystemException
      */
     public function write($file = '', $data = '', $replace = false, $append = false, $truncate = false)
     {
         if ($append === true) {
             $this->append($data);
+
             return;
         }
 
         if ($truncate === true) {
             $this->truncate();
+
             return;
         }
 
@@ -2131,7 +2160,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
 
         } catch (Exception $e) {
 
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(strtolower($this->getFilesystemType()))
                 . ' Filesystem:  error writing file ' . $this->path . '/' . $file);
         }
@@ -2142,12 +2171,12 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Append data to file identified in path using the data value
      *
-     * @param   string  $data
+     * @param string $data
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
-     * @throws  NotFoundException
+     * @throws FilesystemException
+     * @throws FilesystemException
      */
     private function append($data)
     {
@@ -2164,7 +2193,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
 
         } catch (Exception $e) {
 
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(strtolower($this->getFilesystemType())) . ' Filesystem:  error appending to file '
                 . $this->path);
         }
@@ -2175,10 +2204,10 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Truncate file identified in path using the data value
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
-     * @throws  NotFoundException
+     * @throws FilesystemException
+     * @throws FilesystemException
      */
     private function truncate()
     {
@@ -2209,7 +2238,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
 
         } catch (Exception $e) {
 
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(strtolower($this->getFilesystemType())) . ' Filesystem:  error truncating file ' . $this->path);
         }
 
@@ -2219,11 +2248,11 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Create Directory
      *
-     * @param   bool  $path
+     * @param bool $path
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     protected function createDirectory($path)
     {
@@ -2246,17 +2275,17 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Deletes the file identified in path.
      * Empty subdirectories are removed if $delete_subdirectories is true
      *
-     * @param   bool  $delete_subdirectories  default true
+     * @param bool $delete_subdirectories default true
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  FilesystemException
-     * @throws  NotFoundException
+     * @throws FilesystemException
+     * @throws FilesystemException
      */
     public function delete($delete_subdirectories = true)
     {
         if ($this->is_root === true) {
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(
                 strtolower($this->getFilesystemType())
             ) . ' Filesystem Delete: Request to delete root is not allowed'
@@ -2266,7 +2295,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
         if (file_exists($this->path)) {
         } else {
 
-            throw new NotFoundException
+            throw new FilesystemException
             (ucfirst(strtolower($this->getFilesystemType())) . ' Filesystem Delete: File not found ' . $this->path);
         }
 
@@ -2299,7 +2328,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Common code for processing the discovery File Array
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     private function _deleteDiscoveryFilesArray()
@@ -2316,7 +2345,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Common code for processing the discovery File Array
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     private function _deleteDiscoveryDirectoriesArray()
@@ -2337,12 +2366,12 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      *
      * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target portion of the copy
      *
-     * @param   string  $target_directory
-     * @param   string  $target_name
-     * @param   bool    $replace
-     * @param   string  $target_filesystem_type
+     * @param string $target_directory
+     * @param string $target_name
+     * @param bool   $replace
+     * @param string $target_filesystem_type
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function copy($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '')
@@ -2360,12 +2389,12 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Moves the file identified in path to the location identified in the new_parent_name_directory
      *  replacing existing contents, if indicated, and creating directories needed, if indicated
      *
-     * @param   string  $target_directory
-     * @param   string  $target_name
-     * @param   bool    $replace
-     * @param   string  $target_filesystem_type
+     * @param string $target_directory
+     * @param string $target_name
+     * @param bool   $replace
+     * @param string $target_filesystem_type
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function move($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '')
@@ -2385,15 +2414,15 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      *
      * Note: $target_filesystem_type is an instance of the Filesystem
      *
-     * @param   string  $target_directory
-     * @param   string  $target_name
-     * @param   bool    $replace
-     * @param   string  $target_filesystem_type
-     * @param   string  $move_or_copy
+     * @param string $target_directory
+     * @param string $target_name
+     * @param bool   $replace
+     * @param string $target_filesystem_type
+     * @param string $move_or_copy
      *
-     * @return  void|void
+     * @return void|void
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws FilesystemException
      */
     public function moveOrCopy
     (
@@ -2537,10 +2566,10 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Convert the path into a path relative to the path passed in
      *
-     * @param  string  $relative_to_this_path
+     * @param string $relative_to_this_path
      *
-     * @return  void
-     * @throws  FilesystemException
+     * @return void
+     * @throws FilesystemException
      * @since   1.0
      */
     public function getRelativePath($relative_to_this_path = '')
@@ -2557,10 +2586,10 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Changes the owner for the file or folder identified in path
      *
-     * @param   string  $user_name
+     * @param string $user_name
      *
-     * @return  void
-     * @throws  FilesystemException
+     * @return void
+     * @throws FilesystemException
      * @since   1.0
      */
     public function changeOwner($user_name)
@@ -2587,10 +2616,10 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Changes the group for the file or folder identified in path
      *
-     * @param   int  $group_id
+     * @param int $group_id
      *
-     * @return  void
-     * @throws  FilesystemException
+     * @return void
+     * @throws FilesystemException
      * @since   1.0
      */
     public function changeGroup($group_id)
@@ -2612,11 +2641,12 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Change the file mode for user for read, write, execute access
      *
-     * @param   int   $permission
+     * @param int $permission
      *
-     * @return  void
-     * @throws  FilesystemException
+     * @return void
+     * @throws FilesystemException
      * @since   1.0
+     * @throws \Molajo\Filesystem\Exception\FilesystemException
      */
     public function changePermission($permission)
     {
@@ -2635,30 +2665,34 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Update the touch time and/or the access time for the directory or file identified in the path
      *
-     * @param   int     $modification_time
-     * @param   int     $access_time
+     * @param int $modification_time
+     * @param int $access_time
      *
-     * @return  void
-     * @throws  FilesystemException
+     * @return void
+     * @throws FilesystemException
      * @since   1.0
      */
     public function touch($modification_time = null, $access_time = null)
     {
         if ($modification_time == '' || $modification_time === null || $modification_time == 0) {
-            $modification_time = $this->getDateTime($modification_time);
+            $modification_time = $this->getDateTime($modification_time, $this->getTimezone());
+        }
+
+        if ($access_time == '' || $access_time === null || $access_time == 0) {
+            $access_time = $this->getDateTime($access_time, $this->getTimezone());
         }
 
         try {
-
             touch($this->path, $modification_time, $access_time);
 
         } catch (Exception $e) {
 
             throw new FilesystemException
+
             (ucfirst(strtolower($this->getFilesystemType()))
                 . ' Filesystem: touch method failed for Path: ' . $this->path
-                . ' Modification Time: ' . (string) $modification_time
-                . ' Access Time: ' . (string) $access_time);
+                . ' Modification Time: ' . $modification_time->format('Y/m/d H:i:s')
+                . ' Access Time: ' . $access_time->format('Y/m/d H:i:s'));
         }
 
         return;
@@ -2667,7 +2701,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Destruct Method
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function __destruct()
@@ -2682,9 +2716,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Close the Ftp Connection
      *
-     * @return  void
+     * @return void
      * @since   1.0
-     * @throws  \Exception
+     * @throws \Exception
      */
     public function close()
     {
@@ -2705,27 +2739,23 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get Date Time
      *
-     * @param   string       $time
-     * @param   DateTimeZone $timezone
+     * @param string       $time
      *
-     * @return  DateTime
+     * @return DateTime
      */
-    public function getDateTime($time, DateTimeZone $timezone = null)
+    public function getDateTime($time)
     {
         if ($time instanceof DateTime) {
             return $time;
         }
 
         if (is_int($time) || is_float($time)) {
-            //todo test and remove @
-            $time = new DateTime('@' . intval($time), $timezone);
-
         } else {
-
-            $time = new DateTime(null, $timezone);
+            $time = null;
         }
 
-        return $time;
+        //todo test and remove @
+        return new DateTime('@' . intval($time), $this->timezone);
     }
 
     /**
@@ -2733,7 +2763,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      *
      * @param   $path
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function normalise($path = '')
@@ -2741,12 +2771,6 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
         if ($path == '') {
             $this->path = $path;
         }
-
-        /**  Filter: empty value
-         *
-         * @link http://tinyurl.com/arrayFilterStrlen
-         */
-        $nodes = array_filter(explode('/', $path), 'strlen');
 
         /** Determine if it is absolute path */
         $absolute_path = false;
@@ -2757,6 +2781,12 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
 
         /** Unescape slashes */
         $path = str_replace('\\', '/', $path);
+
+        /**  Filter: empty value
+         *
+         * @link http://tinyurl.com/arrayFilterStrlen
+         */
+        $nodes = array_filter(explode('/', $path), 'strlen');
 
         /** Get rid of the '.' and '..' layers */
         $normalised = array();
@@ -2785,7 +2815,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * Discovery of folders and files for specified path
      *
      * @since   1.0
-     * @return  void
+     * @return void
      */
     public function discovery()
     {
@@ -2816,7 +2846,8 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
             new RecursiveDirectoryIterator($this->path),
             RecursiveIteratorIterator::SELF_FIRST);
 
-        if (count($objects) === 0 && is_array($objects)) {
+        if (is_object($objects)) {
+        } else {
             return;
         }
 
@@ -2840,12 +2871,12 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Common method for creating new path for copy or move
      *
-     * @param   string  $path (file or folder)
-     * @param   string  $target_directory
-     * @param   string  $base_folder
+     * @param string $path             (file or folder)
+     * @param string $target_directory
+     * @param string $base_folder
      *
      * @since   1.0
-     * @return  string
+     * @return string
      */
     public function build_new_path($path, $target_directory, $base_folder)
     {
@@ -2863,10 +2894,10 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Utility method - force consistency in True and False
      *
-     * @param   bool  $variable
-     * @param   bool  $default
+     * @param bool $variable
+     * @param bool $default
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function setTorF($variable, $default = false)
