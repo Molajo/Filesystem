@@ -59,7 +59,7 @@ object, as follows:
     echo $adapter->fs->parent;
     echo 'etc';
 ```
-**Metadata about the Fileystem** filesystem_type, root, persistence, default_directory_permissions,
+**Metadata about the Filesystem** filesystem_type, root, persistence, default_directory_permissions,
 default_file_permissions, read_only.
 
 **Metadata about requested path** (be it a file or folder) path, is_absolute, absolute_path, exists, owner,
