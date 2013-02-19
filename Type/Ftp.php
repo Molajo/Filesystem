@@ -1,6 +1,6 @@
 <?php
 /**
- * Ftp Adapter for Filesystem
+ * Ftp Filesystem Type
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -9,6 +9,9 @@
 namespace Molajo\Filesystem\Type;
 
 defined('MOLAJO') or die;
+
+use Exception;
+use Molajo\Filesystem\Exception\FilesystemException;
 
 /**
  * Ftp Filesystem Type
@@ -21,17 +24,26 @@ defined('MOLAJO') or die;
 class Ftp extends FilesystemType
 {
     /**
-     * @var $temp for holding file name
+     * Temp - holds file name
+     *
+     * @var    string
+     * @since  1.0
      */
     private $temp;
 
     /**
-     * @var used when parsing ftprawlist data that is then used for determining metadata values
+     * Temp Files - used when parsing ftprawlist for metadata
+     *
+     * @var    string
+     * @since  1.0
      */
     private $temp_files = array();
 
     /**
-     * @var  $is_windows;
+     * Temp - used to identify Windows FTP Servers
+     *
+     * @var    $is_windows;
+     * @since  1.0
      */
     public $is_windows;
 
@@ -40,9 +52,9 @@ class Ftp extends FilesystemType
      *
      * @since   1.0
      */
-    public function __construct()
+    public function __construct($filesystem_type)
     {
-        parent::__construct();
+        parent::__construct($filesystem_type);
 
         $this->setFilesystemType('Ftp');
 
@@ -52,9 +64,9 @@ class Ftp extends FilesystemType
     /**
      * Method to connect and logon to a Ftp server
      *
-     * @param array $options
+     * @param   array  $options
      *
-     * @return void
+     * @return  void
      * @since   1.0
      */
     public function connect($options = array())
@@ -69,10 +81,11 @@ class Ftp extends FilesystemType
         }
 
         try {
-            if ($this->getConnectType() == 'ftps') {
+            if ($this->getConnectionType() == 'ftps') {
 
                 if (function_exists('ftp_ssl_connect')) {
-                    throw new InvalidArgumentException
+
+                    throw new FilesystemException
                     ('ftp_ssl_connect must be enabled in PHP to use SSL over Ftp');
                 }
 
@@ -162,9 +175,9 @@ class Ftp extends FilesystemType
     /**
      * Method to login to a server once connected
      *
-     * @return bool
+     * @return  bool
      * @since   1.0
-     * @throws \RuntimeException
+     * @throws  \RuntimeException
      */
     public function login()
     {
@@ -172,6 +185,7 @@ class Ftp extends FilesystemType
 
         if ($logged_in === true) {
         } else {
+
             throw new \RuntimeException
             ('Filesystem Adapter Ftp: Unable to login with Password: ' . $this->getPassword()
                 . ' Password: ' . $this->getPassword());
@@ -182,11 +196,12 @@ class Ftp extends FilesystemType
 
     /**
      * Adapter Interface Step 2:
+     *
      * Set the Path
      *
-     * @param string $path
+     * @param   string  $path
      *
-     * @return string
+     * @return  string
      * @since   1.0
      */
     public function setPath($path)
@@ -199,7 +214,7 @@ class Ftp extends FilesystemType
      *
      * Retrieves and sets metadata for the file specified in path
      *
-     * @return void
+     * @return  void
      * @since   1.0
      */
     public function getMetadata()
@@ -223,18 +238,20 @@ class Ftp extends FilesystemType
     /**
      * Returns the contents of the file identified by path
      *
-     * @return mixed
+     * @return  mixed
      * @since   1.0
-     * @throws FilesystemException when file does not exist
+     * @throws  FilesystemException when file does not exist
      */
     public function read()
     {
         if ($this->exists === false) {
+
             throw new FilesystemException
             ('Ftp Filesystem Read: File does not exist: ' . $this->path);
         }
 
         if ($this->is_file === false) {
+
             throw new FilesystemException
             ('Ftp Filesystem Read: Is not a file: ' . $this->path);
         }
@@ -251,674 +268,6 @@ class Ftp extends FilesystemType
 
         if ($this->data === false) {
             ('Ftp Filesystem Read: Empty File: ' . $this->path);
-        }
-
-        return;
-    }
-
-    /**
-     * Returns the contents of the files located at path directory
-     *
-     * @param bool   $recursive
-     * @param bool   $exclude_files
-     * @param bool   $exclude_folders
-     * @param array  $extension_list
-     * @param string $name_mask
-     *
-     * @return void
-     * @since   1.0
-     */
-    public function getList(
-        $recursive = false,
-        $exclude_files = false,
-        $exclude_folders = false,
-        $extension_list = array(),
-        $name_mask = null
-    ) {
-        if (is_file($this->path)) {
-            $this->read();
-
-            return;
-        }
-
-        if ($exclude_folders === true) {
-        } else {
-            foreach ($this->directories as $directory) {
-
-                if ($recursive === false) {
-                    if ($this->path == $directory) {
-                        $files[] = $directory;
-                    }
-                } else {
-                    $files[] = $directory;
-                }
-            }
-        }
-
-        if ($exclude_files === true) {
-        } else {
-            foreach ($this->files as $file) {
-
-                if ($recursive === false) {
-                    if ($this->path == pathinfo($file, PATHINFO_DIRNAME)) {
-                        $files[] = $file;
-                    }
-
-                } else {
-                    $files[] = $file;
-                }
-            }
-        }
-
-        if (count($files) > 0) {
-            asort($files);
-        }
-
-        $this->data = $files;
-
-        return;
-    }
-
-    /**
-     * For a file request, creates, appends to, replaces or truncates the file identified in path
-     * For a folder request, create is the only valid option
-     *
-     * @param string $file
-     * @param string $data
-     * @param bool   $replace
-     * @param bool   $append
-     * @param bool   $truncate
-     *
-     * @return void
-     * @since   1.0
-     * @throws FilesystemException
-     * @throws FilesystemException
-     */
-    public function write($file = '', $data = '', $replace = false, $append = false, $truncate = false)
-    {
-        if ($append === true) {
-            $this->append($file, $data, $replace, $append, $truncate);
-
-            return;
-        }
-
-        if ($truncate === true) {
-            $this->truncate($file, $data, $replace, $append, $truncate);
-
-            return;
-        }
-
-        if ($this->exists === false) {
-
-        } elseif ($this->is_file === true || $this->is_directory === true) {
-
-        } else {
-            throw new FilesystemException
-            ('Ftp Filesystem Write: must be directory or file: '
-                . $this->path . '/' . $file);
-        }
-
-        if (trim($data) == '' || strlen($data) == 0) {
-            if ($this->is_file === true) {
-
-                throw new FilesystemException
-                ('Ftp Filesystem: attempting to write no data to file: '
-                    . $this->path . '/' . $file);
-            }
-        }
-
-        if (trim($data) == '' || strlen($data) == 0) {
-            if ($file == '') {
-                throw new FilesystemException
-                ('Ftp Filesystem: attempting to write no data to file: '
-                    . $this->path . '/' . $file);
-
-            } else {
-                $this->createDirectory($this->path . '/' . $file);
-
-                return;
-            }
-        }
-
-        if (file_exists($this->path)) {
-        } else {
-            $this->createDirectory($this->path);
-        }
-
-        if ($this->isWriteable($this->path . '/' . $file) === false) {
-            throw new FilesystemException
-            ('Ftp Filesystem: file is not writable: ' . $this->path . '/' . $file);
-        }
-
-        if (file_exists($this->path . '/' . $file)) {
-
-            if ($replace === false) {
-                throw new FilesystemException
-                ('Ftp Filesystem: attempting to write to existing file: '
-                    . $this->path . '/' . $file);
-            }
-
-            \unlink($this->path . '/' . $file);
-        }
-
-        try {
-            \file_put_contents($this->path . '/' . $file, $data);
-
-        } catch (\Exception $e) {
-
-            throw new FilesystemException
-            ('Ftp Filesystem: error writing file ' . $this->path . '/' . $file);
-        }
-
-        return;
-    }
-
-    /**
-     * Append data to file identified in path using the data value
-     *
-     * @param string $file
-     * @param string $data
-     * @param bool   $replace
-     * @param bool   $append
-     * @param bool   $truncate
-     *
-     * @return void
-     * @throws FilesystemException
-     * @since   1.0
-     */
-    private function append($file = '', $data = '', $replace = false, $append = false, $truncate = false)
-    {
-        if ($this->exists === true) {
-        } elseif ($this->is_file === false) {
-        } else {
-            throw new FilesystemException
-            ('Ftp Filesystem: attempting to append to a folder, not a file ' . $this->path);
-        }
-
-        if ($replace === true || $truncate === true) {
-            throw new FilesystemException
-            ('Ftp Filesystem Write: replace and truncate must both be false for append action: '
-                . $this->path);
-        }
-
-        try {
-            \file_put_contents($this->path, $data, FILE_APPEND);
-
-        } catch (\Exception $e) {
-
-            throw new FilesystemException
-            ('Ftp Filesystem: error appending to file ' . $this->path);
-        }
-
-        return;
-    }
-
-    /**
-     * Truncate file identified in path using the data value
-     *
-     * @param string $file
-     * @param string $data
-     * @param bool   $replace
-     * @param bool   $append
-     * @param bool   $truncate
-     *
-     * @return void
-     * @throws FilesystemException
-     * @since   1.0
-     */
-    private function truncate($file = '', $data = '', $replace = false, $append = false, $truncate = false)
-    {
-        if ($this->exists === false) {
-            throw new FilesystemException
-            ('Ftp Filesystem: attempting to truncate file that does not exist. '
-                . $this->path);
-        }
-
-        if ($this->is_file === true) {
-        } else {
-            throw new FilesystemException
-            ('Ftp Filesystem: only a file can be truncated. ' . $this->path);
-        }
-
-        if ($replace === true || $append === true) {
-            throw new FilesystemException
-            ('Ftp Filesystem Write: replace and append must both be false for truncate action: '
-                . $this->path . '/' . $file);
-        }
-
-        if (trim($data) == '' || strlen($data) == 0) {
-        } else {
-            throw new FilesystemException
-            ('Ftp Filesystem: data cannot be defined for truncate action. ' . $this->path);
-        }
-
-        if ($this->isWriteable($this->path) === false) {
-            throw new FilesystemException
-            ('Ftp Filesystem: file is not writable and cannot be truncated: ' . $this->path);
-        }
-
-        try {
-            $fp = \fopen($this->path, "w");
-            fclose($fp);
-
-        } catch (\Exception $e) {
-
-            throw new FilesystemException
-            ('Ftp Filesystem: error truncating file ' . $this->path);
-        }
-
-        return;
-    }
-
-    /**
-     * Create Directory
-     *
-     * @param bool $path
-     *
-     * @return void
-     * @since   1.0
-     * @throws FilesystemException
-     */
-    protected function createDirectory($path)
-    {
-        if (file_exists($path)) {
-            return;
-        }
-        try {
-            mkdir($path, $this->default_directory_permissions, true);
-
-        } catch (\Exception $e) {
-
-            throw new FilesystemException
-            ('Filesystem Create Directory: error creating directory: ' . $path);
-        }
-
-        return;
-    }
-
-    /**
-     * Deletes the file identified in path.
-     * Empty subdirectories are removed if $delete_subdirectories is true
-     *
-     * @param bool $delete_subdirectories default true
-     *
-     * @return void
-     * @since   1.0
-     * @throws FilesystemException
-     * @throws FilesystemException
-     */
-    public function delete($delete_subdirectories = true)
-    {
-        if ($this->is_root === true) {
-            throw new FilesystemException
-            ('Ftp Filesystem Delete: Request to delete root is not allowed' . $this->path);
-        }
-
-        if (file_exists($this->path)) {
-        } else {
-
-            throw new FilesystemException
-            ('Ftp Filesystem Delete: File not found ' . $this->path);
-        }
-
-        if ($this->is_writable === false) {
-
-            throw new FilesystemException
-            ('Ftp Filesystem Delete: No write access to file/path: ' . $this->path);
-        }
-
-        try {
-
-            if (file_exists($this->path)) {
-            } else {
-                return;
-            }
-
-            $this->_deleteDiscoveryFilesArray();
-
-            $this->_deleteDiscoveryDirectoriesArray();
-
-        } catch (\Exception $e) {
-
-            throw new FilesystemException
-            ('Ftp Filesystem Delete: failed for: ' . $this->path);
-        }
-
-        return;
-    }
-
-    /**
-     * Common code for processing the discovery File Array
-     *
-     * @return void
-     * @since   1.0
-     */
-    private function _deleteDiscoveryFilesArray()
-    {
-        if (count($this->files) > 0) {
-            foreach ($this->files as $file) {
-                unlink($file);
-            }
-        }
-
-        return;
-    }
-
-    /**
-     * Common code for processing the discovery File Array
-     *
-     * @return void
-     * @since   1.0
-     */
-    private function _deleteDiscoveryDirectoriesArray()
-    {
-        if (count($this->directories) > 0) {
-            arsort($this->directories);
-            foreach ($this->directories as $directory) {
-                rmdir($directory);
-            }
-        }
-
-        return;
-    }
-
-    /**
-     * Copies the file identified in $path to the target_adapter in the new_parent_name_directory,
-     *  replacing existing contents, if indicated, and creating directories needed, if indicated
-     *
-     * Note: $target_filesystem_type is an instance of the Filesystem exclusive to the target
-     *  portion of the copy
-     *
-     * @param string $target_directory
-     * @param string $target_name
-     * @param bool   $replace
-     * @param string $target_filesystem_type
-     *
-     * @return void
-     * @since   1.0
-     */
-    public function copy($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '')
-    {
-        if ($target_filesystem_type == '') {
-            $target_filesystem_type = $this->getFilesystemType();
-        }
-
-        $this->moveOrCopy(
-            $target_directory,
-            $target_name,
-            $replace,
-            $target_filesystem_type,
-            'copy'
-        );
-
-        return;
-    }
-
-    /**
-     * Moves the file identified in path to the location identified in the new_parent_name_directory
-     *  replacing existing contents, if indicated, and creating directories needed, if indicated
-     *
-     * @param string $target_directory
-     * @param string $target_name
-     * @param bool   $replace
-     * @param string $target_filesystem_type
-     *
-     * @return bool
-     * @since   1.0
-     */
-    public function move($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '')
-    {
-        if ($target_filesystem_type == '') {
-            $target_filesystem_type = $this->getFilesystemType();
-        }
-
-        $this->moveOrCopy(
-            $target_directory,
-            $target_name,
-            $replace,
-            $target_filesystem_type,
-            'move'
-        );
-
-        return;
-    }
-
-    /**
-     * Copies the file identified in $path to the $target_directory for the $target_filesystem_type adapter
-     *  replacing existing contents and creating directories needed, if indicated
-     *
-     * Note: $target_filesystem_type is an instance of the Filesystem
-     *
-     * @param string $target_directory
-     * @param string $target_name
-     * @param bool   $replace
-     * @param string $target_filesystem_type
-     * @param string $move_or_copy
-     *
-     * @return void
-     * @since   1.0
-     * @throws FilesystemException
-     */
-    public function moveOrCopy
-    (
-        $target_directory,
-        $target_name = '',
-        $replace = false,
-        $target_filesystem_type,
-        $move_or_copy = 'copy'
-    ) {
-
-        /** Defaults */
-        if ($target_directory == '') {
-            $target_directory = $this->parent;
-        }
-
-        if ($target_name == '' && $this->is_file) {
-            if ($target_directory == $this->parent) {
-                throw new FilesystemException
-                ('Ftp Filesystem ' . $move_or_copy
-                    . ': Must specify new file name when using the same target path: '
-                    . $this->path);
-            }
-            $target_name = $this->name;
-        }
-
-        if ($this->is_file === true) {
-            $base_folder = $this->parent;
-        } else {
-            $base_folder = $this->path;
-        }
-
-        /** Edits */
-        if (file_exists($this->path)) {
-        } else {
-            throw new FilesystemException
-            ('Ftp Filesystem moveOrCopy: failed. This path does not exist: '
-                . $this->path . ' Specified as source for ' . $move_or_copy
-                . ' operation to ' . $target_directory);
-        }
-
-        if (file_exists($target_directory)) {
-        } else {
-            throw new FilesystemException
-            ('Ftp Filesystem moveOrCopy: failed. This path does not exist: '
-                . $this->path . ' Specified as destination for ' . $move_or_copy
-                . ' to ' . $target_directory);
-        }
-
-        if (is_writeable($target_directory) === false) {
-            throw new FilesystemException
-            ('Ftp Filesystem Delete: No write access to file/path: ' . $target_directory);
-        }
-
-        if ($move_or_copy == 'move') {
-            if (is_writeable($this->path) === false) {
-                throw new FilesystemException
-                ('Ftp Filesystem Delete: No write access for moving source file/path: '
-                    . $move_or_copy);
-            }
-        }
-
-        if ($this->is_file === true || $target_name == '') {
-
-        } else {
-            if (is_dir($target_directory . '/' . $target_name)) {
-
-            } else {
-
-                new fsAdapter('write', $target_directory, $target_filesystem_type,
-                    $this->options = array('file' => $target_name)
-                );
-            }
-            $target_directory = $target_directory . '/' . $target_name;
-            $target_name      = '';
-        }
-
-        /** Create new target directories from source directories list */
-        if (count($this->directories) > 0) {
-
-            asort($this->directories);
-
-            $parent   = '';
-            $new_node = '';
-            $new_path = '';
-
-            foreach ($this->directories as $directory) {
-
-                $new_path = $this->build_new_path($directory, $target_directory, $base_folder);
-
-                if (is_dir($new_path)) {
-
-                } else {
-
-                    $parent   = dirname($new_path);
-                    $new_node = basename($new_path);
-
-                    new fsAdapter('write', $parent, $target_filesystem_type,
-                        $this->options = array('file' => $new_node)
-                    );
-                }
-
-                $parent   = '';
-                $new_node = '';
-                $new_path = '';
-            }
-        }
-
-        /** Copy files now that directories are in place */
-        if (count($this->files) > 0) {
-
-            $path_name = '';
-            $file_name = '';
-
-            foreach ($this->files as $file) {
-
-                $new_path = $this->build_new_path($file, $target_directory, $base_folder);
-
-                /** Single file copy or move */
-                if ($this->is_file === true) {
-                    $file_name = $target_name;
-                } else {
-                    $file_name = basename($file);
-                }
-
-                /** Source */
-                $adapter = new fsAdapter('Read', $file);
-                $data    = $adapter->fs->data;
-
-                /** Write Target */
-                new fsAdapter('Write', $new_path, $target_filesystem_type,
-                    $this->options = array(
-                        'file'    => $file_name,
-                        'replace' => $replace,
-                        'data'    => $data,
-                    )
-                );
-
-                $path_name = '';
-                $file_name = '';
-            }
-        }
-
-        /** For move, remove the files and folders just copied */
-        if ($move_or_copy == 'move') {
-            $this->_deleteDiscoveryFilesArray();
-            $this->_deleteDiscoveryDirectoriesArray();
-        }
-
-        return;
-    }
-
-    /**
-     * Convert the path into a path relative to the path passed in
-     *
-     * @param string $relative_to_this_path
-     *
-     * @return void
-     * @throws FilesystemException
-     * @since   1.0
-     */
-    public function getRelativePath($relative_to_this_path = '')
-    {
-        $hold   = getcwd();
-        $target = $this->normalise($relative_to_this_path);
-        chdir($target);
-        $this->data = realpath($this->path);
-        chdir($hold);
-
-        return;
-    }
-
-    /**
-     * Change the file mode for user for read, write, execute access
-     *
-     * @param int $permission
-     *
-     * @return void
-     * @throws FilesystemException
-     * @since   1.0
-     */
-    public function changePermission($permission)
-    {
-        $permission = octdec(str_pad($permission, 4, '0', STR_PAD_LEFT));
-
-        try {
-            chmod($this->path, $permission);
-
-        } catch (\Exception $e) {
-
-            throw new FilesystemException
-            ('Ftp Filesystem: changePermission method failed for ' . $permission);
-        }
-    }
-
-    /**
-     * Update the touch time and/or the access time for the directory or file identified in the path
-     *
-     * @param int $time
-     * @param int $atime
-     *
-     * @return void
-     * @throws FilesystemException
-     * @since   1.0
-     */
-    public function touch($time = null, $atime = null)
-    {
-        if ($time == '' || $time === null || $time == 0) {
-            $time = $this->getDateTime($time);
-        }
-
-        try {
-            if (touch($this->path, $time)) {
-                echo $atime . ' modification time has been changed to present time';
-            } else {
-                echo 'Sorry, could not change modification time of ' . $this->path;
-            }
-
-        } catch (\Exception $e) {
-
-            throw new FilesystemException
-            ('Ftp Filesystem: is_readable method failed for ' . $this->path);
         }
 
         return;
@@ -988,45 +337,6 @@ class Ftp extends FilesystemType
     }
 
     /**
-     * Implemented in isAbsolutePath
-     *
-     * @return void
-     * @since   1.0
-     * @throws FilesystemException
-     */
-    public function getAbsolutePath()
-    {
-        return;
-    }
-
-    /**
-     * Indicates whether the given path is absolute or not
-     *
-     * Relative path - describes how to get from a particular directory to a file or directory
-     * Absolute Path - relative path from the root directory, prepended with a '/'.
-     *
-     * @return void
-     * @since   1.0
-     */
-    public function isAbsolutePath()
-    {
-        if ($this->exists === false) {
-            $this->is_absolute_path = null;
-
-            return;
-        }
-
-        if (substr($this->path, 0, 1) == '/') {
-            $this->is_absolute_path = true;
-            $this->absolute_path    = $this->path;
-        } else {
-            $this->is_absolute_path = false;
-        }
-
-        return;
-    }
-
-    /**
      * Returns true or false indicator as to whether or not the path is a directory
      *
      * @ - added to prevent PHP from throwing a warning if it is a file, not a directory
@@ -1068,7 +378,7 @@ class Ftp extends FilesystemType
 
         try {
 
-            if (@ftp_get($this->getConnection(), $this->temp, $this->path, Ftp_ASCII, 0)) {
+            if (ftp_get($this->getConnection(), $this->temp, $this->path, FTP_ASCII, 0)) {
                 $this->is_file = true;
             }
 
