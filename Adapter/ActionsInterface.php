@@ -10,6 +10,8 @@ namespace Molajo\Filesystem\Adapter;
 
 defined('MOLAJO') or die;
 
+use DateTime;
+
 /**
  * Actions Interface for Filesystem
  *
@@ -125,11 +127,11 @@ interface ActionsInterface
     /**
      * Update the modification time and access time (touch) for the directory or file identified in the path
      *
-     * @param null $modification_time
-     * @param null $access_time
+     * @param int $modification_time
+     * @param int $access_time
      *
      * @return void
      * @since   1.0
      */
-    public function touch($modification_time = null, $access_time = null);
+    public function touch($modification_time, $access_time);
 }

@@ -1913,38 +1913,37 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
 
             case 'changepermission':
 
-                $permission = null;
+                $mode = null;
 
-                if (isset($this->options['permission'])) {
-                    $permission = $this->options['permission'];
+                if (isset($this->options['mode'])) {
+                    $mode = $this->options['mode'];
                 }
 
-                if ($permission === null) {
+                if ($mode === null) {
                     throw new FilesystemException
                     ($this->getFilesystemType(
-                    ) . ' Filesystem doAction Method ' . $action . ' no permission value provided.');
+                    ) . ' Filesystem doAction Method ' . $action . ' no mode value provided.');
                 }
 
-                $this->changePermission((int)$permission);
+                $this->changePermission((int)$mode);
 
                 break;
 
-
             case 'touch':
 
-                $time = null;
+                $modification_time = null;
 
-                if (isset($this->options['time'])) {
-                    $time = (int)$this->options['time'];
+                if (isset($this->options['modification_time'])) {
+                    $modification_time = (int)$this->options['modification_time'];
                 }
 
-                $atime = null;
+                $access_time = null;
 
-                if (isset($this->options['atime'])) {
-                    $atime = (int)$this->options['atime'];
+                if (isset($this->options['access_time'])) {
+                    $access_time = (int)$this->options['access_time'];
                 }
 
-                $this->touch($time, $atime);
+                $this->touch($modification_time, $access_time);
 
                 break;
 
@@ -2641,24 +2640,32 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Change the file mode for user for read, write, execute access
      *
-     * @param int $permission
+     * @param int $mode
      *
      * @return void
      * @throws FilesystemException
      * @since   1.0
      * @throws \Molajo\Filesystem\Exception\FilesystemException
      */
-    public function changePermission($permission)
+    public function changePermission($mode)
     {
         try {
-            chmod($this->path, octdec(str_pad($permission, 4, '0', STR_PAD_LEFT)));
+            chmod($this->path, octdec(str_pad($mode, 4, '0', STR_PAD_LEFT)));
+
+
+            if ($mode === octdec(substr(sprintf('%o', fileperms($this->path)), -4))) {
+            } else {
+                throw new Exception
+                    ('File Permissions did not change to ' . $mode);
+            }
+
 
         } catch (Exception $e) {
 
             throw new FilesystemException
-            (ucfirst(strtolower($this->getFilesystemType()))
-                . ' Filesystem: changePermission method failed for Path: ' . $this->path
-                . ' Permissions: ' . octdec(str_pad($permission, 4, '0', STR_PAD_LEFT)));
+                (ucfirst(strtolower($this->getFilesystemType()))
+                    . ' Filesystem: changePermission method failed for Path: ' . $this->path
+                    . ' Permissions: ' . octdec(str_pad($mode, 4, '0', STR_PAD_LEFT)));
         }
     }
 
@@ -2672,27 +2679,32 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * @throws FilesystemException
      * @since   1.0
      */
-    public function touch($modification_time = null, $access_time = null)
+    public function touch($modification_time, $access_time)
     {
         if ($modification_time == '' || $modification_time === null || $modification_time == 0) {
-            $modification_time = $this->getDateTime($modification_time, $this->getTimezone());
+            $modification_time = null;
         }
 
         if ($access_time == '' || $access_time === null || $access_time == 0) {
-            $access_time = $this->getDateTime($access_time, $this->getTimezone());
+            $access_time = null;
         }
 
         try {
             touch($this->path, $modification_time, $access_time);
+
+            $hold = stat($this->path);
+
+            if ($modification_time == $hold['mtime']) {
+            } else {
+                throw new Exception ('Filesystem: Touch Failed.');
+            }
 
         } catch (Exception $e) {
 
             throw new FilesystemException
 
             (ucfirst(strtolower($this->getFilesystemType()))
-                . ' Filesystem: touch method failed for Path: ' . $this->path
-                . ' Modification Time: ' . $modification_time->format('Y/m/d H:i:s')
-                . ' Access Time: ' . $access_time->format('Y/m/d H:i:s'));
+                . ' Filesystem: touch method failed for Path: ' . $this->path . ' ' . $e->getMessage());
         }
 
         return;

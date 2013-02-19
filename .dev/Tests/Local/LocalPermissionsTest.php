@@ -1,6 +1,9 @@
 <?php
 namespace Local;
 
+use DateTime;
+use DateTimeZone;
+use DateInterval;
 use Molajo\Filesystem\Adapter as fsAdapter;
 
 /**
@@ -24,27 +27,129 @@ class LocalPermissionsTest extends Data
      */
     public function testPermissionsTTTSuccess()
     {
+        $mode          = 0644;
         $this->options = array(
-            'change_readable'   => true,
-            'change_writable'   => true,
-            'change_executable' => true
+            'mode' => $mode
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
         $this->action  = 'changePermission';
 
-        var_dump(stat($this->path ));
-        $stat = stat($this->path );
-        print_r(posix_getpwuid($stat['uid']));
-        die;
-
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
+
+        $this->assertEquals('Local', $adapter->fs->filesystem_type);
+
+        $this->assertEquals(
+            $mode,
+            octdec(substr(sprintf('%o', fileperms($this->path)), - 4))
+        );
+
+
+        $this->assertEquals('Local', $adapter->fs->filesystem_type);
+
         $this->assertEquals(true, is_readable($this->path));
-        $this->assertEquals(true, is_writeable($this->path));
-        $this->assertEquals(true, is_executable($this->path));
+        $this->assertEquals(false, is_writeable($this->path));
+        $this->assertEquals(false, is_executable($this->path));
 
         return;
     }
+
+    /**
+     * @covers Molajo\Filesystem\Type\Local::changePermission
+     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     */
+    public function testPermissionsFail()
+    {
+        $mode          = 99999;
+        $this->options = array(
+            'mode' => $mode
+        );
+        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
+        $this->action  = 'changePermission';
+
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+
+        return;
+    }
+
+    /**
+     * @covers Molajo\Filesystem\Type\Local::Touch
+     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     */
+    public function testTouchSuccess()
+    {
+        $timezone = new DateTimeZone('GMT');
+        $datetime = new DateTime(null, $timezone);
+
+        $datetime->sub(new DateInterval("PT60M"));
+        $m = $datetime->format("Y/m/d m:i:s");
+        $modification_time = strtotime($m);
+
+        $datetime->add(new DateInterval("PT30M"));
+        $a = $datetime->format("Y/m/d m:i:s");
+        $access_time = strtotime($a);
+
+        $this->options = array(
+            'modification_time' => $modification_time,
+            'access_time'       => $access_time
+        );
+
+        $this->path   = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
+        $this->action = 'touch';
+
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+
+        $hold = stat($this->path);
+        $new_atime = $hold['atime'];
+        $new_mtime = $hold['mtime'];
+
+        $this->assertEquals($new_mtime, $new_mtime);
+
+        $this->assertEquals($new_atime, $new_atime);
+
+        return;
+    }
+
+    /**
+     * @covers Molajo\Filesystem\Type\Local::touch
+     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     */
+    public function testTouchFail()
+    {
+        $timezone = new DateTimeZone('GMT');
+        $datetime = new DateTime(null, $timezone);
+
+        $datetime->sub(new DateInterval("PT60M"));
+        $m = $datetime->format("Y/m/d m:i:s");
+        $modification_time = strtotime($m);
+
+        $datetime->add(new DateInterval("PT30M"));
+        $a = $datetime->format("Y/m/d m:i:s");
+        $access_time = strtotime($a);
+
+        $modification_time = 999999999;
+
+        $this->options = array(
+            'modification_time' => $modification_time,
+            'access_time'       => $access_time
+        );
+
+        $this->path   = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
+        $this->action = 'touch';
+
+        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+
+        $hold = stat($this->path);
+        $new_atime = $hold['atime'];
+        $new_mtime = $hold['mtime'];
+
+        $this->assertEquals($modification_time, $new_mtime);
+
+        $this->assertEquals($access_time, $new_atime);
+
+        return;
+    }
+
 
     /**
      * Tears down the fixture, for example, closes a network connection.
