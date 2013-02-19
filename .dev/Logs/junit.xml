@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="38" assertions="156" failures="0" errors="4" time="6.458180">
+    <testsuite name="Local" tests="27" assertions="65" failures="0" errors="0" time="0.482400">
+      <testsuite name="Local\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalCopyTest.php" namespace="Local" fullPackage="Local" tests="5" assertions="9" failures="0" errors="0" time="0.147952">
+        <testcase name="testCopySuccessfulSingleFileBlankDirectory" class="Local\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalCopyTest.php" line="32" assertions="2" time="0.042872"/>
+        <testcase name="testCopySuccessfulSingleFile" class="Local\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalCopyTest.php" line="53" assertions="2" time="0.024119"/>
+        <testcase name="testCopySingleFolder" class="Local\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalCopyTest.php" line="76" assertions="2" time="0.013461"/>
+        <testcase name="testCopyMultipleFolder" class="Local\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalCopyTest.php" line="99" assertions="2" time="0.056781"/>
+        <testcase name="testCopyNotAFile" class="Local\LocalCopyTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalCopyTest.php" line="123" assertions="1" time="0.010719"/>
+      </testsuite>
+      <testsuite name="Local\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalDeleteTest.php" namespace="Local" fullPackage="Local" tests="5" assertions="9" failures="0" errors="0" time="0.064241">
+        <testcase name="testSuccessfulDeleteSingleFile" class="Local\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalDeleteTest.php" line="32" assertions="2" time="0.012769"/>
+        <testcase name="testDeleteSingleFolder" class="Local\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalDeleteTest.php" line="51" assertions="2" time="0.015060"/>
+        <testcase name="testDeleteMultipleFolderOnlyFiles" class="Local\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalDeleteTest.php" line="70" assertions="2" time="0.012456"/>
+        <testcase name="testDeleteMultipleFolderDeleteAll" class="Local\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalDeleteTest.php" line="90" assertions="2" time="0.011701"/>
+        <testcase name="testNotAFile" class="Local\LocalDeleteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalDeleteTest.php" line="111" assertions="1" time="0.012255"/>
+      </testsuite>
+      <testsuite name="Local\LocalListTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalListTest.php" namespace="Local" fullPackage="Local" tests="4" assertions="4" failures="0" errors="0" time="0.051844">
+        <testcase name="testListDirectory" class="Local\LocalListTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalListTest.php" line="32" assertions="1" time="0.012686"/>
+        <testcase name="testListExcludeFiles" class="Local\LocalListTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalListTest.php" line="82" assertions="1" time="0.014528"/>
+        <testcase name="testListExcludeFolders" class="Local\LocalListTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalListTest.php" line="107" assertions="1" time="0.013359"/>
+        <testcase name="testListMask" class="Local\LocalListTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalListTest.php" line="132" assertions="1" time="0.011271"/>
+      </testsuite>
+      <testsuite name="Local\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalMoveTest.php" namespace="Local" fullPackage="Local" tests="5" assertions="9" failures="0" errors="0" time="0.110599">
+        <testcase name="testSuccessfulMoveSingleFileBlankDirectory" class="Local\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalMoveTest.php" line="30" assertions="2" time="0.012308"/>
+        <testcase name="testSuccessfulMoveSingleFile" class="Local\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalMoveTest.php" line="54" assertions="2" time="0.018977"/>
+        <testcase name="testMoveSingleFolder" class="Local\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalMoveTest.php" line="77" assertions="2" time="0.014083"/>
+        <testcase name="testMoveMultipleFolder" class="Local\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalMoveTest.php" line="100" assertions="2" time="0.052379"/>
+        <testcase name="testNotAFile" class="Local\LocalMoveTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalMoveTest.php" line="124" assertions="1" time="0.012852"/>
+      </testsuite>
+      <testsuite name="Local\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalReadTest.php" namespace="Local" fullPackage="Local" tests="3" assertions="25" failures="0" errors="0" time="0.039577">
+        <testcase name="testReadSuccessful" class="Local\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalReadTest.php" line="30" assertions="23" time="0.013031"/>
+        <testcase name="testReadUnsuccessful" class="Local\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalReadTest.php" line="76" assertions="1" time="0.012031"/>
+        <testcase name="testReadNotAFile" class="Local\LocalReadTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalReadTest.php" line="88" assertions="1" time="0.014515"/>
+      </testsuite>
+      <testsuite name="Local\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalWriteTest.php" namespace="Local" fullPackage="Local" tests="5" assertions="9" failures="0" errors="0" time="0.068187">
+        <testcase name="testSuccessfulWrite" class="Local\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalWriteTest.php" line="28" assertions="2" time="0.015530"/>
+        <testcase name="testSuccessfulRewrite" class="Local\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalWriteTest.php" line="56" assertions="2" time="0.013416"/>
+        <testcase name="testUnsuccessfulRewrite" class="Local\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalWriteTest.php" line="86" assertions="1" time="0.013042"/>
+        <testcase name="testWriteSingleFolder" class="Local\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalWriteTest.php" line="106" assertions="2" time="0.012147"/>
+        <testcase name="testWriteMultipleFolders" class="Local\LocalWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Local/LocalWriteTest.php" line="133" assertions="2" time="0.014052"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="Ftp" tests="11" assertions="91" failures="0" errors="4" time="5.975780">
+      <testsuite name="Ftp\FtpConnectTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpConnectTest.php" namespace="Ftp" fullPackage="Ftp" tests="3" assertions="43" failures="0" errors="0" time="5.207207">
+        <testcase name="testSuccessfulConnection" class="Ftp\FtpConnectTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpConnectTest.php" line="32" assertions="41" time="0.119794"/>
+        <testcase name="testUnsuccessfulConnection" class="Ftp\FtpConnectTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpConnectTest.php" line="113" assertions="1" time="0.160740"/>
+        <testcase name="testUnsuccessfulLogin" class="Ftp\FtpConnectTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpConnectTest.php" line="137" assertions="1" time="4.926673"/>
+      </testsuite>
+      <testsuite name="Ftp\FtpReadTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpReadTest.php" namespace="Ftp" fullPackage="Ftp" tests="3" assertions="43" failures="0" errors="0" time="0.136717">
+        <testcase name="testReadSuccessful" class="Ftp\FtpReadTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpReadTest.php" line="29" assertions="41" time="0.115872"/>
+        <testcase name="testReadUnsuccessful" class="Ftp\FtpReadTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpReadTest.php" line="110" assertions="1" time="0.011012"/>
+        <testcase name="testReadNotAFile" class="Ftp\FtpReadTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpReadTest.php" line="122" assertions="1" time="0.009833"/>
+      </testsuite>
+      <testsuite name="Ftp\FtpWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpWriteTest.php" namespace="Ftp" fullPackage="Ftp" tests="5" assertions="5" failures="0" errors="4" time="0.631855">
+        <testcase name="testSuccessfulWrite" class="Ftp\FtpWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpWriteTest.php" line="28" assertions="1" time="0.176394">
+          <error type="Molajo\Filesystem\Exception\FilesystemException">Ftp\FtpWriteTest::testSuccessfulWrite
+Molajo\Filesystem\Exception\FilesystemException: FTP Filesystem isFile: Failed ftp_fget(): I can only retrieve regular files
+
+/Users/amystephen/Sites/Filesystem/Type/Ftp.php:639
+/Users/amystephen/Sites/Filesystem/Type/FilesystemType.php:1160
+/Users/amystephen/Sites/Filesystem/Type/Ftp.php:223
+/Users/amystephen/Sites/Filesystem/Adapter.php:131
+/Users/amystephen/Sites/Filesystem/Adapter.php:60
+/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpWriteTest.php:56
+</error>
+        </testcase>
+        <testcase name="testSuccessfulRewrite" class="Ftp\FtpWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpWriteTest.php" line="66" assertions="1" time="0.114317">
+          <error type="Molajo\Filesystem\Exception\FilesystemException">Ftp\FtpWriteTest::testSuccessfulRewrite
+Molajo\Filesystem\Exception\FilesystemException: FTP Filesystem isFile: Failed ftp_fget(): I can only retrieve regular files
+
+/Users/amystephen/Sites/Filesystem/Type/Ftp.php:639
+/Users/amystephen/Sites/Filesystem/Type/FilesystemType.php:1160
+/Users/amystephen/Sites/Filesystem/Type/Ftp.php:223
+/Users/amystephen/Sites/Filesystem/Adapter.php:131
+/Users/amystephen/Sites/Filesystem/Adapter.php:60
+/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpWriteTest.php:95
+</error>
+        </testcase>
+        <testcase name="testUnsuccessfulRewrite" class="Ftp\FtpWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpWriteTest.php" line="106" assertions="1" time="0.115091"/>
+        <testcase name="testWriteSingleFolder" class="Ftp\FtpWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpWriteTest.php" line="136" assertions="1" time="0.112849">
+          <error type="Molajo\Filesystem\Exception\FilesystemException">Ftp\FtpWriteTest::testWriteSingleFolder
+Molajo\Filesystem\Exception\FilesystemException: FTP Filesystem isFile: Failed ftp_fget(): I can only retrieve regular files
+
+/Users/amystephen/Sites/Filesystem/Type/Ftp.php:639
+/Users/amystephen/Sites/Filesystem/Type/FilesystemType.php:1160
+/Users/amystephen/Sites/Filesystem/Type/Ftp.php:223
+/Users/amystephen/Sites/Filesystem/Adapter.php:131
+/Users/amystephen/Sites/Filesystem/Adapter.php:60
+/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpWriteTest.php:160
+</error>
+        </testcase>
+        <testcase name="testWriteMultipleFolders" class="Ftp\FtpWriteTest" file="/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpWriteTest.php" line="173" assertions="1" time="0.113204">
+          <error type="Molajo\Filesystem\Exception\FilesystemException">Ftp\FtpWriteTest::testWriteMultipleFolders
+Molajo\Filesystem\Exception\FilesystemException: FTP Filesystem isFile: Failed ftp_fget(): Can't open /Data/OneMoreFolder/Cats/love/Dogs: No such file or directory
+
+/Users/amystephen/Sites/Filesystem/Type/Ftp.php:639
+/Users/amystephen/Sites/Filesystem/Type/FilesystemType.php:1160
+/Users/amystephen/Sites/Filesystem/Type/Ftp.php:223
+/Users/amystephen/Sites/Filesystem/Adapter.php:131
+/Users/amystephen/Sites/Filesystem/Adapter.php:60
+/Users/amystephen/Sites/Filesystem/.dev/Tests/Ftp/FtpWriteTest.php:197
+</error>
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>
