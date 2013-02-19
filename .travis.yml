@@ -13,3 +13,4 @@ notifications:
 
 script:
  - phpunit  -c .dev/phpunit.xml
+ - phpdoc -d . -t .dev\Docs

@@ -27,19 +27,29 @@ class FtpWriteTest extends Data
      */
     public function testSuccessfulWrite()
     {
-        if (file_exists(BASE_FOLDER . '/.dev/Tests' . '/' . 'test2.txt')) {
-            \unlink(BASE_FOLDER . '/.dev/Tests' . '/' . 'test2.txt');
+        if (file_exists('' . '/' . 'test2.txt')) {
+            \unlink('' . '/' . 'test2.txt');
         }
 
         $temp = 'test2.txt';
 
         $this->options = array(
+            'username'          => 'test',
+            'password'          => 'test',
+            'host'              => 'localhost',
+            'port'              => '21',
+            'timeout'           => '15',
+            'ftp_mode'          => FTP_ASCII,
+            'passive_mode'      => true,
+            'initial_directory' => 'Data',
+            'persistence'       => false,
+
             'file'    => $temp,
             'replace' => false,
             'data'    => 'Here are the words to write.',
         );
 
-        $this->path = BASE_FOLDER . '/.dev/Tests';
+        $this->path = '/';
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
@@ -58,12 +68,22 @@ class FtpWriteTest extends Data
         $temp = 'test2.txt';
 
         $this->options = array(
+            'username'          => 'test',
+            'password'          => 'test',
+            'host'              => 'localhost',
+            'port'              => '21',
+            'timeout'           => '15',
+            'ftp_mode'          => FTP_ASCII,
+            'passive_mode'      => true,
+            'initial_directory' => 'Data',
+            'persistence'       => false,
+
             'file'    => $temp,
             'replace' => true,
             'data'    => 'Here are the words to write.',
         );
 
-        $this->path = BASE_FOLDER . '/.dev/Tests';
+        $this->path = '/';
 
         if (file_exists($this->path . '/' . $temp)) {
         } else {
@@ -88,12 +108,22 @@ class FtpWriteTest extends Data
         $temp = 'test2.txt';
 
         $this->options = array(
+            'username'          => 'test',
+            'password'          => 'test',
+            'host'              => 'localhost',
+            'port'              => '21',
+            'timeout'           => '15',
+            'ftp_mode'          => FTP_ASCII,
+            'passive_mode'      => true,
+            'initial_directory' => 'Data',
+            'persistence'       => false,
+
             'file'    => $temp,
             'replace' => false,
             'data'    => 'Here are the words to write.',
         );
 
-        $this->path = BASE_FOLDER . '/.dev/Tests';
+        $this->path = '/';
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
@@ -108,12 +138,22 @@ class FtpWriteTest extends Data
         $temp = 'OneMoreFolder';
 
         $this->options = array(
+            'username'          => 'test',
+            'password'          => 'test',
+            'host'              => 'localhost',
+            'port'              => '21',
+            'timeout'           => '15',
+            'ftp_mode'          => FTP_ASCII,
+            'passive_mode'      => true,
+            'initial_directory' => 'Data',
+            'persistence'       => false,
+
             'file'    => $temp,
             'replace' => false,
             'data'    => ''
         );
 
-        $this->path = BASE_FOLDER . '/.dev/Tests/Data';
+        $this->path = '/Data';
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
@@ -135,12 +175,22 @@ class FtpWriteTest extends Data
         $temp = 'sometimes.txt';
 
         $this->options = array(
+            'username'          => 'test',
+            'password'          => 'test',
+            'host'              => 'localhost',
+            'port'              => '21',
+            'timeout'           => '15',
+            'ftp_mode'          => FTP_ASCII,
+            'passive_mode'      => true,
+            'initial_directory' => 'Data',
+            'persistence'       => false,
+
             'file'    => $temp,
             'replace' => false,
             'data'    => 'Poop'
         );
 
-        $this->path = BASE_FOLDER . '/.dev/Tests/Data/OneMoreFolder/Cats/love/Dogs';
+        $this->path = '/Data/OneMoreFolder/Cats/love/Dogs';
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
