@@ -39,8 +39,7 @@ class Local extends FilesystemType
      *
      * Method to connect to a Local server
      *
-     * @param string $type
-     * @param array  $options
+     * @param array $options
      *
      * @return void
      * @since   1.0

@@ -36,14 +36,12 @@ class LocalPermissionsTest extends Data
 
         $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
 
-
         $this->assertEquals('Local', $adapter->fs->filesystem_type);
 
         $this->assertEquals(
             $mode,
             octdec(substr(sprintf('%o', fileperms($this->path)), - 4))
         );
-
 
         $this->assertEquals('Local', $adapter->fs->filesystem_type);
 

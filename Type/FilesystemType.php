@@ -1064,7 +1064,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      */
     public function getTimeout()
     {
-        return (int)$this->timeout;
+        return (int) $this->timeout;
     }
 
     /**
@@ -1848,7 +1848,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
                 $delete_subdirectories = true;
 
                 if (isset($this->options['delete_subdirectories'])) {
-                    $delete_subdirectories = (int)$this->options['delete_subdirectories'];
+                    $delete_subdirectories = (int) $this->options['delete_subdirectories'];
                 }
 
                 $delete_subdirectories = $this->setTorF($delete_subdirectories, true);
@@ -1925,7 +1925,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
                     ) . ' Filesystem doAction Method ' . $action . ' no mode value provided.');
                 }
 
-                $this->changePermission((int)$mode);
+                $this->changePermission((int) $mode);
 
                 break;
 
@@ -1934,13 +1934,13 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
                 $modification_time = null;
 
                 if (isset($this->options['modification_time'])) {
-                    $modification_time = (int)$this->options['modification_time'];
+                    $modification_time = (int) $this->options['modification_time'];
                 }
 
                 $access_time = null;
 
                 if (isset($this->options['access_time'])) {
-                    $access_time = (int)$this->options['access_time'];
+                    $access_time = (int) $this->options['access_time'];
                 }
 
                 $this->touch($modification_time, $access_time);
@@ -2643,9 +2643,9 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * @param int $mode
      *
      * @return void
+     * @throws Exception
      * @throws FilesystemException
      * @since   1.0
-     * @throws \Molajo\Filesystem\Exception\FilesystemException
      */
     public function changePermission($mode)
     {
@@ -2653,19 +2653,19 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
             chmod($this->path, octdec(str_pad($mode, 4, '0', STR_PAD_LEFT)));
 
 
-            if ($mode === octdec(substr(sprintf('%o', fileperms($this->path)), -4))) {
+            if ($mode === octdec(substr(sprintf('%o', fileperms($this->path)), - 4))) {
             } else {
                 throw new Exception
-                    ('File Permissions did not change to ' . $mode);
+                ('File Permissions did not change to ' . $mode);
             }
 
 
         } catch (Exception $e) {
 
             throw new FilesystemException
-                (ucfirst(strtolower($this->getFilesystemType()))
-                    . ' Filesystem: changePermission method failed for Path: ' . $this->path
-                    . ' Permissions: ' . octdec(str_pad($mode, 4, '0', STR_PAD_LEFT)));
+            (ucfirst(strtolower($this->getFilesystemType()))
+                . ' Filesystem: changePermission method failed for Path: ' . $this->path
+                . ' Permissions: ' . octdec(str_pad($mode, 4, '0', STR_PAD_LEFT)));
         }
     }
 
@@ -2676,10 +2676,11 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * @param int $access_time
      *
      * @return void
+     * @throws Exception
      * @throws FilesystemException
      * @since   1.0
      */
-    public function touch($modification_time, $access_time)
+    public function touch($modification_time = null, $access_time = null)
     {
         if ($modification_time == '' || $modification_time === null || $modification_time == 0) {
             $modification_time = null;
@@ -2751,7 +2752,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     /**
      * Get Date Time
      *
-     * @param string       $time
+     * @param string $time
      *
      * @return DateTime
      */
@@ -2894,7 +2895,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     {
         if ($base_folder == $path
             || $target_directory == $base_folder
-        ) {
+) {
             $temp = $target_directory;
         } else {
             $temp = $target_directory . substr($path, strlen($base_folder), 99999);

@@ -19,9 +19,6 @@ use Molajo\Filesystem\Adapter;
  * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
- *
- * Full interface specification:
- *  See https://github.comsrc/Molajo/Filesystem/doc/speifications.md
  */
 class Media implements File, Path, System
 {

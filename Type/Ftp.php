@@ -265,7 +265,7 @@ class Ftp extends FilesystemType
      * @param array  $extension_list
      * @param string $name_mask
      *
-     * @return array
+     * @return void
      * @since   1.0
      */
     public function getList(
@@ -276,7 +276,9 @@ class Ftp extends FilesystemType
         $name_mask = null
     ) {
         if (is_file($this->path)) {
-            return $this->read();
+            $this->read();
+
+            return;
         }
 
         if ($exclude_folders === true) {
@@ -421,6 +423,7 @@ class Ftp extends FilesystemType
      * @param bool   $truncate
      *
      * @return void
+     * @throws FilesystemException
      * @since   1.0
      */
     private function append($file = '', $data = '', $replace = false, $append = false, $truncate = false)
@@ -460,6 +463,7 @@ class Ftp extends FilesystemType
      * @param bool   $truncate
      *
      * @return void
+     * @throws FilesystemException
      * @since   1.0
      */
     private function truncate($file = '', $data = '', $replace = false, $append = false, $truncate = false)
@@ -639,8 +643,13 @@ class Ftp extends FilesystemType
             $target_filesystem_type = $this->getFilesystemType();
         }
 
-        $this->moveOrCopy($target_directory, $target_name,
-            $replace, $target_filesystem_type, 'copy');
+        $this->moveOrCopy(
+            $target_directory,
+            $target_name,
+            $replace,
+            $target_filesystem_type,
+            'copy'
+        );
 
         return;
     }
@@ -663,8 +672,13 @@ class Ftp extends FilesystemType
             $target_filesystem_type = $this->getFilesystemType();
         }
 
-        $this->moveOrCopy($target_directory, $target_name,
-            $replace, $target_filesystem_type, 'move');
+        $this->moveOrCopy(
+            $target_directory,
+            $target_name,
+            $replace,
+            $target_filesystem_type,
+            'move'
+        );
 
         return;
     }
@@ -681,7 +695,7 @@ class Ftp extends FilesystemType
      * @param string $target_filesystem_type
      * @param string $move_or_copy
      *
-     * @return void|void
+     * @return void
      * @since   1.0
      * @throws FilesystemException
      */
@@ -832,7 +846,7 @@ class Ftp extends FilesystemType
             $this->_deleteDiscoveryDirectoriesArray();
         }
 
-        return true;
+        return;
     }
 
     /**
@@ -1149,7 +1163,9 @@ class Ftp extends FilesystemType
      * Returns the mime type of the file located at path directory
      *
      * @return void
+     * @throws FilesystemException
      * @since   1.0
+
      */
     public function getMimeType()
     {
@@ -1173,7 +1189,7 @@ class Ftp extends FilesystemType
             $this->mime_type = mime_content_type($this->temp);
 
         } else {
-            throw new \RuntimeException
+            throw new \FilesystemException
             ('Ftp Filesystem: getMimeType either finfo_open or mime_content_type are required in PHP');
         }
 

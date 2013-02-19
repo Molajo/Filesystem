@@ -10,8 +10,6 @@ namespace Molajo\Filesystem\Adapter;
 
 defined('MOLAJO') or die;
 
-use DateTime;
-
 /**
  * Actions Interface for Filesystem
  *
@@ -133,5 +131,5 @@ interface ActionsInterface
      * @return void
      * @since   1.0
      */
-    public function touch($modification_time, $access_time);
+    public function touch($modification_time = null, $access_time = null);
 }
