@@ -104,7 +104,6 @@ class LocalPermissionsTest extends Data
         $new_mtime = $hold['mtime'];
 
         $this->assertEquals($new_mtime, $new_mtime);
-
         $this->assertEquals($new_atime, $new_atime);
 
         return;
@@ -144,12 +143,10 @@ class LocalPermissionsTest extends Data
         $new_mtime = $hold['mtime'];
 
         $this->assertEquals($modification_time, $new_mtime);
-
         $this->assertEquals($access_time, $new_atime);
 
         return;
     }
-
 
     /**
      * Tears down the fixture, for example, closes a network connection.
