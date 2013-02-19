@@ -1,11 +1,11 @@
 <?php
-/**
- * Filesystem Type Abstract Class
- *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- */
+    /**
+     * Filesystem Type Abstract Class
+     *
+     * @package   Molajo
+     * @copyright 2013 Amy Stephen. All rights reserved.
+     * @license   http://www.opensource.org/licenses/mit-license.html MIT License
+     */
 namespace Molajo\Filesystem\Type;
 
 defined('MOLAJO') or die;
@@ -176,6 +176,14 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * @since  1.0
      */
     public $initial_directory;
+
+    /**
+     * FTP Mode - FTP_ASCII or FTP_BINARY
+     *
+     * @var    bool
+     * @since  1.0
+     */
+    public $ftp_mode = FTP_ASCII;
 
     /**
      * Connection
@@ -511,6 +519,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
         $this->setPassword();
         $this->setHost();
         $this->setPort();
+        $this->setFtpMode();
         $this->setConnectionType();
         $this->setTimeout();
         $this->setPassiveMode();
@@ -998,7 +1007,39 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     }
 
     /**
-     * Set the Port
+     * Set the FTP Mode
+     *
+     * @return int
+     * @since   1.0
+     */
+    public function setFtpMode()
+    {
+        $ftp_mode = null;
+
+        if (isset($this->options['ftp_mode'])) {
+            $ftp_mode = $this->options['ftp_mode'];
+        }
+
+        $this->ftp_mode = $ftp_mode;
+
+        return;
+    }
+
+    /**
+     * Get the FTP Mode
+     *
+     * @return mixed
+     * @since   1.0
+     */
+    public function getFtpMode()
+    {
+        return $this->ftp_mode;
+    }
+
+    /**
+     * Set the Connection Type
+     *
+     * setFtpMode
      *
      * @return int
      * @since   1.0
@@ -2786,6 +2827,10 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
             $this->path = $path;
         }
 
+        /** Unescape slashes */
+        $path = str_replace('\\', '/', $path);
+
+
         /** Determine if it is absolute path */
         $absolute_path = false;
         if (substr($path, 0, 1) == '/') {
@@ -2793,16 +2838,12 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
             $path          = substr($path, 1, strlen($path));
         }
 
-        /** Unescape slashes */
-        $path = str_replace('\\', '/', $path);
-
-        /**  Filter: empty value
+        /**  Filter: empty values
          *
          * @link http://tinyurl.com/arrayFilterStrlen
          */
         $nodes = array_filter(explode('/', $path), 'strlen');
 
-        /** Get rid of the '.' and '..' layers */
         $normalised = array();
 
         foreach ($nodes as $node) {
@@ -2934,14 +2975,69 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     }
 
     /**
-     * Extensions for Text files
+     * Utility method - force consistency in True and False
      *
-     * @return string
-     * @since  1.0
+     * @param bool $variable
+     * @param bool $default
+     *
+     * @return bool
+     * @since   1.0
      */
-    public function textFileExtensions()
+    function getMimeArray()
     {
-        return '(app|avi|doc|docx|exe|ico|mid|midi|mov|mp3|
-                 mpg|mpeg|pdf|psd|qt|ra|ram|rm|rtf|txt|wav|word|xls)';
+        $mime_types = array(
+
+            'txt'  => 'text/plain',
+            'htm'  => 'text/html',
+            'html' => 'text/html',
+            'php'  => 'text/html',
+            'css'  => 'text/css',
+            'js'   => 'application/javascript',
+            'json' => 'application/json',
+            'xml'  => 'application/xml',
+            'swf'  => 'application/x-shockwave-flash',
+            'flv'  => 'video/x-flv',
+
+            'png'  => 'image/png',
+            'jpe'  => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'jpg'  => 'image/jpeg',
+            'gif'  => 'image/gif',
+            'bmp'  => 'image/bmp',
+            'ico'  => 'image/vnd.microsoft.icon',
+            'tiff' => 'image/tiff',
+            'tif'  => 'image/tiff',
+            'svg'  => 'image/svg+xml',
+            'svgz' => 'image/svg+xml',
+
+            'zip'  => 'application/zip',
+            'rar'  => 'application/x-rar-compressed',
+            'exe'  => 'application/x-msdownload',
+            'msi'  => 'application/x-msdownload',
+            'cab'  => 'application/vnd.ms-cab-compressed',
+
+            'mp3'  => 'audio/mpeg',
+            'qt'   => 'video/quicktime',
+            'mov'  => 'video/quicktime',
+
+            'pdf'  => 'application/pdf',
+            'psd'  => 'image/vnd.adobe.photoshop',
+            'ai'   => 'application/postscript',
+            'eps'  => 'application/postscript',
+            'ps'   => 'application/postscript',
+
+            'doc'  => 'application/msword',
+            'rtf'  => 'application/rtf',
+            'xls'  => 'application/vnd.ms-excel',
+            'ppt'  => 'application/vnd.ms-powerpoint',
+            'docx' => 'application/msword',
+            'xlsx' => 'application/vnd.ms-excel',
+            'pptx' => 'application/vnd.ms-powerpoint',
+
+            'odt'  => 'application/vnd.oasis.opendocument.text',
+            'ods'  => 'application/vnd.oasis.opendocument.spreadsheet',
+        );
+
+        return $mime_types[$this->extension];
     }
 }

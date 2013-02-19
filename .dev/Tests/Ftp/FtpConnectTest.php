@@ -39,6 +39,7 @@ class FtpConnectTest extends Data
             'host'              => 'localhost',
             'port'              => '21',
             'timeout'           => '15',
+            'ftp_mode'          => FTP_ASCII,
             'passive_mode'      => true,
             'initial_directory' => 'Data',
             'persistence'       => false
@@ -78,7 +79,7 @@ class FtpConnectTest extends Data
         $this->assertEquals('txt', $adapter->fs->extension);
         $this->assertEquals('test1', $adapter->fs->no_extension);
         $this->assertEquals(20, $adapter->fs->size);
-        $this->assertEquals('text/plain; charset=us-ascii', $adapter->fs->mime_type);
+        $this->assertEquals('text/plain', $adapter->fs->mime_type);
         $this->assertEquals('test1', $adapter->fs->no_extension);
 
         $this->assertEquals('yabba, dabba, doo', trim($adapter->fs->data));

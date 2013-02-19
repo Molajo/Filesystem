@@ -24,17 +24,17 @@ use Molajo\Filesystem\Exception\FilesystemException;
 class Ftp extends FilesystemType
 {
     /**
-     * Temp - holds file name
+     * Temp - stream file for transferring FTP content
      *
-     * @var    string
+     * @var    resource
      * @since  1.0
      */
-    private $temp;
+    private $stream;
 
     /**
      * Temp Files - used when parsing ftprawlist for metadata
      *
-     * @var    string
+     * @var    array
      * @since  1.0
      */
     private $temp_files = array();
@@ -68,12 +68,11 @@ class Ftp extends FilesystemType
      *
      * @return  void
      * @since   1.0
+     * @throws FilesystemException
+     * @throws \InvalidArgumentException
      */
     public function connect($options = array())
     {
-        //todo can this be a stream?
-        $this->temp = '/Users/amystephen/Sites/Filesystem/.dev/Tests/Hold/amy.txt';
-
         parent::connect($options);
 
         if ($this->is_connected === true) {
@@ -240,25 +239,36 @@ class Ftp extends FilesystemType
      *
      * @return  mixed
      * @since   1.0
-     * @throws  FilesystemException when file does not exist
+     * @throws FilesystemException
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function read()
     {
         if ($this->exists === false) {
-
             throw new FilesystemException
             ('Ftp Filesystem Read: File does not exist: ' . $this->path);
         }
 
         if ($this->is_file === false) {
-
             throw new FilesystemException
             ('Ftp Filesystem Read: Is not a file: ' . $this->path);
         }
 
-        /** Already available in $this->temp file */
+        /** Already available in $this->stream file */
+        if ($this->stream === null) {
+        } else {
+            return;
+        }
+
         try {
-            $this->data = file_get_contents($this->temp);
+
+            $this->stream = fopen('php://temp', 'r+');
+
+            if (ftp_fget($this->getConnection(), $this->stream, $this->path, $this->ftp_mode)) {
+            } else {
+                throw new Exception ('FTP Filesystem: Read failed for: ' . $this->path);
+            }
 
         } catch (\Exception $e) {
 
@@ -266,8 +276,217 @@ class Ftp extends FilesystemType
             ('Ftp Filesystem Read: Error reading file: ' . $this->path);
         }
 
+        try {
+            rewind($this->stream);
+            $this->data = stream_get_contents($this->stream);
+            fclose($this->stream);
+
+        } catch (\Exception $e) {
+            throw new FilesystemException
+            ('Ftp Filesystem Read: Error reading file: ' . $this->path . ' ' . $e->getMessage());
+        }
+
         if ($this->data === false) {
             ('Ftp Filesystem Read: Empty File: ' . $this->path);
+        }
+
+        return;
+    }
+
+    /**
+     * For a file request, creates, appends to, replaces or truncates the file identified in path
+     * For a folder request, create is the only valid option
+     *
+     * @param   string  $file
+     * @param   string  $data
+     * @param   bool    $replace
+     * @param   bool    $append
+     * @param   bool    $truncate
+     *
+     * @return  void
+     * @since   1.0
+     * @throws FilesystemException
+     * @throws \Exception
+     */
+    public function write($file = '', $data = '', $replace = false, $append = false, $truncate = false)
+    {
+        if ($append === true) {
+            $this->append_or_truncate($data, 'append');
+
+            return;
+        }
+
+        if ($truncate === true) {
+            $this->append_or_truncate(null, 'truncate');
+
+            return;
+        }
+
+        if ($this->exists === false) {
+
+        } elseif ($this->is_file === true || $this->is_directory === true) {
+
+        } else {
+            throw new FilesystemException
+            (ucfirst(
+                strtolower($this->getFilesystemType())
+            ) . ' Filesystem Write: must be directory or file: ' . $this->path . '/' . $file);
+        }
+
+        if (trim($data) == '' || strlen($data) == 0) {
+            if ($this->is_file === true) {
+
+                throw new FilesystemException
+                (ucfirst(strtolower($this->getFilesystemType()))
+                    . ' Filesystem:  attempting to write no data to file: ' . $this->path . '/' . $file);
+            }
+        }
+
+        if (trim($data) == '' || strlen($data) == 0) {
+            if ($file == '') {
+                throw new FilesystemException
+                (ucfirst(strtolower($this->getFilesystemType()))
+                    . ' Filesystem:  attempting to write no data to file: ' . $this->path . '/' . $file);
+
+            } else {
+                $this->createDirectory($this->path . '/' . $file);
+
+                return;
+            }
+        }
+
+        if ($this->is_file === true) {
+        } else {
+            $this->createDirectory($this->path);
+        }
+
+        try {
+
+            $stream = fopen('php://temp', 'r+');
+            fwrite($stream, $data);
+            rewind($stream);
+
+            if (ftp_fput($this->getConnection(), $this->path, $stream, $this->ftp_mode)) {
+            } else {
+                throw new Exception ('FTP Filesystem Write failed for ' . $this->path);
+            }
+
+        } catch (Exception $e) {
+
+            fclose($this->stream);
+
+            throw new FilesystemException
+            (ucfirst(strtolower($this->getFilesystemType()))
+                . ' Filesystem:  error writing file ' . $this->path . '/' . $file);
+        }
+
+        fclose($this->stream);
+
+        return;
+    }
+
+    /**
+     * Append data to file identified in path using the data value
+     *
+     * @param null   $data
+     * @param string $type
+     *
+     * @return void
+     * @since   1.0
+     * @throws FilesystemException
+     * @throws \Exception
+     */
+    private function append_or_truncate($data = null, $type = 'append')
+    {
+        if ($this->exists === true) {
+
+        } elseif ($this->is_file === false) {
+
+        } else {
+            throw new FilesystemException
+            (ucfirst(strtolower($this->getFilesystemType()))
+                . ' Filesystem:  attempting to append to a folder, not a file ' . $this->path);
+        }
+
+        $this->stream = fopen('php://temp', 'r+');
+
+        if (ftp_fget($this->getConnection(), $this->stream, $this->path, $this->ftp_mode)) {
+        } else {
+            throw new Exception ('FTP Filesystem Append: Read failed for: ' . $this->path);
+        }
+
+        try {
+            rewind($this->stream);
+            $appended = stream_get_contents($this->stream);
+            $appended .= $data;
+
+            if ($type === 'append') {
+            } else {
+                $appended = null;
+            }
+
+            fwrite($this->stream, $appended);
+            rewind($this->stream);
+
+        } catch (\Exception $e) {
+
+            throw new FilesystemException
+            (ucfirst(strtolower($this->getFilesystemType()))
+                . ' Filesystem:  error writing stream for appending to ' . $this->path);
+        }
+
+        try {
+
+            if (ftp_fput($this->getConnection(), $this->path, $this->stream, $this->ftp_mode)) {
+            } else {
+                throw new Exception ('FTP Filesystem Write failed for ' . $this->path);
+            }
+
+        } catch (Exception $e) {
+
+            throw new FilesystemException
+            (ucfirst(strtolower($this->getFilesystemType()))
+                . ' Filesystem:  error writing file ' . $this->path);
+        }
+
+        fclose($this->stream);
+
+        return;
+    }
+
+    /**
+     * Create Directory
+     *
+     * @param bool $path
+     *
+     * @return void
+     * @since   1.0
+     * @throws FilesystemException
+     * @throws \Exception
+     */
+    protected function createDirectory($path)
+    {
+        if (file_exists($path)) {
+            return;
+        }
+
+        /** recursively create parents for FTP */
+        $parent = dirname($path);
+        if ($parent === false || $parent = '' || $parent === null) {
+        } else {
+            $this->createDirectory($parent);
+        }
+
+        try {
+            $success = ftp_mkdir($this->getConnection(), $path);
+            if ($success === false) {
+                throw new Exception ('Unable to create FTP folder: ' . $path);
+            }
+
+        } catch (Exception $e) {
+
+            throw new FilesystemException
+            ('FTP Filesystem Create Directory: error creating directory: ' . $e->getMessage());
         }
 
         return;
@@ -305,9 +524,7 @@ class Ftp extends FilesystemType
             $fileMetadata          = trim(substr($fileMetadata, strpos($fileMetadata, ' '), 9999));
             $metadata->name        = trim($fileMetadata);
 
-            if ($metadata->name == '.'
-                || $metadata->name == '..'
-) {
+            if ($metadata->name == '.' || $metadata->name == '..') {
 
             } else {
                 $name                    = $metadata->name;
@@ -337,7 +554,7 @@ class Ftp extends FilesystemType
     }
 
     /**
-     * Returns true or false indicator as to whether or not the path is a directory
+     * Sets true or false indicator as to whether or not the path is a directory
      *
      * @ - added to prevent PHP from throwing a warning if it is a file, not a directory
      *
@@ -346,15 +563,45 @@ class Ftp extends FilesystemType
      */
     public function isDirectory()
     {
-        $this->is_directory = false;
+        $this->is_directory = $this->checkIsDirectory();
+
+        if ($this->is_directory === true) {
+            $this->is_file = false;
+        }
+
+        return;
+    }
+
+    /**
+     * Sets true or false indicator as to whether or not the path is a directory
+     *
+     * @ - added to prevent PHP from throwing a warning if it is a file, not a directory
+     *
+     * @return bool
+     * @since   1.0
+     */
+    public function isParentDirectory()
+    {
+        return $this->checkIsDirectory();
+    }
+
+    /**
+     * Shared by isDirectory and isParentDirectory
+     *
+     * @ - added to prevent PHP from throwing a warning if it is a file, not a directory
+     *
+     * @return  bool
+     * @since   1.0
+     */
+    public function checkIsDirectory()
+    {
+        $indicator = false;
 
         $current = ftp_pwd($this->getConnection());
 
         try {
             if (@ftp_chdir($this->getConnection(), $this->path)) {
-                $this->is_directory = true;
-            } else {
-                $this->is_file = false;
+                $indicator = true;
             }
 
         } catch (\Exception $e) {
@@ -363,7 +610,7 @@ class Ftp extends FilesystemType
 
         ftp_chdir($this->getConnection(), $current);
 
-        return;
+        return $indicator;
     }
 
     /**
@@ -371,18 +618,35 @@ class Ftp extends FilesystemType
      *
      * @return void
      * @since   1.0
+     * @throws FilesystemException
+     * @throws \Exception
      */
     public function isFile()
     {
         $this->is_file = false;
 
         try {
+            $this->stream = fopen('php://temp', 'r+');
 
-            if (ftp_get($this->getConnection(), $this->temp, $this->path, FTP_ASCII, 0)) {
+            if (ftp_fget($this->getConnection(), $this->stream, $this->path, $this->ftp_mode, 0)) {
                 $this->is_file = true;
+            } else {
+                throw new Exception('FTP Filesystem: IsFile ftp_get failed ' . $this->path);
             }
 
         } catch (\Exception $e) {
+            throw new FilesystemException
+            ('FTP Filesystem isFile: Failed ' . $e->getMessage());
+        }
+
+        try {
+            rewind($this->stream);
+            $this->data = stream_get_contents($this->stream);
+            fclose($this->stream);
+
+        } catch (\Exception $e) {
+            throw new FilesystemException
+            ('Ftp Filesystem Read: Error reading file: ' . $this->path . ' ' . $e->getMessage());
         }
 
         return;
@@ -462,7 +726,7 @@ class Ftp extends FilesystemType
         if (count($this->temp_files) > 0) {
 
             foreach ($this->temp_files as $file) {
-                $this->size = $this->size + (int) $file->size;
+                $this->size = $this->size + (int)$file->size;
             }
         }
 
@@ -475,7 +739,6 @@ class Ftp extends FilesystemType
      * @return void
      * @throws FilesystemException
      * @since   1.0
-
      */
     public function getMimeType()
     {
@@ -490,17 +753,13 @@ class Ftp extends FilesystemType
             return;
         }
 
-        if (function_exists('finfo_open')) {
-            $php_mime        = finfo_open(FILEINFO_MIME);
-            $this->mime_type = strtolower(finfo_file($php_mime, $this->temp));
-            finfo_close($php_mime);
+        $temp_mimetype = $this->getMimeArray();
 
-        } elseif (function_exists('mime_content_type')) {
-            $this->mime_type = mime_content_type($this->temp);
+        if ($temp_mimetype === null) {
+            $this->mime_type = 'application/octet-stream';
 
         } else {
-            throw new \FilesystemException
-            ('Ftp Filesystem: getMimeType either finfo_open or mime_content_type are required in PHP');
+            $this->mime_type = $temp_mimetype;
         }
 
         return;
@@ -728,7 +987,7 @@ class Ftp extends FilesystemType
             return;
         }
 
-        $this->hash_file_md5 = md5_file($this->temp);
+        $this->hash_file_md5 = md5($this->data);
 
         return;
     }
@@ -752,7 +1011,7 @@ class Ftp extends FilesystemType
             return;
         }
 
-        $this->hash_file_sha1 = sha1_file($this->temp);
+        $this->hash_file_sha1 = sha1($this->data);
 
         return;
     }
@@ -776,7 +1035,7 @@ class Ftp extends FilesystemType
             return;
         }
 
-        $this->hash_file_sha1_20 = sha1_file($this->temp, true);
+        $this->hash_file_sha1_20 = sha1($this->data, true);
 
         return;
     }

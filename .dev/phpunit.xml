@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="Bootstrap.php" colors="true">
     <testsuites>
-        <testsuite name="Local">
-            <directory>./Tests/Local/</directory>
+        <testsuite name="Ftp">
+            <directory>./Tests/Ftp/</directory>
         </testsuite>
     </testsuites>
     <filter>
