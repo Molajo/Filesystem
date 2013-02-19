@@ -1105,7 +1105,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      */
     public function getTimeout()
     {
-        return (int)$this->timeout;
+        return (int) $this->timeout;
     }
 
     /**
@@ -1890,7 +1890,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
                 $delete_subdirectories = true;
 
                 if (isset($this->options['delete_subdirectories'])) {
-                    $delete_subdirectories = (int)$this->options['delete_subdirectories'];
+                    $delete_subdirectories = (int) $this->options['delete_subdirectories'];
                 }
 
                 $delete_subdirectories = $this->setTorF($delete_subdirectories, true);
@@ -1967,7 +1967,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
                     ) . ' Filesystem doAction Method ' . $action . ' no mode value provided.');
                 }
 
-                $this->changePermission((int)$mode);
+                $this->changePermission((int) $mode);
 
                 break;
 
@@ -1976,13 +1976,13 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
                 $modification_time = null;
 
                 if (isset($this->options['modification_time'])) {
-                    $modification_time = (int)$this->options['modification_time'];
+                    $modification_time = (int) $this->options['modification_time'];
                 }
 
                 $access_time = null;
 
                 if (isset($this->options['access_time'])) {
-                    $access_time = (int)$this->options['access_time'];
+                    $access_time = (int) $this->options['access_time'];
                 }
 
                 $this->touch($modification_time, $access_time);
@@ -2937,7 +2937,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
     {
         if ($base_folder == $path
             || $target_directory == $base_folder
-        ) {
+) {
             $temp = $target_directory;
         } else {
             $temp = $target_directory . substr($path, strlen($base_folder), 99999);
@@ -2983,7 +2983,7 @@ class FilesystemType implements AdapterInterface, ActionsInterface, MetadataInte
      * @return bool
      * @since   1.0
      */
-    function getMimeArray()
+    public function getMimeArray()
     {
         $mime_types = array(
 

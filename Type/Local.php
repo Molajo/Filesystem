@@ -39,9 +39,9 @@ class Local extends FilesystemType
      *
      * Method to connect to a Local server
      *
-     * @param   array $options
+     * @param array $options
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function connect($options = array())
@@ -71,7 +71,7 @@ class Local extends FilesystemType
      *
      * Retrieves and sets metadata for the file specified in path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getMetadata()

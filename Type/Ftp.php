@@ -64,9 +64,9 @@ class Ftp extends FilesystemType
     /**
      * Method to connect and logon to a Ftp server
      *
-     * @param   array  $options
+     * @param array $options
      *
-     * @return  void
+     * @return void
      * @since   1.0
      * @throws FilesystemException
      * @throws \InvalidArgumentException
@@ -174,9 +174,9 @@ class Ftp extends FilesystemType
     /**
      * Method to login to a server once connected
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
-     * @throws  \RuntimeException
+     * @throws \RuntimeException
      */
     public function login()
     {
@@ -198,9 +198,9 @@ class Ftp extends FilesystemType
      *
      * Set the Path
      *
-     * @param   string  $path
+     * @param string $path
      *
-     * @return  string
+     * @return string
      * @since   1.0
      */
     public function setPath($path)
@@ -213,7 +213,7 @@ class Ftp extends FilesystemType
      *
      * Retrieves and sets metadata for the file specified in path
      *
-     * @return  void
+     * @return void
      * @since   1.0
      */
     public function getMetadata()
@@ -237,7 +237,7 @@ class Ftp extends FilesystemType
     /**
      * Returns the contents of the file identified by path
      *
-     * @return  mixed
+     * @return mixed
      * @since   1.0
      * @throws FilesystemException
      * @throws \InvalidArgumentException
@@ -297,13 +297,13 @@ class Ftp extends FilesystemType
      * For a file request, creates, appends to, replaces or truncates the file identified in path
      * For a folder request, create is the only valid option
      *
-     * @param   string  $file
-     * @param   string  $data
-     * @param   bool    $replace
-     * @param   bool    $append
-     * @param   bool    $truncate
+     * @param string $file
+     * @param string $data
+     * @param bool   $replace
+     * @param bool   $append
+     * @param bool   $truncate
      *
-     * @return  void
+     * @return void
      * @since   1.0
      * @throws FilesystemException
      * @throws \Exception
@@ -590,7 +590,7 @@ class Ftp extends FilesystemType
      *
      * @ - added to prevent PHP from throwing a warning if it is a file, not a directory
      *
-     * @return  bool
+     * @return bool
      * @since   1.0
      */
     public function checkIsDirectory()
@@ -726,7 +726,7 @@ class Ftp extends FilesystemType
         if (count($this->temp_files) > 0) {
 
             foreach ($this->temp_files as $file) {
-                $this->size = $this->size + (int)$file->size;
+                $this->size = $this->size + (int) $file->size;
             }
         }
 
