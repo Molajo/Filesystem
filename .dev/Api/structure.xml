@@ -2814,7 +2814,7 @@ Absolute Path - relative path from the root directory, prepended with a '/'.&lt;
       </docblock>
     </interface>
   </file>
-  <file path="Type/FilesystemType.php" hash="4acd53d7f5fa65239e97e4b5d09849f5" package="Molajo">
+  <file path="Type/FilesystemType.php" hash="db65750cb7396bb4c1eac8da39a7006e" package="Molajo">
     <docblock line="2">
       <description>Filesystem Type Abstract Class</description>
       <long-description></long-description>
@@ -5044,7 +5044,7 @@ For a folder request, create is the only valid option</description>
       <notice line="2977" code="50013">Parameter $default could not be found in getMimeArray()</notice>
     </parse_markers>
   </file>
-  <file path="Type/Ftp.php" hash="29ea4a2000d3a6be97c4cf74dc8975f1" package="Molajo">
+  <file path="Type/Ftp.php" hash="3bcc3144d20f791e4c7d31c15e36766f" package="Molajo">
     <docblock line="2">
       <description>Ftp Filesystem Type</description>
       <long-description></long-description>
@@ -5608,7 +5608,7 @@ http://www.php.net/manual/en/function.sha1-file.php</description>
       <error line="50" code="50015">Argument $filesystem_type is missing from the Docblock of __construct()</error>
     </parse_markers>
   </file>
-  <file path="Type/Local.php" hash="9f3a51b4192dc5265c5c46cc1a50ea3e" package="Molajo">
+  <file path="Type/Local.php" hash="2bea1304aab0e276581bf989e37537bf" package="Molajo">
     <docblock line="2">
       <description>Local Filesystem Type</description>
       <long-description></long-description>

@@ -2,6 +2,19 @@
 
 <project name="molajo-filesystem" default="build" basedir="./../.dev">
     <property name="source" value="../" />
+    <property name="git.repo" value="git@github.com:Molajo/Filesystem.git" />
+    <property name="temp.folder.clone" value="./temp/clone" />
+    <property name="temp.folder.zipthis" value="./temp/zipthis" />
+    <property name="branch.name" value="master" />
+    <property name="version" value="0.0.1 Dev" />
+    <property name="version" value="0.0.1 Dev" />
+
+    <resolvepath propertyName="temp.folder.clone.resolved" file="${temp.folder.clone}" />
+    <resolvepath propertyName="temp.folder.zipthis.resolved" file="${temp.folder.zipthis}" />
+
+    <tstamp>
+        <format property="build.time" pattern="%Y_%m_%d__%H_%M_%S" />
+    </tstamp>
 
     <condition property="script-suffix" value=".bat">
         <os family="windows" />
@@ -40,9 +53,25 @@
 		</exec>
 	</target>
 
-    <target name="cleanend" description="Clean up unnecessary directories">
+    <target name="archive" description="archive and zip repo">
+        <delete dir="${temp.folder.clone.resolved}" includeemptydirs="true" verbose="true" failonerror="false" />
+        <mkdir  dir="${temp.folder.clone.resolved}" />
+        <gitclone repository="${git.repo}" targetPath="${temp.folder.clone.resolved}" />
+
+        <copy todir="${temp.folder.zipthis.resolved}/molajo-${build.time}" >
+            <fileset dir=".">
+                <include name="molajo/" />
+                <exclude name="molajo/.git" />
+                <exclude name="molajo/.git/" />
+                <exclude name="molajo/.dev" />
+                <exclude name="molajo/.dev/" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean2" description="Clean up unnecessary directories">
         <delete dir="output" />
     </target>
 
-	<target name="build" depends="clean,phpunit,phpcs,phpdoc,cleanend" />
+    <target name="build" depends="clean,phpunit,phpcs,phpdoc,archive,clean2,archive" />
 </project>

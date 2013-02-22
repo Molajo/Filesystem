@@ -4,9 +4,6 @@
         <testsuite name="Local">
             <directory>./Tests/Local/</directory>
         </testsuite>
-        <testsuite name="Ftp">
-            <directory>./Tests/Ftp/</directory>
-        </testsuite>
     </testsuites>
     <logging>
         <log type="coverage-html" target="build/coverage" title="Molajo-Filesystem" charset="UTF-8" yui="true" highlight="true"
