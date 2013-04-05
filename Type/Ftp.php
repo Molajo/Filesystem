@@ -11,6 +11,7 @@ namespace Molajo\Filesystem\Type;
 defined('MOLAJO') or die;
 
 use Exception;
+
 use Molajo\Filesystem\Exception\FilesystemException;
 
 /**
@@ -21,7 +22,7 @@ use Molajo\Filesystem\Exception\FilesystemException;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Ftp extends FilesystemType
+class Ftp extends AbstractType
 {
     /**
      * Temp - stream file for transferring FTP content
@@ -45,10 +46,10 @@ class Ftp extends FilesystemType
      * @var    $is_windows;
      * @since  1.0
      */
-    public $is_windows;
+    protected $is_windows;
 
     /**
-     * Class constructor
+     * class constructor
      *
      * @since   1.0
      */
@@ -68,8 +69,8 @@ class Ftp extends FilesystemType
      *
      * @return void
      * @since   1.0
-     * @throws FilesystemException
-     * @throws \InvalidArgumentException
+     * @throws  FilesystemException
+     * @throws  \InvalidArgumentException
      */
     public function connect($options = array())
     {
@@ -176,9 +177,9 @@ class Ftp extends FilesystemType
      *
      * @return bool
      * @since   1.0
-     * @throws \RuntimeException
+     * @throws  \RuntimeException
      */
-    public function login()
+    protected function login()
     {
         $logged_in = ftp_login($this->getConnection(), $this->getUsername(), $this->getPassword());
 
@@ -203,7 +204,7 @@ class Ftp extends FilesystemType
      * @return string
      * @since   1.0
      */
-    public function setPath($path)
+    protected function setPath($path)
     {
         return parent::setPath($path);
     }
@@ -239,11 +240,11 @@ class Ftp extends FilesystemType
      *
      * @return mixed
      * @since   1.0
-     * @throws FilesystemException
-     * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @throws  FilesystemException
+     * @throws  \InvalidArgumentException
+     * @throws  \Exception
      */
-    public function read()
+    protected function read()
     {
         if ($this->exists === false) {
             throw new FilesystemException
@@ -305,10 +306,10 @@ class Ftp extends FilesystemType
      *
      * @return void
      * @since   1.0
-     * @throws FilesystemException
-     * @throws \Exception
+     * @throws  FilesystemException
+     * @throws  \Exception
      */
-    public function write($file = '', $data = '', $replace = false, $append = false, $truncate = false)
+    protected function write($file = '', $data = '', $replace = false, $append = false, $truncate = false)
     {
         if ($append === true) {
             $this->append_or_truncate($data, 'append');
@@ -393,8 +394,8 @@ class Ftp extends FilesystemType
      *
      * @return void
      * @since   1.0
-     * @throws FilesystemException
-     * @throws \Exception
+     * @throws  FilesystemException
+     * @throws  \Exception
      */
     private function append_or_truncate($data = null, $type = 'append')
     {
@@ -461,8 +462,8 @@ class Ftp extends FilesystemType
      *
      * @return void
      * @since   1.0
-     * @throws FilesystemException
-     * @throws \Exception
+     * @throws  FilesystemException
+     * @throws  \Exception
      */
     protected function createDirectory($path)
     {
@@ -497,7 +498,7 @@ class Ftp extends FilesystemType
      *
      * @return void
      */
-    public function getFtpMetadata()
+    protected function getFtpMetadata()
     {
         $ftp_metadata = ftp_rawlist($this->getConnection(), $this->path);
 
@@ -540,7 +541,7 @@ class Ftp extends FilesystemType
      *
      * @return void
      */
-    public function exists()
+    protected function exists()
     {
         $this->exists = false;
 
@@ -561,7 +562,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function isDirectory()
+    protected function isDirectory()
     {
         $this->is_directory = $this->checkIsDirectory();
 
@@ -580,7 +581,7 @@ class Ftp extends FilesystemType
      * @return bool
      * @since   1.0
      */
-    public function isParentDirectory()
+    protected function isParentDirectory()
     {
         return $this->checkIsDirectory();
     }
@@ -593,7 +594,7 @@ class Ftp extends FilesystemType
      * @return bool
      * @since   1.0
      */
-    public function checkIsDirectory()
+    protected function checkIsDirectory()
     {
         $indicator = false;
 
@@ -618,10 +619,10 @@ class Ftp extends FilesystemType
      *
      * @return void
      * @since   1.0
-     * @throws FilesystemException
-     * @throws \Exception
+     * @throws  FilesystemException
+     * @throws  \Exception
      */
-    public function isFile()
+    protected function isFile()
     {
         $this->is_file = false;
 
@@ -658,7 +659,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function isLink()
+    protected function isLink()
     {
         $this->is_link = false;
     }
@@ -668,9 +669,9 @@ class Ftp extends FilesystemType
      *
      * @return void
      * @since   1.0
-     * @throws FilesystemException
+     * @throws  FilesystemException
      */
-    public function getParent()
+    protected function getParent()
     {
         if ($this->exists === false) {
             $this->parent = null;
@@ -719,7 +720,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function getSize()
+    protected function getSize()
     {
         $this->size = 0;
 
@@ -737,10 +738,10 @@ class Ftp extends FilesystemType
      * Returns the mime type of the file located at path directory
      *
      * @return void
-     * @throws FilesystemException
+     * @throws  FilesystemException
      * @since   1.0
      */
-    public function getMimeType()
+    protected function getMimeType()
     {
         $this->mime_type = null;
 
@@ -771,7 +772,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function getOwner()
+    protected function getOwner()
     {
         $this->owner = null;
 
@@ -796,7 +797,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function getGroup()
+    protected function getGroup()
     {
         $this->group = null;
 
@@ -820,9 +821,9 @@ class Ftp extends FilesystemType
      *
      * @return void
      * @since   1.0
-     * @throws FilesystemException
+     * @throws  FilesystemException
      */
-    public function getCreateDate()
+    protected function getCreateDate()
     {
         $this->create_date = null;
 
@@ -834,9 +835,9 @@ class Ftp extends FilesystemType
      *
      * @return void
      * @since   1.0
-     * @throws FilesystemException
+     * @throws  FilesystemException
      */
-    public function getAccessDate()
+    protected function getAccessDate()
     {
         $this->access_date = null;
 
@@ -848,9 +849,9 @@ class Ftp extends FilesystemType
      *
      * @return void
      * @since   1.0
-     * @throws FilesystemException
+     * @throws  FilesystemException
      */
-    public function getModifiedDate()
+    protected function getModifiedDate()
     {
         $this->modified_date = null;
 
@@ -880,7 +881,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function isReadable()
+    protected function isReadable()
     {
         $this->is_readable = null;
 
@@ -912,7 +913,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function isWriteable()
+    protected function isWriteable()
     {
         $this->is_writable = null;
 
@@ -944,7 +945,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function isExecutable()
+    protected function isExecutable()
     {
         $this->is_executable = null;
 
@@ -975,7 +976,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function hashFileMd5()
+    protected function hashFileMd5()
     {
         $this->hash_file_md5 = null;
 
@@ -999,7 +1000,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function hashFileSha1()
+    protected function hashFileSha1()
     {
         $this->hash_file_sha1 = null;
 
@@ -1023,7 +1024,7 @@ class Ftp extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function hashFileSha1_20()
+    protected function hashFileSha1_20()
     {
         $this->hash_file_sha1_20 = null;
 

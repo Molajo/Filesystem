@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Local" tests="4" assertions="9" failures="0" errors="0" time="0.064660">
+    <testsuite name="Local\LocalPermissionsTest" file="/Users/amystephen/Sites/Standard/Vendor/Molajo/Filesystem/.dev/Tests/LocalDontRunOnTravis/LocalPermissionsTest.php" namespace="Local" fullPackage="Local" tests="4" assertions="9" failures="0" errors="0" time="0.064660">
+      <testcase name="testPermissionsTTTSuccess" class="Local\LocalPermissionsTest" file="/Users/amystephen/Sites/Standard/Vendor/Molajo/Filesystem/.dev/Tests/LocalDontRunOnTravis/LocalPermissionsTest.php" line="28" assertions="6" time="0.021767"/>
+      <testcase name="testPermissionsFail" class="Local\LocalPermissionsTest" file="/Users/amystephen/Sites/Standard/Vendor/Molajo/Filesystem/.dev/Tests/LocalDontRunOnTravis/LocalPermissionsTest.php" line="59" assertions="1" time="0.012215"/>
+      <testcase name="testTouchSuccess" class="Local\LocalPermissionsTest" file="/Users/amystephen/Sites/Standard/Vendor/Molajo/Filesystem/.dev/Tests/LocalDontRunOnTravis/LocalPermissionsTest.php" line="77" assertions="1" time="0.018117"/>
+      <testcase name="testTouchFail" class="Local\LocalPermissionsTest" file="/Users/amystephen/Sites/Standard/Vendor/Molajo/Filesystem/.dev/Tests/LocalDontRunOnTravis/LocalPermissionsTest.php" line="114" assertions="1" time="0.012561"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

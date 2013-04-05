@@ -1,6 +1,6 @@
 <?php
 /**
- * Adapter Interface for Filesystem
+ * Filesystem Adapter Interface
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -11,7 +11,7 @@ namespace Molajo\Filesystem\Adapter;
 defined('MOLAJO') or die;
 
 /**
- * Adapter Interface for Filesystem
+ * Filesystem Adapter Interface
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -23,9 +23,9 @@ interface AdapterInterface
     /**
      * Connect to the Filesystem
      *
-     * @param array $options
+     * @param   array $options
      *
-     * @return void
+     * @return  $this
      * @since   1.0
      */
     public function connect($options = array());
@@ -33,9 +33,9 @@ interface AdapterInterface
     /**
      * Sets the value of the path defining the current directory and file
      *
-     * @param   $path
+     * @param   string $path
      *
-     * @return void
+     * @return  $this
      * @since   1.0
      */
     public function setPath($path);
@@ -43,7 +43,7 @@ interface AdapterInterface
     /**
      * Retrieves and sets metadata for the file specified in path
      *
-     * @return void
+     * @return  $this
      * @since   1.0
      */
     public function getMetadata();
@@ -51,9 +51,9 @@ interface AdapterInterface
     /**
      * Execute the action requested
      *
-     * @param string $action
+     * @param   string $action
      *
-     * @return void
+     * @return  $this
      * @since   1.0
      */
     public function doAction($action = '');
@@ -61,7 +61,7 @@ interface AdapterInterface
     /**
      * Close the Connection
      *
-     * @return void
+     * @return  $this
      * @since   1.0
      */
     public function close();

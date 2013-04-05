@@ -10,6 +10,8 @@ namespace Molajo\Filesystem\Adapter;
 
 defined('MOLAJO') or die;
 
+use Molajo\Filesystem\Exception\FilesystemException;
+
 /**
  * Actions Interface for Filesystem
  *
@@ -25,111 +27,145 @@ interface ActionsInterface
     /**
      * Returns the contents of the file identified in path
      *
-     * @return mixed|string|array
+     * @param   string $path
+     *
+     * return array|mixed|object|string
+     *
      * @since   1.0
+     * @throws  FilesystemException
      */
-    public function read();
+    public function read($path);
 
     /**
      * Returns a list of file and folder names located at path directory
      *
-     * @param bool $recursive
+     * @param   string $path
+     * @param   bool   $recursive
      *
-     * @return array
+     * @return  $this
      * @since   1.0
+     * @throws  FilesystemException
      */
-    public function getList($recursive = false);
+    public function getList($path, $recursive = false);
 
     /**
      * Creates or replaces the file or directory identified in path using the data value
      *
-     * @param string $file
-     * @param bool   $replace
-     * @param string $data
+     * @param   string $path
+     * @param   string $file
+     * @param   bool   $replace
+     * @param   string $data
      *
-     * @return void
+     * @return  $this
      * @since   1.0
+     * @throws  FilesystemException
      */
-    public function write($file = '', $replace = true, $data = '');
+    public function write($path, $file = '', $replace = true, $data = '');
 
     /**
      * Deletes the file or folder identified in path. Deletes subdirectories, if so indicated
      *
-     * @param bool $delete_subdirectories
+     * @param   string $path
+     * @param   bool   $delete_subdirectories
      *
-     * @return void
+     * @return  $this
      * @since   1.0
+     * @throws  FilesystemException
      */
-    public function delete($delete_subdirectories = true);
+    public function delete($path, $delete_subdirectories = true);
 
     /**
      * Copies the file/folder in $path to the target_directory, replacing content, if indicated
      *
      * Note: $target_filesystem_type used to create new filesystem instance for target
      *
-     * @param string $target_directory
-     * @param string $target_name
-     * @param bool   $replace
-     * @param string $target_filesystem_type
+     * @param   string $path
+     * @param   string $target_directory
+     * @param   string $target_name
+     * @param   bool   $replace
+     * @param   string $target_filesystem_type
      *
-     * @return mixed
+     * @return  $this
      * @since   1.0
+     * @throws  FilesystemException
      */
-    public function copy($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '');
+    public function copy(
+        $path,
+        $target_directory,
+        $target_name = '',
+        $replace = true,
+        $target_filesystem_type = ''
+    );
 
     /**
      * Moves the file/folder in $path to the target_directory, replacing content, if indicated
      *
      * Note: $target_filesystem_type used to create new filesystem instance for target
      *
-     * @param string $target_directory
-     * @param string $target_name
-     * @param bool   $replace
-     * @param string $target_filesystem_type
+     * @param   string $path
+     * @param   string $target_directory
+     * @param   string $target_name
+     * @param   bool   $replace
+     * @param   string $target_filesystem_type
      *
-     * @return mixed
+     * @return  $this
      * @since   1.0
+     * @throws  FilesystemException
      */
-    public function move($target_directory, $target_name = '', $replace = true, $target_filesystem_type = '');
+    public function move(
+        $path,
+        $target_directory,
+        $target_name = '',
+        $replace = true,
+        $target_filesystem_type = ''
+    );
 
     /**
      * Change owner for file or folder identified in path
      *
-     * @param string $user_name
+     * @param   string $path
+     * @param   string $user_name
      *
-     * @return void
+     * @return  $this
      * @since   1.0
+     * @throws  FilesystemException
      */
-    public function changeOwner($user_name);
+    public function changeOwner($path, $user_name);
 
     /**
      * Change group for file or folder identified in path
      *
-     * @param string $group_id
+     * @param   string $path
+     * @param   string $group_id
      *
-     * @return void
+     * @return  $this
      * @since   1.0
+     * @throws  FilesystemException
      */
-    public function changeGroup($group_id);
+    public function changeGroup($path, $group_id);
 
     /**
      * Change permissions for file or folder identified in path
      *
-     * @param int $permission
+     * @param   string $path
+     * @param   int    $permission
      *
-     * @return void
+     * @return  $this
      * @since   1.0
+     * @throws  FilesystemException
      */
-    public function changePermission($permission);
+    public function changePermission($path, $permission);
 
     /**
      * Update the modification time and access time (touch) for the directory or file identified in the path
      *
-     * @param int $modification_time
-     * @param int $access_time
+     * @param   string $path
+     * @param   int    $modification_time
+     * @param   int    $access_time
      *
-     * @return void
+     * @return  $this
      * @since   1.0
+     * @throws  FilesystemException
      */
-    public function touch($modification_time = null, $access_time = null);
+    public function touch($path, $modification_time = null, $access_time = null);
 }

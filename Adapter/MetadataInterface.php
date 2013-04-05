@@ -157,7 +157,7 @@ interface MetadataInterface
     /**
      * Retrieves Create Date for directory or file identified in the path
      *
-     * @return object Datetime
+     * @return  object Datetime
      * @since   1.0
      */
     public function getCreateDate();
@@ -165,7 +165,7 @@ interface MetadataInterface
     /**
      * Retrieves Last Update Date for directory or file identified in the path
      *
-     * @return object Datetime
+     * @return  object Datetime
      * @since   1.0
      */
     public function getModifiedDate();
@@ -173,7 +173,7 @@ interface MetadataInterface
     /**
      * Retrieves Last Access Date for directory or file identified in the path
      *
-     * @return object Datetime
+     * @return  object Datetime
      * @since   1.0
      */
     public function getAccessDate();

@@ -704,9 +704,9 @@ If desired, you could simply use this.
 ### 3.3.1 Overview
 
 Molajo uses a Facade Pattern approach to providing access to application services. The connection
-to the Services Class is supported by a static instance within the Frontcontroller to the Services
+to the Services Class is supported by a static instance within the FrontController to the Services
 Class. The only function of the static instance is to create a useful entry point back into
-the Frontcontroller, and then into the Services class.
+the FrontController, and then into the Services class.
 
 An example of how this creates a more productive development environment follows as the difference
 between the first example where it takes one command to read a file translates to in reality as

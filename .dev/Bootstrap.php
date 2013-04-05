@@ -27,6 +27,7 @@ $classMap = array(
     'Molajo\\Filesystem\\Adapter\\SystemInterface'                => BASE_FOLDER . '/Adapter/SystemInterface.php',
     'Molajo\\Filesystem\\Exception\\FilesystemException'          => BASE_FOLDER . '/Exception/FilesystemException.php',
     'Molajo\\Filesystem\\Exception\\FilesystemExceptionInterface' => BASE_FOLDER . '/Exception/FilesystemExceptionInterface.php',
+    'Molajo\\Filesystem\\Type\\AbstractType'                      => BASE_FOLDER . '/Type/AbstractType.php',
     'Molajo\\Filesystem\\Type\\Local'                             => BASE_FOLDER . '/Type/Local.php',
     'Molajo\\Filesystem\\Type\\Ftp'                               => BASE_FOLDER . '/Type/Ftp.php',
     'Molajo\\Filesystem\\Type\\FilesystemType'                    => BASE_FOLDER . '/Type/FilesystemType.php',

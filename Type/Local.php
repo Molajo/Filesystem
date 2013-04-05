@@ -18,10 +18,10 @@ defined('MOLAJO') or die;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Local extends FilesystemType
+class Local extends AbstractType
 {
     /**
-     * Class constructor
+     * class constructor
      *
      * @since  1.0
      */
@@ -61,7 +61,7 @@ class Local extends FilesystemType
      * @return string
      * @since   1.0
      */
-    public function setPath($path)
+    protected function setPath($path)
     {
         return parent::setPath($path);
     }
@@ -104,7 +104,7 @@ class Local extends FilesystemType
      * @return void
      * @since   1.0
      */
-    public function close()
+    protected function close()
     {
         return;
     }
