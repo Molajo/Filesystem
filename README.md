@@ -1,166 +1,334 @@
 **NOT COMPLETE**
 
+Amy - look at adapters for:
+- PHP-OpenCloud https://github.com/rackspace/php-opencloud
+- Streaming
+- Sparkleshare http://sparkleshare.org/
+
 =======
 Filesystem
 =======
 
 [![Build Status](https://travis-ci.org/Molajo/Filesystem.png?branch=master)](https://travis-ci.org/Molajo/Filesystem)
 
-Simple, uniform File and Directory Services API for PHP applications enabling interaction with multiple Filesystem types
-(ex., Local, Ftp, Github, LDAP, etc.).
+Simple, uniform file and directory services API for PHP applications to interact with different types of filesystems in a common way.
 
 ## System Requirements ##
 
-* PHP 5.3.3, or above
+* PHP 5.3, or above
 * [PSR-0 compliant Autoloader](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)
-* PHP Framework independent
-* [optional] PHPUnit 3.5+ to execute the test suite (phpunit --version)
+* PHP framework independent
 
 ## What is Filesystem? ##
 
-**Filesystem** provides a common API to read, list, write, rename, delete, copy or move files and folders
-on (and between) filesystems using adapters. In addition, the API enables applications to perform system
-administrative tasks like changing the owner, group, file dates, and file and folder permissions. Benefits
-include a simple, uniform API, ability to copy and move files between filesystems, and an interface
-to fileservices for application support services, like Cache, Logging, Message, and Cache.
+**Filesystem** provides a common API for File and Folder operations, including: exists, getMetadata, read, getList, write, delete, copy, move, and rename on, and between, filesystems. In addition, the API enables applications to perform system administrative tasks like changing the owner, group, create, update, and touch dates, and permissions of files and folders.
 
-## Basic Usage ##
+### Basic Usage ###
 
-Each **Filesystem** command shares the same syntax and the same four parameters:
+Instantiate the specific adapter needed, pass it into the generic **Filesystem** adapter, and then use the generic adapter in your application.
 
-### Filesystem Request ###
+#### Class Instantiation ####
+After instantiating the adapter class for a specific filesystem, the application can then interact with that filesystem.
 
-```php
-    $adapter = new Molajo/Filesystem/Adapter($action, $path, $filesystem_type, $options);
-```
-#### Parameters ####
-
-- **$action** valid values: Read, List, Write, Delete, Rename, Copy, Move, GetRelativePath, Chmod, Touch, Metadata;
-- **$path** contains an absolute path from the filesystem root to be used to fulfill the action requested;
-- **$filesystem_type** Identifier for the file system. Examples include Local (default), Ftp, Virtual, Dropbox, etc.;
-- **$options** Associative array of named pair values needed for the specific Action (examples below).
-
-#### Results ####
-
-The output from the filesystem action request, along with relevant metadata, can be accessed from the returned
-object, as follows:
-
-**Action Results:** For any request where data is to be returned, this example shows how to retrieve the output:
+The local filesystem is default and does require any input. Other filesystems require specific types of input, as described in the **Adapters** section, below.
 
 ```php
-    echo $adapter->fs->data;
+    use Molajo\Filesystem\Connection;
+    $adapter = new Connection();
 ```
 
-**Metadata** including the file or folder (name), parent, extension, etc., is accessed in this manner:
+#### Using the Filesystem Adapter ####
+Applications can use $adapter to interact with files and folders as in this example of reading a file.
 
 ```php
-    echo $adapter->fs->size;
-    echo $adapter->fs->mime_type;
-    echo $adapter->fs->parent;
-    echo 'etc';
+    try {
+        $results = $adapter->read('\file\located\here.txt');
+    } catch (Exception $e) {
+        // deal with the exception
+    }
 ```
-**Metadata about the Fileystem** filesystem_type, root, persistence, default_directory_permissions,
-default_file_permissions, read_only.
+
+## Filesystem API ##
+Listed are the various methods available, an example, parameters definitions and how to access the results. It is recommended to use each method in a Try/Catch block since the method could throw an exception.
+
+### Exists ###
+Verifies if the file or folder defined by $path exists, returns true or false.
+
+```php
+    try {
+        $exists = $adapter->exists($path);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
+
+    if ($exists === true) {
+			echo 'The file or folder defined in $path does exist.';
+    } else {
+			echo 'The file or folder defined in $path does NOT exist.';
+    }
+```
+**Parameters**
+- **$path** contains an absolute path for a file or folder
+
+### getMetadata ###
+Retrieves an object containing metadata for the file or folder defined in $path:
+
+```php
+    try {
+        $metadata = $adapter->getMetadata($path);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
+
+    // View all object properties returned
+    echo '<pre>';
+    var_dump($metadata);
+    echo '</pre>';
+
+    // Use a single element
+    echo $metadata->name;
+```
+**Parameters**
+- **$path** contains an absolute path for a file or folder
+
+#### Metadata ####
+The metadata available for each type of Filesystem can vary. For the Local Filesystem, this is the list of metadata available.
+
+**Metadata about the Filesystem** filesystem_type, root, persistence, default_directory_permissions,
+default_file_permissions and read_only.
 
 **Metadata about requested path** (be it a file or folder) path, is_absolute, absolute_path, exists, owner,
 group, create_date, access_date, modified_date, is_readable, is_writable, is_executable, is_directory,
-is_file, is_link, type, name, parent, extension, no_extension, size, and mime_type.
+is_file, is_link, type, name, parent, extension, no_extension, size and mime_type.
 
-Metadata is defined in the [Molajo\Filesystem\Properties](https://github.com/Molajo/Filesystem/blob/master/src/Molajo/Filesystem/Type/FilesystemType.php) class. The Properties
-class can be extended and customized, as needed, by Filesystem.
-
-### Filesystem Commands ###
-
-#### Read ####
-
+### Read ###
 To read a specific file from a filesystem:
 
 ```php
-    $adapter = new \Molajo\Filesystem\Adapter('Read', 'location/of/file.txt');
-    echo $adapter->fs->data;
+    try {
+        $results = $adapter->read('\file\located\here.txt');
+    } catch (Exception $e) {
+        // deal with the exception
+    }
 ```
 
-#### List
+**Parameters**
+- **$path** contains an absolute path for a file or folder
 
-To list all files and folders for a given path, limiting the results to those files which
-have the extension types identified:
+### Get List ###
+
+Returns an array of files and folders for a given path, optionally recursively processing all sub-folders, and optionally limiting the results to those file extensions identified.
 
 ```php
-    $options = array(
-        'extension'    => 'txt,doc,ppt'
-    );
+    $path = '\file\located\here.txt';
+    $recursive = true;
+    $extensions = 'txt, pdf, doc';
 
-    $adapter = new \Molajo\Filesystem\Adapter('List', 'directory-name', $options);
-    $results = $adapter->fs->data);
+    try {
+        $results = $adapter->getList($path, $recursive, $extensions);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
 ```
+**Parameters**
+- **$path** contains an absolute path for a file or folder
+- **$recursive** true (default) or false indicator of whether or not subfolders should be processed
+- **$extensions** Comma delimited list of file extensions limiting search
 
-#### Write
+### Write ###
 
-To write the information in **$data** to the **Log** filesystem using the **standard** log.
+Writes data to the file identified in the given path.
 
 ```php
-    $options = array(
-        'data'    => 'Here are the words to write to the file.',
-    );
-    $adapter      = new \Molajo\Filesystem\Adapter('Write', 'standard', $options, 'Log');
+    $path = '\file\located\here.txt';
+    $data = 'Write this data.';
+    $replace = true;
+
+    try {
+        $results = $adapter->write($path, $data, $replace);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
 ```
+**Parameters**
+- **$path** contains an absolute path for the file
+- **$data** Content to be written to the file
+- **$replace** True or false value indicating whether or not an existing file should be overwritten
 
-#### Copy
+### Delete ###
 
-To copy file(s) and folder(s) from a filesystem to a location on the same or a different filesystem.
-
-This example shows how to backup a local file to a remote location.
+Deletes the folder and/or files identified in the given path, recursively deleting subfolders and files if so specified.
 
 ```php
-    $options = array(
-        'target_directory'       => 'name/of/target/folder',
-        'target_name'            => 'single-file-copy.txt',
-        'replace'                => false,
-        'target_filesystem_type' => 'Cloud'
-    );
-    $adapter = new \Molajo\Filesystem\Adapter('Copy', 'name/of/source/file', $options);
+    $path = '\example\of\a\folder';
+    $recursive = true;
+
+    try {
+        $results = $adapter->delete($path, $recursive);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
 ```
+**Parameters**
+- **$path** contains an absolute path for the folder or file
+- **$recursive** True or false value indicating if subfolders and files should be deleted, too (only valid for folder). False value for folder with subfolders will throw an exception.
 
-#### Move
+### Copy ###
 
-The only difference between the copy and the move is that the files copied are removed from the
-source location after the operation is complete.
+Copies the file(s) and folder(s) from a filesystem to a location on the same or a different filesystem.
 
-This example shows how to move files from a local directory to an archive location on the local filesystem.
+When copying a single file, a new filename can be specified using the target_name field.
 
 ```php
-    $options = array(
-        'target_directory'       => '/archive/year2012',
-        'replace'                => false
-    );
+    $path                   = '\copy\this\folder';
+    $target_directory       = '\copy\to\this\folder';
+    $target_name            = null;
+    $replace            	    = true;
+    $target_filesystem_type = 'Backup';
 
-    $adapter = new \Molajo\Filesystem\Adapter('Move', 'current/folder/year2012', $options);
+    try {
+        $adapter->copy($path, $target_directory, $target_name, $replace, $target_filesystem_type);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
 ```
+**Parameters**
+- **$path** contains an absolute path for the source folder or file
+- **$target_directory** contains an absolute path for the target folder or file
+- **$target_name** contains a different value for filename when copying a file a new filename is desired
+- **$replace** True or false value indicating whether the target file, if exists, should be replaced.
+- **$target_filesystem_type** Use if copying to a filesystem other than the current filesystem.
 
-#### Delete
+### Move ###
 
-As with the list, copy, and move, the delete can be used for individual files and it can be used
-to specify a folder and all dependent subfolders and files should be deleted.
+Moves the file(s) and folder(s) from a filesystem to a location on the same or a different filesystem.
+
+When moving a single file, a new filename can be specified using the target_name field.
 
 ```php
-    $adapter = new \Molajo\Filesystem\Adapter('Delete', 'name/of/source/folder');
+    $path                   = '\move\this\folder';
+    $target_directory       = '\move\to\this\folder';
+    $target_name            = null;
+    $replace            	    = false;
+    $target_filesystem_type = 'Archive';
+
+    try {
+        $adapter->copy($path, $target_directory, $target_name, $replace, $target_filesystem_type);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
 ```
+**Parameters**
+- **$path** contains an absolute path for the source folder or file
+- **$target_directory** contains an absolute path for the target folder or file
+- **$target_name** contains a different value for filename when copying a file a new filename is desired
+- **$replace** True or false value indicating whether the target file, if exists, should be replaced.
+- **$target_filesystem_type** Use if copying to a filesystem other than the current filesystem.
 
-### Special Purpose File Operations
-
-### Merged Filesystems
+### Rename ###
+Renames the file or folder to the specified value.
 
 ```php
-    $adapter = new \Molajo\Filesystem\Adapter('List', '/first/location');
-    $data1   = $adapter->fs->data;
+    $path                   = '\copy\this\folder\old_name.txt';
+    $new_name               = 'new_name.txt';
 
-    $adapter = new \Molajo\Filesystem\Adapter('List', '/second/location');
-    $data2   = $adapter->fs->data;
-
-    $merged  = array_merge($data1, $data2);
+    try {
+        $adapter->rename($path, $new_name);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
 ```
-#### Backup
+**Parameters**
+- **$path** contains an absolute path for the source folder or file
+- **$target_name** contains the new value to use for filename
 
+### Change Owner ###
+Change owner for file or folder identified in path, recursively changing the owner for all subordinate files and folders, if specified
+
+```php
+    $path        = '\this\folder\';
+    $user_name   = 'user';
+    $recursive   = true;
+
+    try {
+        $adapter->changeOwner($path, $user_name, $recursive);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
+```
+**Parameters**
+- **$path** contains an absolute path for the folder or file
+- **$user_name** system user name
+- **$recursive** True or false value indicating if subfolders and files should be deleted, too (only valid for folder). False value for folder with subfolders will throw an exception.
+
+### Change Group ###
+Change group for file or folder identified in path, recursively changing the group for all subordinate files and folders, if specified
+
+```php
+    $path        = '\this\folder\';
+    $group_id    = 5;
+    $recursive   = true;
+
+    try {
+        $adapter->changeOwner($path, $user_name, $recursive);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
+```
+**Parameters**
+- **$path** contains an absolute path for the folder or file
+- **$group_id** numeric system group id
+- **$recursive** True or false value indicating if subfolders and files should be deleted, too (only valid for folder). False value for folder with subfolders will throw an exception.
+
+### Change Permission ###
+Change permission for file or folder identified in path, recursively changing the permission for all subordinate files and folders, if specified
+
+```php
+    $path        = '\this\folder\';
+    $permission  = 0755;
+    $recursive   = true;
+
+    try {
+        $adapter->changeOwner($path, $user_name, $recursive);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
+```
+**Parameters**
+- **$path** contains an absolute path for the folder or file
+- **$user_name** system user name
+- **$recursive** True or false value indicating if subfolders and files should be deleted, too (only valid for folder). False value for folder with subfolders will throw an exception.
+
+### Touch ###
+Update the modification time and access time for the directory or file identified in $path.
+
+```php
+    $path                = '\copy\this\folder\old_name.txt';
+    $modification_time   = $modification_time;
+    $access_time         = $access_time;
+    $recursive           = false;
+
+    try {
+        $adapter->rename($path, $new_name);
+    } catch (Exception $e) {
+        // deal with the exception
+    }
+```
+**Parameters**
+- **$path** contains an absolute path for the source folder or file
+- **$modification_time** contains a PHP time value to be used as the modification time
+- **$access_time** contains a PHP time value to be used as the access time
+- **$recursive** true or false value indicating if the changes should be recursively applied to subfolders and files (only for folder)
+
+## Filesystem Adapters ##
+In order for an application to use a filesystem, it must first instantiate the adapter class. Different types of filesystems require different input to access the environment.
+
+### Local Filesystem Adapter ###
+
+- **$options** Associative array of named pair values needed to establish a connection for the adapter;
+- **$adapter** Identifier for the file system. Examples include Local (default), Ftp, Media, Dropbox, etc.;
+
+### FTP Filesystem Adapter ###
 This shows how to backup a file on one filesystem to another filesystem.
 
 ```php
@@ -175,52 +343,31 @@ This shows how to backup a file on one filesystem to another filesystem.
     $adapter = new \Molajo\Filesystem\File($options);
     $data    = $adapter->backup ();
 ```
+**Parameters**
+- **$path** contains an absolute path for the source folder or file
+- **$target_name** contains the new value to use for filename
 
-#### Download
+### Media Filesystem Adapter ###
 
-This shows how to backup a file on one filesystem to another filesystem.
+## Creative Uses of Filesystem ##
 
-```php
-    $options = array(
-        'source_adapter' => 'local',
-        'source_path'    => '/x/y/example',
-        'target_adapter' => 'ftp',
-        'target_path'    => '/x/y/backup',
-        'archive'        => 'zip'
-    );
+### Merged Filesystems ###
+You can use **Filesystem** to easily create a merged filesystem: Just instantiate multiple classes and merge read results.
+### Backup ###
+**Filesystem** supports copying files and folders to another filesystem. Combining this capability with an application cron job is a good way to schedule backups.
+### Archive ###
+**Filesystem** supports moving files and folders to another filesystem, simplifying the process of content archival.
+### Upload and Download ###
 
-    $adapter = new \Molajo\Filesystem\File($options);
-    $data    = $adapter->backup ();
-```
+## Install using Composer from Packagist ##
 
-#### Ftp Server
-
-This shows how to backup a file on one filesystem to another filesystem.
-
-```php
-    $options = array(
-        'source_adapter' => 'local',
-        'source_path'    => '/x/y/example',
-        'target_adapter' => 'ftp',
-        'target_path'    => '/x/y/backup',
-        'archive'        => 'zip'
-    );
-
-    $adapter = new \Molajo\Filesystem\File($options);
-    $data    = $adapter->backup ();
-```
-
-### Installation
-
-#### Install using Composer from Packagist
-
-**Step 1** Install composer in your project:
+### Step 1: Install composer in your project ###
 
 ```php
     curl -s https://getcomposer.org/installer | php
 ```
 
-**Step 2** Create a **composer.json** file in your project root:
+### Step 2: Create a **composer.json** file in your project root ###
 
 ```php
 {
@@ -230,32 +377,16 @@ This shows how to backup a file on one filesystem to another filesystem.
 }
 ```
 
-**Step 3** Install via composer:
+### Step 3: Install via composer ###
 
 ```php
     php composer.phar install
 ```
 
-**Step 4** Add this line to your application’s **index.php** file:
-
-```php
-    require 'vendor/autoload.php';
-```
-
-This instructs PHP to use Composer’s autoloader for **Filesystem** project dependencies.
-
-#### Or, Install Manually
-
-Download and extract **Filesystem**.
-
-Copy the Molajo folder (first subfolder of src) into your Vendor directory.
-
-Register Molajo\Filesystem\ subfolder in your autoload process.
-
 About
 =====
 
-Molajo Project adopted the following:
+Molajo Project has adopted the following:
 
  * [Semantic Versioning](http://semver.org/)
  * [PSR-0 Autoloader Interoperability](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)
@@ -270,15 +401,15 @@ Molajo Project adopted the following:
 Submitting pull requests and features
 ------------------------------------
 
-Pull requests [GitHub](https://github.com/Molajo/Fileservices/pulls)
+Pull requests [GitHub](https://github.com/Molajo/Filesystem/pulls)
 
-Features [GitHub](https://github.com/Molajo/Fileservices/issues)
+Features [GitHub](https://github.com/Molajo/Filesystem/issues)
 
 Author
 ------
 
 Amy Stephen - <AmyStephen@gmail.com> - <http://twitter.com/AmyStephen><br />
-See also the list of [contributors](https://github.com/Molajo/Fileservices/contributors) participating in this project.
+See also the list of [contributors](https://github.com/Molajo/Filesystem/contributors) participating in this project.
 
 License
 -------
@@ -293,6 +424,4 @@ specifications were followed, as closely as possible.
 
 More Information
 ----------------
-- [Usage](/Filesystem/doc/usage.md)
 - [Extend](/Filesystem/doc/extend.md)
-- [Specifications](/Filesystem/doc/specifications.md)

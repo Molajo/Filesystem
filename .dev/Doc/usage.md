@@ -172,13 +172,13 @@ Requirements
 Submitting bugs and feature requests
 ------------------------------------
 
-Bugs and feature request are tracked on [GitHub](https://github.com/Molajo/Fileservices/issues)
+Bugs and feature request are tracked on [GitHub](https://github.com/Molajo/Filesystem/issues)
 
 Author
 ------
 
 Amy Stephen - <AmyStephen@gmail.com> - <http://twitter.com/AmyStephen><br />
-See also the list of [contributors](https://github.com/Molajo/Fileservices/contributors) participating in this project.
+See also the list of [contributors](https://github.com/Molajo/Filesystem/contributors) participating in this project.
 
 License
 -------

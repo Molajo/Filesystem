@@ -689,7 +689,7 @@ If desired, you could simply use this.
 - cURL
 - Ftp Server
 
-##### 3.2.3.1 Segmenting Fileservices for Application
+##### 3.2.3.1 Segmenting Filesystem for Application
 
 - by person, business area, office, and so on
 - Media
@@ -730,8 +730,8 @@ Uses a Facade pattern to mask the complexity with the Filesystem Adapter Structu
 
 ::
 
-use Molajo\Filesystem\Adapter\Local as LocalAdapter;
-$adapter = new LocalAdapter($options);
+use Molajo\Filesystem\Api\Local as Local;
+$adapter = new Local($options);
 
 use Molajo\Filesystem\Filesystem;
 $filesystem = new Filesystem($adapter);

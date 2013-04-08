@@ -1,6 +1,6 @@
 <?php
 /**
- * FilesystemException
+ * FtpFilesystemException
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -15,14 +15,14 @@ use Exception;
 use Molajo\Filesystem\Api\ExceptionInterface;
 
 /**
- * FilesystemException Exception
+ * FtpFilesystemException Exception
  *
  * @package   Molajo
  * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class FilesystemException extends Exception implements ExceptionInterface
+class FtpFilesystemException extends Exception implements ExceptionInterface
 {
 
 }

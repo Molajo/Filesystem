@@ -17,10 +17,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 use Molajo\Filesystem\Adapter as fsAdapter;
-use Molajo\Filesystem\Adapter\AdapterInterface;
-use Molajo\Filesystem\Adapter\ActionsInterface;
-use Molajo\Filesystem\Adapter\MetadataInterface;
-use Molajo\Filesystem\Adapter\SystemInterface;
+use Molajo\Filesystem\Api\AdapterInterface;
 
 use Exception;
 use Molajo\Filesystem\Exception\FilesystemException;
@@ -48,7 +45,7 @@ class AbstractType
     /**
      * Options
      *
-     * @var    string
+     * @var    array
      * @since  1.0
      */
     protected $options;
@@ -72,20 +69,20 @@ class AbstractType
     protected $root;
 
     /**
+     * Initial Directory for Filesystem
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $initial_directory;
+
+    /**
      * Is path root?
      *
      * @var    string
      * @since  1.0
      */
     protected $is_root;
-
-    /**
-     * Persistence (Permanent 1, Temporary 0)
-     *
-     * @var    bool
-     * @since  1.0
-     */
-    protected $persistence;
 
     /**
      * Directory Permissions
@@ -110,96 +107,6 @@ class AbstractType
      * @since  1.0
      */
     protected $read_only;
-
-    /**
-     * LOGON
-     *
-     * Username
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $username;
-
-    /**
-     * Password
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $password;
-
-    /**
-     * Host
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $host;
-
-    /**
-     * Port
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $port = 21;
-
-    /**
-     * Connection Type
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $connection_type;
-
-    /**
-     * Timeout in minutes
-     *
-     * @var    string
-     * @since  1.0
-     */
-    protected $timeout = 15;
-
-    /**
-     * Passive Mode
-     *
-     * @var    bool
-     * @since  1.0
-     */
-    protected $passive_mode = false;
-
-    /**
-     * Initial Directory after Connection
-     *
-     * @var    object|resource
-     * @since  1.0
-     */
-    protected $initial_directory;
-
-    /**
-     * FTP Mode - FTP_ASCII or FTP_BINARY
-     *
-     * @var    bool
-     * @since  1.0
-     */
-    protected $ftp_mode = FTP_ASCII;
-
-    /**
-     * Connection
-     *
-     * @var    object|resource
-     * @since  1.0
-     */
-    protected $connection;
-
-    /**
-     * Is Connected?
-     *
-     * @var    bool
-     * @since  1.0
-     */
-    protected $is_connected;
 
     /**
      * Timezone
@@ -438,19 +345,19 @@ class AbstractType
     protected $data;
 
     /**
-     * class constructor
+     * Constructor
+     *
+     * @param   array  $options
+     * @param   string $filesystem_type
      *
      * @since   1.0
-     * @throws  FilesystemException
      */
-    public function __construct($filesystem_type)
+    public function __construct($options = array(), $filesystem_type = '')
     {
-
+        $this->connect($options);
     }
 
     /**
-     * Adapter Interface Step 1:
-     *
      * Method to connect to a Local server
      *
      * @param   array $options
@@ -462,7 +369,6 @@ class AbstractType
     {
         $this->setOptions($options);
         $this->setRoot();
-        $this->setPersistence();
         $this->setDirectoryDefaultPermissions();
         $this->setFileDefaultPermissions();
         $this->setReadOnly();
@@ -471,19 +377,18 @@ class AbstractType
     }
 
     /**
-     * Adapter Interface Step 2:
      * Set the Path
      *
      * @param   string $path
      *
-     * @return  string
+     * @return  $this
      * @since   1.0
      */
     protected function setPath($path)
     {
-        $this->path = $path;
+        $this->path = $this->normalise($path);
 
-        return $this->path;
+        return $this;
     }
 
     /**
@@ -495,43 +400,6 @@ class AbstractType
     public function getPath()
     {
         return $this->path;
-    }
-
-    /**
-     * Set Options
-     *
-     * @param   array $options
-     *
-     * @return  $this
-     * @since   1.0
-     */
-    protected function setOptions($options = array())
-    {
-        if (is_array($options)) {
-        } else {
-            $options = array();
-        }
-
-        $this->options = $options;
-
-        $this->setTimezone();
-        $this->setUsername();
-        $this->setPassword();
-        $this->setHost();
-        $this->setPort();
-        $this->setFtpMode();
-        $this->setConnectionType();
-        $this->setTimeout();
-        $this->setPassiveMode();
-        $this->setInitialDirectory();
-
-        $this->setRoot();
-        $this->setPersistence();
-        $this->setDirectoryDefaultPermissions();
-        $this->setFileDefaultPermissions();
-        $this->setReadOnly();
-
-        return $this;
     }
 
     /**
@@ -592,29 +460,14 @@ class AbstractType
     }
 
     /**
-     * Set persistence indicator for Filesystem
+     * Get Root of Filesystem
      *
      * @return  $this
      * @since   1.0
      */
-    protected function setPersistence()
+    protected function getRoot()
     {
-        $persistence = true;
-
-        if (isset($this->options['persistence'])) {
-            $persistence = $this->options['persistence'];
-        }
-
-        if ($persistence === false) {
-        } else {
-            $persistence = true;
-        }
-
-        $persistence = $this->setTorF($persistence, true);
-
-        $this->persistence = $persistence;
-
-        return $this;
+        return $this->root;
     }
 
     /**
@@ -825,28 +678,6 @@ class AbstractType
     protected function getIsConnected()
     {
         return $this->is_connected;
-    }
-
-    /**
-     * Get Root of Filesystem
-     *
-     * @return  $this
-     * @since   1.0
-     */
-    protected function getRoot()
-    {
-        return $this->root;
-    }
-
-    /**
-     * Get Persistence indicator
-     *
-     * @return  bool
-     * @since   1.0
-     */
-    protected function getPersistence()
-    {
-        return $this->persistence;
     }
 
     /**
@@ -2020,7 +1851,7 @@ class AbstractType
         try {
             $this->data = file_get_contents($this->path);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
             throw new FilesystemException
             (ucfirst(strtolower($this->getFilesystemType())) . ' Filesystem Read: Error reading file: ' . $this->path);
@@ -2764,9 +2595,9 @@ class AbstractType
             try {
                 ftp_close($this->connection);
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
 
-                throw new \Exception
+                throw new FilesystemException
                 ('Filesystem Adapter Ftp: Closing Ftp Connection Failed');
             }
         }

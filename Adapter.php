@@ -10,10 +10,10 @@ namespace Molajo\Filesystem;
 
 defined('MOLAJO') or die;
 
-use Molajo\Filesystem\Adapter\AdapterInterface;
-use Molajo\Filesystem\Adapter\ActionsInterface;
 use Exception;
 use Molajo\Filesystem\Exception\FilesystemException;
+use Molajo\Filesystem\Api\ConnectionInterface;
+use Molajo\Filesystem\Api\AdapterInterface;
 
 /**
  * Adapter for Filesystem
@@ -23,7 +23,7 @@ use Molajo\Filesystem\Exception\FilesystemException;
  * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @since     1.0
  */
-class Adapter implements AdapterInterface, ActionsInterface
+class Adapter implements ConnectionInterface, AdapterInterface
 {
     /**
      * Filesystem Type
@@ -31,59 +31,19 @@ class Adapter implements AdapterInterface, ActionsInterface
      * @var     object
      * @since   1.0
      */
-    public $fs;
+    public $fsType;
 
     /**
      * Constructor
      *
-     * @param   string $filesystem_type
-     * @param   array  $options
+     * @param   AdapterInterface $filesystem
+     * @param   array            $options
      *
-     * @return  mixed
      * @since   1.0
      */
-    public function __construct($filesystem_type = 'Local', $options = array())
+    public function __construct(AdapterInterface $filesystem)
     {
-        if ($filesystem_type == '') {
-            $filesystem_type = 'Local';
-        }
-
-        $this->getFilesystemType($filesystem_type);
-
-        $this->connect($options);
-    }
-
-    /**
-     * Get the Filesystem Type (ex., Local, Ftp, etc.)
-     *
-     * @param   string $filesystem_type
-     *
-     * @return  $this
-     * @since   1.0
-     * @throws  FilesystemException
-     */
-    protected function getFilesystemType($filesystem_type)
-    {
-        $class = 'Molajo\\Filesystem\\Type\\' . $filesystem_type;
-
-        try {
-
-            $this->fs = new $class($filesystem_type);
-
-        } catch (Exception $e) {
-
-            throw new FilesystemException
-            ('Filesystem: Could not instantiate Filesystem Type: ' . $fieldhandler_type
-                . ' Class: ' . $class);
-        }
-
-        if (class_exists($class)) {
-        } else {
-            throw new FilesystemException
-            ('Filesystem Type class ' . $class . ' does not exist.');
-        }
-
-        return;
+        $this->fsType = $filesystem;
     }
 
     /**
@@ -94,49 +54,131 @@ class Adapter implements AdapterInterface, ActionsInterface
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
+     * @api
      */
     public function connect($options = array())
     {
         try {
-            $this->fs->connect($options);
+            $this->fsType->connect($options);
 
         } catch (Exception $e) {
 
             throw new FilesystemException
-            ('Filesystem: Caught Exception: ' . $e->GetMessage());
+            ('Filesystem: Caught Exception: ' . $e->getMessage());
         }
 
-        return;
+        return $this;
+    }
+
+    /**
+     * Determines if file or folder identified in path exists
+     *
+     * @param   string $path
+     *
+     * @return  bool
+     * @since   1.0
+     * @throws  FilesystemException
+     * @api
+     */
+    public function exists($path)
+    {
+        try {
+            return $this->fsType->exists($path);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: Exists Exception ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Returns an associative array of metadata for the file or folder specified in path
+     *
+     * @param   string $path
+     *
+     * @return  mixed
+     * @since   1.0
+     * @throws  FilesystemException
+     * @api
+     */
+    public function getMetadata($path)
+    {
+        try {
+            return $this->fsType->getMetadata($path);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: getMetadata Exception ' . $e->getMessage());
+        }
     }
 
     /**
      * Returns the contents of the file identified in path
      *
-     * @param   string  $path
+     * @param   string $path
      *
-     * return array|mixed|object|string
+     * @return  null|string
      * @since   1.0
      * @throws  FilesystemException
+     * @api
      */
     public function read($path)
     {
-        if ($path == '') {
-            throw new FilesystemException
-            ('Filesystem Path is required, but was not provided.');
+        try {
+
+            return $this->fsType->read($path);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: Read Exception ' . $e->getMessage());
         }
-
-        $options = array();
-
-        $this->setPath($path);
-        $this->getMetadata();
-        $this->doAction('read', $options);
-        $this->close();
-
-        return $this->fs;
     }
 
     /**
-     * Returns a list of file and folder names located at path directory
+     * Returns a list of file and folder names located at path directory, optionally recursively
+     *
+     * @param   string $path
+     * @param   bool   $recursive
+     * @param   string $extensions
+     *
+     * @return  mixed
+     * @since   1.0
+     * @throws  FilesystemException
+     * @api
+     */
+    public function getList($path, $recursive = false, $extensions = '')
+    {
+        try {
+
+            return $this->fsType->getList($path, $recursive);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: getList Exception ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Creates (or replaces) the file or creates the directory identified in path;
+     *
+     * @param   string $path
+     * @param   string $data    file, only
+     * @param   bool   $replace file, only
+     *
+     * @return  $this
+     * @since   1.0
+     * @throws  FilesystemException
+     * @api
+     */
+    public function write($path, $data = '', $replace = true)
+    {
+        try {
+
+            return $this->fsType->write($path, $data, $replace);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: Write Exception ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Deletes the file or folder identified in path, optionally deletes recursively
      *
      * @param   string $path
      * @param   bool   $recursive
@@ -144,89 +186,22 @@ class Adapter implements AdapterInterface, ActionsInterface
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
+     * @api
      */
-    public function getList($path, $recursive = false)
+    public function delete($path, $recursive = false)
     {
-        if ($path == '') {
-            throw new FilesystemException
-            ('Filesystem Path is required, but was not provided.');
+        try {
+
+            return $this->fsType->delete($path, $recursive);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: Delete Exception ' . $e->getMessage());
         }
-
-        $options = array();
-        $options['recursive'] = $recursive;
-
-        $this->setPath($path);
-        $this->getMetadata();
-        $this->doAction('getList', $options);
-        $this->close();
-
-        return $this->fs;
     }
 
     /**
-     * Creates or replaces the file or directory identified in path using the data value
-     *
-     * @param   string $path
-     * @param   string $file
-     * @param   bool   $replace
-     * @param   string $data
-     *
-     * @return  $this
-     * @since   1.0
-     * @throws  FilesystemException
-     */
-    public function write($path, $file = '', $replace = true, $data = '')
-    {
-        if ($path == '') {
-            throw new FilesystemException
-            ('Filesystem Path is required, but was not provided.');
-        }
-
-        $options = array();
-        $options['file'] = $file;
-        $options['replace'] = $replace;
-        $options['data'] = $data;
-
-        $this->setPath($path);
-        $this->getMetadata();
-        $this->doAction('write', $options);
-        $this->close();
-
-        return $this->fs;
-    }
-
-    /**
-     * Deletes the file or folder identified in path. Deletes subdirectories, if so indicated
-     *
-     * @param   string $path
-     * @param   bool   $delete_subdirectories
-     *
-     * @return  $this
-     * @since   1.0
-     * @throws  FilesystemException
-     */
-    public function delete($path, $delete_subdirectories = true)
-    {
-        if ($path == '') {
-            throw new FilesystemException
-            ('Filesystem Path is required, but was not provided.');
-        }
-
-        $options = array();
-        $options['delete_subdirectories'] = $delete_subdirectories;
-
-        $this->setPath($path);
-        $this->getMetadata();
-        $this->doAction('delete', $options);
-        $this->close();
-
-        return $this->fs;
-    }
-
-    /**
-     * Copies the file/folder in $path to the target_directory, replacing content, if indicated
-     *
-     * Note: $target_filesystem_type used to create new filesystem instance for target
+     * Copies the file/folder in $path to the target_directory (optionally target_name),
+     *  replacing content, if indicated. Can copy to target_filesystem_type.
      *
      * @param   string $path
      * @param   string $target_directory
@@ -237,33 +212,27 @@ class Adapter implements AdapterInterface, ActionsInterface
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
+     * @api
      */
-    public function copy($path, $target_directory, $target_name = '',
-        $replace = true, $target_filesystem_type = '')
-    {
-        if ($path == '') {
-            throw new FilesystemException
-            ('Filesystem Path is required, but was not provided.');
+    public function copy(
+        $path,
+        $target_directory,
+        $target_name = '',
+        $replace = true,
+        $target_filesystem_type = ''
+    ) {
+        try {
+
+            return $this->fsType->copy($path, $target_directory, $target_name, $replace, $target_filesystem_type);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: Copy Exception ' . $e->getMessage());
         }
-
-        $options = array();
-        $options['target_directory'] = $target_directory;
-        $options['target_name'] = $target_name;
-        $options['replace'] = $replace;
-        $options['target_filesystem_type'] = $target_filesystem_type;
-
-        $this->setPath($path);
-        $this->getMetadata();
-        $this->doAction('copy', $options);
-        $this->close();
-
-        return $this->fs;
     }
 
     /**
-     * Moves the file/folder in $path to the target_directory, replacing content, if indicated
-     *
-     * Note: $target_filesystem_type used to create new filesystem instance for target
+     * Moves the file/folder in $path to the target_directory (optionally target_name),
+     *  replacing content, if indicated. Can move to target_filesystem_type.
      *
      * @param   string $path
      * @param   string $target_directory
@@ -274,27 +243,44 @@ class Adapter implements AdapterInterface, ActionsInterface
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
+     * @api
      */
-    public function move($path, $target_directory, $target_name = '',
-        $replace = true, $target_filesystem_type = '')
-    {
-        if ($path == '') {
-            throw new FilesystemException
-            ('Filesystem Path is required, but was not provided.');
+    public function move(
+        $path,
+        $target_directory,
+        $target_name = '',
+        $replace = true,
+        $target_filesystem_type = ''
+    ) {
+        try {
+
+            return $this->fsType->move($path, $target_directory, $target_name, $replace, $target_filesystem_type);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: Move Exception ' . $e->getMessage());
         }
+    }
 
-        $options = array();
-        $options['target_directory'] = $target_directory;
-        $options['target_name'] = $target_name;
-        $options['replace'] = $replace;
-        $options['target_filesystem_type'] = $target_filesystem_type;
+    /**
+     * Rename file or folder identified in path
+     *
+     * @param   string $path
+     * @param   string $new_name
+     *
+     * @return  $this
+     * @since   1.0
+     * @throws  FilesystemException
+     * @api
+     */
+    public function rename($path, $new_name)
+    {
+        try {
 
-        $this->setPath($path);
-        $this->getMetadata();
-        $this->doAction('move', $options);
-        $this->close();
+            return $this->fsType->rename($path, $new_name);
 
-        return $this->fs;
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: Rename Exception ' . $e->getMessage());
+        }
     }
 
     /**
@@ -302,27 +288,22 @@ class Adapter implements AdapterInterface, ActionsInterface
      *
      * @param   string $path
      * @param   string $user_name
+     * @param   bool   $recursive
      *
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
+     * @api
      */
-    public function changeOwner($path, $user_name)
+    public function changeOwner($path, $user_name, $recursive = false)
     {
-        if ($path == '') {
-            throw new FilesystemException
-            ('Filesystem Path is required, but was not provided.');
+        try {
+
+            return $this->fsType->changeOwner($path, $user_name, $recursive);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: changeOwner Exception ' . $e->getMessage());
         }
-
-        $options = array();
-        $options['user_name'] = $user_name;
-
-        $this->setPath($path);
-        $this->getMetadata();
-        $this->doAction('changeOwner', $options);
-        $this->close();
-
-        return $this->fs;
     }
 
     /**
@@ -330,27 +311,22 @@ class Adapter implements AdapterInterface, ActionsInterface
      *
      * @param   string $path
      * @param   string $group_id
+     * @param   bool   $recursive
      *
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
+     * @api
      */
-    public function changeGroup($path, $group_id)
+    public function changeGroup($path, $group_id, $recursive = false)
     {
-        if ($path == '') {
-            throw new FilesystemException
-            ('Filesystem Path is required, but was not provided.');
+        try {
+
+            return $this->fsType->changeGroup($path, $group_id, $recursive);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: changeGroup Exception ' . $e->getMessage());
         }
-
-        $options = array();
-        $options['group_id'] = $group_id;
-
-        $this->setPath($path);
-        $this->getMetadata();
-        $this->doAction('changeGroup', $options);
-        $this->close();
-
-        return $this->fs;
     }
 
     /**
@@ -358,27 +334,22 @@ class Adapter implements AdapterInterface, ActionsInterface
      *
      * @param   string $path
      * @param   int    $permission
+     * @param   bool   $recursive
      *
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
+     * @api
      */
-    public function changePermission($path, $permission)
+    public function changePermission($path, $permission, $recursive = false)
     {
-        if ($path == '') {
-            throw new FilesystemException
-            ('Filesystem Path is required, but was not provided.');
+        try {
+
+            return $this->fsType->changePermission($path, $permission, $recursive);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: changePermission Exception ' . $e->getMessage());
         }
-
-        $options = array();
-        $options['permission'] = $permission;
-
-        $this->setPath($path);
-        $this->getMetadata();
-        $this->doAction('changePermission', $options);
-        $this->close();
-
-        return $this->fs;
     }
 
     /**
@@ -387,75 +358,22 @@ class Adapter implements AdapterInterface, ActionsInterface
      * @param   string $path
      * @param   int    $modification_time
      * @param   int    $access_time
+     * @param   bool   $recursive
      *
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
+     * @api
      */
-    public function touch($path, $modification_time = null, $access_time = null)
+    public function touch($path, $modification_time = null, $access_time = null, $recursive = false)
     {
-        if ($path == '') {
-            throw new FilesystemException
-            ('Filesystem Path is required, but was not provided.');
+        try {
+
+            return $this->fsType->touch($path, $modification_time, $access_time, $recursive);
+
+        } catch (Exception $e) {
+            throw new FilesystemException('Filesystem: Touch Exception ' . $e->getMessage());
         }
-
-        $options = array();
-        $options['modification_time'] = $modification_time;
-        $options['access_time'] = $access_time;
-
-        $this->setPath($path);
-        $this->getMetadata();
-        $this->doAction('touch', $options);
-        $this->close();
-
-        return $this->fs;
-    }
-
-    /**
-     * Set the Path
-     *
-     * @param   string $path
-     *
-     * @return  $this
-     * @since   1.0
-     * @throws  FilesystemException
-     */
-    public function setPath($path)
-    {
-        $this->fs->setPath($path);
-
-        return $this;
-    }
-
-    /**
-     * Retrieves and set metadata for the file specified in path
-     *
-     * @return  $this
-     * @since   1.0
-     * @throws  FilesystemException
-     */
-    public function getMetadata()
-    {
-        $this->fs->getMetadata();
-
-        return $this;
-    }
-
-    /**
-     * Execute the action requested
-     *
-     * @param   string  $action
-     * @param   array  $options
-     *
-     * @return  $this
-     * @since   1.0
-     * @throws  FilesystemException
-     */
-    public function doAction($action = '', $options = array())
-    {
-        $this->fs->doAction($action);
-
-        return $this;
     }
 
     /**
@@ -464,10 +382,11 @@ class Adapter implements AdapterInterface, ActionsInterface
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
+     * @api
      */
     public function close()
     {
-        $this->fs->close();
+        $this->fsType->close();
 
         return $this;
     }

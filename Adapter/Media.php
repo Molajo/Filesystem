@@ -10,8 +10,6 @@ namespace Molajo\Filesystem\Type;
 
 defined('MOLAJO') or die;
 
-use Molajo\Filesystem\Adapter;
-
 /**
  * Media Adapter for Filesystem
  *
@@ -20,7 +18,7 @@ use Molajo\Filesystem\Adapter;
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class Media implements File, Path, System
+class Media extends Local
 {
     /**
      * Constructor
