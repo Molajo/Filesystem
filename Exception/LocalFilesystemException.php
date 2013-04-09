@@ -11,7 +11,6 @@ namespace Molajo\Filesystem\Exception;
 defined('MOLAJO') or die;
 
 use Exception;
-
 use Molajo\Filesystem\Api\ExceptionInterface;
 
 /**

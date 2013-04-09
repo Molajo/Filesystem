@@ -64,28 +64,33 @@ interface AdapterInterface
      *
      * @param   string $path
      * @param   bool   $recursive
-     * @param   string $extensions
+     * @param   string $extension_list
+     * @param   bool   $include_files
+     * @param   bool   $include_folders
      *
      * @return  mixed
      * @since   1.0
      * @throws  FilesystemException
      * @api
      */
-    public function getList($path, $recursive = false, $extensions = '');
+    public function getList($path, $recursive = false, $extension_list = '',
+        $include_files = false, $include_folders = false);
 
     /**
      * Creates (or replaces) the file or creates the directory identified in path;
      *
      * @param   string $path
-     * @param   string $data    file, only
-     * @param   bool   $replace file, only
+     * @param   string $data     (file, only)
+     * @param   bool   $replace  (file, only)
+     * @param   bool   $append   (file, only)
+     * @param   bool   $truncate (file, only)
      *
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
      * @api
      */
-    public function write($path, $data = '', $replace = true);
+    public function write($path, $data = '', $replace = true, $append = false, $truncate = false);
 
     /**
      * Deletes the file or folder identified in path, optionally deletes recursively

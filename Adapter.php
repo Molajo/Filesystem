@@ -95,7 +95,7 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @param   string $path
      *
-     * @return  mixed
+     * @return  object
      * @since   1.0
      * @throws  FilesystemException
      * @api
@@ -136,18 +136,21 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @param   string $path
      * @param   bool   $recursive
-     * @param   string $extensions
+     * @param   string $extension_list
+     * @param   bool   $include_files
+     * @param   bool   $include_folders
      *
      * @return  mixed
      * @since   1.0
      * @throws  FilesystemException
      * @api
      */
-    public function getList($path, $recursive = false, $extensions = '')
+    public function getList($path, $recursive = false, $extension_list = '',
+        $include_files = false, $include_folders = false)
     {
         try {
 
-            return $this->fsType->getList($path, $recursive);
+            return $this->fsType->getList($path, $recursive, $extension_list, $include_files, $include_folders);
 
         } catch (Exception $e) {
             throw new FilesystemException('Filesystem: getList Exception ' . $e->getMessage());
@@ -158,19 +161,21 @@ class Adapter implements ConnectionInterface, AdapterInterface
      * Creates (or replaces) the file or creates the directory identified in path;
      *
      * @param   string $path
-     * @param   string $data    file, only
-     * @param   bool   $replace file, only
+     * @param   string $data     (file, only)
+     * @param   bool   $replace  (file, only)
+     * @param   bool   $append   (file, only)
+     * @param   bool   $truncate (file, only)
      *
      * @return  $this
      * @since   1.0
      * @throws  FilesystemException
      * @api
      */
-    public function write($path, $data = '', $replace = true)
+    public function write($path, $data = '', $replace = true, $append = false, $truncate = false)
     {
         try {
 
-            return $this->fsType->write($path, $data, $replace);
+            return $this->fsType->write($path, $data, $replace, $append, $truncate);
 
         } catch (Exception $e) {
             throw new FilesystemException('Filesystem: Write Exception ' . $e->getMessage());

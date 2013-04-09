@@ -35,8 +35,8 @@ class LocalListTest extends Data
 
         $this->options = array(
             'recursive'       => false,
-            'exclude_files'   => false,
-            'exclude_folders' => false,
+            'include_files'   => false,
+            'include_folders' => false,
             'extension_list'  => array(),
             'name_mask'       => null
         );
@@ -60,8 +60,8 @@ class LocalListTest extends Data
 
         $this->options = array(
             'recursive'       => true,
-            'exclude_files'   => false,
-            'exclude_folders' => false,
+            'include_files'   => false,
+            'include_folders' => false,
             'extension_list'  => array(),
             'name_mask'       => null
         );
@@ -85,8 +85,8 @@ class LocalListTest extends Data
 
         $this->options = array(
             'recursive'       => true,
-            'exclude_files'   => true,
-            'exclude_folders' => false,
+            'include_files'   => true,
+            'include_folders' => false,
             'extension_list'  => array(),
             'name_mask'       => null
         );
@@ -110,8 +110,8 @@ class LocalListTest extends Data
 
         $this->options = array(
             'recursive'       => true,
-            'exclude_files'   => false,
-            'exclude_folders' => true,
+            'include_files'   => false,
+            'include_folders' => true,
             'extension_list'  => array(),
             'name_mask'       => null
         );
@@ -135,8 +135,8 @@ class LocalListTest extends Data
 
         $this->options = array(
             'recursive'       => true,
-            'exclude_files'   => false,
-            'exclude_folders' => false,
+            'include_files'   => false,
+            'include_folders' => false,
             'extension_list'  => array(),
             'name_mask'       => '2'
         );

@@ -5,6 +5,10 @@ Amy - look at adapters for:
 - Streaming
 - Sparkleshare http://sparkleshare.org/
 
+Todo:
+- getrelativepath
+- add $include_files, $include_folders, $name_mask to getList
+
 =======
 Filesystem
 =======
@@ -18,6 +22,48 @@ Simple, uniform file and directory services API for PHP applications to interact
 * PHP 5.3, or above
 * [PSR-0 compliant Autoloader](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md)
 * PHP framework independent
+
+## At a glance ... ##
+These methods are discussed in more detail, below. With the exception of the read method,
+each are designed to provide results for either a file or a folder. Since Exceptions could
+be thrown, it is recommended that the methods be placed within a Try/Catch block.
+
+[Filesystem Adapter Interface](https://github.com/Molajo/Standard/blob/master/Vendor/Molajo/Filesystem/Api/AdapterInterface.php)
+```php
+
+    // Defaults to Local Filesystem; $path can be file or folder
+
+    use Molajo\Filesystem\Connection;
+    $adapter = new Connection();
+
+    $results = $adapter->exists('\file\located\here.txt');
+
+    $metadata = $adapter->getMetadata('\file\located\here.txt');
+    echo $metadata->owner;      // See complete list of metadata returned, below
+
+    $results = $adapter->read('\file\located\here.txt');
+
+    $results = $adapter->getList($path, $recursive, $extensions);
+
+    $adapter->write($path, $data, $replace, $append, $truncate);
+
+    $adapter->delete($path, $recursive);
+
+    $adapter->copy($path, $target_directory, $target_name, $replace, $target_filesystem_type);
+
+    $adapter->move($path, $target_directory, $target_name, $replace, $target_filesystem_type);
+
+    $adapter->rename($path, $new_name);
+
+    $adapter->changeOwner($path, $user_name, $recursive);
+
+    $adapter->changeGroup($path, $group_id, $recursive);
+
+    $adapter->changePermission($path, $permission, $recursive);
+
+    $adapter->touch($path, $modification_time, $access_time, $recursive);
+
+```
 
 ## What is Filesystem? ##
 
@@ -122,10 +168,12 @@ Returns an array of files and folders for a given path, optionally recursively p
 ```php
     $path = '\file\located\here.txt';
     $recursive = true;
-    $extensions = 'txt, pdf, doc';
+    $extension_list = 'txt, pdf, doc';
+    $include_files = false;
+    $include_folders = false;
 
     try {
-        $results = $adapter->getList($path, $recursive, $extensions);
+        $results = $adapter->getList($path, $recursive, $extension_list, $include_files, $include_folders);
     } catch (Exception $e) {
         // deal with the exception
     }
@@ -133,7 +181,9 @@ Returns an array of files and folders for a given path, optionally recursively p
 **Parameters**
 - **$path** contains an absolute path for a file or folder
 - **$recursive** true (default) or false indicator of whether or not subfolders should be processed
-- **$extensions** Comma delimited list of file extensions limiting search
+- **$extension_list** Comma delimited list of file extensions which qualify
+- **$include_files** True or false value used to exclude or include files in list
+- **$include_folders** True or false value used to exclude or include folders in list
 
 ### Write ###
 
@@ -180,10 +230,11 @@ Copies the file(s) and folder(s) from a filesystem to a location on the same or 
 When copying a single file, a new filename can be specified using the target_name field.
 
 ```php
-    $path                   = '\copy\this\folder';
-    $target_directory       = '\copy\to\this\folder';
+
+    $path                   = '\copy\contents\from\this\folder';
+    $target_directory       = '\to\this\folder';
     $target_name            = null;
-    $replace            	    = true;
+    $replace            	= true;
     $target_filesystem_type = 'Backup';
 
     try {
@@ -191,6 +242,7 @@ When copying a single file, a new filename can be specified using the target_nam
     } catch (Exception $e) {
         // deal with the exception
     }
+
 ```
 **Parameters**
 - **$path** contains an absolute path for the source folder or file
@@ -206,14 +258,14 @@ Moves the file(s) and folder(s) from a filesystem to a location on the same or a
 When moving a single file, a new filename can be specified using the target_name field.
 
 ```php
-    $path                   = '\move\this\folder';
-    $target_directory       = '\move\to\this\folder';
+    $path                   = '\move\contents\from\this\folder';
+    $target_directory       = '\to\this\folder';
     $target_name            = null;
-    $replace            	    = false;
+    $replace            	= false;
     $target_filesystem_type = 'Archive';
 
     try {
-        $adapter->copy($path, $target_directory, $target_name, $replace, $target_filesystem_type);
+        $adapter->move($path, $target_directory, $target_name, $replace, $target_filesystem_type);
     } catch (Exception $e) {
         // deal with the exception
     }
@@ -270,7 +322,7 @@ Change group for file or folder identified in path, recursively changing the gro
     $recursive   = true;
 
     try {
-        $adapter->changeOwner($path, $user_name, $recursive);
+        $adapter->changeGroup($path, $group_id, $recursive);
     } catch (Exception $e) {
         // deal with the exception
     }
@@ -289,14 +341,14 @@ Change permission for file or folder identified in path, recursively changing th
     $recursive   = true;
 
     try {
-        $adapter->changeOwner($path, $user_name, $recursive);
+        $adapter->changePermission($path, $permission, $recursive);
     } catch (Exception $e) {
         // deal with the exception
     }
 ```
 **Parameters**
 - **$path** contains an absolute path for the folder or file
-- **$user_name** system user name
+- **$permission** system user name
 - **$recursive** True or false value indicating if subfolders and files should be deleted, too (only valid for folder). False value for folder with subfolders will throw an exception.
 
 ### Touch ###
@@ -309,7 +361,7 @@ Update the modification time and access time for the directory or file identifie
     $recursive           = false;
 
     try {
-        $adapter->rename($path, $new_name);
+        $adapter->touch($path, $modification_time, $access_time, $recursive);
     } catch (Exception $e) {
         // deal with the exception
     }

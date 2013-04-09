@@ -63,6 +63,20 @@ class Connection implements ConnectionInterface
     }
 
     /**
+     * Entry point for adapter
+     *
+     * @param   string $name
+     * @param   array  $arguments
+     *
+     * @return  object
+     * @since   1.0
+     */
+    public function __call($name, $arguments)
+    {
+        return $this->adapter->$name(implode(', ', $arguments));
+    }
+
+    /**
      * Get the Filesystem specific Adapter
      *
      * @param   string $filesystem_type
