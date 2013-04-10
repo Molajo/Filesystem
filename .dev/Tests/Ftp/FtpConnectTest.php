@@ -18,7 +18,7 @@ class FtpConnectTest extends Data
         parent::setUp();
 
         /** initialise call */
-        $this->filesystem_type = 'Ftp';
+        $this->adapter_handler = 'Ftp';
         $this->action          = 'Read';
 
         return;
@@ -27,7 +27,7 @@ class FtpConnectTest extends Data
     /**
      * Should default target directory to $this->path
      *
-     * @covers Molajo\Filesystem\Type\Ftp::copyOrMove
+     * @covers Molajo\Filesystem\Handler\Ftp::copyOrMove
      */
     public function testSuccessfulConnection()
     {
@@ -45,9 +45,9 @@ class FtpConnectTest extends Data
             'persistence'       => false
         );
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
-        $this->assertEquals('Ftp', $adapter->fs->filesystem_type);
+        $this->assertEquals('Ftp', $adapter->fs->adapter_handler);
         $this->assertEquals('/', $adapter->fs->root);
         $this->assertEquals(false, $adapter->fs->persistence);
         $this->assertEquals(0755, $adapter->fs->default_directory_permissions);
@@ -107,7 +107,7 @@ class FtpConnectTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Ftp::connect
+     * @covers Molajo\Filesystem\Handler\Ftp::connect
      * @expectedException InvalidArgumentException
      */
     public function testUnsuccessfulConnection()
@@ -125,13 +125,13 @@ class FtpConnectTest extends Data
             'persistence'       => false
         );
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         return;
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Ftp::connect
+     * @covers Molajo\Filesystem\Handler\Ftp::connect
      * @expectedException InvalidArgumentException
      */
     public function testUnsuccessfulLogin()
@@ -149,7 +149,7 @@ class FtpConnectTest extends Data
             'persistence'       => false
         );
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         return;
     }

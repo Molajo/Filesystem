@@ -15,7 +15,7 @@ class FtpReadTest extends Data
     {
         parent::setUp();
 
-        $this->filesystem_type = 'Ftp';
+        $this->adapter_handler = 'Ftp';
         $this->action          = 'Read';
         $this->path            = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
         $this->options         = array();
@@ -24,7 +24,7 @@ class FtpReadTest extends Data
     /**
      * Did this in Connect
      *
-     * @covers Molajo\Filesystem\Type\Ftp::read
+     * @covers Molajo\Filesystem\Handler\Ftp::read
      */
     public function testReadSuccessful()
     {
@@ -42,9 +42,9 @@ class FtpReadTest extends Data
             'persistence'       => false
         );
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
-        $this->assertEquals('Ftp', $adapter->fs->filesystem_type);
+        $this->assertEquals('Ftp', $adapter->fs->adapter_handler);
         $this->assertEquals('/', $adapter->fs->root);
         $this->assertEquals(false, $adapter->fs->persistence);
         $this->assertEquals(0755, $adapter->fs->default_directory_permissions);
@@ -104,25 +104,25 @@ class FtpReadTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Ftp::read
+     * @covers Molajo\Filesystem\Handler\Ftp::read
      * @expectedException InvalidArgumentException
      */
     public function testReadUnsuccessful()
     {
         $this->path = '/Data/testreally-is-not-there.txt';
-        $adapter    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options = array());
+        $adapter    = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options = array());
 
         return;
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Ftp::read
+     * @covers Molajo\Filesystem\Handler\Ftp::read
      * @expectedException InvalidArgumentException
      */
     public function testReadNotAFile()
     {
         $this->path = '';
-        $adapter    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options = array());
+        $adapter    = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options = array());
 
         return;
     }

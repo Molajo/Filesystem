@@ -1,6 +1,6 @@
 <?php
 /**
- * Adapter for Filesystem
+ * Connection to Filesystem Adapter
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -11,11 +11,11 @@ namespace Molajo\Filesystem;
 defined('MOLAJO') or die;
 
 use Exception;
-use Molajo\Filesystem\Exception\FilesystemException;
+use Molajo\Filesystem\Exception\AdapterException;
 use Molajo\Filesystem\Api\ConnectionInterface;
 
 /**
- * Connect to Filesystem
+ * Connection to Filesystem Adapter
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -25,15 +25,7 @@ use Molajo\Filesystem\Api\ConnectionInterface;
 class Connection implements ConnectionInterface
 {
     /**
-     * Filesystem Type
-     *
-     * @var     object
-     * @since   1.0
-     */
-    public $fsType;
-
-    /**
-     * Adapter
+     * Adapter Instance
      *
      * @var     object
      * @since   1.0
@@ -41,29 +33,37 @@ class Connection implements ConnectionInterface
     public $adapter;
 
     /**
+     * Adapter Handler Instance
+     *
+     * @var     object
+     * @since   1.0
+     */
+    public $adapter_handler;
+
+    /**
      * Constructor
      *
-     * @param   string $filesystem_type
+     * @param   string $adapter_handler
      * @param   array  $options
      *
      * @since   1.0
      * @api
      */
-    public function __construct($filesystem_type = 'Local', $options = array())
+    public function __construct($adapter_handler = 'Local', $options = array())
     {
-        if ($filesystem_type == '') {
-            $filesystem_type = 'Local';
+        if ($adapter_handler == '') {
+            $adapter_handler = 'Local';
         }
 
-        $this->getFilesystemType($filesystem_type);
+        $this->getAdapterHandler($adapter_handler);
 
-        $this->getFilesystemAdapter($filesystem_type);
+        $this->getAdapter($adapter_handler);
 
         $this->connect($options);
     }
 
     /**
-     * Entry point for adapter
+     * Pass Adapter Calls through to the Adapter Class
      *
      * @param   string $name
      * @param   array  $arguments
@@ -77,54 +77,50 @@ class Connection implements ConnectionInterface
     }
 
     /**
-     * Get the Filesystem specific Adapter
+     * Get the Filesystem specific Adapter Handler
      *
-     * @param   string $filesystem_type
+     * @param   string $adapter_handler
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
-    protected function getFilesystemType($filesystem_type = 'Local')
+    protected function getAdapterHandler($adapter_handler = 'Local')
     {
-        $class = 'Molajo\\Filesystem\\Adapter\\' . $filesystem_type;
+        $class = 'Molajo\\Filesystem\\Handler\\' . $adapter_handler;
 
         try {
-
-            $this->fsType = new $class($filesystem_type);
+            $this->adapter_handler = new $class($adapter_handler);
 
         } catch (Exception $e) {
-
-            throw new FilesystemException
-            ('Filesystem: Could not instantiate Filesystem Type: ' . $filesystem_type);
+            throw new AdapterException
+            ('Filesystem: Could not instantiate Filesystem Adapter Handler: ' . $adapter_handler);
         }
 
         return;
     }
 
     /**
-     * Get Adapter, inject with specific Filesystem Adapter
+     * Get Filesystem Adapter, inject with specific Filesystem Adapter Handler
      *
-     * @param   string $filesystem_type
+     * @param   string $adapter_handler
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
-    protected function getFilesystemAdapter($filesystem_type)
+    protected function getAdapter($adapter_handler)
     {
         $class = 'Molajo\\Filesystem\\Adapter';
 
         try {
-
-            $this->adapter = new $class($this->fsType);
+            $this->adapter = new $class($this->adapter_handler);
 
         } catch (Exception $e) {
-
-            throw new FilesystemException
-            ('Filesystem: Could not instantiate Adapter for Filesystem Type: ' . $filesystem_type);
+            throw new AdapterException
+            ('Filesystem: Could not instantiate Adapter for Filesystem Type: ' . $adapter_handler);
         }
 
         return $this;
@@ -137,7 +133,7 @@ class Connection implements ConnectionInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function connect($options = array())
@@ -147,7 +143,7 @@ class Connection implements ConnectionInterface
 
         } catch (Exception $e) {
 
-            throw new FilesystemException
+            throw new AdapterException
             ('Filesystem: Caught Exception: ' . $e->GetMessage());
         }
 
@@ -159,7 +155,7 @@ class Connection implements ConnectionInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function close()

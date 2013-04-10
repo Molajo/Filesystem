@@ -11,9 +11,9 @@ namespace Molajo\Filesystem;
 defined('MOLAJO') or die;
 
 use Exception;
-use Molajo\Filesystem\Exception\FilesystemException;
+use Molajo\Filesystem\Exception\AdapterException;
 use Molajo\Filesystem\Api\ConnectionInterface;
-use Molajo\Filesystem\Api\AdapterInterface;
+use Molajo\Filesystem\Api\FilesystemInterface;
 
 /**
  * Adapter for Filesystem
@@ -23,47 +23,47 @@ use Molajo\Filesystem\Api\AdapterInterface;
  * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @since     1.0
  */
-class Adapter implements ConnectionInterface, AdapterInterface
+class Adapter implements ConnectionInterface, FilesystemInterface
 {
     /**
-     * Filesystem Type
+     * Filesystem Adapter Handler
      *
      * @var     object
      * @since   1.0
      */
-    public $fsType;
+    public $adapterHandler;
 
     /**
      * Constructor
      *
-     * @param   AdapterInterface $filesystem
-     * @param   array            $options
+     * @param   FilesystemInterface $filesystem
+     * @param   array               $options
      *
      * @since   1.0
      */
-    public function __construct(AdapterInterface $filesystem)
+    public function __construct(FilesystemInterface $filesystem)
     {
-        $this->fsType = $filesystem;
+        $this->adapterHandler = $filesystem;
     }
 
     /**
-     * Connect to the Filesystem Type
+     * Connect to the Filesystem Adapter Handler
      *
      * @param   array $options
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function connect($options = array())
     {
         try {
-            $this->fsType->connect($options);
+            $this->adapterHandler->connect($options);
 
         } catch (Exception $e) {
 
-            throw new FilesystemException
+            throw new AdapterException
             ('Filesystem: Caught Exception: ' . $e->getMessage());
         }
 
@@ -77,16 +77,16 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  bool
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function exists($path)
     {
         try {
-            return $this->fsType->exists($path);
+            return $this->adapterHandler->exists($path);
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: Exists Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: Exists Exception ' . $e->getMessage());
         }
     }
 
@@ -97,16 +97,16 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  object
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function getMetadata($path)
     {
         try {
-            return $this->fsType->getMetadata($path);
+            return $this->adapterHandler->getMetadata($path);
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: getMetadata Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: getMetadata Exception ' . $e->getMessage());
         }
     }
 
@@ -117,43 +117,56 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  null|string
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function read($path)
     {
         try {
-
-            return $this->fsType->read($path);
+            return $this->adapterHandler->read($path);
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: Read Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: Read Exception ' . $e->getMessage());
         }
     }
 
     /**
-     * Returns a list of file and folder names located at path directory, optionally recursively
+     * Returns a list of file and folder names located at path directory, optionally recursively,
+     *  optionally filtered by a list of file extension values, filename mask, and inclusion or exclusion
+     *  of files and/or folders
      *
      * @param   string $path
      * @param   bool   $recursive
      * @param   string $extension_list
      * @param   bool   $include_files
      * @param   bool   $include_folders
+     * @param   null   $filename_mask
      *
      * @return  mixed
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
-    public function getList($path, $recursive = false, $extension_list = '',
-        $include_files = false, $include_folders = false)
-    {
+    public function getList(
+        $path,
+        $recursive = false,
+        $extension_list = '',
+        $include_files = false,
+        $include_folders = false,
+        $filename_mask = null
+    ) {
         try {
-
-            return $this->fsType->getList($path, $recursive, $extension_list, $include_files, $include_folders);
+            return $this->adapterHandler->getList(
+                $path,
+                $recursive,
+                $extension_list,
+                $include_files,
+                $include_folders,
+                $filename_mask
+            );
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: getList Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: getList Exception ' . $e->getMessage());
         }
     }
 
@@ -168,17 +181,16 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function write($path, $data = '', $replace = true, $append = false, $truncate = false)
     {
         try {
-
-            return $this->fsType->write($path, $data, $replace, $append, $truncate);
+            return $this->adapterHandler->write($path, $data, $replace, $append, $truncate);
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: Write Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: Write Exception ' . $e->getMessage());
         }
     }
 
@@ -190,33 +202,32 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function delete($path, $recursive = false)
     {
         try {
-
-            return $this->fsType->delete($path, $recursive);
+            return $this->adapterHandler->delete($path, $recursive);
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: Delete Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: Delete Exception ' . $e->getMessage());
         }
     }
 
     /**
      * Copies the file/folder in $path to the target_directory (optionally target_name),
-     *  replacing content, if indicated. Can copy to target_filesystem_type.
+     *  replacing content, if indicated. Can copy to target_adapter_handler.
      *
      * @param   string $path
      * @param   string $target_directory
      * @param   string $target_name
      * @param   bool   $replace
-     * @param   string $target_filesystem_type
+     * @param   string $target_adapter_handler
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function copy(
@@ -224,30 +235,35 @@ class Adapter implements ConnectionInterface, AdapterInterface
         $target_directory,
         $target_name = '',
         $replace = true,
-        $target_filesystem_type = ''
+        $target_adapter_handler = ''
     ) {
         try {
-
-            return $this->fsType->copy($path, $target_directory, $target_name, $replace, $target_filesystem_type);
+            return $this->adapterHandler->copy(
+                $path,
+                $target_directory,
+                $target_name,
+                $replace,
+                $target_adapter_handler
+            );
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: Copy Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: Copy Exception ' . $e->getMessage());
         }
     }
 
     /**
      * Moves the file/folder in $path to the target_directory (optionally target_name),
-     *  replacing content, if indicated. Can move to target_filesystem_type.
+     *  replacing content, if indicated. Can move to target_adapter_handler.
      *
      * @param   string $path
      * @param   string $target_directory
      * @param   string $target_name
      * @param   bool   $replace
-     * @param   string $target_filesystem_type
+     * @param   string $target_adapter_handler
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function move(
@@ -255,14 +271,19 @@ class Adapter implements ConnectionInterface, AdapterInterface
         $target_directory,
         $target_name = '',
         $replace = true,
-        $target_filesystem_type = ''
+        $target_adapter_handler = ''
     ) {
         try {
-
-            return $this->fsType->move($path, $target_directory, $target_name, $replace, $target_filesystem_type);
+            return $this->adapterHandler->move(
+                $path,
+                $target_directory,
+                $target_name,
+                $replace,
+                $target_adapter_handler
+            );
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: Move Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: Move Exception ' . $e->getMessage());
         }
     }
 
@@ -274,17 +295,16 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function rename($path, $new_name)
     {
         try {
-
-            return $this->fsType->rename($path, $new_name);
+            return $this->adapterHandler->rename($path, $new_name);
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: Rename Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: Rename Exception ' . $e->getMessage());
         }
     }
 
@@ -297,17 +317,16 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function changeOwner($path, $user_name, $recursive = false)
     {
         try {
-
-            return $this->fsType->changeOwner($path, $user_name, $recursive);
+            return $this->adapterHandler->changeOwner($path, $user_name, $recursive);
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: changeOwner Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: changeOwner Exception ' . $e->getMessage());
         }
     }
 
@@ -320,17 +339,16 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function changeGroup($path, $group_id, $recursive = false)
     {
         try {
-
-            return $this->fsType->changeGroup($path, $group_id, $recursive);
+            return $this->adapterHandler->changeGroup($path, $group_id, $recursive);
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: changeGroup Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: changeGroup Exception ' . $e->getMessage());
         }
     }
 
@@ -343,17 +361,16 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function changePermission($path, $permission, $recursive = false)
     {
         try {
-
-            return $this->fsType->changePermission($path, $permission, $recursive);
+            return $this->adapterHandler->changePermission($path, $permission, $recursive);
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: changePermission Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: changePermission Exception ' . $e->getMessage());
         }
     }
 
@@ -367,17 +384,16 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function touch($path, $modification_time = null, $access_time = null, $recursive = false)
     {
         try {
-
-            return $this->fsType->touch($path, $modification_time, $access_time, $recursive);
+            return $this->adapterHandler->touch($path, $modification_time, $access_time, $recursive);
 
         } catch (Exception $e) {
-            throw new FilesystemException('Filesystem: Touch Exception ' . $e->getMessage());
+            throw new AdapterException('Filesystem: Touch Exception ' . $e->getMessage());
         }
     }
 
@@ -386,12 +402,12 @@ class Adapter implements ConnectionInterface, AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function close()
     {
-        $this->fsType->close();
+        $this->adapterHandler->close();
 
         return $this;
     }

@@ -2,7 +2,7 @@
 namespace Ftp;
 
 use Exception;
-use Molajo\Filesystem\Exception\FilesystemException;
+use Molajo\Filesystem\Exception\AdapterException;
 
 use Molajo\Filesystem\Adapter as fsAdapter;
 
@@ -18,12 +18,12 @@ class FtpWriteTest extends Data
     {
         parent::setUp();
 
-        $this->filesystem_type = 'Ftp';
+        $this->adapter_handler = 'Ftp';
         $this->action          = 'Write';
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Ftp::write
+     * @covers Molajo\Filesystem\Handler\Ftp::write
      */
     public function testSuccessfulWrite()
     {
@@ -53,7 +53,7 @@ class FtpWriteTest extends Data
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 
@@ -61,7 +61,7 @@ class FtpWriteTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Ftp::write
+     * @covers Molajo\Filesystem\Handler\Ftp::write
      */
     public function testSuccessfulRewrite()
     {
@@ -92,7 +92,7 @@ class FtpWriteTest extends Data
 
         $this->assertfileExists($this->path . '/' . $temp);
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 
@@ -100,8 +100,8 @@ class FtpWriteTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Ftp::write
-     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     * @covers Molajo\Filesystem\Handler\Ftp::write
+     * @expectedException Molajo\Filesystem\Exception\AdapterException
      */
     public function testUnsuccessfulRewrite()
     {
@@ -125,13 +125,13 @@ class FtpWriteTest extends Data
 
         $this->path = '/';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         return;
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Ftp::write
+     * @covers Molajo\Filesystem\Handler\Ftp::write
      */
     public function testWriteSingleFolder()
     {
@@ -157,7 +157,7 @@ class FtpWriteTest extends Data
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 
@@ -168,7 +168,7 @@ class FtpWriteTest extends Data
      * rmdir($filePath);
      *  unlink($filePath);
      *
-     * @covers Molajo\Filesystem\Type\Ftp::write
+     * @covers Molajo\Filesystem\Handler\Ftp::write
      */
     public function testWriteMultipleFolders()
     {
@@ -194,7 +194,7 @@ class FtpWriteTest extends Data
 
         $this->assertfileNotExists($this->path . '/' . $temp);
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileExists($this->path . '/' . $temp);
 

@@ -18,12 +18,12 @@ class LocalPermissionsTest extends Data
     {
         parent::setUp();
 
-        $this->filesystem_type = 'Local';
+        $this->adapter_handler = 'Local';
         $this->options         = array();
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::read
+     * @covers Molajo\Filesystem\Handler\Local::read
      */
     public function testPermissionsTTTSuccess()
     {
@@ -34,16 +34,16 @@ class LocalPermissionsTest extends Data
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
         $this->action  = 'changePermission';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
-        $this->assertEquals('Local', $adapter->fs->filesystem_type);
+        $this->assertEquals('Local', $adapter->fs->adapter_handler);
 
         $this->assertEquals(
             $mode,
             octdec(substr(sprintf('%o', fileperms($this->path)), - 4))
         );
 
-        $this->assertEquals('Local', $adapter->fs->filesystem_type);
+        $this->assertEquals('Local', $adapter->fs->adapter_handler);
 
         $this->assertEquals(true, is_readable($this->path));
         $this->assertEquals(false, is_writeable($this->path));
@@ -53,8 +53,8 @@ class LocalPermissionsTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::changePermission
-     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     * @covers Molajo\Filesystem\Handler\Local::changePermission
+     * @expectedException Molajo\Filesystem\Exception\AdapterException
      */
     public function testPermissionsFail()
     {
@@ -65,14 +65,14 @@ class LocalPermissionsTest extends Data
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
         $this->action  = 'changePermission';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         return;
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::Touch
-     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     * @covers Molajo\Filesystem\Handler\Local::Touch
+     * @expectedException Molajo\Filesystem\Exception\AdapterException
      */
     public function testTouchSuccess()
     {
@@ -95,7 +95,7 @@ class LocalPermissionsTest extends Data
         $this->path   = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
         $this->action = 'touch';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $hold = stat($this->path);
         $new_atime = $hold['atime'];
@@ -108,8 +108,8 @@ class LocalPermissionsTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::touch
-     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     * @covers Molajo\Filesystem\Handler\Local::touch
+     * @expectedException Molajo\Filesystem\Exception\AdapterException
      */
     public function testTouchFail()
     {
@@ -134,7 +134,7 @@ class LocalPermissionsTest extends Data
         $this->path   = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
         $this->action = 'touch';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $hold = stat($this->path);
         $new_atime = $hold['atime'];

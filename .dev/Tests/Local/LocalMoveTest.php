@@ -16,7 +16,7 @@ class LocalMoveTest extends Data
         parent::setUp();
 
         /** initialise call */
-        $this->filesystem_type = 'Local';
+        $this->adapter_handler = 'Local';
         $this->action          = 'Move';
 
         return;
@@ -25,7 +25,7 @@ class LocalMoveTest extends Data
     /**
      * Should default target directory to $this->path
      *
-     * @covers Molajo\Filesystem\Type\Local::copyOrMove
+     * @covers Molajo\Filesystem\Handler\Local::copyOrMove
      */
     public function testSuccessfulMoveSingleFileBlankDirectory()
     {
@@ -35,12 +35,12 @@ class LocalMoveTest extends Data
             'target_directory'       => '',
             'target_name'            => 'test2.txt',
             'replace'                => false,
-            'target_filesystem_type' => 'Local'
+            'target_adapter_handler' => 'Local'
         );
 
         $this->path = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileExists($temp . '/test2.txt');
         $this->assertfileNotExists($this->path);
@@ -49,7 +49,7 @@ class LocalMoveTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::copyOrMove
+     * @covers Molajo\Filesystem\Handler\Local::copyOrMove
      */
     public function testSuccessfulMoveSingleFile()
     {
@@ -59,11 +59,11 @@ class LocalMoveTest extends Data
             'target_directory'       => '',
             'target_name'            => 'test2.txt',
             'replace'                => false,
-            'target_filesystem_type' => 'Local'
+            'target_adapter_handler' => 'Local'
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileExists($temp . '/test2.txt');
         $this->assertfileNotExists($this->path);
@@ -72,7 +72,7 @@ class LocalMoveTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::copyOrMove
+     * @covers Molajo\Filesystem\Handler\Local::copyOrMove
      */
     public function testMoveSingleFolder()
     {
@@ -82,11 +82,11 @@ class LocalMoveTest extends Data
             'target_directory'       => $temp,
             'target_name'            => 'didit',
             'replace'                => false,
-            'target_filesystem_type' => 'Local'
+            'target_adapter_handler' => 'Local'
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/doit';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileExists($temp . '/didit');
         $this->assertfileNotExists($this->path);
@@ -95,7 +95,7 @@ class LocalMoveTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::copyOrMove
+     * @covers Molajo\Filesystem\Handler\Local::copyOrMove
      */
     public function testMoveMultipleFolder()
     {
@@ -105,11 +105,11 @@ class LocalMoveTest extends Data
             'target_directory'       => $temp,
             'target_name'            => 'Amy',
             'replace'                => false,
-            'target_filesystem_type' => 'Local'
+            'target_adapter_handler' => 'Local'
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileExists($temp . '/Amy');
         $this->assertfileNotExists($this->path);
@@ -118,8 +118,8 @@ class LocalMoveTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::copyOrMove
-     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     * @covers Molajo\Filesystem\Handler\Local::copyOrMove
+     * @expectedException Molajo\Filesystem\Exception\AdapterException
      */
     public function testNotAFile()
     {
@@ -127,11 +127,11 @@ class LocalMoveTest extends Data
             'target_directory'       => BASE_FOLDER . '/.dev/Tests/Data',
             'target_name'            => 'Amy',
             'replace'                => false,
-            'target_filesystem_type' => 'Local'
+            'target_adapter_handler' => 'Local'
         );
 
         $this->path = BASE_FOLDER . '/.dev/Tests/Dataeeeeee';
-        $adapter    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter    = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         return;
     }

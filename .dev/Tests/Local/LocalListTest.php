@@ -18,7 +18,7 @@ class LocalListTest extends Data
         parent::setUp();
 
         /** initialise call */
-        $this->filesystem_type = 'Local';
+        $this->adapter_handler = 'Local';
         $this->action          = 'getList';
 
         return;
@@ -27,7 +27,7 @@ class LocalListTest extends Data
     /**
      * Return the folder matching the patch (1 result)
      *
-     * @covers Molajo\Filesystem\Type\Local::getList
+     * @covers Molajo\Filesystem\Handler\Local::getList
      */
     public function testListDirectory()
     {
@@ -42,7 +42,7 @@ class LocalListTest extends Data
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertEquals(1, count($adapter->fs->data));
 
@@ -52,7 +52,7 @@ class LocalListTest extends Data
     /**
      * Return all files and folders
      *
-     * @covers Molajo\Filesystem\Type\Local::getList
+     * @covers Molajo\Filesystem\Handler\Local::getList
      */
     public function TestListAll()
     {
@@ -67,7 +67,7 @@ class LocalListTest extends Data
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertEquals(38, count($adapter->fs->data));
 
@@ -77,7 +77,7 @@ class LocalListTest extends Data
     /**
      * Exclude Files
      *
-     * @covers Molajo\Filesystem\Type\Local::getList
+     * @covers Molajo\Filesystem\Handler\Local::getList
      */
     public function testListExcludeFiles()
     {
@@ -92,7 +92,7 @@ class LocalListTest extends Data
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertEquals(10, count($adapter->fs->data));
 
@@ -102,7 +102,7 @@ class LocalListTest extends Data
     /**
      * Exclude Folders
      *
-     * @covers Molajo\Filesystem\Type\Local::getList
+     * @covers Molajo\Filesystem\Handler\Local::getList
      */
     public function testListExcludeFolders()
     {
@@ -117,7 +117,7 @@ class LocalListTest extends Data
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertEquals(28, count($adapter->fs->data));
 
@@ -127,7 +127,7 @@ class LocalListTest extends Data
     /**
      * Mask
      *
-     * @covers Molajo\Filesystem\Type\Local::getList
+     * @covers Molajo\Filesystem\Handler\Local::getList
      */
     public function testListMask()
     {
@@ -143,7 +143,7 @@ class LocalListTest extends Data
 
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertEquals(38, count($adapter->fs->data));
 

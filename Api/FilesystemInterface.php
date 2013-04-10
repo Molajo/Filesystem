@@ -10,7 +10,7 @@ namespace Molajo\Filesystem\Api;
 
 defined('MOLAJO') or die;
 
-use Molajo\Filesystem\Exception\FilesystemException;
+use Molajo\Filesystem\Exception\AdapterException;
 
 /**
  * Filesystem Adapter Interface
@@ -21,7 +21,7 @@ use Molajo\Filesystem\Exception\FilesystemException;
  * @since     1.0
  * @api
  */
-interface AdapterInterface
+interface FilesystemInterface
 {
     /**
      * Determines if file or folder identified in path exists
@@ -30,7 +30,7 @@ interface AdapterInterface
      *
      * @return  bool
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function exists($path);
@@ -42,7 +42,7 @@ interface AdapterInterface
      *
      * @return  mixed
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function getMetadata($path);
@@ -54,27 +54,30 @@ interface AdapterInterface
      *
      * @return  null|string
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function read($path);
 
     /**
-     * Returns a list of file and folder names located at path directory, optionally recursively
+     * Returns a list of file and folder names located at path directory, optionally recursively,
+     *  optionally filtered by a list of file extension values, filename mask, and inclusion or exclusion
+     *  of files and/or folders
      *
      * @param   string $path
      * @param   bool   $recursive
      * @param   string $extension_list
      * @param   bool   $include_files
      * @param   bool   $include_folders
+     * @param   null   $filename_mask
      *
      * @return  mixed
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function getList($path, $recursive = false, $extension_list = '',
-        $include_files = false, $include_folders = false);
+        $include_files = false, $include_folders = false, $filename_mask = null);
 
     /**
      * Creates (or replaces) the file or creates the directory identified in path;
@@ -87,7 +90,7 @@ interface AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function write($path, $data = '', $replace = true, $append = false, $truncate = false);
@@ -100,24 +103,24 @@ interface AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function delete($path, $recursive = false);
 
     /**
      * Copies the file/folder in $path to the target_directory (optionally target_name),
-     *  replacing content, if indicated. Can copy to target_filesystem_type.
+     *  replacing content, if indicated. Can copy to target_adapter_handler.
      *
      * @param   string $path
      * @param   string $target_directory
      * @param   string $target_name
      * @param   bool   $replace
-     * @param   string $target_filesystem_type
+     * @param   string $target_adapter_handler
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function copy(
@@ -125,22 +128,22 @@ interface AdapterInterface
         $target_directory,
         $target_name = '',
         $replace = true,
-        $target_filesystem_type = ''
+        $target_adapter_handler = ''
     );
 
     /**
      * Moves the file/folder in $path to the target_directory (optionally target_name),
-     *  replacing content, if indicated. Can move to target_filesystem_type.
+     *  replacing content, if indicated. Can move to target_adapter_handler.
      *
      * @param   string $path
      * @param   string $target_directory
      * @param   string $target_name
      * @param   bool   $replace
-     * @param   string $target_filesystem_type
+     * @param   string $target_adapter_handler
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function move(
@@ -148,7 +151,7 @@ interface AdapterInterface
         $target_directory,
         $target_name = '',
         $replace = true,
-        $target_filesystem_type = ''
+        $target_adapter_handler = ''
     );
 
     /**
@@ -159,7 +162,7 @@ interface AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function rename($path, $new_name);
@@ -173,7 +176,7 @@ interface AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function changeOwner($path, $user_name, $recursive = false);
@@ -187,7 +190,7 @@ interface AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function changeGroup($path, $group_id, $recursive = false);
@@ -201,7 +204,7 @@ interface AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function changePermission($path, $permission, $recursive = false);
@@ -216,7 +219,7 @@ interface AdapterInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function touch($path, $modification_time = null, $access_time = null, $recursive = false);

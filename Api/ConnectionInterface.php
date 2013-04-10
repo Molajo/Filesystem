@@ -10,7 +10,7 @@ namespace Molajo\Filesystem\Api;
 
 defined('MOLAJO') or die;
 
-use Molajo\Filesystem\Exception\FilesystemException;
+use Molajo\Filesystem\Exception\AdapterException;
 
 /**
  * Filesystem Connection Interface
@@ -30,7 +30,7 @@ interface ConnectionInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function connect($options = array());
@@ -40,7 +40,7 @@ interface ConnectionInterface
      *
      * @return  $this
      * @since   1.0
-     * @throws  FilesystemException
+     * @throws  AdapterException
      * @api
      */
     public function close();

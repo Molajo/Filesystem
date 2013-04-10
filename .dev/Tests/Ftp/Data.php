@@ -13,7 +13,7 @@ class Data extends PHPUnit_Framework_TestCase
     /**
      * @var Type of Filesystem (ex. Ftp, Ftp, Stream)
      */
-    protected $filesystem_type;
+    protected $adapter_handler;
 
     /**
      * @var Filesystem Adapter
@@ -64,7 +64,7 @@ class Data extends PHPUnit_Framework_TestCase
         $this->copyOrMove($from, $to, $folder);
 
         /** initialise call */
-        $this->filesystem_type = 'Ftp';
+        $this->adapter_handler = 'Ftp';
         $this->action          = 'Delete';
 
         $this->options = array(

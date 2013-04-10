@@ -1,6 +1,6 @@
 <?php
 /**
- * MediaFilesystemException
+ * MediaHandlerException
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -15,14 +15,14 @@ use Exception;
 use Molajo\Filesystem\Api\ExceptionInterface;
 
 /**
- * MediaFilesystemException Exception
+ * MediaHandlerException Exception
  *
  * @package   Molajo
  * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class MediaFilesystemException extends Exception implements ExceptionInterface
+class MediaHandlerException extends Exception implements ExceptionInterface
 {
 
 }

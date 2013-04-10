@@ -16,7 +16,7 @@ class LocalDeleteTest extends Data
         parent::setUp();
 
         /** initialise call */
-        $this->filesystem_type = 'Local';
+        $this->adapter_handler = 'Local';
         $this->action          = 'Delete';
 
         $this->options = array(
@@ -27,7 +27,7 @@ class LocalDeleteTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::delete
+     * @covers Molajo\Filesystem\Handler\Local::delete
      */
     public function testSuccessfulDeleteSingleFile()
     {
@@ -38,7 +38,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -46,7 +46,7 @@ class LocalDeleteTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::delete
+     * @covers Molajo\Filesystem\Handler\Local::delete
      */
     public function testDeleteSingleFolder()
     {
@@ -57,7 +57,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -65,7 +65,7 @@ class LocalDeleteTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::delete
+     * @covers Molajo\Filesystem\Handler\Local::delete
      */
     public function testDeleteMultipleFolderOnlyFiles()
     {
@@ -77,7 +77,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -85,7 +85,7 @@ class LocalDeleteTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::delete
+     * @covers Molajo\Filesystem\Handler\Local::delete
      */
     public function testDeleteMultipleFolderDeleteAll()
     {
@@ -97,7 +97,7 @@ class LocalDeleteTest extends Data
 
         $this->assertfileExists($this->path);
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         $this->assertfileNotExists($this->path);
 
@@ -105,8 +105,8 @@ class LocalDeleteTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::delete
-     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     * @covers Molajo\Filesystem\Handler\Local::delete
+     * @expectedException Molajo\Filesystem\Exception\AdapterException
      */
     public function testNotAFile()
     {
@@ -116,7 +116,7 @@ class LocalDeleteTest extends Data
 
         $this->path = BASE_FOLDER . '/.dev/Tests/Dataeeeeee';
 
-        $adapter = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options);
+        $adapter = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options);
 
         return;
     }

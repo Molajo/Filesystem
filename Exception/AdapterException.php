@@ -1,6 +1,6 @@
 <?php
 /**
- * LocalFilesystemException
+ * AdapterException
  *
  * @package   Molajo
  * @copyright 2013 Amy Stephen. All rights reserved.
@@ -14,14 +14,14 @@ use Exception;
 use Molajo\Filesystem\Api\ExceptionInterface;
 
 /**
- * LocalFilesystemException Exception
+ * Adapter Exception
  *
  * @package   Molajo
  * @license   http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright 2013 Amy Stephen. All rights reserved.
  * @since     1.0
  */
-class LocalFilesystemException extends Exception implements ExceptionInterface
+class AdapterException extends Exception implements ExceptionInterface
 {
 
 }

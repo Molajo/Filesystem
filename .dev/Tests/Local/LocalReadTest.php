@@ -2,7 +2,7 @@
 namespace Local;
 
 use Exception;
-use Molajo\Filesystem\Exception\FilesystemException;
+use Molajo\Filesystem\Exception\AdapterException;
 
 use Molajo\Filesystem\Adapter as fsAdapter;
 
@@ -18,20 +18,20 @@ class LocalReadTest extends Data
     {
         parent::setUp();
 
-        $this->filesystem_type = 'Local';
+        $this->adapter_handler = 'Local';
         $this->action          = 'Read';
         $this->path            = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
         $this->options         = array();
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::read
+     * @covers Molajo\Filesystem\Handler\Local::read
      */
     public function testReadSuccessful()
     {
         $adapter = new fsAdapter($this->action, $this->path);
 
-        $this->assertEquals('Local', $adapter->fs->filesystem_type);
+        $this->assertEquals('Local', $adapter->fs->adapter_handler);
         $this->assertEquals('/', $adapter->fs->root);
         $this->assertEquals(true, $adapter->fs->persistence);
         $this->assertEquals(0755, $adapter->fs->default_directory_permissions);
@@ -70,25 +70,25 @@ class LocalReadTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::read
-     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     * @covers Molajo\Filesystem\Handler\Local::read
+     * @expectedException Molajo\Filesystem\Exception\AdapterException
      */
     public function testReadUnsuccessful()
     {
         $this->path = BASE_FOLDER . '/.dev/Tests/Data/testreally-is-not-there.txt';
-        $adapter    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options = array());
+        $adapter    = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options = array());
 
         return;
     }
 
     /**
-     * @covers Molajo\Filesystem\Type\Local::read
-     * @expectedException Molajo\Filesystem\Exception\FilesystemException
+     * @covers Molajo\Filesystem\Handler\Local::read
+     * @expectedException Molajo\Filesystem\Exception\AdapterException
      */
     public function testReadNotAFile()
     {
         $this->path = BASE_FOLDER . '/.dev/Tests';
-        $adapter    = new fsAdapter($this->action, $this->path, $this->filesystem_type, $this->options = array());
+        $adapter    = new fsAdapter($this->action, $this->path, $this->adapter_handler, $this->options = array());
 
         return;
     }
