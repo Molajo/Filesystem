@@ -1,13 +1,3 @@
-**NOT COMPLETE**
-
-Amy - look at handlers for:
-- Streaming
-- PHP-OpenCloud https://github.com/rackspace/php-opencloud
-- Sparkleshare http://sparkleshare.org/
-
-Todo:
-- getrelativepath
-
 =======
 Filesystem
 =======
@@ -32,10 +22,13 @@ a file or a folder. Since Exceptions can be thrown, it is recommended methods be
 [Filesystem Adapter Interface](https://github.com/Molajo/Standard/blob/master/Vendor/Molajo/Filesystem/Api/FilesystemInterface.php)
 ```php
 
-    // Defaults to Local Filesystem; $path can be file or folder
+    // Instantiate Handler (example local) and pass it into the Filesystem Adapter
 
-    use Molajo\Filesystem\Connection;
-    $adapter = new Connection();
+    use Molajo\Filesystem\Handler\Local;
+    $handler = new Local();
+
+    use Molajo\Filesystem\Adapter;
+    $adapter = new Adapter($handler);
 
     $true_of_false = $adapter->exists('\file\located\here.txt');
 
@@ -44,16 +37,16 @@ a file or a folder. Since Exceptions can be thrown, it is recommended methods be
 
     $contents_of_file = $adapter->read('\file\located\here.txt');
 
-    $list_of_results = $adapter->getList($path, $recursive, $name_mask,
-        $extension_list, $include_files, $include_folders);
+    $list_of_results = $adapter->getList($path, $recursive, $extension_list,
+        $include_files, $include_folders, $filename_mask);
 
     $adapter->write($path, $data, $replace, $append, $truncate);
 
     $adapter->delete($path, $recursive);
 
-    $adapter->copy($path, $target_directory, $target_name, $replace, $target_adapter_handler);
+    $adapter->copy($path, $target_directory, $target_name, $replace, $target_handler);
 
-    $adapter->move($path, $target_directory, $target_name, $replace, $target_adapter_handler);
+    $adapter->move($path, $target_directory, $target_name, $replace, $target_handler);
 
     $adapter->rename($path, $new_name);
 
@@ -77,11 +70,16 @@ files and folders.
 ### Class Instantiation ####
 After instantiating the adapter class for a specific filesystem, the application can then interact with that filesystem.
 
-The local filesystem is default and does require any input. Other filesystems require specific types of input, as described in the **Filesystem Adapter Handlers** section, below.
+The local filesystem is default and does require any input. Other filesystems require specific types of input, as described in the **Filesystem Handlers** section, below.
 
 ```php
-    use Molajo\Filesystem\Connection;
-    $adapter = new Connection();
+
+    use Molajo\Filesystem\Handler\Local;
+    $handler = new Local();
+
+    use Molajo\Filesystem\Adapter;
+    $adapter = new Adapter($handler);
+
 ```
 
 ### Using the Filesystem Adapter ###
@@ -90,6 +88,7 @@ Applications can use $adapter to interact with files and folders as in this exam
 ```php
     try {
         $results = $adapter->read('\file\located\here.txt');
+
     } catch (Exception $e) {
         // deal with the exception
     }
@@ -141,12 +140,12 @@ Retrieves an object containing metadata for the file or folder defined in $path:
 #### Metadata ####
 The metadata available for each type of Filesystem can vary. For the Local Filesystem, this is the list of metadata available.
 
-**Metadata about the Filesystem** adapter_handler, root, persistence, default_directory_permissions,
+**Metadata about the Filesystem** handler, root, persistence, default_directory_permissions,
 default_file_permissions and read_only.
 
 **Metadata about requested path** (be it a file or folder) path, is_absolute, absolute_path, exists, owner,
 group, create_date, access_date, modified_date, is_readable, is_writable, is_executable, is_directory,
-is_file, is_link, type, name, parent, extension, no_extension, size and mime_type.
+is_file, is_link, type, name, parent, extension, file_name_without_extension, size and mime_type.
 
 ### Read ###
 To read a specific file from a filesystem:
@@ -190,15 +189,19 @@ Returns an array of files and folders for a given path, optionally recursively p
 
 ### Write ###
 
-Writes data to the file identified in the given path.
+Writes data to the file identified in the given path, optionally replacing existing data, appending to the
+    data that already exists, or truncating the data in the file, but leaving the empty file in place.
 
 ```php
     $path = '\file\located\here.txt';
     $data = 'Write this data.';
     $replace = true;
+    $append = false;
+    $truncate = false;
 
     try {
-        $results = $adapter->write($path, $data, $replace);
+        $results = $adapter->write($path, $data, $replace, $append, $truncate);
+
     } catch (Exception $e) {
         // deal with the exception
     }
@@ -207,6 +210,8 @@ Writes data to the file identified in the given path.
 - **$path** contains an absolute path for the file
 - **$data** Content to be written to the file
 - **$replace** True or false value indicating whether or not an existing file should be overwritten
+- **$append** True or false value indicating whether or not data should be appended to existing data in table
+- **$truncate** True or false value indicating whether or not an existing data in the file should be truncated, leaving an empty file
 
 ### Delete ###
 
@@ -238,10 +243,10 @@ When copying a single file, a new filename can be specified using the target_nam
     $target_directory       = '\to\this\folder';
     $target_name            = null;
     $replace            	= true;
-    $target_adapter_handler = 'Backup';
+    $target_handler = 'Backup';
 
     try {
-        $adapter->copy($path, $target_directory, $target_name, $replace, $target_adapter_handler);
+        $adapter->copy($path, $target_directory, $target_name, $replace, $target_handler);
     } catch (Exception $e) {
         // deal with the exception
     }
@@ -252,7 +257,7 @@ When copying a single file, a new filename can be specified using the target_nam
 - **$target_directory** contains an absolute path for the target folder or file
 - **$target_name** contains a different value for filename when copying a file a new filename is desired
 - **$replace** True or false value indicating whether the target file, if exists, should be replaced.
-- **$target_adapter_handler** Use if copying to a filesystem other than the current filesystem.
+- **$target_handler** Use if copying to a filesystem other than the current filesystem.
 
 ### Move ###
 
@@ -265,10 +270,10 @@ When moving a single file, a new filename can be specified using the target_name
     $target_directory       = '\to\this\folder';
     $target_name            = null;
     $replace            	= false;
-    $target_adapter_handler = 'Archive';
+    $target_handler = 'Archive';
 
     try {
-        $adapter->move($path, $target_directory, $target_name, $replace, $target_adapter_handler);
+        $adapter->move($path, $target_directory, $target_name, $replace, $target_handler);
     } catch (Exception $e) {
         // deal with the exception
     }
@@ -278,7 +283,7 @@ When moving a single file, a new filename can be specified using the target_name
 - **$target_directory** contains an absolute path for the target folder or file
 - **$target_name** contains a different value for filename when copying a file a new filename is desired
 - **$replace** True or false value indicating whether the target file, if exists, should be replaced.
-- **$target_adapter_handler** Use if copying to a filesystem other than the current filesystem.
+- **$target_handler** Use if copying to a filesystem other than the current filesystem.
 
 ### Rename ###
 Renames the file or folder to the specified value.
@@ -375,7 +380,7 @@ Update the modification time and access time for the directory or file identifie
 - **$access_time** contains a PHP time value to be used as the access time
 - **$recursive** true or false value indicating if the changes should be recursively applied to subfolders and files (only for folder)
 
-## Filesystem Adapter Handlers ##
+## Filesystem Handlers ##
 
 To use a filesystem, the application instantiates the Connection class, passing in a
 request for a specific filesystem adapter handler. Different types of filesystems require different input
@@ -385,7 +390,7 @@ properties are passed into the filesystem adapter handler using the $options arr
 ### Local Filesystem Handler ###
 
 - **$options** Associative array of named pair values needed to establish a connection for the adapter handler;
-- **$adapter_handler** Identifier for the file system. Examples include Local (default), Ftp, Media, Dropbox, etc.;
+- **$handler** Identifier for the file system. Examples include Local (default), Ftp, Media, Dropbox, etc.;
 
 ### FTP Filesystem Handler ###
 This shows how to backup a file on one filesystem to another filesystem.

@@ -25,12 +25,12 @@ use Molajo\Filesystem\Exception\AbstractHandlerException;
 abstract class AbstractHandler
 {
     /**
-     * Filesystem Adapter Handler
+     * Filesystem Handler
      *
      * @var    string
      * @since  1.0
      */
-    protected $adapter_handler;
+    protected $handler;
 
     /**
      * Path
@@ -298,7 +298,7 @@ abstract class AbstractHandler
      * @var    string
      * @since  1.0
      */
-    protected $no_extension;
+    protected $file_name_without_extension;
 
     /**
      * Size
@@ -416,13 +416,13 @@ abstract class AbstractHandler
      * Constructor
      *
      * @param   array  $options
-     * @param   string $adapter_handler
+     * @param   string $handler
      *
      * @since   1.0
      */
-    public function __construct($options = array(), $adapter_handler = '')
+    public function __construct($options)
     {
-        $this->setFilesystemType($adapter_handler);
+        $this->connect($options);
     }
 
     /**
@@ -466,14 +466,14 @@ abstract class AbstractHandler
     /**
      * Set Filesystem Type
      *
-     * @param   string $adapter_handler
+     * @param   string $handler
      *
      * @return  $this
      * @since   1.0
      */
-    protected function setFilesystemType($adapter_handler)
+    protected function setAdapterHandler($handler)
     {
-        $this->adapter_handler = $adapter_handler;
+        $this->handler = $handler;
 
         return $this;
     }
@@ -484,9 +484,9 @@ abstract class AbstractHandler
      * @return  string
      * @since   1.0
      */
-    protected function getFilesystemType()
+    protected function getAdapterHandler()
     {
-        return $this->adapter_handler;
+        return $this->handler;
     }
 
     /**
@@ -892,7 +892,7 @@ abstract class AbstractHandler
         }
 
         if ($connection_type === null) {
-            $this->connection_type = strtolower($this->getFilesystemType());
+            $this->connection_type = strtolower($this->getAdapterHandler());
         } else {
             $this->connection_type = strtolower($connection_type);
         }

@@ -110,13 +110,13 @@ interface FilesystemInterface
 
     /**
      * Copies the file/folder in $path to the target_directory (optionally target_name),
-     *  replacing content, if indicated. Can copy to target_adapter_handler.
+     *  replacing content, if indicated. Can copy to target_handler.
      *
      * @param   string $path
      * @param   string $target_directory
      * @param   string $target_name
      * @param   bool   $replace
-     * @param   string $target_adapter_handler
+     * @param   string $target_handler
      *
      * @return  $this
      * @since   1.0
@@ -128,18 +128,18 @@ interface FilesystemInterface
         $target_directory,
         $target_name = '',
         $replace = true,
-        $target_adapter_handler = ''
+        $target_handler = ''
     );
 
     /**
      * Moves the file/folder in $path to the target_directory (optionally target_name),
-     *  replacing content, if indicated. Can move to target_adapter_handler.
+     *  replacing content, if indicated. Can move to target_handler.
      *
      * @param   string $path
      * @param   string $target_directory
      * @param   string $target_name
      * @param   bool   $replace
-     * @param   string $target_adapter_handler
+     * @param   string $target_handler
      *
      * @return  $this
      * @since   1.0
@@ -151,7 +151,7 @@ interface FilesystemInterface
         $target_directory,
         $target_name = '',
         $replace = true,
-        $target_adapter_handler = ''
+        $target_handler = ''
     );
 
     /**

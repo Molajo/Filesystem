@@ -83,15 +83,23 @@ class Ftp extends AbstractHandler
     );
 
     /**
-     * constructor
+     * Filesystem Handler
+     *
+     * @var    string
+     * @since  1.0
+     */
+    protected $handler = 'Local';
+
+    /**
+     * Constructor
+     *
+     * @param   array  $options
      *
      * @since   1.0
      */
-    public function __construct($adapter_handler)
+    public function __construct($options = array())
     {
-        parent::__construct($adapter_handler);
-
-        $this->setFilesystemType('Ftp');
+        $this->connect($options);
     }
 
     /**
@@ -104,12 +112,9 @@ class Ftp extends AbstractHandler
      * @returns  $this
      * @since    1.0
      * @throws   FtpHandlerException
-     * @api
      */
     public function connect($options = array())
     {
-        parent::connect($options);
-
         if ($this->is_connected === true) {
             return;
         }
@@ -228,19 +233,32 @@ class Ftp extends AbstractHandler
         return true;
     }
 
+    ////////// Begin Metadata /////////////
+
     /**
-     * Handler Interface Step 2:
-     *
      * Set the Path
      *
-     * @param string $path
+     * @param   string $path
      *
-     * @return string
+     * @return  $this
      * @since   1.0
      */
     protected function setPath($path)
     {
-        return parent::setPath($path);
+        $this->path = $this->normalise($path);
+
+        return $this;
+    }
+
+    /**
+     * Get the Path
+     *
+     * @since   1.0
+     * @return  string
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 
     /**
@@ -371,7 +389,7 @@ class Ftp extends AbstractHandler
         } else {
             throw new FtpHandlerException
             (ucfirst(
-                strtolower($this->getFilesystemType())
+                strtolower($this->getAdapterHandler())
             ) . ' Filesystem Write: must be directory or file: ' . $this->path . '/' . $file);
         }
 
@@ -379,7 +397,7 @@ class Ftp extends AbstractHandler
             if ($this->is_file === true) {
 
                 throw new FtpHandlerException
-                (ucfirst(strtolower($this->getFilesystemType()))
+                (ucfirst(strtolower($this->getAdapterHandler()))
                     . ' Filesystem:  attempting to write no data to file: ' . $this->path . '/' . $file);
             }
         }
@@ -387,7 +405,7 @@ class Ftp extends AbstractHandler
         if (trim($data) == '' || strlen($data) == 0) {
             if ($file == '') {
                 throw new FtpHandlerException
-                (ucfirst(strtolower($this->getFilesystemType()))
+                (ucfirst(strtolower($this->getAdapterHandler()))
                     . ' Filesystem:  attempting to write no data to file: ' . $this->path . '/' . $file);
 
             } else {
@@ -418,7 +436,7 @@ class Ftp extends AbstractHandler
             fclose($this->stream);
 
             throw new FtpHandlerException
-            (ucfirst(strtolower($this->getFilesystemType()))
+            (ucfirst(strtolower($this->getAdapterHandler()))
                 . ' Filesystem:  error writing file ' . $this->path . '/' . $file);
         }
 
@@ -445,7 +463,7 @@ class Ftp extends AbstractHandler
 
         } else {
             throw new FtpHandlerException
-            (ucfirst(strtolower($this->getFilesystemType()))
+            (ucfirst(strtolower($this->getAdapterHandler()))
                 . ' Filesystem:  attempting to append to a folder, not a file ' . $this->path);
         }
 
@@ -472,7 +490,7 @@ class Ftp extends AbstractHandler
         } catch (Exception $e) {
 
             throw new FtpHandlerException
-            (ucfirst(strtolower($this->getFilesystemType()))
+            (ucfirst(strtolower($this->getAdapterHandler()))
                 . ' Filesystem:  error writing stream for appending to ' . $this->path);
         }
 
@@ -486,7 +504,7 @@ class Ftp extends AbstractHandler
         } catch (Exception $e) {
 
             throw new FtpHandlerException
-            (ucfirst(strtolower($this->getFilesystemType()))
+            (ucfirst(strtolower($this->getAdapterHandler()))
                 . ' Filesystem:  error writing file ' . $this->path);
         }
 

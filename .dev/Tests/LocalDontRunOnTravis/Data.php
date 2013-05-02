@@ -13,12 +13,12 @@ class Data extends PHPUnit_Framework_TestCase
     /**
      * @var Type of Filesystem (ex. Local, Ftp, Stream)
      */
-    protected $adapter_handler;
+    protected $handler;
 
     /**
      * @var Filesystem Adapter
      */
-    protected $fsAdapter;
+    protected $adapter;
 
     /**
      * @var Action (ex. Read, List, Write, Copy, Delete, Set, etc.)
@@ -64,7 +64,7 @@ class Data extends PHPUnit_Framework_TestCase
         $this->copyOrMove($from, $to, $folder);
 
         /** initialise call */
-        $this->adapter_handler = 'Local';
+        $this->handler = 'Local';
         $this->action          = 'Delete';
 
         $this->options = array(
