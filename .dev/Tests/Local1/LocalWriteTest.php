@@ -7,10 +7,10 @@ use Molajo\Filesystem\Adapter;
 /**
  * Tests Local Filesystem Handler: Write Methods
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- * @since     1.0
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
+ * @since      1.0
  */
 class LocalWriteTest extends Data
 {

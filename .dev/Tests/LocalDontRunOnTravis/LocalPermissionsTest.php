@@ -19,7 +19,7 @@ class LocalPermissionsTest extends Data
         parent::setUp();
 
         $this->handler = 'Local';
-        $this->options         = array();
+        $this->options = array();
     }
 
     /**
@@ -54,7 +54,7 @@ class LocalPermissionsTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Local::changePermission
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testPermissionsFail()
     {
@@ -72,7 +72,7 @@ class LocalPermissionsTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Local::Touch
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testTouchSuccess()
     {
@@ -80,11 +80,11 @@ class LocalPermissionsTest extends Data
         $datetime = new DateTime(null, $timezone);
 
         $datetime->sub(new DateInterval("PT60M"));
-        $m = $datetime->format("Y/m/d m:i:s");
+        $m                 = $datetime->format("Y/m/d m:i:s");
         $modification_time = strtotime($m);
 
         $datetime->add(new DateInterval("PT30M"));
-        $a = $datetime->format("Y/m/d m:i:s");
+        $a           = $datetime->format("Y/m/d m:i:s");
         $access_time = strtotime($a);
 
         $this->options = array(
@@ -97,7 +97,7 @@ class LocalPermissionsTest extends Data
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
 
-        $hold = stat($this->path);
+        $hold      = stat($this->path);
         $new_atime = $hold['atime'];
         $new_mtime = $hold['mtime'];
 
@@ -109,7 +109,7 @@ class LocalPermissionsTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Local::touch
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testTouchFail()
     {
@@ -117,11 +117,11 @@ class LocalPermissionsTest extends Data
         $datetime = new DateTime(null, $timezone);
 
         $datetime->sub(new DateInterval("PT60M"));
-        $m = $datetime->format("Y/m/d m:i:s");
+        $m                 = $datetime->format("Y/m/d m:i:s");
         $modification_time = strtotime($m);
 
         $datetime->add(new DateInterval("PT30M"));
-        $a = $datetime->format("Y/m/d m:i:s");
+        $a           = $datetime->format("Y/m/d m:i:s");
         $access_time = strtotime($a);
 
         $modification_time = 999999999;
@@ -136,7 +136,7 @@ class LocalPermissionsTest extends Data
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
 
-        $hold = stat($this->path);
+        $hold      = stat($this->path);
         $new_atime = $hold['atime'];
         $new_mtime = $hold['mtime'];
 

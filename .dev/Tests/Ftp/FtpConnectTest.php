@@ -19,7 +19,7 @@ class FtpConnectTest extends Data
 
         /** initialise call */
         $this->handler = 'Ftp';
-        $this->action          = 'Read';
+        $this->action  = 'Read';
 
         return;
     }
@@ -31,7 +31,7 @@ class FtpConnectTest extends Data
      */
     public function testSuccessfulConnection()
     {
-        $this->path            =   '/Data/test1.txt';
+        $this->path = '/Data/test1.txt';
 
         $this->options = array(
             'username'          => 'test',
@@ -100,7 +100,7 @@ class FtpConnectTest extends Data
         $this->assertEquals(true, $adapter->fs->passive_mode);
         $this->assertEquals('Data', $adapter->fs->initial_directory);
         $this->assertEquals(true, $adapter->fs->is_connected);
-        $this->assertEquals('73f661695573b01306ca7eafadca485b', $adapter->fs->hash_file_md5);
+        $this->assertEquals('73f661695573b01306ca7eafadca485b', $adapter->fs->hash_file_serialize);
         $this->assertEquals('4448b5a7175376584c124937c238c4afeb9b7509', $adapter->fs->hash_file_sha1);
 
         return;
@@ -112,7 +112,7 @@ class FtpConnectTest extends Data
      */
     public function testUnsuccessfulConnection()
     {
-        $this->path            =   '/Data/test1.txt';
+        $this->path = '/Data/test1.txt';
 
         $this->options = array(
             'username'          => 'test',
@@ -136,7 +136,7 @@ class FtpConnectTest extends Data
      */
     public function testUnsuccessfulLogin()
     {
-        $this->path            =   '/Data/test1.txt';
+        $this->path = '/Data/test1.txt';
 
         $this->options = array(
             'username'          => 'testy',
@@ -153,6 +153,7 @@ class FtpConnectTest extends Data
 
         return;
     }
+
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.

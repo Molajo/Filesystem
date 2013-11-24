@@ -2,25 +2,23 @@
 /**
  * Ftp Filesystem Type
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  */
 namespace Molajo\Filesystem\Handler;
 
-defined('MOLAJO') or die;
-
 use Exception;
 
-use Molajo\Filesystem\Exception\FtpHandlerException;
+use Exception\Filesystem\FtpHandlerException;
 
 /**
  * Ftp Filesystem Type
  *
- * @package   Molajo
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @since     1.0
+ * @package    Molajo
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @since      1.0
  */
 class Ftp extends AbstractHandler
 {
@@ -43,7 +41,7 @@ class Ftp extends AbstractHandler
     /**
      * Temp - used to identify Windows FTP Servers
      *
-     * @var    $is_windows;
+     * @var    $is_windows ;
      * @since  1.0
      */
     protected $is_windows;
@@ -51,7 +49,7 @@ class Ftp extends AbstractHandler
     /**
      * Error messages and codes
      *
-     * @var    $is_windows;
+     * @var    $is_windows ;
      * @since  1.0
      */
     protected static $error_messages = array(
@@ -93,11 +91,11 @@ class Ftp extends AbstractHandler
     /**
      * Constructor
      *
-     * @param   array  $options
+     * @param   array $options
      *
      * @since   1.0
      */
-    public function __construct($options = array())
+    public function __construct(array $options = array())
     {
         $this->connect($options);
     }
@@ -129,43 +127,39 @@ class Ftp extends AbstractHandler
                 }
 
                 $id = \ftp_ssl_connect($this->host, $this->port, $this->timeout);
-
             } else {
                 $id = \ftp_connect($this->host, $this->port, $this->timeout);
             }
 
             $this->setConnection($id);
-
         } catch (Exception $e) {
             throw new FtpHandlerException
             ('Filesystem Handler Ftp: Unable to connect to the Ftp Server '
-                . ' Host: ' . $this->host . ' Port: ' . $this->port);
+            . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
         if ($this->is_connected === false) {
             throw new FtpHandlerException
             ('Filesystem Handler Ftp: Not connected '
-                . ' Host: ' . $this->host . ' Port: ' . $this->port);
+            . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
         try {
             \ftp_pasv($this->connection, $this->getPassiveMode());
-
         } catch (Exception $e) {
 
             throw new FtpHandlerException
             ('Filesystem Handler Ftp: Unable to set passive mode for Ftp Server '
-                . ' Host: ' . $this->host . ' Port: ' . $this->port);
+            . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
         try {
             $this->login();
-
         } catch (Exception $e) {
 
             throw new FtpHandlerException
             ('Filesystem Handler Ftp: Login failed for ' . ' User: ' . $this->username
-                . ' Host: ' . $this->host . ' Port: ' . $this->port);
+            . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
         try {
@@ -178,12 +172,11 @@ class Ftp extends AbstractHandler
             } else {
                 $this->is_windows = true;
             }
-
         } catch (Exception $e) {
 
             throw new FtpHandlerException
             ('Filesystem Handler Ftp: Login failed for ' . ' User: ' . $this->username
-                . ' Host: ' . $this->host . ' Port: ' . $this->port);
+            . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
         try {
@@ -192,20 +185,19 @@ class Ftp extends AbstractHandler
             } else {
                 $results = \ftp_chdir($this->connection, $this->initial_directory);
             }
-
         } catch (Exception $e) {
 
             throw new FtpHandlerException
             ('Filesystem Handler Ftp: Changing Ftp Directory failed. Directory: '
-                . $this->initial_directory);
+            . $this->initial_directory);
         }
 
         if ($results === false) {
 
             throw new FtpHandlerException
             ('Filesystem Handler Ftp: Unable to change directory: '
-                . $this->root . ' for Ftp Server '
-                . ' Host: ' . $this->host . ' Port: ' . $this->port);
+            . $this->root . ' for Ftp Server '
+            . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
         return;
@@ -227,7 +219,7 @@ class Ftp extends AbstractHandler
 
             throw new FtpHandlerException
             ('Filesystem Handler Ftp: Unable to login with Password: ' . $this->getPassword()
-                . ' Password: ' . $this->getPassword());
+            . ' Password: ' . $this->getPassword());
         }
 
         return true;
@@ -320,7 +312,6 @@ class Ftp extends AbstractHandler
             } else {
                 throw new FtpHandlerException ('FTP Filesystem: Read failed for: ' . $this->path);
             }
-
         } catch (Exception $e) {
 
             throw new FtpHandlerException
@@ -331,7 +322,6 @@ class Ftp extends AbstractHandler
             rewind($this->stream);
             $this->data = stream_get_contents($this->stream);
             fclose($this->stream);
-
         } catch (Exception $e) {
             throw new FtpHandlerException
             ('Ftp Filesystem Read: Error reading file: ' . $this->path . ' ' . $e->getMessage());
@@ -358,16 +348,6 @@ class Ftp extends AbstractHandler
      * @since   1.0
      * @throws  FtpHandlerException
      */
-
-    /**
-     * @param string $file
-     * @param string $data
-     * @param bool   $replace
-     * @param bool   $append
-     * @param bool   $truncate
-     *
-     * @throws FtpHandlerException
-     */
     protected function write($file = '', $data = '', $replace = false, $append = false, $truncate = false)
     {
         if ($append === true) {
@@ -383,9 +363,7 @@ class Ftp extends AbstractHandler
         }
 
         if ($this->exists === false) {
-
         } elseif ($this->is_file === true || $this->is_directory === true) {
-
         } else {
             throw new FtpHandlerException
             (ucfirst(
@@ -398,7 +376,7 @@ class Ftp extends AbstractHandler
 
                 throw new FtpHandlerException
                 (ucfirst(strtolower($this->getAdapterHandler()))
-                    . ' Filesystem:  attempting to write no data to file: ' . $this->path . '/' . $file);
+                . ' Filesystem:  attempting to write no data to file: ' . $this->path . '/' . $file);
             }
         }
 
@@ -406,8 +384,7 @@ class Ftp extends AbstractHandler
             if ($file == '') {
                 throw new FtpHandlerException
                 (ucfirst(strtolower($this->getAdapterHandler()))
-                    . ' Filesystem:  attempting to write no data to file: ' . $this->path . '/' . $file);
-
+                . ' Filesystem:  attempting to write no data to file: ' . $this->path . '/' . $file);
             } else {
                 $this->createDirectory($this->path . '/' . $file);
 
@@ -430,14 +407,13 @@ class Ftp extends AbstractHandler
             } else {
                 throw new FtpHandlerException ('FTP Filesystem Write failed for ' . $this->path);
             }
-
         } catch (Exception $e) {
 
             fclose($this->stream);
 
             throw new FtpHandlerException
             (ucfirst(strtolower($this->getAdapterHandler()))
-                . ' Filesystem:  error writing file ' . $this->path . '/' . $file);
+            . ' Filesystem:  error writing file ' . $this->path . '/' . $file);
         }
 
         fclose($this->stream);
@@ -458,13 +434,11 @@ class Ftp extends AbstractHandler
     private function append_or_truncate($data = null, $type = 'append')
     {
         if ($this->exists === true) {
-
         } elseif ($this->is_file === false) {
-
         } else {
             throw new FtpHandlerException
             (ucfirst(strtolower($this->getAdapterHandler()))
-                . ' Filesystem:  attempting to append to a folder, not a file ' . $this->path);
+            . ' Filesystem:  attempting to append to a folder, not a file ' . $this->path);
         }
 
         $this->stream = fopen('php://temp', 'r+');
@@ -486,12 +460,11 @@ class Ftp extends AbstractHandler
 
             fwrite($this->stream, $appended);
             rewind($this->stream);
-
         } catch (Exception $e) {
 
             throw new FtpHandlerException
             (ucfirst(strtolower($this->getAdapterHandler()))
-                . ' Filesystem:  error writing stream for appending to ' . $this->path);
+            . ' Filesystem:  error writing stream for appending to ' . $this->path);
         }
 
         try {
@@ -500,12 +473,11 @@ class Ftp extends AbstractHandler
             } else {
                 throw new FtpHandlerException ('FTP Filesystem Write failed for ' . $this->path);
             }
-
         } catch (Exception $e) {
 
             throw new FtpHandlerException
             (ucfirst(strtolower($this->getAdapterHandler()))
-                . ' Filesystem:  error writing file ' . $this->path);
+            . ' Filesystem:  error writing file ' . $this->path);
         }
 
         fclose($this->stream);
@@ -540,7 +512,6 @@ class Ftp extends AbstractHandler
             if ($success === false) {
                 throw new FtpHandlerException ('Unable to create FTP folder: ' . $path);
             }
-
         } catch (Exception $e) {
 
             throw new FtpHandlerException
@@ -583,7 +554,6 @@ class Ftp extends AbstractHandler
             $metadata->name        = trim($fileMetadata);
 
             if ($metadata->name == '.' || $metadata->name == '..') {
-
             } else {
                 $name                    = $metadata->name;
                 $this->temp_files[$name] = $metadata;
@@ -661,9 +631,7 @@ class Ftp extends AbstractHandler
             if (@ftp_chdir($this->getConnection(), $this->path)) {
                 $indicator = true;
             }
-
         } catch (Exception $e) {
-
         }
 
         ftp_chdir($this->getConnection(), $current);
@@ -691,7 +659,6 @@ class Ftp extends AbstractHandler
                 throw new FtpHandlerException
                 ('FTP Filesystem: IsFile ftp_get failed ' . $this->path);
             }
-
         } catch (Exception $e) {
             throw new FtpHandlerException
             ('FTP Filesystem isFile: Failed ' . $e->getMessage());
@@ -701,7 +668,6 @@ class Ftp extends AbstractHandler
             rewind($this->stream);
             $this->data = stream_get_contents($this->stream);
             fclose($this->stream);
-
         } catch (Exception $e) {
             throw new FtpHandlerException
             ('Ftp Filesystem Read: Error reading file: ' . $this->path . ' ' . $e->getMessage());
@@ -752,7 +718,6 @@ class Ftp extends AbstractHandler
 
         try {
             chdir($this->getConnection(), $this->path);
-
         } catch (Exception $e) {
         }
 
@@ -760,7 +725,6 @@ class Ftp extends AbstractHandler
             ftp_cdup($this->getConnection());
 
             $this->parent = ftp_pwd($this->getConnection());
-
         } catch (Exception $e) {
         }
 
@@ -815,7 +779,6 @@ class Ftp extends AbstractHandler
 
         if ($temp_mimetype === null) {
             $this->mime_type = 'application/octet-stream';
-
         } else {
             $this->mime_type = $temp_mimetype;
         }
@@ -924,9 +887,9 @@ class Ftp extends AbstractHandler
 
         $this->modified_date =
             $this->temp_files[$this->path]->year . '-' .
-                $this->temp_files[$this->path]->month . '-' .
-                $this->temp_files[$this->path]->day . ' ' .
-                $this->temp_files[$this->path]->time;
+            $this->temp_files[$this->path]->month . '-' .
+            $this->temp_files[$this->path]->day . ' ' .
+            $this->temp_files[$this->path]->time;
 
         return;
     }
@@ -1038,9 +1001,7 @@ class Ftp extends AbstractHandler
         $this->hash_file_md5 = null;
 
         if ($this->exists === true) {
-
         } elseif ($this->is_file === true) {
-
         } else {
             return;
         }
@@ -1062,9 +1023,7 @@ class Ftp extends AbstractHandler
         $this->hash_file_sha1 = null;
 
         if ($this->exists === true) {
-
         } elseif ($this->is_file === true) {
-
         } else {
             return;
         }
@@ -1086,9 +1045,7 @@ class Ftp extends AbstractHandler
         $this->hash_file_sha1_20 = null;
 
         if ($this->exists === true) {
-
         } elseif ($this->is_file === true) {
-
         } else {
             return;
         }
@@ -1097,7 +1054,6 @@ class Ftp extends AbstractHandler
 
         return;
     }
-
 
     /**
      * Destruct Method

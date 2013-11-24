@@ -1,16 +1,16 @@
 <?php
 namespace Local;
 
-use Molajo\Filesystem\Exception\AdapterException;
+use Exception\Filesystem\AdapterException;
 use Molajo\Filesystem\Connection;
 
 /**
  * Tests Local Filesystem Handler: Metadata Methods
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- * @since     1.0
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
+ * @since      1.0
  */
 class LocalMetadataTest extends Data
 {
@@ -33,8 +33,8 @@ class LocalMetadataTest extends Data
         parent::setUp();
 
         $this->handler = 'Local';
-        $this->path            = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
-        $this->options         = array();
+        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
+        $this->options = array();
         $this->adapter = new Connection();
     }
 
@@ -43,15 +43,15 @@ class LocalMetadataTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::getMetadata
-     * @covers Molajo\Filesystem\Handler\Local::getMetadata
+     * @covers  Molajo\Filesystem\Adapter::getMetadata
+     * @covers  Molajo\Filesystem\Handler\Local::getMetadata
      */
     public function testMetadataSuccessful()
     {
         $metadata = $this->adapter->getMetadata($this->path);
 
         $this->assertEquals(BASE_FOLDER . '/.dev/Tests/Data/test1.txt', $metadata->path);
-        $this->assertEquals(null, $metadata->initial_directory);  //amy
+        $this->assertEquals(null, $metadata->initial_directory); //amy
         $this->assertEquals('/', $metadata->root);
         $this->assertEquals(null, $metadata->host);
         $this->assertEquals(493, $metadata->default_directory_permissions);
@@ -87,16 +87,16 @@ class LocalMetadataTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::getMetadata
-     * @covers Molajo\Filesystem\Handler\Local::getMetadata
+     * @covers  Molajo\Filesystem\Adapter::getMetadata
+     * @covers  Molajo\Filesystem\Handler\Local::getMetadata
      */
     public function testGetMetadataForFolder()
     {
         $this->path = BASE_FOLDER . '/.dev/Tests/Hold';
-        $metadata = $this->adapter->getMetadata($this->path);
+        $metadata   = $this->adapter->getMetadata($this->path);
 
         $this->assertEquals(BASE_FOLDER . '/.dev/Tests/Hold', $metadata->path);
-        $this->assertEquals(null, $metadata->initial_directory);  //amy
+        $this->assertEquals(null, $metadata->initial_directory); //amy
         $this->assertEquals('/', $metadata->root);
         $this->assertEquals(null, $metadata->host);
         $this->assertEquals(493, $metadata->default_directory_permissions);
@@ -126,14 +126,15 @@ class LocalMetadataTest extends Data
 
         return $this;
     }
+
     /**
      * Unsuccessful Read: $path is for a folder, not a file
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::getMetadata
-     * @covers Molajo\Filesystem\Handler\Local::getMetadata
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @covers  Molajo\Filesystem\Adapter::getMetadata
+     * @covers  Molajo\Filesystem\Handler\Local::getMetadata
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testReadNotAFile()
     {

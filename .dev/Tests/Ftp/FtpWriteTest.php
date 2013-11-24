@@ -2,7 +2,7 @@
 namespace Ftp;
 
 use Exception;
-use Molajo\Filesystem\Exception\AdapterException;
+use Exception\Filesystem\AdapterException;
 
 use Molajo\Filesystem\Adapter as adapter;
 
@@ -19,7 +19,7 @@ class FtpWriteTest extends Data
         parent::setUp();
 
         $this->handler = 'Ftp';
-        $this->action          = 'Write';
+        $this->action  = 'Write';
     }
 
     /**
@@ -43,10 +43,9 @@ class FtpWriteTest extends Data
             'passive_mode'      => true,
             'initial_directory' => 'Data',
             'persistence'       => false,
-
-            'file'    => $temp,
-            'replace' => false,
-            'data'    => 'Here are the words to write.',
+            'file'              => $temp,
+            'replace'           => false,
+            'data'              => 'Here are the words to write.',
         );
 
         $this->path = '/';
@@ -77,10 +76,9 @@ class FtpWriteTest extends Data
             'passive_mode'      => true,
             'initial_directory' => 'Data',
             'persistence'       => false,
-
-            'file'    => $temp,
-            'replace' => true,
-            'data'    => 'Here are the words to write.',
+            'file'              => $temp,
+            'replace'           => true,
+            'data'              => 'Here are the words to write.',
         );
 
         $this->path = '/';
@@ -101,7 +99,7 @@ class FtpWriteTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Ftp::write
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testUnsuccessfulRewrite()
     {
@@ -117,10 +115,9 @@ class FtpWriteTest extends Data
             'passive_mode'      => true,
             'initial_directory' => 'Data',
             'persistence'       => false,
-
-            'file'    => $temp,
-            'replace' => false,
-            'data'    => 'Here are the words to write.',
+            'file'              => $temp,
+            'replace'           => false,
+            'data'              => 'Here are the words to write.',
         );
 
         $this->path = '/';
@@ -147,10 +144,9 @@ class FtpWriteTest extends Data
             'passive_mode'      => true,
             'initial_directory' => 'Data',
             'persistence'       => false,
-
-            'file'    => $temp,
-            'replace' => false,
-            'data'    => ''
+            'file'              => $temp,
+            'replace'           => false,
+            'data'              => ''
         );
 
         $this->path = '/Data';
@@ -184,10 +180,9 @@ class FtpWriteTest extends Data
             'passive_mode'      => true,
             'initial_directory' => 'Data',
             'persistence'       => false,
-
-            'file'    => $temp,
-            'replace' => false,
-            'data'    => 'Poop'
+            'file'              => $temp,
+            'replace'           => false,
+            'data'              => 'Poop'
         );
 
         $this->path = '/Data/OneMoreFolder/Cats/love/Dogs';

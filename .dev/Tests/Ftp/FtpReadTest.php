@@ -16,9 +16,9 @@ class FtpReadTest extends Data
         parent::setUp();
 
         $this->handler = 'Ftp';
-        $this->action          = 'Read';
-        $this->path            = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
-        $this->options         = array();
+        $this->action  = 'Read';
+        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
+        $this->options = array();
     }
 
     /**
@@ -28,7 +28,7 @@ class FtpReadTest extends Data
      */
     public function testReadSuccessful()
     {
-        $this->path            =   '/Data/test1.txt';
+        $this->path = '/Data/test1.txt';
 
         $this->options = array(
             'username'          => 'test',

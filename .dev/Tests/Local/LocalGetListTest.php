@@ -1,16 +1,16 @@
 <?php
 namespace Local;
 
-use Molajo\Filesystem\Exception\AdapterException;
+use Exception\Filesystem\AdapterException;
 use Molajo\Filesystem\Connection;
 
 /**
  * Tests Local Filesystem Handler: Getlist Methods
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- * @since     1.0
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
+ * @since      1.0
  */
 class LocalGetlistTest extends Data
 {
@@ -33,7 +33,7 @@ class LocalGetlistTest extends Data
         parent::setUp();
 
         $this->handler = 'Local';
-        $this->adapter         = new Connection();
+        $this->adapter = new Connection();
     }
 
     /**
@@ -41,8 +41,8 @@ class LocalGetlistTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::getGetlist
-     * @covers Molajo\Filesystem\Handler\Local::getGetlist
+     * @covers  Molajo\Filesystem\Adapter::getGetlist
+     * @covers  Molajo\Filesystem\Handler\Local::getGetlist
      */
     public function testGetlistRecursiveFalseSuccessful()
     {
@@ -72,8 +72,8 @@ class LocalGetlistTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::getGetlist
-     * @covers Molajo\Filesystem\Handler\Local::getGetlist
+     * @covers  Molajo\Filesystem\Adapter::getGetlist
+     * @covers  Molajo\Filesystem\Handler\Local::getGetlist
      */
     public function testGetlistRecursiveTrueSuccessful()
     {
@@ -103,8 +103,8 @@ class LocalGetlistTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::getGetlist
-     * @covers Molajo\Filesystem\Handler\Local::getGetlist
+     * @covers  Molajo\Filesystem\Adapter::getGetlist
+     * @covers  Molajo\Filesystem\Handler\Local::getGetlist
      */
     public function testGetlistRecursiveNoFilesSuccessful()
     {
@@ -134,8 +134,8 @@ class LocalGetlistTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::getGetlist
-     * @covers Molajo\Filesystem\Handler\Local::getGetlist
+     * @covers  Molajo\Filesystem\Adapter::getGetlist
+     * @covers  Molajo\Filesystem\Handler\Local::getGetlist
      */
     public function testGetlistRecursiveNoFoldersSuccessful()
     {
@@ -165,8 +165,8 @@ class LocalGetlistTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::getGetlist
-     * @covers Molajo\Filesystem\Handler\Local::getGetlist
+     * @covers  Molajo\Filesystem\Adapter::getGetlist
+     * @covers  Molajo\Filesystem\Handler\Local::getGetlist
      */
     public function testGetlistRecursiveNoFoldersOnlyTxtSuccessful()
     {
@@ -196,8 +196,8 @@ class LocalGetlistTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::getGetlist
-     * @covers Molajo\Filesystem\Handler\Local::getGetlist
+     * @covers  Molajo\Filesystem\Adapter::getGetlist
+     * @covers  Molajo\Filesystem\Handler\Local::getGetlist
      */
     public function testGetlistRecursiveNoFoldersOnlyPdfSuccessful()
     {
@@ -227,8 +227,8 @@ class LocalGetlistTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::getGetlist
-     * @covers Molajo\Filesystem\Handler\Local::getGetlist
+     * @covers  Molajo\Filesystem\Adapter::getGetlist
+     * @covers  Molajo\Filesystem\Handler\Local::getGetlist
      */
     public function testGetlistRecursiveNoFoldersTest2Successful()
     {

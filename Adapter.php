@@ -2,25 +2,23 @@
 /**
  * Adapter for Filesystem
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  */
 namespace Molajo\Filesystem;
 
-defined('MOLAJO') or die;
-
 use Exception;
-use Molajo\Filesystem\Exception\AdapterException;
-use Molajo\Filesystem\Api\FilesystemInterface;
+use Exception\Filesystem\AdapterException;
+use CommonApi\Filesystem\FilesystemInterface;
 
 /**
  * Adapter for Filesystem
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- * @since     1.0
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
+ * @since      1.0
  */
 class Adapter
 {
@@ -57,7 +55,6 @@ class Adapter
     {
         try {
             return $this->handler->exists($path);
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: Exists Exception ' . $e->getMessage());
         }
@@ -76,7 +73,6 @@ class Adapter
     {
         try {
             return $this->handler->getMetadata($path);
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: getMetadata Exception ' . $e->getMessage());
         }
@@ -95,7 +91,6 @@ class Adapter
     {
         try {
             return $this->handler->read($path);
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: Read Exception ' . $e->getMessage());
         }
@@ -134,7 +129,6 @@ class Adapter
                 $include_folders,
                 $filename_mask
             );
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: getList Exception ' . $e->getMessage());
         }
@@ -157,7 +151,6 @@ class Adapter
     {
         try {
             return $this->handler->write($path, $data, $replace, $append, $truncate);
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: Write Exception ' . $e->getMessage());
         }
@@ -177,7 +170,6 @@ class Adapter
     {
         try {
             return $this->handler->delete($path, $recursive);
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: Delete Exception ' . $e->getMessage());
         }
@@ -212,7 +204,6 @@ class Adapter
                 $replace,
                 $target_handler
             );
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: Copy Exception ' . $e->getMessage());
         }
@@ -247,7 +238,6 @@ class Adapter
                 $replace,
                 $target_handler
             );
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: Move Exception ' . $e->getMessage());
         }
@@ -267,7 +257,6 @@ class Adapter
     {
         try {
             return $this->handler->rename($path, $new_name);
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: Rename Exception ' . $e->getMessage());
         }
@@ -288,7 +277,6 @@ class Adapter
     {
         try {
             return $this->handler->changeOwner($path, $user_name, $recursive);
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: changeOwner Exception ' . $e->getMessage());
         }
@@ -309,7 +297,6 @@ class Adapter
     {
         try {
             return $this->handler->changeGroup($path, $group_id, $recursive);
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: changeGroup Exception ' . $e->getMessage());
         }
@@ -330,7 +317,6 @@ class Adapter
     {
         try {
             return $this->handler->changePermission($path, $permission, $recursive);
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: changePermission Exception ' . $e->getMessage());
         }
@@ -352,7 +338,6 @@ class Adapter
     {
         try {
             return $this->handler->touch($path, $modification_time, $access_time, $recursive);
-
         } catch (Exception $e) {
             throw new AdapterException('Filesystem: Touch Exception ' . $e->getMessage());
         }

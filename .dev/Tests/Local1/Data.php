@@ -4,10 +4,10 @@ namespace Local;
 /**
  * Data for Filesystem
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- * @since     1.0
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
+ * @since      1.0
  */
 
 use PHPUnit_Framework_TestCase;
@@ -167,9 +167,7 @@ class Data extends PHPUnit_Framework_TestCase
                 $new_directory = $new_path . '/' . substr($directory, strlen($path), 99999);
 
                 if (basename($new_directory) == '.' || basename($new_directory) == '..') {
-
                 } elseif (file_exists($new_directory)) {
-
                 } else {
                     mkdir($new_directory);
                 }
@@ -287,7 +285,6 @@ class Data extends PHPUnit_Framework_TestCase
 
             if (is_file($name)) {
                 $this->files[] = $name;
-
             } elseif (is_dir($name)) {
 
                 if (basename($name) == '.' || basename($name) == '..') {

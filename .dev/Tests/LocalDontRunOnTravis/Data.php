@@ -65,7 +65,7 @@ class Data extends PHPUnit_Framework_TestCase
 
         /** initialise call */
         $this->handler = 'Local';
-        $this->action          = 'Delete';
+        $this->action  = 'Delete';
 
         $this->options = array(
             'delete_empty' => false
@@ -145,9 +145,7 @@ class Data extends PHPUnit_Framework_TestCase
                 $new_directory = $new_path . '/' . substr($directory, strlen($path), 99999);
 
                 if (basename($new_directory) == '.' || basename($new_directory) == '..') {
-
                 } elseif (file_exists($new_directory)) {
-
                 } else {
                     mkdir($new_directory);
                 }
@@ -265,7 +263,6 @@ class Data extends PHPUnit_Framework_TestCase
 
             if (is_file($name)) {
                 $this->files[] = $name;
-
             } elseif (is_dir($name)) {
 
                 if (basename($name) == '.' || basename($name) == '..') {

@@ -1,16 +1,16 @@
 <?php
 namespace Local;
 
-use Molajo\Filesystem\Exception\AdapterException;
+use Exception\Filesystem\AdapterException;
 use Molajo\Filesystem\Connection;
 
 /**
  * Tests Local Filesystem Handler: Exists Methods
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- * @since     1.0
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
+ * @since      1.0
  */
 class LocalExistsTest extends Data
 {
@@ -108,7 +108,6 @@ class LocalExistsTest extends Data
         return $this;
     }
 
-
     /**
      * Successful: Folder does not exist
      *
@@ -116,7 +115,7 @@ class LocalExistsTest extends Data
      * @since   1.0
      * @covers  Molajo\Filesystem\Adapter::exists
      * @covers  Molajo\Filesystem\Handler\Local::exists
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testEmptyPathNotSuccessful()
     {

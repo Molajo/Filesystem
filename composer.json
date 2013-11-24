@@ -1,41 +1,29 @@
 {
-    "name":"molajo/filesystem",
-    "type":"molajo-bundle",
-    "description":"Simple, uniform file and directory services API for PHP applications that enables applications to interact with any filesystem for which an adapter has been defined in a common way.",
-    "keywords":["Filesystem", "PSR-0", "PSR-1", "PSR-2"],
-    "homepage":"http://github.com/Molajo/Filesystem",
-    "license":"MIT",
-
-    "authors":[
+    "name": "molajo/filesystem",
+    "type": "molajo-bundle",
+    "description": "Simple, uniform file and directory services API for PHP applications that enables applications to interact with any filesystem for which an adapter has been defined in a common way.",
+    "keywords": ["Filesystem", "CommonApi", "Molajo"],
+    "homepage": "http://github.com/Molajo/Filesystem",
+    "license": "MIT",
+    "authors": [
         {
-            "name":"Amy Stephen",
-            "email":"AmyStephen@gmail.com",
-            "homepage":"http://AmyStephen.github.com"
+            "name": "Amy Stephen",
+            "email": "AmyStephen@gmail.com",
+            "homepage": "http://AmyStephen.github.io"
         }
     ],
-
-    "require":{
-        "php":">=5.3"
+    "require": {
+        "php": ">=5.3.10",
+        "commonapi/filesystem": "dev-master"
     },
 
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/molajo/filesystem"
-        }
-    ],
-
-    "autoload":{
-        "psr-0":{
-            "Molajo\\Filesystem":"./"
-        }
+    "support": {
+        "event": "hello@molajo.org",
+        "irc": "irc://irc.freenode.org/molajo"
     },
-
-    "minimum-stability":"dev",
-
-    "extra":{
-        "branch-alias":{
-            "dev-master":"1.0.x-dev"
+    "autoload": {
+        "psr-4": {
+            "Molajo\\Filesystem": "./"
         }
     }
 }

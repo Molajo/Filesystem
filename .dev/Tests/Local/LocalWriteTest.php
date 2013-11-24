@@ -1,16 +1,16 @@
 <?php
 namespace Local;
 
-use Molajo\Filesystem\Exception\AdapterException;
+use Exception\Filesystem\AdapterException;
 use Molajo\Filesystem\Connection;
 
 /**
  * Tests Local Filesystem Handler: Write Methods
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- * @since     1.0
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
+ * @since      1.0
  */
 class LocalWriteTest extends Data
 {
@@ -33,8 +33,8 @@ class LocalWriteTest extends Data
         parent::setUp();
 
         $this->handler = 'Local';
-        $this->options         = array();
-        $this->adapter         = new Connection();
+        $this->options = array();
+        $this->adapter = new Connection();
 
         return $this;
     }
@@ -44,8 +44,8 @@ class LocalWriteTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::write
-     * @covers Molajo\Filesystem\Handler\Local::write
+     * @covers  Molajo\Filesystem\Adapter::write
+     * @covers  Molajo\Filesystem\Handler\Local::write
      */
     public function testSuccessfulWrite()
     {
@@ -55,9 +55,9 @@ class LocalWriteTest extends Data
             \unlink($this->path);
         }
 
-        $data = 'Here are the words to write.';
-        $replace = false;
-        $append = false;
+        $data     = 'Here are the words to write.';
+        $replace  = false;
+        $append   = false;
         $truncate = false;
 
         $this->assertFileNotExists($this->path);
@@ -74,8 +74,8 @@ class LocalWriteTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::write
-     * @covers Molajo\Filesystem\Handler\Local::write
+     * @covers  Molajo\Filesystem\Adapter::write
+     * @covers  Molajo\Filesystem\Handler\Local::write
      */
     public function testSuccessfulRewrite()
     {
@@ -85,9 +85,9 @@ class LocalWriteTest extends Data
             \unlink($this->path);
         }
 
-        $data = 'Here are the words to write.';
-        $replace = true;
-        $append = false;
+        $data     = 'Here are the words to write.';
+        $replace  = true;
+        $append   = false;
         $truncate = false;
 
         $this->assertFileNotExists($this->path);
@@ -101,7 +101,7 @@ class LocalWriteTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Local::write
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testUnsuccessfulRewrite()
     {

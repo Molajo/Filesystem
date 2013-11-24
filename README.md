@@ -30,7 +30,7 @@ a file or a folder. Since Exceptions can be thrown, it is recommended methods be
     use Molajo\Filesystem\Adapter;
     $adapter = new Adapter($handler);
 
-    $true_of_false = $adapter->exists('\file\located\here.txt');
+    $true_or_false = $adapter->exists('\file\located\here.txt');
 
     $metadata = $adapter->getMetadata('\file\located\here.txt');
     echo $metadata->owner;      // See complete list of metadata returned, below
@@ -127,9 +127,7 @@ Retrieves an object containing metadata for the file or folder defined in $path:
     }
 
     // View all object properties returned
-    echo '<pre>';
-    var_dump($metadata);
-    echo '</pre>';
+
 
     // Use a single element
     echo $metadata->name;

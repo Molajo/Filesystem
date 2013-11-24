@@ -17,7 +17,7 @@ class LocalMoveTest extends Data
 
         /** initialise call */
         $this->handler = 'Local';
-        $this->action          = 'Move';
+        $this->action  = 'Move';
 
         return;
     }
@@ -32,10 +32,10 @@ class LocalMoveTest extends Data
         $temp = BASE_FOLDER . '/.dev/Tests/Data/Testcases';
 
         $this->options = array(
-            'target_directory'       => '',
-            'target_name'            => 'test2.txt',
-            'replace'                => false,
-            'target_handler' => 'Local'
+            'target_directory' => '',
+            'target_name'      => 'test2.txt',
+            'replace'          => false,
+            'target_handler'   => 'Local'
         );
 
         $this->path = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
@@ -56,10 +56,10 @@ class LocalMoveTest extends Data
         $temp = BASE_FOLDER . '/.dev/Tests/Data/Testcases';
 
         $this->options = array(
-            'target_directory'       => '',
-            'target_name'            => 'test2.txt',
-            'replace'                => false,
-            'target_handler' => 'Local'
+            'target_directory' => '',
+            'target_name'      => 'test2.txt',
+            'replace'          => false,
+            'target_handler'   => 'Local'
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
 
@@ -79,10 +79,10 @@ class LocalMoveTest extends Data
         $temp = BASE_FOLDER . '/.dev/Tests/Data';
 
         $this->options = array(
-            'target_directory'       => $temp,
-            'target_name'            => 'didit',
-            'replace'                => false,
-            'target_handler' => 'Local'
+            'target_directory' => $temp,
+            'target_name'      => 'didit',
+            'replace'          => false,
+            'target_handler'   => 'Local'
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/doit';
 
@@ -102,10 +102,10 @@ class LocalMoveTest extends Data
         $temp = BASE_FOLDER . '/.dev/Tests/Data';
 
         $this->options = array(
-            'target_directory'       => $temp,
-            'target_name'            => 'Amy',
-            'replace'                => false,
-            'target_handler' => 'Local'
+            'target_directory' => $temp,
+            'target_name'      => 'Amy',
+            'replace'          => false,
+            'target_handler'   => 'Local'
         );
         $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases';
 
@@ -119,15 +119,15 @@ class LocalMoveTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Local::copyOrMove
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testNotAFile()
     {
         $this->options = array(
-            'target_directory'       => BASE_FOLDER . '/.dev/Tests/Data',
-            'target_name'            => 'Amy',
-            'replace'                => false,
-            'target_handler' => 'Local'
+            'target_directory' => BASE_FOLDER . '/.dev/Tests/Data',
+            'target_name'      => 'Amy',
+            'replace'          => false,
+            'target_handler'   => 'Local'
         );
 
         $this->path = BASE_FOLDER . '/.dev/Tests/Dataeeeeee';

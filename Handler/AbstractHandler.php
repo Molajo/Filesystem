@@ -2,25 +2,23 @@
 /**
  * Filesystem Abstract Type
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  */
 namespace Molajo\Filesystem\Handler;
 
-defined('MOLAJO') or die;
-
 use DateTime;
 use DateTimeZone;
-use Molajo\Filesystem\Exception\AbstractHandlerException;
+use Exception\Filesystem\AbstractHandlerException;
 
 /**
  * Filesystem Abstract Handler
  *
- * @package   Molajo
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @since     1.0
+ * @package    Molajo
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @since      1.0
  */
 abstract class AbstractHandler
 {
@@ -420,7 +418,7 @@ abstract class AbstractHandler
      *
      * @since   1.0
      */
-    public function __construct($options)
+    public function __construct(array $options = array())
     {
         $this->connect($options);
     }
@@ -557,7 +555,7 @@ abstract class AbstractHandler
     /**
      * Normalizes the given path
      *
-     * @param   string  $path
+     * @param   string $path
      *
      * @return  string
      * @since   1.0
@@ -599,7 +597,6 @@ abstract class AbstractHandler
                 if (count($normalised) > 0) {
                     array_pop($normalised);
                 }
-
             } else {
                 $normalised[] = $node;
             }
@@ -615,7 +612,7 @@ abstract class AbstractHandler
     /**
      * Common method for creating new path for copy or move
      *
-     * @param   string $path             (file or folder)
+     * @param   string $path (file or folder)
      * @param   string $target_directory
      * @param   string $base_folder
      *
@@ -652,7 +649,6 @@ abstract class AbstractHandler
             } else {
                 $variable = true;
             }
-
         } else {
             if ($variable === true) {
             } else {

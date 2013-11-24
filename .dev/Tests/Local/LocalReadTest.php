@@ -1,16 +1,16 @@
 <?php
 namespace Local;
 
-use Molajo\Filesystem\Exception\AdapterException;
+use Exception\Filesystem\AdapterException;
 use Molajo\Filesystem\Connection;
 
 /**
  * Tests Local Filesystem Handler: Read Methods
  *
- * @package   Molajo
- * @copyright 2013 Amy Stephen. All rights reserved.
- * @license   http://www.opensource.org/licenses/mit-license.html MIT License
- * @since     1.0
+ * @package    Molajo
+ * @copyright  2013 Amy Stephen. All rights reserved.
+ * @license    http://www.opensource.org/licenses/mit-license.html MIT License
+ * @since      1.0
  */
 class LocalReadTest extends Data
 {
@@ -33,8 +33,8 @@ class LocalReadTest extends Data
         parent::setUp();
 
         $this->handler = 'Local';
-        $this->path            = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
-        $this->adapter         = new Connection();
+        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
+        $this->adapter = new Connection();
 
         return $this;
     }
@@ -44,8 +44,8 @@ class LocalReadTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::read
-     * @covers Molajo\Filesystem\Handler\Local::read
+     * @covers  Molajo\Filesystem\Adapter::read
+     * @covers  Molajo\Filesystem\Handler\Local::read
      */
     public function testReadSuccessful()
     {
@@ -60,9 +60,9 @@ class LocalReadTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::read
-     * @covers Molajo\Filesystem\Handler\Local::read
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @covers  Molajo\Filesystem\Adapter::read
+     * @covers  Molajo\Filesystem\Handler\Local::read
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testReadUnsuccessful()
     {
@@ -77,9 +77,9 @@ class LocalReadTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers Molajo\Filesystem\Adapter::read
-     * @covers Molajo\Filesystem\Handler\Local::read
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @covers  Molajo\Filesystem\Adapter::read
+     * @covers  Molajo\Filesystem\Handler\Local::read
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testReadNotAFile()
     {

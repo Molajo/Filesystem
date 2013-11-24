@@ -17,7 +17,7 @@ class LocalDeleteTest extends Data
 
         /** initialise call */
         $this->handler = 'Local';
-        $this->action          = 'Delete';
+        $this->action  = 'Delete';
 
         $this->options = array(
             'delete_empty' => false
@@ -106,7 +106,7 @@ class LocalDeleteTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Local::delete
-     * @expectedException Molajo\Filesystem\Exception\AdapterException
+     * @expectedException Exception\Filesystem\AdapterException
      */
     public function testNotAFile()
     {
