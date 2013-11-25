@@ -1,6 +1,6 @@
 {
     "name": "molajo/filesystem",
-    "type": "molajo-bundle",
+    "type": "molajo-package",
     "description": "Simple, uniform file and directory services API for PHP applications that enables applications to interact with any filesystem for which an adapter has been defined in a common way.",
     "keywords": ["Filesystem", "CommonApi", "Molajo"],
     "homepage": "http://github.com/Molajo/Filesystem",
@@ -8,8 +8,8 @@
     "authors": [
         {
             "name": "Amy Stephen",
-            "email": "AmyStephen@gmail.com",
-            "homepage": "http://AmyStephen.github.io"
+            "email": "AmyStephen@Molajo.org",
+            "homepage": "http://AmyStephen.com"
         }
     ],
     "require": {
@@ -22,7 +22,7 @@
         "irc": "irc://irc.freenode.org/molajo"
     },
     "autoload": {
-        "psr-4": {
+        "psr-0": {
             "Molajo\\Filesystem": "./"
         }
     }

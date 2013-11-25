@@ -473,7 +473,7 @@ Features [GitHub](https://github.com/Molajo/Filesystem/issues)
 Author
 ------
 
-Amy Stephen - <AmyStephen@gmail.com> - <http://twitter.com/AmyStephen><br />
+Amy Stephen - <AmyStephen@Molajo.org> - <http://twitter.com/AmyStephen><br />
 See also the list of [contributors](https://github.com/Molajo/Filesystem/contributors) participating in this project.
 
 License
