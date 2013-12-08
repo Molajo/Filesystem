@@ -432,7 +432,6 @@ abstract class AbstractHandler
      *
      * @return   $this
      * @since    1.0
-     * @api
      */
     public function connect($options = array())
     {
