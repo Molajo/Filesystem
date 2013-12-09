@@ -1,7 +1,7 @@
 <?php
 namespace Local;
 
-use Exception\Filesystem\AdapterException;
+use Exception\Filesystem\RuntimeException;
 use Molajo\Filesystem\Connection;
 
 /**
@@ -134,7 +134,7 @@ class LocalMetadataTest extends Data
      * @since   1.0
      * @covers  Molajo\Filesystem\Adapter::getMetadata
      * @covers  Molajo\Filesystem\Handler\Local::getMetadata
-     * @expectedException Exception\Filesystem\AdapterException
+     * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testReadNotAFile()
     {

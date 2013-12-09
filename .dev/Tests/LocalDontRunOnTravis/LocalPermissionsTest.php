@@ -54,7 +54,7 @@ class LocalPermissionsTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Local::changePermission
-     * @expectedException Exception\Filesystem\AdapterException
+     * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testPermissionsFail()
     {
@@ -72,7 +72,7 @@ class LocalPermissionsTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Local::Touch
-     * @expectedException Exception\Filesystem\AdapterException
+     * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testTouchSuccess()
     {
@@ -109,7 +109,7 @@ class LocalPermissionsTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Local::touch
-     * @expectedException Exception\Filesystem\AdapterException
+     * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testTouchFail()
     {

@@ -1,7 +1,7 @@
 <?php
 namespace Local;
 
-use Exception\Filesystem\AdapterException;
+use Exception\Filesystem\RuntimeException;
 use Molajo\Filesystem\Connection;
 
 /**
@@ -101,7 +101,7 @@ class LocalWriteTest extends Data
 
     /**
      * @covers Molajo\Filesystem\Handler\Local::write
-     * @expectedException Exception\Filesystem\AdapterException
+     * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testUnsuccessfulRewrite()
     {

@@ -9,7 +9,7 @@
 namespace Molajo\Filesystem;
 
 use Exception;
-use Exception\Filesystem\AdapterException;
+use Exception\Filesystem\RuntimeException;
 use CommonApi\Filesystem\FilesystemInterface;
 
 /**
@@ -49,14 +49,14 @@ class Adapter
      *
      * @return  bool
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function exists($path)
     {
         try {
             return $this->handler->exists($path);
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: Exists Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: Exists Exception ' . $e->getMessage());
         }
     }
 
@@ -67,14 +67,14 @@ class Adapter
      *
      * @return  object
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function getMetadata($path)
     {
         try {
             return $this->handler->getMetadata($path);
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: getMetadata Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: getMetadata Exception ' . $e->getMessage());
         }
     }
 
@@ -85,14 +85,14 @@ class Adapter
      *
      * @return  null|string
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function read($path)
     {
         try {
             return $this->handler->read($path);
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: Read Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: Read Exception ' . $e->getMessage());
         }
     }
 
@@ -110,7 +110,7 @@ class Adapter
      *
      * @return  mixed
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function getList(
         $path,
@@ -130,7 +130,7 @@ class Adapter
                 $filename_mask
             );
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: getList Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: getList Exception ' . $e->getMessage());
         }
     }
 
@@ -145,14 +145,14 @@ class Adapter
      *
      * @return  $this
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function write($path, $data = '', $replace = true, $append = false, $truncate = false)
     {
         try {
             return $this->handler->write($path, $data, $replace, $append, $truncate);
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: Write Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: Write Exception ' . $e->getMessage());
         }
     }
 
@@ -164,14 +164,14 @@ class Adapter
      *
      * @return  $this
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function delete($path, $recursive = false)
     {
         try {
             return $this->handler->delete($path, $recursive);
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: Delete Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: Delete Exception ' . $e->getMessage());
         }
     }
 
@@ -187,7 +187,7 @@ class Adapter
      *
      * @return  $this
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function copy(
         $path,
@@ -205,7 +205,7 @@ class Adapter
                 $target_handler
             );
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: Copy Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: Copy Exception ' . $e->getMessage());
         }
     }
 
@@ -221,7 +221,7 @@ class Adapter
      *
      * @return  $this
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function move(
         $path,
@@ -239,7 +239,7 @@ class Adapter
                 $target_handler
             );
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: Move Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: Move Exception ' . $e->getMessage());
         }
     }
 
@@ -251,14 +251,14 @@ class Adapter
      *
      * @return  $this
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function rename($path, $new_name)
     {
         try {
             return $this->handler->rename($path, $new_name);
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: Rename Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: Rename Exception ' . $e->getMessage());
         }
     }
 
@@ -271,14 +271,14 @@ class Adapter
      *
      * @return  $this
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function changeOwner($path, $user_name, $recursive = false)
     {
         try {
             return $this->handler->changeOwner($path, $user_name, $recursive);
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: changeOwner Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: changeOwner Exception ' . $e->getMessage());
         }
     }
 
@@ -291,14 +291,14 @@ class Adapter
      *
      * @return  $this
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function changeGroup($path, $group_id, $recursive = false)
     {
         try {
             return $this->handler->changeGroup($path, $group_id, $recursive);
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: changeGroup Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: changeGroup Exception ' . $e->getMessage());
         }
     }
 
@@ -311,14 +311,14 @@ class Adapter
      *
      * @return  $this
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function changePermission($path, $permission, $recursive = false)
     {
         try {
             return $this->handler->changePermission($path, $permission, $recursive);
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: changePermission Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: changePermission Exception ' . $e->getMessage());
         }
     }
 
@@ -332,14 +332,15 @@ class Adapter
      *
      * @return  $this
      * @since   1.0
-     * @throws  AdapterException
+     * @throws  RuntimeException
      */
     public function touch($path, $modification_time = null, $access_time = null, $recursive = false)
     {
         try {
             return $this->handler->touch($path, $modification_time, $access_time, $recursive);
         } catch (Exception $e) {
-            throw new AdapterException('Filesystem: Touch Exception ' . $e->getMessage());
+            throw new RuntimeException('Filesystem: Touch Exception ' . $e->getMessage());
         }
     }
 }
+

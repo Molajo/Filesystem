@@ -1,7 +1,7 @@
 <?php
 namespace Local;
 
-use Exception\Filesystem\AdapterException;
+use Exception\Filesystem\RuntimeException;
 use Molajo\Filesystem\Connection;
 
 /**
@@ -115,7 +115,7 @@ class LocalExistsTest extends Data
      * @since   1.0
      * @covers  Molajo\Filesystem\Adapter::exists
      * @covers  Molajo\Filesystem\Handler\Local::exists
-     * @expectedException Exception\Filesystem\AdapterException
+     * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testEmptyPathNotSuccessful()
     {

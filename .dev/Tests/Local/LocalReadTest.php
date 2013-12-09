@@ -1,7 +1,7 @@
 <?php
 namespace Local;
 
-use Exception\Filesystem\AdapterException;
+use Exception\Filesystem\RuntimeException;
 use Molajo\Filesystem\Connection;
 
 /**
@@ -62,7 +62,7 @@ class LocalReadTest extends Data
      * @since   1.0
      * @covers  Molajo\Filesystem\Adapter::read
      * @covers  Molajo\Filesystem\Handler\Local::read
-     * @expectedException Exception\Filesystem\AdapterException
+     * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testReadUnsuccessful()
     {
@@ -79,7 +79,7 @@ class LocalReadTest extends Data
      * @since   1.0
      * @covers  Molajo\Filesystem\Adapter::read
      * @covers  Molajo\Filesystem\Handler\Local::read
-     * @expectedException Exception\Filesystem\AdapterException
+     * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testReadNotAFile()
     {

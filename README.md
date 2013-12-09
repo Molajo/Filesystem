@@ -19,7 +19,7 @@ reading, writing, listing, copying, moving, etc., files and folders is the same 
 of the underlying system. With the exception of the read method, each are designed to provide results for either
 a file or a folder. Since Exceptions can be thrown, it is recommended methods be used within Try/Catch blocks.
 
-[Filesystem Adapter Interface](https://github.com/Molajo/Standard/blob/master/Vendor/Molajo/Filesystem/Api/FilesystemInterface.php)
+[Filesystem Adapter Interface](https://github.com/Molajo/Standard/blob/master/vendor/Molajo/Filesystem/Api/FilesystemInterface.php)
 ```php
 
     // Instantiate Handler (example local) and pass it into the Filesystem Adapter

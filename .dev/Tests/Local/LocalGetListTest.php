@@ -1,7 +1,7 @@
 <?php
 namespace Local;
 
-use Exception\Filesystem\AdapterException;
+use Exception\Filesystem\RuntimeException;
 use Molajo\Filesystem\Connection;
 
 /**
