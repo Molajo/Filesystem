@@ -14,7 +14,8 @@
     ],
     "require": {
         "php": ">=5.4",
-        "commonapi/filesystem": "dev-master"
+        "commonapi/filesystem": "dev-master",
+        "commonapi/exception": "dev-master"
     },
 
     "support": {
@@ -23,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Molajo\\Filesystem": "./"
+            "Molajo\\Filesystem\\": "Source/"
         }
     }
 }
