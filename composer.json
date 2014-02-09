@@ -26,5 +26,11 @@
         "psr-4": {
             "Molajo\\Filesystem\\": "Source/"
         }
-    }
+    },
+
+    "archive": {
+        "exclude": ["/.dev"]
+    },
+
+    "minimum-stability": "dev"
 }
