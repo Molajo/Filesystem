@@ -66,7 +66,10 @@ class LocalWriteTest extends Data
      */
     public function testSuccessfulWrite()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests' . '/' . 'test33.txt';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path = $base . '/.dev/Tests' . '/' . 'test33.txt';
+
         echo $this->path;
         if (file_exists($this->path)) {
             \unlink($this->path);

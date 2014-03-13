@@ -1,27 +1,28 @@
 <?php
 /**
- * Filesystem Service Provider
+ * Filesystem Factory Method
  *
  * @package    Molajo
  * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright  2014 Amy Stephen. All rights reserved.
  */
-namespace Molajo\Service\Filesystem;
+namespace Molajo\Factories\Filesystem;
 
 use Exception;
 use CommonApi\Exception\RuntimeException;
-use CommonApi\IoC\ServiceProviderInterface;
-use Molajo\IoC\AbstractServiceProvider;
+use CommonApi\IoC\FactoryMethodInterface;
+use CommonApi\IoC\FactoryMethodBatchSchedulingInterface;
+use Molajo\IoC\FactoryBase;
 
 /**
- * Filesystem Service Provider
+ * Filesystem Factory Method
  *
  * @author     Amy Stephen
  * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright  2014 Amy Stephen. All rights reserved.
  * @since      1.0
  */
-class FilesystemServiceProvider extends AbstractServiceProvider implements ServiceProviderInterface
+class FilesystemFactoryMethod extends FactoryBase implements FactoryMethodInterface, FactoryMethodBatchSchedulingInterface
 {
     /**
      * Adapter Instance
@@ -48,9 +49,9 @@ class FilesystemServiceProvider extends AbstractServiceProvider implements Servi
      */
     public function __construct(array $options = array())
     {
-        $options['service_name']             = basename(__DIR__);
+        $options['product_name']             = basename(__DIR__);
         $options['store_instance_indicator'] = true;
-        $options['service_namespace']        = 'Molajo\\Filesystem\\Adapter';
+        $options['product_namespace']        = 'Molajo\\Filesystem\\Adapter';
 
         parent::__construct($options);
     }
@@ -62,11 +63,11 @@ class FilesystemServiceProvider extends AbstractServiceProvider implements Servi
      * @since   1.0
      * @throws  \CommonApi\Exception\RuntimeException;
      */
-    public function instantiateService()
+    public function instantiateClass()
     {
-        $options                = array();
-        $handler                = $this->getAdapterHandler($options);
-        $this->service_instance = $this->getAdapter($handler);
+        $options              = array();
+        $handler              = $this->getAdapterHandler($options);
+        $this->product_result = $this->getAdapter($handler);
 
         return $this;
     }
@@ -78,7 +79,7 @@ class FilesystemServiceProvider extends AbstractServiceProvider implements Servi
      *
      * @return  object
      * @since   1.0
-     * @throws  ServiceProviderInterface
+     * @throws  FactoryMethodInterface
      */
     protected function getAdapterHandler($options = array())
     {
@@ -99,7 +100,7 @@ class FilesystemServiceProvider extends AbstractServiceProvider implements Servi
      *
      * @return  object
      * @since   1.0
-     * @throws  ServiceProviderInterface
+     * @throws  FactoryMethodInterface
      */
     protected function getAdapter($handler)
     {
@@ -124,29 +125,29 @@ class FilesystemServiceProvider extends AbstractServiceProvider implements Servi
     protected function testAPI()
     {
         /** 1. Exists */
-        $true_or_false = $this->service_instance->exists(__DIR__ . '/Configuration.xml');
+        $true_or_false = $this->product_result->exists(__DIR__ . '/Configuration.xml');
 
         if ($true_or_false === false) {
-            echo 'LocalFilesystem Exists did not work when tested in Filesystem Service Provider'
+            echo 'LocalFilesystem Exists did not work when tested in Filesystem Factory Method'
                 . __DIR__ . '/Configuration.xml. <br /> ';
             die;
         } else {
-            echo 'LocalFilesystem Exists when tested in Filesystem Service Provider'
+            echo 'LocalFilesystem Exists when tested in Filesystem Factory Method'
                 . __DIR__ . '/Configuration.xml. <br /> ';
         }
 
         /** Metadata */
-        $metadata = $this->service_instance->getMetadata(__DIR__ . '/Configuration.xml');
+        $metadata = $this->product_result->getMetadata(__DIR__ . '/Configuration.xml');
 
         /** List */
-        $path            = BASE_FOLDER . '/Vendor' . '/Molajo';
+        $path            = $this->options['base_path'] . '/Vendor' . '/Molajo';
         $recursive       = true;
         $extension_list  = null;
         $include_files   = true;
         $include_folders = false;
         $filename_mask   = null;
 
-        $list_of_results = $this->service_instance->getList(
+        $list_of_results = $this->product_result->getList(
             $path,
             $recursive,
             $extension_list,
@@ -162,10 +163,10 @@ class FilesystemServiceProvider extends AbstractServiceProvider implements Servi
         $append   = false;
         $truncate = false;
 
-        $this->service_instance->write($path, $data, $replace, $append, $truncate);
+        $this->product_result->write($path, $data, $replace, $append, $truncate);
 
         /** Read */
-        $contents = $this->service_instance->read($path);
+        $contents = $this->product_result->read($path);
         echo $contents;
 
         $target_directory       = __DIR__;
@@ -173,23 +174,23 @@ class FilesystemServiceProvider extends AbstractServiceProvider implements Servi
         $replace                = true;
         $target_adapter_handler = 'Local';
 
-        $this->service_instance->copy($path, $target_directory, $target_name, $replace, $target_adapter_handler);
+        $this->product_result->copy($path, $target_directory, $target_name, $replace, $target_adapter_handler);
 
         die;
 
-        $this->service_instance->move($path, $target_directory, $target_name, $replace, $target_adapter_handler);
+        $this->product_result->move($path, $target_directory, $target_name, $replace, $target_adapter_handler);
 
-        $this->service_instance->rename($path, $new_name);
+        $this->product_result->rename($path, $new_name);
 
-        $this->service_instance->delete($path, $recursive);
+        $this->product_result->delete($path, $recursive);
 
-        $this->service_instance->changeOwner($path, $user_name, $recursive);
+        $this->product_result->changeOwner($path, $user_name, $recursive);
 
-        $this->service_instance->changeGroup($path, $group_id, $recursive);
+        $this->product_result->changeGroup($path, $group_id, $recursive);
 
-        $this->service_instance->changePermission($path, $permission, $recursive);
+        $this->product_result->changePermission($path, $permission, $recursive);
 
-        $this->service_instance->touch($path, $modification_time, $access_time, $recursive);
+        $this->product_result->touch($path, $modification_time, $access_time, $recursive);
 
         die;
     }

@@ -52,7 +52,8 @@ class LocalCopyTest extends Data
      */
     public function testCopySuccessfulSingleFileBlankDirectory()
     {
-        $temp = BASE_FOLDER . '/.dev/Tests/Data/Testcases';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+        $temp = $base . '/.dev/Tests/Data/Testcases';
 
         $this->options = array(
             'target_directory' => '',
@@ -60,7 +61,7 @@ class LocalCopyTest extends Data
             'replace'          => false,
             'target_handler'   => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
+        $this->path    = $base . '/.dev/Tests/Data/Testcases/test1.txt';
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
 
@@ -73,7 +74,8 @@ class LocalCopyTest extends Data
      */
     public function testCopySuccessfulSingleFile()
     {
-        $temp = BASE_FOLDER . '/.dev/Tests/Data/Testcases';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+        $temp = $base . '/.dev/Tests/Data/Testcases';
 
         $this->options = array(
             'target_directory' => '',
@@ -81,7 +83,7 @@ class LocalCopyTest extends Data
             'replace'          => false,
             'target_handler'   => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
+        $this->path    = $base . '/.dev/Tests/Data/Testcases/test1.txt';
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
 
@@ -96,7 +98,8 @@ class LocalCopyTest extends Data
      */
     public function testCopySingleFolder()
     {
-        $temp = BASE_FOLDER . '/.dev/Tests/Data';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+        $temp = $base . '/.dev/Tests/Data';
 
         $this->options = array(
             'target_directory' => $temp,
@@ -104,7 +107,7 @@ class LocalCopyTest extends Data
             'replace'          => false,
             'target_handler'   => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/doit';
+        $this->path    = $base . '/.dev/Tests/Data/doit';
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
 
@@ -119,7 +122,8 @@ class LocalCopyTest extends Data
      */
     public function testCopyMultipleFolder()
     {
-        $temp = BASE_FOLDER . '/.dev/Tests/Data';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+        $temp = $base . '/.dev/Tests/Data';
 
         $this->options = array(
             'target_directory' => $temp,
@@ -127,7 +131,7 @@ class LocalCopyTest extends Data
             'replace'          => false,
             'target_handler'   => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases';
+        $this->path    = $base . '/.dev/Tests/Data/Testcases';
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
 
@@ -143,13 +147,14 @@ class LocalCopyTest extends Data
      */
     public function testCopyNotAFile()
     {
+        $base          = substr(__DIR__, 0, strlen(__DIR__) - 5);
         $this->options = array(
-            'target_directory' => BASE_FOLDER . '/.dev/Tests/Data',
+            'target_directory' => $base . '/.dev/Tests/Data',
             'target_name'      => 'Amy',
             'replace'          => false,
             'target_handler'   => 'Local'
         );
-        $this->path    = BASE_FOLDER . '/.dev/Tests/Dataeeeeee';
+        $this->path    = $base . '/.dev/Tests/Dataeeeeee';
         $adapter       = new adapter($this->action, $this->path, $this->handler, $this->options);
 
         return;

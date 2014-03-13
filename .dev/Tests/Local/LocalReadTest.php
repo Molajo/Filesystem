@@ -30,10 +30,12 @@ class LocalReadTest extends Data
      */
     protected function setUp()
     {
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
         parent::setUp();
 
         $this->handler = 'Local';
-        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
+        $this->path    = $base . '/.dev/Tests/Data/test1.txt';
         $this->adapter = new Connection();
 
         return $this;
@@ -49,6 +51,7 @@ class LocalReadTest extends Data
      */
     public function testReadSuccessful()
     {
+        $base    = substr(__DIR__, 0, strlen(__DIR__) - 5);
         $results = $this->adapter->read($this->path);
         $this->assertEquals('yabba, dabba, doo', trim($results));
 
@@ -66,7 +69,8 @@ class LocalReadTest extends Data
      */
     public function testReadUnsuccessful()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests/Data/testreally-is-not-there.txt';
+        $base       = substr(__DIR__, 0, strlen(__DIR__) - 5);
+        $this->path = $base . '/.dev/Tests/Data/testreally-is-not-there.txt';
         $results    = $this->adapter->read($this->path);
 
         return $this;
@@ -83,7 +87,8 @@ class LocalReadTest extends Data
      */
     public function testReadNotAFile()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests';
+        $base       = substr(__DIR__, 0, strlen(__DIR__) - 5);
+        $this->path = $base . '/.dev/Tests';
         $results    = $this->adapter->read($this->path);
 
         return $this;

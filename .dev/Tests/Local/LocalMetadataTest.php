@@ -32,8 +32,9 @@ class LocalMetadataTest extends Data
     {
         parent::setUp();
 
+        $base          = substr(__DIR__, 0, strlen(__DIR__) - 5);
         $this->handler = 'Local';
-        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
+        $this->path    = $base . '/.dev/Tests/Data/test1.txt';
         $this->options = array();
         $this->adapter = new Connection();
     }
@@ -50,7 +51,9 @@ class LocalMetadataTest extends Data
     {
         $metadata = $this->adapter->getMetadata($this->path);
 
-        $this->assertEquals(BASE_FOLDER . '/.dev/Tests/Data/test1.txt', $metadata->path);
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->assertEquals($base . '/.dev/Tests/Data/test1.txt', $metadata->path);
         $this->assertEquals(null, $metadata->initial_directory); //amy
         $this->assertEquals('/', $metadata->root);
         $this->assertEquals(null, $metadata->host);
@@ -58,7 +61,7 @@ class LocalMetadataTest extends Data
         $this->assertEquals(420, $metadata->default_file_permissions);
         $this->assertEquals(false, $metadata->read_only);
         $this->assertEquals(true, $metadata->exists);
-        $this->assertEquals(BASE_FOLDER . '/.dev/Tests/Data/test1.txt', $metadata->absolute_path);
+        $this->assertEquals($base . '/.dev/Tests/Data/test1.txt', $metadata->absolute_path);
         $this->assertEquals(true, $metadata->is_absolute_path);
         $this->assertEquals(false, $metadata->is_root);
         $this->assertEquals(false, $metadata->is_directory);
@@ -66,7 +69,7 @@ class LocalMetadataTest extends Data
         $this->assertEquals(false, $metadata->is_link);
         $this->assertEquals('file', $metadata->type);
         $this->assertEquals('test1.txt', $metadata->name);
-        $this->assertEquals(BASE_FOLDER . '/.dev/Tests/Data', $metadata->parent);
+        $this->assertEquals($base . '/.dev/Tests/Data', $metadata->parent);
         $this->assertEquals('txt', $metadata->extension);
         $this->assertEquals('test1', $metadata->name_without_extension);
         $this->assertEquals('text/plain; charset=us-ascii', $metadata->mimetype);
@@ -92,10 +95,12 @@ class LocalMetadataTest extends Data
      */
     public function testGetMetadataForFolder()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests/Hold';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path = $base . '/.dev/Tests/Hold';
         $metadata   = $this->adapter->getMetadata($this->path);
 
-        $this->assertEquals(BASE_FOLDER . '/.dev/Tests/Hold', $metadata->path);
+        $this->assertEquals($base . '/.dev/Tests/Hold', $metadata->path);
         $this->assertEquals(null, $metadata->initial_directory); //amy
         $this->assertEquals('/', $metadata->root);
         $this->assertEquals(null, $metadata->host);
@@ -103,7 +108,7 @@ class LocalMetadataTest extends Data
         $this->assertEquals(420, $metadata->default_file_permissions);
         $this->assertEquals(false, $metadata->read_only);
         $this->assertEquals(true, $metadata->exists);
-        $this->assertEquals(BASE_FOLDER . '/.dev/Tests/Hold', $metadata->absolute_path);
+        $this->assertEquals($base . '/.dev/Tests/Hold', $metadata->absolute_path);
         $this->assertEquals(true, $metadata->is_absolute_path);
         $this->assertEquals(false, $metadata->is_root);
         $this->assertEquals(true, $metadata->is_directory);
@@ -111,7 +116,7 @@ class LocalMetadataTest extends Data
         $this->assertEquals(false, $metadata->is_link);
         $this->assertEquals('directory', $metadata->type);
         $this->assertEquals('Hold', $metadata->name);
-        $this->assertEquals(BASE_FOLDER . '/.dev/Tests', $metadata->parent);
+        $this->assertEquals($base . '/.dev/Tests', $metadata->parent);
         $this->assertEquals(null, $metadata->extension);
         $this->assertEquals(null, $metadata->name_without_extension);
         $this->assertEquals(null, $metadata->mimetype);
@@ -138,7 +143,9 @@ class LocalMetadataTest extends Data
      */
     public function testReadNotAFile()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests/this/file/does/not/exist.txt';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path = $base . '/.dev/Tests/this/file/does/not/exist.txt';
         $results    = $this->adapter->getMetadata($this->path);
 
         return $this;

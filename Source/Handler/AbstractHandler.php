@@ -613,19 +613,19 @@ abstract class AbstractHandler
      *
      * @param   string $path (file or folder)
      * @param   string $target_directory
-     * @param   string $base_folder
+     * @param   string $base_path
      *
      * @since   1.0
      * @return  string
      */
-    protected function build_new_path($path, $target_directory, $base_folder)
+    protected function build_new_path($path, $target_directory, $base_path)
     {
-        if ($base_folder == $path
-            || $target_directory == $base_folder
+        if ($base_path == $path
+            || $target_directory == $base_path
         ) {
             $temp = $target_directory;
         } else {
-            $temp = $target_directory . substr($path, strlen($base_folder), 99999);
+            $temp = $target_directory . substr($path, strlen($base_path), 99999);
         }
 
         return $temp;

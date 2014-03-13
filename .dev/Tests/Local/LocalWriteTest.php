@@ -49,7 +49,9 @@ class LocalWriteTest extends Data
      */
     public function testSuccessfulWrite()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests' . '/' . 'test2.txt';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path = $base . '/.dev/Tests' . '/' . 'test2.txt';
 
         if (file_exists($this->path)) {
             \unlink($this->path);
@@ -79,7 +81,9 @@ class LocalWriteTest extends Data
      */
     public function testSuccessfulRewrite()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests' . '/' . 'test2.txt';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path = $base . '/.dev/Tests' . '/' . 'test2.txt';
 
         if (file_exists($this->path)) {
             \unlink($this->path);
@@ -105,6 +109,8 @@ class LocalWriteTest extends Data
      */
     public function testUnsuccessfulRewrite()
     {
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
         $temp = 'test2.txt';
 
         $this->options = array(
@@ -113,7 +119,7 @@ class LocalWriteTest extends Data
             'data'    => 'Here are the words to write.',
         );
 
-        $this->path = BASE_FOLDER . '/.dev/Tests';
+        $this->path = $base . '/.dev/Tests';
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
 
@@ -125,6 +131,8 @@ class LocalWriteTest extends Data
      */
     public function testWriteSingleFolder()
     {
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
         $temp = 'OneMoreFolder';
 
         $this->options = array(
@@ -133,7 +141,7 @@ class LocalWriteTest extends Data
             'data'    => ''
         );
 
-        $this->path = BASE_FOLDER . '/.dev/Tests/Data';
+        $this->path = $base . '/.dev/Tests/Data';
 
         $this->assertFileNotExists($this->path . '/' . $temp);
 
@@ -152,6 +160,8 @@ class LocalWriteTest extends Data
      */
     public function testWriteMultipleFolders()
     {
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
         $temp = 'sometimes.txt';
 
         $this->options = array(
@@ -160,7 +170,7 @@ class LocalWriteTest extends Data
             'data'    => 'Poop'
         );
 
-        $this->path = BASE_FOLDER . '/.dev/Tests/Data/OneMoreFolder/Cats/love/Dogs';
+        $this->path = $base . '/.dev/Tests/Data/OneMoreFolder/Cats/love/Dogs';
 
         $this->assertFileNotExists($this->path . '/' . $temp);
 

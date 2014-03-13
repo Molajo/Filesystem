@@ -27,11 +27,13 @@ class LocalPermissionsTest extends Data
      */
     public function testPermissionsTTTSuccess()
     {
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
         $mode          = 0644;
         $this->options = array(
             'mode' => $mode
         );
-        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
+        $this->path    = $base . '/.dev/Tests/Data/Testcases/test1.txt';
         $this->action  = 'changePermission';
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
@@ -58,11 +60,13 @@ class LocalPermissionsTest extends Data
      */
     public function testPermissionsFail()
     {
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
         $mode          = 99999;
         $this->options = array(
             'mode' => $mode
         );
-        $this->path    = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
+        $this->path    = $base . '/.dev/Tests/Data/Testcases/test1.txt';
         $this->action  = 'changePermission';
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
@@ -76,6 +80,8 @@ class LocalPermissionsTest extends Data
      */
     public function testTouchSuccess()
     {
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
         $timezone = new DateTimeZone('GMT');
         $datetime = new DateTime(null, $timezone);
 
@@ -92,7 +98,7 @@ class LocalPermissionsTest extends Data
             'access_time'       => $access_time
         );
 
-        $this->path   = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
+        $this->path   = $base . '/.dev/Tests/Data/Testcases/test1.txt';
         $this->action = 'touch';
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
@@ -113,6 +119,8 @@ class LocalPermissionsTest extends Data
      */
     public function testTouchFail()
     {
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
         $timezone = new DateTimeZone('GMT');
         $datetime = new DateTime(null, $timezone);
 
@@ -131,7 +139,7 @@ class LocalPermissionsTest extends Data
             'access_time'       => $access_time
         );
 
-        $this->path   = BASE_FOLDER . '/.dev/Tests/Data/Testcases/test1.txt';
+        $this->path   = $base . '/.dev/Tests/Data/Testcases/test1.txt';
         $this->action = 'touch';
 
         $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);

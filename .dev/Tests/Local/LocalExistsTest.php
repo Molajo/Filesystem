@@ -50,7 +50,8 @@ class LocalExistsTest extends Data
      */
     public function testFileExistsSuccessful()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests/Data/test1.txt';
+        $base       = substr(__DIR__, 0, strlen(__DIR__) - 5);
+        $this->path = $base . '/.dev/Tests/Data/test1.txt';
         $results    = $this->adapter->exists($this->path);
         $this->assertEquals(true, $results);
 
@@ -67,7 +68,8 @@ class LocalExistsTest extends Data
      */
     public function testFolderExistsSuccessful()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests/Data';
+        $base       = substr(__DIR__, 0, strlen(__DIR__) - 5);
+        $this->path = $base . '/.dev/Tests/Data';
         $results    = $this->adapter->exists($this->path);
         $this->assertEquals(true, $results);
 
@@ -84,7 +86,8 @@ class LocalExistsTest extends Data
      */
     public function testFileDoesNotExistSuccessful()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests/Data/test1ZZZZZZ.txt';
+        $base       = substr(__DIR__, 0, strlen(__DIR__) - 5);
+        $this->path = $base . '/.dev/Tests/Data/test1ZZZZZZ.txt';
         $results    = $this->adapter->exists($this->path);
         $this->assertEquals(false, $results);
 
@@ -101,7 +104,8 @@ class LocalExistsTest extends Data
      */
     public function testFolderDoesNotExistSuccessful()
     {
-        $this->path = BASE_FOLDER . '/.dev/Tests/DataZZZZZZ';
+        $base       = substr(__DIR__, 0, strlen(__DIR__) - 5);
+        $this->path = $base . '/.dev/Tests/DataZZZZZZ';
         $results    = $this->adapter->exists($this->path);
         $this->assertEquals(false, $results);
 

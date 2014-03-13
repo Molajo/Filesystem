@@ -46,7 +46,9 @@ class LocalGetlistTest extends Data
      */
     public function testGetlistRecursiveFalseSuccessful()
     {
-        $this->path      = BASE_FOLDER . '/.dev/Tests/Hold';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path      = $base . '/.dev/Tests/Hold';
         $recursive       = false;
         $extension_list  = null;
         $include_files   = true;
@@ -77,7 +79,9 @@ class LocalGetlistTest extends Data
      */
     public function testGetlistRecursiveTrueSuccessful()
     {
-        $this->path      = BASE_FOLDER . '/.dev/Tests/Hold';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path      = $base . '/.dev/Tests/Hold';
         $recursive       = true;
         $extension_list  = null;
         $include_files   = true;
@@ -108,7 +112,9 @@ class LocalGetlistTest extends Data
      */
     public function testGetlistRecursiveNoFilesSuccessful()
     {
-        $this->path      = BASE_FOLDER . '/.dev/Tests/Hold';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path      = $base . '/.dev/Tests/Hold';
         $recursive       = true;
         $extension_list  = null;
         $include_files   = false;
@@ -139,7 +145,9 @@ class LocalGetlistTest extends Data
      */
     public function testGetlistRecursiveNoFoldersSuccessful()
     {
-        $this->path      = BASE_FOLDER . '/.dev/Tests/Hold';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path      = $base . '/.dev/Tests/Hold';
         $recursive       = true;
         $extension_list  = null;
         $include_files   = true;
@@ -170,7 +178,9 @@ class LocalGetlistTest extends Data
      */
     public function testGetlistRecursiveNoFoldersOnlyTxtSuccessful()
     {
-        $this->path      = BASE_FOLDER . '/.dev/Tests/Hold';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path      = $base . '/.dev/Tests/Hold';
         $recursive       = true;
         $extension_list  = 'txt';
         $include_files   = true;
@@ -201,7 +211,9 @@ class LocalGetlistTest extends Data
      */
     public function testGetlistRecursiveNoFoldersOnlyPdfSuccessful()
     {
-        $this->path      = BASE_FOLDER . '/.dev/Tests/Hold';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path      = $base . '/.dev/Tests/Hold';
         $recursive       = true;
         $extension_list  = 'pdf,doc';
         $include_files   = true;
@@ -232,7 +244,9 @@ class LocalGetlistTest extends Data
      */
     public function testGetlistRecursiveNoFoldersTest2Successful()
     {
-        $this->path      = BASE_FOLDER . '/.dev/Tests/Hold';
+        $base = substr(__DIR__, 0, strlen(__DIR__) - 5);
+
+        $this->path      = $base . '/.dev/Tests/Hold';
         $recursive       = true;
         $extension_list  = '';
         $include_files   = true;

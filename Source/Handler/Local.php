@@ -768,9 +768,9 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         }
 
         if ($this->is_file === true) {
-            $base_folder = $this->parent;
+            $base_path = $this->parent;
         } else {
-            $base_folder = $this->path;
+            $base_path = $this->path;
         }
 
         /** Edits */
@@ -827,7 +827,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
 
             foreach ($this->directories as $directory) {
 
-                $new_path = $this->build_new_path($directory, $target_directory, $base_folder);
+                $new_path = $this->build_new_path($directory, $target_directory, $base_path);
 
                 if (is_dir($new_path)) {
                 } else {
@@ -847,7 +847,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
 
             foreach ($this->files as $file) {
 
-                $new_path = $this->build_new_path($file, $target_directory, $base_folder);
+                $new_path = $this->build_new_path($file, $target_directory, $base_path);
 
                 /** Single file copy or move */
                 if ($this->is_file === true) {
