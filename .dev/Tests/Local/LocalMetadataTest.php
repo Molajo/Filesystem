@@ -5,7 +5,7 @@ use Exception\Filesystem\RuntimeException;
 use Molajo\Filesystem\Connection;
 
 /**
- * Tests Local Filesystem Handler: Metadata Methods
+ * Tests Local Filesystem Adapter: Metadata Methods
  *
  * @package    Molajo
  * @copyright  2014 Amy Stephen. All rights reserved.
@@ -17,7 +17,7 @@ class LocalMetadataTest extends Data
     /**
      * Adapter
      *
-     * @var    object  Molajo\Filesystem\Adapter
+     * @var    object  Molajo\Filesystem\Driver
      * @since  1.0
      */
     protected $adapter;
@@ -33,7 +33,7 @@ class LocalMetadataTest extends Data
         parent::setUp();
 
         $base          = substr(__DIR__, 0, strlen(__DIR__) - 5);
-        $this->handler = 'Local';
+        $this->adapter = 'Local';
         $this->path    = $base . '/.dev/Tests/Data/test1.txt';
         $this->options = array();
         $this->adapter = new Connection();
@@ -44,8 +44,8 @@ class LocalMetadataTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::getMetadata
-     * @covers  Molajo\Filesystem\Handler\Local::getMetadata
+     * @covers  Molajo\Filesystem\Driver::getMetadata
+     * @covers  Molajo\Filesystem\Adapter\Local::getMetadata
      */
     public function testMetadataSuccessful()
     {
@@ -90,8 +90,8 @@ class LocalMetadataTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::getMetadata
-     * @covers  Molajo\Filesystem\Handler\Local::getMetadata
+     * @covers  Molajo\Filesystem\Driver::getMetadata
+     * @covers  Molajo\Filesystem\Adapter\Local::getMetadata
      */
     public function testGetMetadataForFolder()
     {
@@ -137,8 +137,8 @@ class LocalMetadataTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::getMetadata
-     * @covers  Molajo\Filesystem\Handler\Local::getMetadata
+     * @covers  Molajo\Filesystem\Driver::getMetadata
+     * @covers  Molajo\Filesystem\Adapter\Local::getMetadata
      * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testReadNotAFile()

@@ -5,7 +5,7 @@ use Exception\Filesystem\RuntimeException;
 use Molajo\Filesystem\Connection;
 
 /**
- * Tests Local Filesystem Handler: Write Methods
+ * Tests Local Filesystem Adapter: Write Methods
  *
  * @package    Molajo
  * @copyright  2014 Amy Stephen. All rights reserved.
@@ -17,7 +17,7 @@ class LocalWriteTest extends Data
     /**
      * Adapter
      *
-     * @var    object  Molajo\Filesystem\Adapter
+     * @var    object  Molajo\Filesystem\Driver
      * @since  1.0
      */
     protected $adapter;
@@ -32,7 +32,7 @@ class LocalWriteTest extends Data
     {
         parent::setUp();
 
-        $this->handler = 'Local';
+        $this->adapter = 'Local';
         $this->options = array();
         $this->adapter = new Connection();
 
@@ -44,8 +44,8 @@ class LocalWriteTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::write
-     * @covers  Molajo\Filesystem\Handler\Local::write
+     * @covers  Molajo\Filesystem\Driver::write
+     * @covers  Molajo\Filesystem\Adapter\Local::write
      */
     public function testSuccessfulWrite()
     {
@@ -76,8 +76,8 @@ class LocalWriteTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::write
-     * @covers  Molajo\Filesystem\Handler\Local::write
+     * @covers  Molajo\Filesystem\Driver::write
+     * @covers  Molajo\Filesystem\Adapter\Local::write
      */
     public function testSuccessfulRewrite()
     {
@@ -104,7 +104,7 @@ class LocalWriteTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Handler\Local::write
+     * @covers Molajo\Filesystem\Adapter\Local::write
      * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testUnsuccessfulRewrite()
@@ -121,13 +121,13 @@ class LocalWriteTest extends Data
 
         $this->path = $base . '/.dev/Tests';
 
-        $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
+        $adapter = new adapter($this->action, $this->path, $this->adapter, $this->options);
 
         return;
     }
 
     /**
-     * @covers Molajo\Filesystem\Handler\Local::write
+     * @covers Molajo\Filesystem\Adapter\Local::write
      */
     public function testWriteSingleFolder()
     {
@@ -145,7 +145,7 @@ class LocalWriteTest extends Data
 
         $this->assertFileNotExists($this->path . '/' . $temp);
 
-        $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
+        $adapter = new adapter($this->action, $this->path, $this->adapter, $this->options);
 
         $this->assertFileExists($this->path . '/' . $temp);
 
@@ -156,7 +156,7 @@ class LocalWriteTest extends Data
      * rmdir($filePath);
      *  unlink($filePath);
      *
-     * @covers Molajo\Filesystem\Handler\Local::write
+     * @covers Molajo\Filesystem\Adapter\Local::write
      */
     public function testWriteMultipleFolders()
     {
@@ -174,7 +174,7 @@ class LocalWriteTest extends Data
 
         $this->assertFileNotExists($this->path . '/' . $temp);
 
-        $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
+        $adapter = new adapter($this->action, $this->path, $this->adapter, $this->options);
 
         $this->assertFileExists($this->path . '/' . $temp);
 

@@ -10,9 +10,9 @@ namespace Molajo\Factories\Filesystem;
 
 use Exception;
 use CommonApi\Exception\RuntimeException;
-use CommonApi\IoC\FactoryMethodInterface;
-use CommonApi\IoC\FactoryMethodBatchSchedulingInterface;
-use Molajo\IoC\FactoryBase;
+use CommonApi\IoC\FactoryInterface;
+use CommonApi\IoC\FactoryBatchInterface;
+use Molajo\IoC\FactoryMethodBase;
 
 /**
  * Filesystem Factory Method
@@ -22,7 +22,7 @@ use Molajo\IoC\FactoryBase;
  * @copyright  2014 Amy Stephen. All rights reserved.
  * @since      1.0
  */
-class FilesystemFactoryMethod extends FactoryBase implements FactoryMethodInterface, FactoryMethodBatchSchedulingInterface
+class FilesystemFactoryMethod extends FactoryMethodBase implements FactoryInterface, FactoryBatchInterface
 {
     /**
      * Adapter Instance
@@ -33,12 +33,12 @@ class FilesystemFactoryMethod extends FactoryBase implements FactoryMethodInterf
     public $adapter;
 
     /**
-     * Adapter Handler Instance
+     * Adapter Adapter Instance
      *
      * @var     object
      * @since   1.0
      */
-    public $adapter_handler;
+    public $adapter_adapter;
 
     /**
      * Constructor
@@ -51,7 +51,7 @@ class FilesystemFactoryMethod extends FactoryBase implements FactoryMethodInterf
     {
         $options['product_name']             = basename(__DIR__);
         $options['store_instance_indicator'] = true;
-        $options['product_namespace']        = 'Molajo\\Filesystem\\Adapter';
+        $options['product_namespace']        = 'Molajo\\Filesystem\\Driver';
 
         parent::__construct($options);
     }
@@ -66,48 +66,48 @@ class FilesystemFactoryMethod extends FactoryBase implements FactoryMethodInterf
     public function instantiateClass()
     {
         $options              = array();
-        $handler              = $this->getAdapterHandler($options);
-        $this->product_result = $this->getAdapter($handler);
+        $adapter              = $this->getAdapterAdapter($options);
+        $this->product_result = $this->getAdapter($adapter);
 
         return $this;
     }
 
     /**
-     * Get the Filesystem specific Adapter Handler
+     * Get the Filesystem specific Adapter Adapter
      *
      * @param   string $options
      *
      * @return  object
      * @since   1.0
-     * @throws  FactoryMethodInterface
+     * @throws  FactoryInterface
      */
-    protected function getAdapterHandler($options = array())
+    protected function getAdapterAdapter($options = array())
     {
-        $class = 'Molajo\\Filesystem\\Handler\\Local';
+        $class = 'Molajo\\Filesystem\\Adapter\\Local';
 
         try {
             return new $class($options);
         } catch (Exception $e) {
             throw new RuntimeException
-            ('Filesystem: Could not instantiate Filesystem Adapter Handler: Local');
+            ('Filesystem: Could not instantiate Filesystem Adapter Adapter: Local');
         }
     }
 
     /**
-     * Get Filesystem Adapter, inject with specific Filesystem Adapter Handler
+     * Get Filesystem Adapter, inject with specific Filesystem Adapter Adapter
      *
-     * @param   object $handler
+     * @param   object $adapter
      *
      * @return  object
      * @since   1.0
-     * @throws  FactoryMethodInterface
+     * @throws  FactoryInterface
      */
-    protected function getAdapter($handler)
+    protected function getAdapter($adapter)
     {
-        $class = 'Molajo\\Filesystem\\Adapter';
+        $class = $this->product_namespace;
 
         try {
-            return new $class($handler);
+            return new $class($adapter);
         } catch (Exception $e) {
 
             throw new RuntimeException
@@ -172,13 +172,13 @@ class FilesystemFactoryMethod extends FactoryBase implements FactoryMethodInterf
         $target_directory       = __DIR__;
         $target_name            = 'Newfile.txt';
         $replace                = true;
-        $target_adapter_handler = 'Local';
+        $target_adapter_adapter = 'Local';
 
-        $this->product_result->copy($path, $target_directory, $target_name, $replace, $target_adapter_handler);
+        $this->product_result->copy($path, $target_directory, $target_name, $replace, $target_adapter_adapter);
 
         die;
 
-        $this->product_result->move($path, $target_directory, $target_name, $replace, $target_adapter_handler);
+        $this->product_result->move($path, $target_directory, $target_name, $replace, $target_adapter_adapter);
 
         $this->product_result->rename($path, $new_name);
 

@@ -8,7 +8,7 @@
  */
 namespace Local;
 
-use Molajo\Filesystem\Adapter as adapter;
+use Molajo\Filesystem\Driver as adapter;
 
 /**
  * Foundation Test
@@ -39,7 +39,7 @@ class LocalCopyTest extends Data
         parent::setUp();
 
         /** initialise call */
-        $this->handler = 'Local';
+        $this->adapter = 'Local';
         $this->action  = 'Copy';
 
         return;
@@ -48,7 +48,7 @@ class LocalCopyTest extends Data
     /**
      * Should default target directory to $this->path
      *
-     * @covers Molajo\Filesystem\Handler\Local::copyOrMove
+     * @covers Molajo\Filesystem\Adapter\Local::copyOrMove
      */
     public function testCopySuccessfulSingleFileBlankDirectory()
     {
@@ -59,18 +59,18 @@ class LocalCopyTest extends Data
             'target_directory' => '',
             'target_name'      => 'test2.txt',
             'replace'          => false,
-            'target_handler'   => 'Local'
+            'target_adapter'   => 'Local'
         );
         $this->path    = $base . '/.dev/Tests/Data/Testcases/test1.txt';
 
-        $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
+        $adapter = new adapter($this->action, $this->path, $this->adapter, $this->options);
 
         $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/test2.txt'));
         $this->assertGreaterThan(0, $this->calculateSize($temp . '/test2.txt'));
     }
 
     /**
-     * @covers Molajo\Filesystem\Handler\Local::copyOrMove
+     * @covers Molajo\Filesystem\Adapter\Local::copyOrMove
      */
     public function testCopySuccessfulSingleFile()
     {
@@ -81,11 +81,11 @@ class LocalCopyTest extends Data
             'target_directory' => '',
             'target_name'      => 'test2.txt',
             'replace'          => false,
-            'target_handler'   => 'Local'
+            'target_adapter'   => 'Local'
         );
         $this->path    = $base . '/.dev/Tests/Data/Testcases/test1.txt';
 
-        $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
+        $adapter = new adapter($this->action, $this->path, $this->adapter, $this->options);
 
         $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/test2.txt'));
         $this->assertGreaterThan(0, $this->calculateSize($temp . '/test2.txt'));
@@ -94,7 +94,7 @@ class LocalCopyTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Handler\Local::copyOrMove
+     * @covers Molajo\Filesystem\Adapter\Local::copyOrMove
      */
     public function testCopySingleFolder()
     {
@@ -105,11 +105,11 @@ class LocalCopyTest extends Data
             'target_directory' => $temp,
             'target_name'      => 'didit',
             'replace'          => false,
-            'target_handler'   => 'Local'
+            'target_adapter'   => 'Local'
         );
         $this->path    = $base . '/.dev/Tests/Data/doit';
 
-        $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
+        $adapter = new adapter($this->action, $this->path, $this->adapter, $this->options);
 
         $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/didit'));
         $this->assertGreaterThan(0, $this->calculateSize($temp . '/didit'));
@@ -118,7 +118,7 @@ class LocalCopyTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Handler\Local::copyOrMove
+     * @covers Molajo\Filesystem\Adapter\Local::copyOrMove
      */
     public function testCopyMultipleFolder()
     {
@@ -129,11 +129,11 @@ class LocalCopyTest extends Data
             'target_directory' => $temp,
             'target_name'      => 'Amy',
             'replace'          => false,
-            'target_handler'   => 'Local'
+            'target_adapter'   => 'Local'
         );
         $this->path    = $base . '/.dev/Tests/Data/Testcases';
 
-        $adapter = new adapter($this->action, $this->path, $this->handler, $this->options);
+        $adapter = new adapter($this->action, $this->path, $this->adapter, $this->options);
 
         $this->assertEquals($this->calculateSize($this->path), $this->calculateSize($temp . '/Amy'));
         $this->assertGreaterThan(0, $this->calculateSize($temp . '/Amy'));
@@ -142,7 +142,7 @@ class LocalCopyTest extends Data
     }
 
     /**
-     * @covers Molajo\Filesystem\Handler\Local::copyOrMove
+     * @covers Molajo\Filesystem\Adapter\Local::copyOrMove
      * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testCopyNotAFile()
@@ -152,10 +152,10 @@ class LocalCopyTest extends Data
             'target_directory' => $base . '/.dev/Tests/Data',
             'target_name'      => 'Amy',
             'replace'          => false,
-            'target_handler'   => 'Local'
+            'target_adapter'   => 'Local'
         );
         $this->path    = $base . '/.dev/Tests/Dataeeeeee';
-        $adapter       = new adapter($this->action, $this->path, $this->handler, $this->options);
+        $adapter       = new adapter($this->action, $this->path, $this->adapter, $this->options);
 
         return;
     }

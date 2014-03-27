@@ -1,11 +1,11 @@
 <?php
 namespace Local;
 
-use Molajo\Filesystem\Handler\Local;
-use Molajo\Filesystem\Adapter;
+use Molajo\Filesystem\Adapter\Local;
+use Molajo\Filesystem\Driver;
 
 /**
- * Tests Local Filesystem Handler: Write Methods
+ * Tests Local Filesystem Adapter: Write Methods
  *
  * @package    Molajo
  * @copyright  2014 Amy Stephen. All rights reserved.
@@ -17,15 +17,15 @@ class LocalWriteTest extends Data
     /**
      * Adapter
      *
-     * @var    object  Molajo\Filesystem\Handler\Local
+     * @var    object  Molajo\Filesystem\Adapter\Local
      * @since  1.0
      */
-    protected $handler;
+    protected $adapter;
 
     /**
      * Adapter
      *
-     * @var    object  Molajo\Filesystem\Adapter
+     * @var    object  Molajo\Filesystem\Driver
      * @since  1.0
      */
     protected $adapter;
@@ -48,10 +48,10 @@ class LocalWriteTest extends Data
     {
         parent::setUp();
 
-        $this->handler = new Local($this->options);
+        $this->adapter = new Local($this->options);
 
         $this->options = array();
-        $this->adapter = new Adapter($this->handler);
+        $this->adapter = new Adapter($this->adapter);
 
         return $this;
     }
@@ -61,8 +61,8 @@ class LocalWriteTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::write
-     * @covers  Molajo\Filesystem\Handler\Local::write
+     * @covers  Molajo\Filesystem\Driver::write
+     * @covers  Molajo\Filesystem\Adapter\Local::write
      */
     public function testSuccessfulWrite()
     {

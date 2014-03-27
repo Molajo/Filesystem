@@ -1,12 +1,12 @@
 <?php
 /**
- * Local Filesystem Handler
+ * Local Filesystem Adapter
  *
  * @package    Molajo
  * @copyright  2014 Amy Stephen. All rights reserved.
  * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  */
-namespace Molajo\Filesystem\Handler;
+namespace Molajo\Filesystem\Adapter;
 
 use stdClass;
 use Exception;
@@ -17,22 +17,22 @@ use CommonApi\Filesystem\FilesystemInterface;
 use CommonApi\Filesystem\ConnectionInterface;
 
 /**
- * Local Filesystem Handler
+ * Local Filesystem Adapter
  *
  * @package    Molajo
  * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright  2014 Amy Stephen. All rights reserved.
  * @since      1.0
  */
-class Local extends AbstractHandler implements ConnectionInterface, FilesystemInterface
+class Local extends AbstractAdapter implements ConnectionInterface, FilesystemInterface
 {
     /**
-     * Filesystem Handler
+     * Filesystem Adapter
      *
      * @var    string
      * @since  1.0
      */
-    protected $handler = 'Local';
+    protected $adapter = 'Local';
 
     /**
      * Constructor
@@ -47,7 +47,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
     }
 
     /**
-     * Handler Interface Step 1:
+     * Adapter Interface Step 1:
      *
      * Method to connect to a Local server
      *
@@ -91,7 +91,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
             } catch (Exception $e) {
 
                 throw new RuntimeException
-                ('Filesystem Handler Ftp: Closing Ftp Connection Failed');
+                ('Filesystem Adapter Ftp: Closing Ftp Connection Failed');
             }
         }
 
@@ -143,7 +143,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
 
         $metadata = new stdClass();
 
-        $metadata->handler                       = $this->getAdapterHandler();
+        $metadata->adapter                       = $this->getAdapterAdapter();
         $metadata->path                          = $this->getPath();
         $metadata->initial_directory             = $this->getInitialDirectory();
         $metadata->root                          = $this->getRoot();
@@ -156,7 +156,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         if ($metadata->exists === true) {
         } else {
             throw new RuntimeException
-            ('Local Filesystem Handler: Cannot retrieve Metadata for File/Path that does not exist: '
+            ('Local Filesystem Adapter: Cannot retrieve Metadata for File/Path that does not exist: '
             . $this->path);
         }
 
@@ -214,13 +214,13 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         if ($this->setExists()->getExists() === true) {
         } else {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem Read: File does not exist: ' . $this->path);
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem Read: File does not exist: ' . $this->path);
         }
 
         if ($this->setIsFile()->getIsFile() === true) {
         } else {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem Read: Is not a file: ' . $this->path);
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem Read: Is not a file: ' . $this->path);
         }
 
         if ($this->setIsReadable()->getIsReadable() === true) {
@@ -228,7 +228,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
 
             throw new RuntimeException
             (ucfirst(
-                strtolower($this->getAdapterHandler())
+                strtolower($this->getAdapterAdapter())
             ) . ' Filesystem Read: Not permitted to read: ' . $this->path);
         }
 
@@ -237,11 +237,11 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem Read: Error reading file: ' . $this->path);
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem Read: Error reading file: ' . $this->path);
         }
 
         if ($this->data === false) {
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem Read: Empty File: ' . $this->path);
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem Read: Empty File: ' . $this->path);
         }
 
         return $this->data;
@@ -444,7 +444,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } else {
             throw new RuntimeException
             (ucfirst(
-                strtolower($this->getAdapterHandler())
+                strtolower($this->getAdapterAdapter())
             ) . ' Filesystem Write: must be directory or file: ' . $this->path);
         }
 
@@ -452,7 +452,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
             if ($this->is_file === true) {
 
                 throw new RuntimeException
-                (ucfirst(strtolower($this->getAdapterHandler()))
+                (ucfirst(strtolower($this->getAdapterAdapter()))
                 . ' Filesystem:  attempting to write no data to file: ' . $this->parent . '/' . $this->name);
             }
         }
@@ -460,7 +460,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         if (trim($data) == '' || strlen($data) == 0) {
             if ($this->name == '') {
                 throw new RuntimeException
-                (ucfirst(strtolower($this->getAdapterHandler()))
+                (ucfirst(strtolower($this->getAdapterAdapter()))
                 . ' Filesystem:  attempting to write no data to file: ' . $this->parent . '/' . $this->name);
             } else {
                 $this->createDirectory($this->parent . '/' . $this->name);
@@ -478,7 +478,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
 
         if ($this->getIsWriteable() === false) {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem:  file is not writable: ' . $this->parent . '/' . $this->name);
         }
 
@@ -486,7 +486,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
 
             if ($replace === false) {
                 throw new RuntimeException
-                (ucfirst(strtolower($this->getAdapterHandler()))
+                (ucfirst(strtolower($this->getAdapterAdapter()))
                 . ' Filesystem:  attempting to write to existing file: ' . $this->parent . '/' . $this->name);
             }
 
@@ -498,7 +498,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem:  error writing file ' . $this->parent . '/' . $this->name);
         }
 
@@ -521,7 +521,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } elseif ($this->is_file === false) {
         } else {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem:  attempting to append to a folder, not a file ' . $this->path);
         }
 
@@ -530,7 +530,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem:  error appending to file '
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem:  error appending to file '
             . $this->path);
         }
 
@@ -548,7 +548,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
     {
         if ($this->exists === false) {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem:  attempting to truncate file that does not exist. '
             . $this->path);
         }
@@ -556,13 +556,13 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         if ($this->is_file === true) {
         } else {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem:  only a file can be truncated. ' . $this->path);
         }
 
         if ($this->setIsWriteable($this->path) === false) {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem:  file is not writable and cannot be truncated: '
             . $this->path);
         }
@@ -573,7 +573,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem:  error truncating file ' . $this->path);
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem:  error truncating file ' . $this->path);
         }
 
         return;
@@ -610,7 +610,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         if ($this->is_root === true) {
             throw new RuntimeException
             (ucfirst(
-                strtolower($this->getAdapterHandler())
+                strtolower($this->getAdapterAdapter())
             ) . ' Filesystem Delete: Request to delete root is not allowed'
             . $this->path);
         }
@@ -619,13 +619,13 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } else {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem Delete: File not found ' . $this->path);
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem Delete: File not found ' . $this->path);
         }
 
         if ($this->is_writable === false) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem Delete: No write access to file/path: '
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem Delete: No write access to file/path: '
             . $this->path);
         }
 
@@ -641,7 +641,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem Delete: failed for: ' . $this->path);
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem Delete: failed for: ' . $this->path);
         }
 
         return;
@@ -649,13 +649,13 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
 
     /**
      * Copies the file/folder in $path to the target_directory (optionally target_name),
-     *  replacing content, if indicated. Can copy to target_handler.
+     *  replacing content, if indicated. Can copy to target_adapter.
      *
      * @param   string $path
      * @param   string $target_directory
      * @param   string $target_name
      * @param   bool   $replace
-     * @param   string $target_handler
+     * @param   string $target_adapter
      *
      * @return  $this
      * @since   1.0
@@ -667,7 +667,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         $target_directory,
         $target_name = '',
         $replace = true,
-        $target_handler = ''
+        $target_adapter = ''
     ) {
         if ($path == '') {
             throw new RuntimeException
@@ -678,7 +678,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         $options['target_directory'] = $target_directory;
         $options['target_name']      = $target_name;
         $options['replace']          = $replace;
-        $options['target_handler']   = $target_handler;
+        $options['target_adapter']   = $target_adapter;
 
         $this->setPath($path);
         $this->getMetadata();
@@ -686,13 +686,13 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
 
     /**
      * Moves the file/folder in $path to the target_directory (optionally target_name),
-     *  replacing content, if indicated. Can move to target_handler.
+     *  replacing content, if indicated. Can move to target_adapter.
      *
      * @param   string $path
      * @param   string $target_directory
      * @param   string $target_name
      * @param   bool   $replace
-     * @param   string $target_handler
+     * @param   string $target_adapter
      *
      * @return  $this
      * @since   1.0
@@ -704,7 +704,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         $target_directory,
         $target_name = '',
         $replace = true,
-        $target_handler = ''
+        $target_adapter = ''
     ) {
         if ($path == '') {
             throw new RuntimeException
@@ -715,30 +715,30 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         $options['target_directory'] = $target_directory;
         $options['target_name']      = $target_name;
         $options['replace']          = $replace;
-        $options['target_handler']   = $target_handler;
+        $options['target_adapter']   = $target_adapter;
 
         $this->setPath($path);
         $this->getMetadata();
 
-        if ($target_handler == '') {
-            $target_handler = $this->getAdapterHandler();
+        if ($target_adapter == '') {
+            $target_adapter = $this->getAdapterAdapter();
         }
 
-        $this->moveOrCopy($target_directory, $target_name, $replace, $target_handler, 'copy');
+        $this->moveOrCopy($target_directory, $target_name, $replace, $target_adapter, 'copy');
 
         return $this;
     }
 
     /**
-     * Copies the file identified in $path to the $target_directory for the $target_handler adapter
+     * Copies the file identified in $path to the $target_directory for the $target_adapter adapter
      *  replacing existing contents and creating directories needed, if indicated
      *
-     * Note: $target_handler is an instance of the Filesystem
+     * Note: $target_adapter is an instance of the Filesystem
      *
      * @param   string $target_directory
      * @param   string $target_name
      * @param   bool   $replace
-     * @param   string $target_handler
+     * @param   string $target_adapter
      * @param   string $move_or_copy
      *
      * @return  $this
@@ -750,7 +750,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         $target_directory,
         $target_name = '',
         $replace = false,
-        $target_handler,
+        $target_adapter,
         $move_or_copy = 'copy'
     ) {
         /** Defaults */
@@ -761,7 +761,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         if ($target_name == '' && $this->is_file) {
             if ($target_directory == $this->parent) {
                 throw new RuntimeException
-                (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem ' . $move_or_copy
+                (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem ' . $move_or_copy
                 . ': Must specify new file name when using the same target path: ' . $this->path);
             }
             $target_name = $this->name;
@@ -777,7 +777,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         if (file_exists($this->path)) {
         } else {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem moveOrCopy: failed.'
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem moveOrCopy: failed.'
             . 'This path does not exist: '
             . $this->path . ' Specified as source for ' . $move_or_copy
             . ' operation to ' . $target_directory);
@@ -786,7 +786,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         if (file_exists($target_directory)) {
         } else {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem moveOrCopy: failed. '
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem moveOrCopy: failed. '
             . ' This path does not exist: '
             . $this->path . ' Specified as destination for ' . $move_or_copy
             . ' to ' . $target_directory);
@@ -794,14 +794,14 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
 
         if (is_writeable($target_directory) === false) {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem Delete: No write access to file/path: ' . $target_directory);
         }
 
         if ($move_or_copy == 'move') {
             if (is_writeable($this->path) === false) {
                 throw new RuntimeException
-                (ucfirst(strtolower($this->getAdapterHandler()))
+                (ucfirst(strtolower($this->getAdapterAdapter()))
                 . ' Filesystem Delete: No write access for moving source file/path: '
                 . $move_or_copy);
             }
@@ -812,7 +812,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
             if (is_dir($target_directory . '/' . $target_name)) {
             } else {
 
-                new fsHandler('write', $target_directory, $target_handler,
+                new fsAdapter('write', $target_directory, $target_adapter,
                     $this->options = array('file' => $target_name)
                 );
             }
@@ -835,7 +835,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
                     $parent   = dirname($new_path);
                     $new_node = basename($new_path);
 
-                    new fsHandler('write', $parent, $target_handler,
+                    new fsAdapter('write', $parent, $target_adapter,
                         $this->options = array('file' => $new_node)
                     );
                 }
@@ -857,11 +857,11 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
                 }
 
                 /** Source */
-                $adapter = new fsHandler('Read', $file);
+                $adapter = new fsAdapter('Read', $file);
                 $data    = $adapter->fs->data;
 
                 /** Write Target */
-                new fsHandler('Write', $new_path, $target_handler,
+                new fsAdapter('Write', $new_path, $target_adapter,
                     $this->options = array(
                         'file'    => $file_name,
                         'replace' => $replace,
@@ -956,7 +956,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem: changeOwner method failed for Path: ' . $this->path
             . ' Owner: ' . $user_name);
         }
@@ -989,7 +989,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem: changeGroup method failed for Path: ' . $this->path
             . ' Group: ' . $group_id);
         }
@@ -1032,7 +1032,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem: changePermission method failed for Path: ' . $this->path
             . ' Permissions: ' . octdec(str_pad($permission, 4, '0', STR_PAD_LEFT)));
         }
@@ -1085,7 +1085,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
 
             throw new RuntimeException
 
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem: touch method failed for Path: ' . $this->path . ' ' . $e->getMessage());
         }
 
@@ -1470,7 +1470,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
             return $this;
         } else {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem:  not a valid file. Path: '
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem:  not a valid file. Path: '
             . $this->path);
         }
 
@@ -1513,7 +1513,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
             return $this;
         } else {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem:  not a valid file. Path: '
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem:  not a valid file. Path: '
             . $this->path);
         }
 
@@ -1594,7 +1594,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
             $this->mime_type = mime_content_type($this->path);
         } else {
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem:  getMimeType either '
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem:  getMimeType either '
             . ' finfo_open or mime_content_type are required in PHP');
         }
 
@@ -1695,7 +1695,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem getCreateDate failed for ' . $this->path);
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem getCreateDate failed for ' . $this->path);
         }
 
         return $this;
@@ -1733,7 +1733,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
 
             throw new RuntimeException
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem getAccessDate failed for ' . $this->path);
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem getAccessDate failed for ' . $this->path);
         }
 
         return $this;
@@ -1771,7 +1771,7 @@ class Local extends AbstractHandler implements ConnectionInterface, FilesystemIn
         } catch (Exception $e) {
             throw new RuntimeException
 
-            (ucfirst(strtolower($this->getAdapterHandler())) . ' Filesystem:  getModifiedDate method failed for '
+            (ucfirst(strtolower($this->getAdapterAdapter())) . ' Filesystem:  getModifiedDate method failed for '
             . $this->path);
         }
 

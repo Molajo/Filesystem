@@ -5,7 +5,7 @@ use Exception\Filesystem\RuntimeException;
 use Molajo\Filesystem\Connection;
 
 /**
- * Tests Local Filesystem Handler: Exists Methods
+ * Tests Local Filesystem Adapter: Exists Methods
  *
  * @package    Molajo
  * @copyright  2014 Amy Stephen. All rights reserved.
@@ -17,7 +17,7 @@ class LocalExistsTest extends Data
     /**
      * Adapter
      *
-     * @var    object  Molajo\Filesystem\Adapter
+     * @var    object  Molajo\Filesystem\Driver
      * @since  1.0
      */
     protected $adapter;
@@ -34,7 +34,7 @@ class LocalExistsTest extends Data
 
         $this->options = array();
 
-        $this->handler = 'Local';
+        $this->adapter = 'Local';
         $this->adapter = new Connection();
 
         return $this;
@@ -45,8 +45,8 @@ class LocalExistsTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::exists
-     * @covers  Molajo\Filesystem\Handler\Local::exists
+     * @covers  Molajo\Filesystem\Driver::exists
+     * @covers  Molajo\Filesystem\Adapter\Local::exists
      */
     public function testFileExistsSuccessful()
     {
@@ -63,8 +63,8 @@ class LocalExistsTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::exists
-     * @covers  Molajo\Filesystem\Handler\Local::exists
+     * @covers  Molajo\Filesystem\Driver::exists
+     * @covers  Molajo\Filesystem\Adapter\Local::exists
      */
     public function testFolderExistsSuccessful()
     {
@@ -81,8 +81,8 @@ class LocalExistsTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::exists
-     * @covers  Molajo\Filesystem\Handler\Local::exists
+     * @covers  Molajo\Filesystem\Driver::exists
+     * @covers  Molajo\Filesystem\Adapter\Local::exists
      */
     public function testFileDoesNotExistSuccessful()
     {
@@ -99,8 +99,8 @@ class LocalExistsTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::exists
-     * @covers  Molajo\Filesystem\Handler\Local::exists
+     * @covers  Molajo\Filesystem\Driver::exists
+     * @covers  Molajo\Filesystem\Adapter\Local::exists
      */
     public function testFolderDoesNotExistSuccessful()
     {
@@ -117,8 +117,8 @@ class LocalExistsTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::exists
-     * @covers  Molajo\Filesystem\Handler\Local::exists
+     * @covers  Molajo\Filesystem\Driver::exists
+     * @covers  Molajo\Filesystem\Adapter\Local::exists
      * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testEmptyPathNotSuccessful()

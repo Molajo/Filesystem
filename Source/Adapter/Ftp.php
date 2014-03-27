@@ -6,11 +6,11 @@
  * @copyright  2014 Amy Stephen. All rights reserved.
  * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  */
-namespace Molajo\Filesystem\Handler;
+namespace Molajo\Filesystem\Adapter;
 
 use Exception;
 
-use Exception\Filesystem\FtpHandlerException;
+use Exception\Filesystem\FtpAdapterException;
 
 /**
  * Ftp Filesystem Type
@@ -20,7 +20,7 @@ use Exception\Filesystem\FtpHandlerException;
  * @copyright  2014 Amy Stephen. All rights reserved.
  * @since      1.0
  */
-class Ftp extends AbstractHandler
+class Ftp extends AbstractAdapter
 {
     /**
      * Temp - stream file for transferring FTP content
@@ -81,12 +81,12 @@ class Ftp extends AbstractHandler
     );
 
     /**
-     * Filesystem Handler
+     * Filesystem Adapter
      *
      * @var    string
      * @since  1.0
      */
-    protected $handler = 'Local';
+    protected $adapter = 'Local';
 
     /**
      * Constructor
@@ -101,7 +101,7 @@ class Ftp extends AbstractHandler
     }
 
     /**
-     * Handler Interface Step 1:
+     * Adapter Interface Step 1:
      *
      * Method to connect to a Local server
      *
@@ -109,7 +109,7 @@ class Ftp extends AbstractHandler
      *
      * @returns  $this
      * @since    1.0
-     * @throws   FtpHandlerException
+     * @throws   FtpAdapterException
      */
     public function connect($options = array())
     {
@@ -122,7 +122,7 @@ class Ftp extends AbstractHandler
 
                 if (function_exists('ftp_ssl_connect')) {
 
-                    throw new FtpHandlerException
+                    throw new FtpAdapterException
                     ('ftp_ssl_connect must be enabled in PHP to use SSL over Ftp');
                 }
 
@@ -133,14 +133,14 @@ class Ftp extends AbstractHandler
 
             $this->setConnection($id);
         } catch (Exception $e) {
-            throw new FtpHandlerException
-            ('Filesystem Handler Ftp: Unable to connect to the Ftp Server '
+            throw new FtpAdapterException
+            ('Filesystem Adapter Ftp: Unable to connect to the Ftp Server '
             . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
         if ($this->is_connected === false) {
-            throw new FtpHandlerException
-            ('Filesystem Handler Ftp: Not connected '
+            throw new FtpAdapterException
+            ('Filesystem Adapter Ftp: Not connected '
             . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
@@ -148,8 +148,8 @@ class Ftp extends AbstractHandler
             \ftp_pasv($this->connection, $this->getPassiveMode());
         } catch (Exception $e) {
 
-            throw new FtpHandlerException
-            ('Filesystem Handler Ftp: Unable to set passive mode for Ftp Server '
+            throw new FtpAdapterException
+            ('Filesystem Adapter Ftp: Unable to set passive mode for Ftp Server '
             . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
@@ -157,8 +157,8 @@ class Ftp extends AbstractHandler
             $this->login();
         } catch (Exception $e) {
 
-            throw new FtpHandlerException
-            ('Filesystem Handler Ftp: Login failed for ' . ' User: ' . $this->username
+            throw new FtpAdapterException
+            ('Filesystem Adapter Ftp: Login failed for ' . ' User: ' . $this->username
             . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
@@ -174,8 +174,8 @@ class Ftp extends AbstractHandler
             }
         } catch (Exception $e) {
 
-            throw new FtpHandlerException
-            ('Filesystem Handler Ftp: Login failed for ' . ' User: ' . $this->username
+            throw new FtpAdapterException
+            ('Filesystem Adapter Ftp: Login failed for ' . ' User: ' . $this->username
             . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
 
@@ -187,15 +187,15 @@ class Ftp extends AbstractHandler
             }
         } catch (Exception $e) {
 
-            throw new FtpHandlerException
-            ('Filesystem Handler Ftp: Changing Ftp Directory failed. Directory: '
+            throw new FtpAdapterException
+            ('Filesystem Adapter Ftp: Changing Ftp Directory failed. Directory: '
             . $this->initial_directory);
         }
 
         if ($results === false) {
 
-            throw new FtpHandlerException
-            ('Filesystem Handler Ftp: Unable to change directory: '
+            throw new FtpAdapterException
+            ('Filesystem Adapter Ftp: Unable to change directory: '
             . $this->root . ' for Ftp Server '
             . ' Host: ' . $this->host . ' Port: ' . $this->port);
         }
@@ -208,7 +208,7 @@ class Ftp extends AbstractHandler
      *
      * @return bool
      * @since   1.0
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      */
     protected function login()
     {
@@ -217,8 +217,8 @@ class Ftp extends AbstractHandler
         if ($logged_in === true) {
         } else {
 
-            throw new FtpHandlerException
-            ('Filesystem Handler Ftp: Unable to login with Password: ' . $this->getPassword()
+            throw new FtpAdapterException
+            ('Filesystem Adapter Ftp: Unable to login with Password: ' . $this->getPassword()
             . ' Password: ' . $this->getPassword());
         }
 
@@ -254,7 +254,7 @@ class Ftp extends AbstractHandler
     }
 
     /**
-     * Handler Interface Step 3:
+     * Adapter Interface Step 3:
      *
      * Retrieves and sets metadata for the file specified in path
      *
@@ -284,17 +284,17 @@ class Ftp extends AbstractHandler
      *
      * @return mixed
      * @since   1.0
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      */
     protected function read()
     {
         if ($this->exists === false) {
-            throw new FtpHandlerException
+            throw new FtpAdapterException
             ('Ftp Filesystem Read: File does not exist: ' . $this->path);
         }
 
         if ($this->is_file === false) {
-            throw new FtpHandlerException
+            throw new FtpAdapterException
             ('Ftp Filesystem Read: Is not a file: ' . $this->path);
         }
 
@@ -310,11 +310,11 @@ class Ftp extends AbstractHandler
 
             if (ftp_fget($this->getConnection(), $this->stream, $this->path, $this->ftp_mode)) {
             } else {
-                throw new FtpHandlerException ('FTP Filesystem: Read failed for: ' . $this->path);
+                throw new FtpAdapterException ('FTP Filesystem: Read failed for: ' . $this->path);
             }
         } catch (Exception $e) {
 
-            throw new FtpHandlerException
+            throw new FtpAdapterException
             ('Ftp Filesystem Read: Error reading file: ' . $this->path);
         }
 
@@ -323,7 +323,7 @@ class Ftp extends AbstractHandler
             $this->data = stream_get_contents($this->stream);
             fclose($this->stream);
         } catch (Exception $e) {
-            throw new FtpHandlerException
+            throw new FtpAdapterException
             ('Ftp Filesystem Read: Error reading file: ' . $this->path . ' ' . $e->getMessage());
         }
 
@@ -346,7 +346,7 @@ class Ftp extends AbstractHandler
      *
      * @return void
      * @since   1.0
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      */
     protected function write($file = '', $data = '', $replace = false, $append = false, $truncate = false)
     {
@@ -365,25 +365,25 @@ class Ftp extends AbstractHandler
         if ($this->exists === false) {
         } elseif ($this->is_file === true || $this->is_directory === true) {
         } else {
-            throw new FtpHandlerException
+            throw new FtpAdapterException
             (ucfirst(
-                strtolower($this->getAdapterHandler())
+                strtolower($this->getAdapterAdapter())
             ) . ' Filesystem Write: must be directory or file: ' . $this->path . '/' . $file);
         }
 
         if (trim($data) == '' || strlen($data) == 0) {
             if ($this->is_file === true) {
 
-                throw new FtpHandlerException
-                (ucfirst(strtolower($this->getAdapterHandler()))
+                throw new FtpAdapterException
+                (ucfirst(strtolower($this->getAdapterAdapter()))
                 . ' Filesystem:  attempting to write no data to file: ' . $this->path . '/' . $file);
             }
         }
 
         if (trim($data) == '' || strlen($data) == 0) {
             if ($file == '') {
-                throw new FtpHandlerException
-                (ucfirst(strtolower($this->getAdapterHandler()))
+                throw new FtpAdapterException
+                (ucfirst(strtolower($this->getAdapterAdapter()))
                 . ' Filesystem:  attempting to write no data to file: ' . $this->path . '/' . $file);
             } else {
                 $this->createDirectory($this->path . '/' . $file);
@@ -405,14 +405,14 @@ class Ftp extends AbstractHandler
 
             if (ftp_fput($this->getConnection(), $this->path, $stream, $this->ftp_mode)) {
             } else {
-                throw new FtpHandlerException ('FTP Filesystem Write failed for ' . $this->path);
+                throw new FtpAdapterException ('FTP Filesystem Write failed for ' . $this->path);
             }
         } catch (Exception $e) {
 
             fclose($this->stream);
 
-            throw new FtpHandlerException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            throw new FtpAdapterException
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem:  error writing file ' . $this->path . '/' . $file);
         }
 
@@ -429,15 +429,15 @@ class Ftp extends AbstractHandler
      *
      * @return  void
      * @since   1.0
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      */
     private function append_or_truncate($data = null, $type = 'append')
     {
         if ($this->exists === true) {
         } elseif ($this->is_file === false) {
         } else {
-            throw new FtpHandlerException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            throw new FtpAdapterException
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem:  attempting to append to a folder, not a file ' . $this->path);
         }
 
@@ -445,7 +445,7 @@ class Ftp extends AbstractHandler
 
         if (ftp_fget($this->getConnection(), $this->stream, $this->path, $this->ftp_mode)) {
         } else {
-            throw new FtpHandlerException ('FTP Filesystem Append: Read failed for: ' . $this->path);
+            throw new FtpAdapterException ('FTP Filesystem Append: Read failed for: ' . $this->path);
         }
 
         try {
@@ -462,8 +462,8 @@ class Ftp extends AbstractHandler
             rewind($this->stream);
         } catch (Exception $e) {
 
-            throw new FtpHandlerException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            throw new FtpAdapterException
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem:  error writing stream for appending to ' . $this->path);
         }
 
@@ -471,12 +471,12 @@ class Ftp extends AbstractHandler
 
             if (ftp_fput($this->getConnection(), $this->path, $this->stream, $this->ftp_mode)) {
             } else {
-                throw new FtpHandlerException ('FTP Filesystem Write failed for ' . $this->path);
+                throw new FtpAdapterException ('FTP Filesystem Write failed for ' . $this->path);
             }
         } catch (Exception $e) {
 
-            throw new FtpHandlerException
-            (ucfirst(strtolower($this->getAdapterHandler()))
+            throw new FtpAdapterException
+            (ucfirst(strtolower($this->getAdapterAdapter()))
             . ' Filesystem:  error writing file ' . $this->path);
         }
 
@@ -492,7 +492,7 @@ class Ftp extends AbstractHandler
      *
      * @return void
      * @since   1.0
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      */
     protected function createDirectory($path)
     {
@@ -510,11 +510,11 @@ class Ftp extends AbstractHandler
         try {
             $success = ftp_mkdir($this->getConnection(), $path);
             if ($success === false) {
-                throw new FtpHandlerException ('Unable to create FTP folder: ' . $path);
+                throw new FtpAdapterException ('Unable to create FTP folder: ' . $path);
             }
         } catch (Exception $e) {
 
-            throw new FtpHandlerException
+            throw new FtpAdapterException
             ('FTP Filesystem Create Directory: error creating directory: ' . $e->getMessage());
         }
 
@@ -644,7 +644,7 @@ class Ftp extends AbstractHandler
      *
      * @return void
      * @since   1.0
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      */
     protected function isFile()
     {
@@ -656,11 +656,11 @@ class Ftp extends AbstractHandler
             if (ftp_fget($this->getConnection(), $this->stream, $this->path, $this->ftp_mode, 0)) {
                 $this->is_file = true;
             } else {
-                throw new FtpHandlerException
+                throw new FtpAdapterException
                 ('FTP Filesystem: IsFile ftp_get failed ' . $this->path);
             }
         } catch (Exception $e) {
-            throw new FtpHandlerException
+            throw new FtpAdapterException
             ('FTP Filesystem isFile: Failed ' . $e->getMessage());
         }
 
@@ -669,7 +669,7 @@ class Ftp extends AbstractHandler
             $this->data = stream_get_contents($this->stream);
             fclose($this->stream);
         } catch (Exception $e) {
-            throw new FtpHandlerException
+            throw new FtpAdapterException
             ('Ftp Filesystem Read: Error reading file: ' . $this->path . ' ' . $e->getMessage());
         }
 
@@ -692,7 +692,7 @@ class Ftp extends AbstractHandler
      *
      * @return void
      * @since   1.0
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      */
     protected function getParent()
     {
@@ -759,7 +759,7 @@ class Ftp extends AbstractHandler
      * Returns the mime type of the file located at path directory
      *
      * @return void
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      * @since   1.0
      */
     protected function getMimeType()
@@ -841,7 +841,7 @@ class Ftp extends AbstractHandler
      *
      * @return void
      * @since   1.0
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      */
     protected function getCreateDate()
     {
@@ -855,7 +855,7 @@ class Ftp extends AbstractHandler
      *
      * @return void
      * @since   1.0
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      */
     protected function getAccessDate()
     {
@@ -869,7 +869,7 @@ class Ftp extends AbstractHandler
      *
      * @return void
      * @since   1.0
-     * @throws  FtpHandlerException
+     * @throws  FtpAdapterException
      */
     protected function getModifiedDate()
     {

@@ -1,15 +1,15 @@
 <?php
 /**
- * Media Handler for Filesystem
+ * Media Adapter for Filesystem
  *
  * @package    Molajo
  * @copyright  2014 Amy Stephen. All rights reserved.
  * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  */
-namespace Molajo\Filesystem\Handler;
+namespace Molajo\Filesystem\Adapter;
 
 /**
- * Media Handler for Filesystem
+ * Media Adapter for Filesystem
  *
  * @package    Molajo
  * @license    http://www.opensource.org/licenses/mit-license.html MIT License

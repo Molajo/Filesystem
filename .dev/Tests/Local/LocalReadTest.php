@@ -5,7 +5,7 @@ use Exception\Filesystem\RuntimeException;
 use Molajo\Filesystem\Connection;
 
 /**
- * Tests Local Filesystem Handler: Read Methods
+ * Tests Local Filesystem Adapter: Read Methods
  *
  * @package    Molajo
  * @copyright  2014 Amy Stephen. All rights reserved.
@@ -17,7 +17,7 @@ class LocalReadTest extends Data
     /**
      * Adapter
      *
-     * @var    object  Molajo\Filesystem\Adapter
+     * @var    object  Molajo\Filesystem\Driver
      * @since  1.0
      */
     protected $adapter;
@@ -34,7 +34,7 @@ class LocalReadTest extends Data
 
         parent::setUp();
 
-        $this->handler = 'Local';
+        $this->adapter = 'Local';
         $this->path    = $base . '/.dev/Tests/Data/test1.txt';
         $this->adapter = new Connection();
 
@@ -46,8 +46,8 @@ class LocalReadTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::read
-     * @covers  Molajo\Filesystem\Handler\Local::read
+     * @covers  Molajo\Filesystem\Driver::read
+     * @covers  Molajo\Filesystem\Adapter\Local::read
      */
     public function testReadSuccessful()
     {
@@ -63,8 +63,8 @@ class LocalReadTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::read
-     * @covers  Molajo\Filesystem\Handler\Local::read
+     * @covers  Molajo\Filesystem\Driver::read
+     * @covers  Molajo\Filesystem\Adapter\Local::read
      * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testReadUnsuccessful()
@@ -81,8 +81,8 @@ class LocalReadTest extends Data
      *
      * @return  $this
      * @since   1.0
-     * @covers  Molajo\Filesystem\Adapter::read
-     * @covers  Molajo\Filesystem\Handler\Local::read
+     * @covers  Molajo\Filesystem\Driver::read
+     * @covers  Molajo\Filesystem\Adapter\Local::read
      * @expectedException Exception\Filesystem\RuntimeException
      */
     public function testReadNotAFile()

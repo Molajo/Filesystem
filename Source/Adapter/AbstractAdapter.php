@@ -6,29 +6,29 @@
  * @copyright  2014 Amy Stephen. All rights reserved.
  * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  */
-namespace Molajo\Filesystem\Handler;
+namespace Molajo\Filesystem\Adapter;
 
 use DateTime;
 use DateTimeZone;
-use Exception\Filesystem\AbstractHandlerException;
+use Exception\Filesystem\AbstractAdapterException;
 
 /**
- * Filesystem Abstract Handler
+ * Filesystem Abstract Adapter
  *
  * @package    Molajo
  * @license    http://www.opensource.org/licenses/mit-license.html MIT License
  * @copyright  2014 Amy Stephen. All rights reserved.
  * @since      1.0
  */
-abstract class AbstractHandler
+abstract class AbstractAdapter
 {
     /**
-     * Filesystem Handler
+     * Filesystem Adapter
      *
      * @var    string
      * @since  1.0
      */
-    protected $handler;
+    protected $adapter;
 
     /**
      * Path
@@ -414,7 +414,7 @@ abstract class AbstractHandler
      * Constructor
      *
      * @param   array  $options
-     * @param   string $handler
+     * @param   string $adapter
      *
      * @since   1.0
      */
@@ -424,7 +424,7 @@ abstract class AbstractHandler
     }
 
     /**
-     * Handler Interface Step 1:
+     * Adapter Interface Step 1:
      *
      * Method to connect to a Local server
      *
@@ -463,14 +463,14 @@ abstract class AbstractHandler
     /**
      * Set Filesystem Type
      *
-     * @param   string $handler
+     * @param   string $adapter
      *
      * @return  $this
      * @since   1.0
      */
-    protected function setAdapterHandler($handler)
+    protected function setAdapterAdapter($adapter)
     {
-        $this->handler = $handler;
+        $this->adapter = $adapter;
 
         return $this;
     }
@@ -481,9 +481,9 @@ abstract class AbstractHandler
      * @return  string
      * @since   1.0
      */
-    protected function getAdapterHandler()
+    protected function getAdapterAdapter()
     {
-        return $this->handler;
+        return $this->adapter;
     }
 
     /**
@@ -558,7 +558,7 @@ abstract class AbstractHandler
      *
      * @return  string
      * @since   1.0
-     * @throws  AbstractHandlerException
+     * @throws  AbstractAdapterException
      */
     protected function normalise($path = '')
     {
@@ -567,8 +567,8 @@ abstract class AbstractHandler
         }
 
         if ($path == '') {
-            throw new AbstractHandlerException
-            ('Filesystem: No Path sent into AbstractHandler::Normalise');
+            throw new AbstractAdapterException
+            ('Filesystem: No Path sent into AbstractAdapter::Normalise');
         }
 
         /** Unescape slashes */
@@ -577,8 +577,8 @@ abstract class AbstractHandler
         /** Determine if it is absolute path */
         if (substr($path, 0, 1) == '/') {
         } else {
-            throw new AbstractHandlerException
-            ('Filesystem: AbstractHandler requires Absolute Path: ' . $this->path . ' is invalid.');
+            throw new AbstractAdapterException
+            ('Filesystem: AbstractAdapter requires Absolute Path: ' . $this->path . ' is invalid.');
         }
 
         $path = substr($path, 1, strlen($path));
@@ -887,7 +887,7 @@ abstract class AbstractHandler
         }
 
         if ($connection_type === null) {
-            $this->connection_type = strtolower($this->getAdapterHandler());
+            $this->connection_type = strtolower($this->getAdapterAdapter());
         } else {
             $this->connection_type = strtolower($connection_type);
         }
@@ -1012,7 +1012,7 @@ abstract class AbstractHandler
      *
      * @return  $this
      * @since   1.0
-     * @throws  AbstractHandlerException
+     * @throws  AbstractAdapterException
      */
     protected function setRoot()
     {
@@ -1034,8 +1034,8 @@ abstract class AbstractHandler
             }
         }
 
-        throw new AbstractHandlerException
-        ('Filesystem Abstract Handler: Root is not a valid directory. ' . $root);
+        throw new AbstractAdapterException
+        ('Filesystem Abstract Adapter: Root is not a valid directory. ' . $root);
     }
 
     /**
