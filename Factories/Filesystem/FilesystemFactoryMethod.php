@@ -61,7 +61,7 @@ class FilesystemFactoryMethod extends FactoryMethodBase implements FactoryInterf
      *
      * @return  $this
      * @since   1.0
-     * @throws  \CommonApi\Exception\RuntimeException;
+     * @throws  \CommonApi\Exception\RuntimeException
      */
     public function instantiateClass()
     {
@@ -120,7 +120,7 @@ class FilesystemFactoryMethod extends FactoryMethodBase implements FactoryInterf
      *
      * @return  $this
      * @since   1.0
-     * @throws  \CommonApi\Exception\RuntimeException;
+     * @throws  \CommonApi\Exception\RuntimeException
      */
     protected function testAPI()
     {
